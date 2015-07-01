@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>Timeline</title>
+	<meta name="description" content="Activity Tracker Application">
+	<meta name="author" content="Aggelos Arvanitakis">
+	<meta name="keyword" content="Activity, Track, Tracker, Manage, Logs, Everyday Life">
+	<!-- end: Meta -->
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+	<!-- start: CSS -->
+    {% load staticfiles %}
+    {% load custom_templates %}
+    <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
+	<link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
+	<link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
+	<link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/bootstrap-clockpicker.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/jquery.tokenize.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/style-font.css' %}" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>	<!-- end: CSS -->
+
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<link id="ie-style" href="css/ie.css" rel="stylesheet">
+	<![endif]-->
+
+	<!--[if IE 9]>
+		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
+	<![endif]-->
+
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" type="image/icon" href="/static/activitytracker/img/favicon.ico">
+
+	<!-- end: Favicon -->
+
+</head>
+
+<body>
+		<!-- start: Header -->
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="{% url 'index' %}"><span>Activity Tracker</span></a>
+
+				<!-- start: Header Menu -->
+				<div class="nav-no-collapse header-nav">
+					<ul class="nav pull-right">
+						<!-- start: User Dropdown -->
+						<li class="dropdown">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="halflings-icon white user"></i> {{ username }}
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-menu-title">
+ 									<span>Account Options</span>
+								</li>
+								<li>
+                                    <a href="{% url 'settings' %}"><i class="halflings-icon user"></i> Profile</a>
+							    </li>
+								<li>
+                                    <a href="{% url 'logout' %}"><i class="halflings-icon off"></i> Logout</a>
+                                </li>
+							</ul>
+						</li>
+						<!-- end: User Dropdown -->
+					</ul>
+				</div>
+				<!-- end: Header Menu -->
+
+			</div>
+		</div>
+	</div>
+	<!-- start: Header -->
+
+	<div class="container-fluid-full">
+		<div class="row-fluid">
+
+			<!-- start: Main Menu -->
+			<div id="sidebar-left" class="span2">
+				<div class="nav-collapse sidebar-nav">
+					<ul class="nav nav-tabs nav-stacked main-menu">
+						<li><a href="{% url 'index' %}"><i class="icon-list-alt"></i><span class="hidden-tablet"> History</span></a></li>
+						<li><a href="{% url 'timeline' %}"><i class="icon-tasks"></i><span class="hidden-tablet"> Timeline</span></a></li>
+						<li><a href="{% url 'goals' %}"><i class="icon-trophy"></i><span class="hidden-tablet"> Goals</span></a></li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Analytics</span></a>
+							<ul>
+								<li><a class="submenu" href="{% url 'analytics-activities' %}"><i class="icon-star"></i><span class="hidden-tablet"> Activities</span></a></li>
+								<li><a class="submenu" href="{% url 'analytics-friends' %}"><i class="icon-group"></i><span class="hidden-tablet"> Friends</span></a></li>
+								<li><a class="submenu" href="{% url 'analytics-goals' %}"><i class="icon-trophy"></i><span class="hidden-tablet"> Goals</span></a></li>
+                                <li><a class="submenu" href="{% url 'analytics-places' %}"><i class="icon-globe"></i><span class="hidden-tablet"> Places</span></a></li>
+                                <li><a class="submenu" href="{% url 'analytics-objects' %}"><i class="icon-wrench"></i><span class="hidden-tablet"> Objects</span></a></li>
+							</ul>
+						</li>
+                    </ul>
+				</div>
+			</div>
+			<noscript>
+				<div class="alert alert-block span10">
+					<h4 class="alert-heading">Warning!</h4>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+				</div>
+			</noscript>
+
+			<!-- start: Content -->
+			<div id="content" class="span10">
+
+				<ul class="breadcrumb">
+					<li>
+						<i class="icon-home"></i>
+						<a href="{% url 'index' %}">Home</a>
+						<i class="icon-angle-right"></i>
+					</li>
+					<li><a href="#">Timeline</a></li>
+				</ul>
+
+				<div class="row-fluid ">
+					<div class="span5 noMarginLeft">
+						<div class="dark">
+							<h1 align="center">Activity Timeline</h1>
+							<div class=" timeline">
+								<!-- Content from Ajax -->
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div><!--/.fluid-container-->
+		</div><!--/#content.span10-->
+	</div><!--/fluid-row-->
+		
+	<div class="modal hide fade " id="showActivityTimelineModal">
+        <div class="modal-content">
+					<div class="modal-header box-header blueNavy ">
+                        <button type="button" class="close" data-dismiss="modal" style="color:white">×</button>
+						<h2><i class="halflings-icon list-alt white"></i>
+                            <span class="break" ></span>
+                            <a style="color:white" href="the json display (jQuery modified href)">Details of selected Activity</a>
+                        </h2>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- data from activitytracker/display-activity.html -->
+					</div>
+					<div class="modal-footer">
+                         <a  class="showactivityheaderedit" id="editactivityTimeline" href="dynamically modified by jQuery" data-dismiss="modal" data-toggle="modal" data-target="#editActivityTimelineModal">
+                        	<i class="halflings-icon edit"></i> Edit Details
+						 </a>
+						 <a class="showactivityheaderdelete" id="deleteactivityTimeline" href="{% url 'deleteactivity' %}">
+                         	<i class="halflings-icon trash"></i> Delete Activity
+						 </a>
+						<a href="#" class="btn btn-danger" id='closeModal' data-dismiss="modal">Close</a>
+					</div>
+            </div>
+    </div>
+
+    <div class="modal hide fade" id="editActivityTimelineModal">
+		<form action="{% url 'updateactivity' %}" method="post" name="editForm" id="editForm" style="margin-bottom:0;">
+            {% csrf_token %}
+					<div class="modal-header box-header blueNavy">
+						<button type="button" class="close" data-dismiss="modal">×</button>
+						<h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>Edit Activity Details</h2>
+					</div>
+					<div class="modal-body no-padding">
+						<!-- Content from edit-activity.html -->
+					</div>
+					<div class="modal-footer">
+						<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+						<input type="button" class="btn btn-info" value="Update" id="editFormSubmit"/>
+					</div>
+		</form>
+    </div>
+	
+	<div class="clearfix"></div>
+	<div id="overlay">
+		<img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
+	</div>
+	<footer>
+
+		<p>
+			<span style="text-align:left;float:left">&copy; 2015 <a href="http://themifycloud.com/downloads/janux-free-responsive-admin-dashboard-template/" alt="Bootstrap_Metro_Dashboard">Arvanitakis Labs</a></span>
+			
+		</p>
+
+	</footer>
+	
+	<!-- start: JavaScript-->
+
+	<script src="{% static 'activitytracker/js/jquery-1.9.1.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery-ui-1.10.0.custom.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.ui.touch-punch.js' %}"></script>
+
+        <script src="{% static 'activitytracker/js/jquery-migrate-1.0.0.min.js' %}"></script>
+
+        <script src="{% static 'activitytracker/js/bootstrap.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/modernizr.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.cookie.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/excanvas.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.flot.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.sparkline.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.chosen.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.uniform.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.cleditor.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.noty.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.elfinder.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.raty.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.iphone.toggle.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.uploadify-3.1.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.gritter.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.imagesloaded.js' %}"></script>
+
+        <script src="{% static 'activitytracker/js/jquery.dataTables.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.masonry.min.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/jquery.knob.modified.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/counter.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/retina.js' %}"></script>
+
+		<script src="{% static 'activitytracker/js/custom.js' %}"></script>
+
+        <script src="{% static 'activitytracker/js/bootstrap-clockpicker.min.js' %}"></script>
+
+        <script src="{% static 'activitytracker/js/jquery.tokenize.js' %}"></script>
+
+         <script type="text/javascript"
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
+		</script>
+	<!-- end: JavaScript-->
+		<script src="{% static 'activitytracker/js/timeline.js' %}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+    {% load staticfiles %}
+    {% load custom_templates %}
+
+	<link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
+	<link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
+	<link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+			body { background: url({% static 'activitytracker/img/bg-login.jpg' %}) !important; }
+            .container-fluid-full { background: url({% static 'activitytracker/img/bg-login.jpg' %}) !important; }
+	</style>
+
+    <script src="{% static 'activitytracker/js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery-migrate-1.0.0.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery-ui-1.10.0.custom.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery.ui.touch-punch.js' %}"></script>
+
+        {% if action == "AuthCancelled" %} //do nothing
+            <script>window.close()</script>;
+        {% elif action == "RegisteredUser" %}
+            <script>
+            window.onunload = function (e) {
+                window.opener.LoadingWithBackdrop();
+            };
+            window.opener.location.reload();
+            window.close()
+            </script>
+        {% elif action == "NewUser" %}
+            <script>
+            window.onunload = function (e) {
+                window.opener.LoadingWithBackdrop();
+            };
+            window.opener.location.href = '{% url 'index' 'NewUser' %}';
+            window.close()
+            </script>
+        {% else %}
+            <body>
+                <div class="container-fluid-full">
+                    <div class="row-fluid">
+
+                        <div class="row-fluid">
+                            <div class="login-box">
+                                <div align="center">
+                                    {% if action == "InactiveUser" %}
+                                        <p style="color:red">Login via social community failed.
+                                            This is caused because you have a registered but unverified account that shares the
+                                            same e-mail address as the service you tried to log in with. Please visit your e-mail address
+                                            and verify your account using the e-mail we have sent you at registration time.
+                                        </p>
+                                        <p style="color:red">Verifying will resolve this issue.</p>
+                                    {% elif action == "LoginFailed" %}
+                                        <p style="color:red">Login via social community failed.
+                                            An unknown error has occured that prevented the request from being fullfilled. If this is
+                                            persistent, please consider registering manually to Activity Tracker.
+                                        </p>
+                                    {% endif %}
+                                    <p>If not closed manually, page will close in 30 seconds</p>
+                                    <script>setTimeout(function(){ window.close(); }, 30000);</script>
+                                </div>
+                            </div><!--/span-->
+                        </div><!--/row-->
+                    </div><!--/.fluid-row-->
+                </div>
+            </body>
+        {% endif %}
+</head>
+
+</html>
+

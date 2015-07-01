@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+
+    {% load staticfiles %}
+    {% load custom_templates %}
+
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<link id="ie-style" href="css/ie.css" rel="stylesheet">
+	<![endif]-->
+
+	<!--[if IE 9]>
+		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
+	<![endif]-->
+
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" href="{% static 'activitytracker/img/favicon.ico' %}">
+
+</head>
+
+<body>
+
+    <!-- Modal detailing the activity -->
+    <div class=" modal-body-replacement">
+    {% for activity_performed in activity_list %}
+        <div class="control-group">
+            <div class="controls activity-output">
+                <i class="glyphicons-icon star modal-icon"></i>
+                <p>{{ activity_performed.instance.activity }}</p>
+            </div>
+        </div>
+        <div class="control-group">
+			  <div class="controls activity-output">
+				<i class="glyphicons-icon calendar modal-icon"></i>
+				<p>{{ activity_performed.start_date }}  (Started)</p>
+			  </div>
+		</div>
+		<div class="control-group">
+			  <div class="controls activity-output">
+				<i class="glyphicons-icon calendar modal-icon"></i>
+				<p>{{ activity_performed.end_date }}  (Finished)</p>
+			  </div>
+		</div>
+		<div class="control-group">
+			<div class="controls activity-output">
+				  <i class="glyphicons-icon clock modal-icon"></i>
+				  <p>{{ activity_performed.start_time }}  (Started)</p>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls activity-output">
+				  <i class="glyphicons-icon history modal-icon"></i>
+				  <p>{{ activity_performed.end_time}}  (Finished)</p>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls activity-output">
+				<i class="glyphicons-icon cup modal-icon"></i>
+				<p>
+                    {% if activity_performed.instance.goal %}
+                   		{{ activity_performed.instance.goal }}
+                    {% else %}
+                		n/a
+                	{% endif %}
+                    &nbsp&nbsp
+                    {% if activity_performed.instance.goal_status == 'Reached'  %}
+                    	<i class="icon-ok"></i>
+                    {% elif activity_performed.instance.goal_status == 'Failed' %}
+                    	<i class="icon-remove"></i>
+                    {% elif activity_performed.instance.goal_status == 'InProgress' %}
+                    	<i class="icon-road"></i>
+                    {% endif %}
+                </p>
+			</div>
+		</div>
+        <div class="control-group">
+			<div class="controls activity-output">
+				<i class="glyphicons-icon ok modal-icon"></i>
+                {% if instance.result %}
+					<p>{{ activity_performed.instance.result}}</p>
+                {% else %}
+                	<p>n/a</p>
+                {% endif %}
+			</div>
+        <div class="control-group">
+			<div class="controls activity-output">
+				<i class="glyphicons-icon group modal-icon"></i>
+                {% if instance.friends %}
+					<p>{{ activity_performed.instance.friends|addSpaceAfterComma }}</p>
+                {% else %}
+                	<p>n/a</p>
+                {% endif %}
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls activity-output">
+				<i class="glyphicons-icon claw_hammer modal-icon"></i>
+				{% if tools %}
+					<p>{{ activity_performed.tools }}</p>
+                {% else %}
+                	<p>n/a</p>
+                {% endif %}
+			</div>
+		</div>
+    	<div class="control-group">
+			<div class="controls activity-output">
+				<i class="glyphicons-icon google_maps modal-icon"></i>
+                {% if activity_performed.instance.location_address %}
+					<p>{{ activity_performed.instance.location_address }}</p>
+                {% else %}
+                	<p>n/a</p>
+                {% endif %}
+			</div>
+		</div>
+        {% if activity_performed.instance.location_address %}
+        <div id="map-canvas-group-show-{{ activity_performed.instance.id }}" class="map-canvas">{{ activity_performed.instance.location_lat }},{{ activity_performed.instance.location_lng }}</div>
+        {% endif %}
+        <div style='margin-top:15px;border-bottom:6px solid {{ color }}'></div>
+    {% endfor %}
+    </div>
+
+	<script>
+        $('[id^=showGroupActivity] .modal-header').attr('style','border-bottom:6px solid {{ color }} !important');
+        $('[id^=showGroupActivity] .modal-header h2').text("Details of this Group of Activities ({{ total_grouped_activities }})");
+		function initializeGroupShowMaps() {
+            var mapCanvases = $('div[id^="map-canvas-group-show"]');
+            for(var i=0; i<mapCanvases.length;i++) {
+				var mapCanvas = mapCanvases[i];
+				var marker = new google.maps.Marker({});
+				var coords = mapCanvas.textContent;
+				var lat = parseFloat(coords.split(',')[0]);
+				var lng = parseFloat(coords.split(',')[1]);
+				marker.setPosition({lat: lat, lng: lng});
+				var mapOptions = {
+                    center: {lat: lat, lng: lng},
+                    zoom: 16
+				};
+				var mapShow = new google.maps.Map(mapCanvas, mapOptions);
+				marker.setMap(mapShow);
+            }
+		}
+		</script>
+
+</body>
+
+</html>
