@@ -473,8 +473,15 @@ def showactivity(request, performs_identification):
     end_date = details.end_date.strftime('%m/%d/%Y')
     end_time = details.end_date.strftime('%H:%M')
     start_time = details.start_date.strftime('%H:%M')
+
+    try:
+        provider_instance = PerformsProviderInfo.objects.get(instance=details)
+    except ObjectDoesNotExist:
+        provider_instance = None
+
     context = {'instance': details, 'tools': tools_string, 'start_t': start_time, 'end_t': end_time,
-               'end_date': end_date, 'start_date': start_date, 'color': colourDict[details.activity.category] }
+               'end_date': end_date, 'start_date': start_date, 'color': colourDict[details.activity.category],
+               'performs_provider_instance': provider_instance}
     return SimpleTemplateResponse('activitytracker/display-activity.html', context)
 
 # Gets called when a grouped activity needs to be shown
@@ -2283,8 +2290,7 @@ def social_login(request, action):
 
 def syncProviderActivities(request, provider):
     user = request.user
-    if checkConnection(user, provider) in ("Not Connected", "Authentication Failed"):
-        return HttpResponseBadRequest("Provider not connected or authorized properly. " +
-                                      "Please visit your profile page to resolve the issue")
+    if checkConnection(user, provider) in ("Not Connected", "Authentication Failed", "Cannot Process Request"):
+        return HttpResponseBadRequest("Provider Error. Please refresh the page or try again")
 
     return providerSyncFunctions[provider](user)

@@ -87,6 +87,7 @@
                 	<p>n/a</p>
                 {% endif %}
 			</div>
+        </div>
         <div class="control-group">
 			<div class="controls activity-output">
 				<i class="glyphicons-icon group modal-icon"></i>
@@ -144,7 +145,13 @@
 				marker.setMap(mapShow);
             }
 		}
-		</script>
+        $(document).ready(function () {
+            try {
+                initializeGroupShowMaps()
+            }
+            catch (e) {}
+        });
+    </script>
 
 </body>
 

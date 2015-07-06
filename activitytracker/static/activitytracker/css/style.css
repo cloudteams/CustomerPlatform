@@ -390,9 +390,8 @@ input.radio,
 	padding-bottom: 5em
 }
 .activity-output p {
-	display: inline;
 	position:relative;
-	top:6px;
+	top:-40px;
 	left:25%;
 }
 
@@ -423,6 +422,12 @@ body {
 
 a {
 	color: #646464;
+}
+
+p a {
+	color: #08c;
+	text-decoration: underline;
+	
 }
 
 hr {

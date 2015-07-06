@@ -89,24 +89,11 @@
         /* show activity fields */
         $('#showActivityModal').on("shown", function (e){
             var id_clicked = $('.modal-body-replacement').attr('id');
-            try {
-                initializeShowMap();
-            }
-            catch(err) {}
             var url_edit = BASE_URL + "activity/edit-activity/" + id_clicked;
             var url_json_activity = BASE_URL + "activity/" + id_clicked;
             $("#editactivity").attr("href", url_edit);
             $("#showActivityModal h2 a").attr("href", url_json_activity);
         });
-
-        /* show group activity fields */
-        $('#showGroupActivityModal').on("shown", function (e){
-            try {
-                initializeGroupShowMaps();
-            }
-            catch(err) {}
-        });
-
 
         /* Delete Activity */
         $('a[href="/activitytracker/activity/delete-activity/"]').on("click", function(event){
@@ -280,10 +267,7 @@
 
     });
 
-    $('#editActivityModal').on('shown', function () {
-        initializeEditMap();
 
-    });
 
 
 

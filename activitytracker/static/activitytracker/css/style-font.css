@@ -9,8 +9,19 @@
 	font-style: normal;
 }
 
+@font-face {
+	font-family: 'activicon2';
+	src:url('../font/activicon2.eot?-3tz3n8');
+	src:url('../font/activicon2.eot?#iefix-3tz3n8') format('embedded-opentype'),
+		url('../font/activicon2.ttf?-3tz3n8') format('truetype'),
+		url('../font/activicon2.woff?-3tz3n8') format('woff'),
+		url('../font/activicon2.svg?-3tz3n8#activicon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 [class^="activicon-"], [class*=" activicon-"] {
-	font-family: 'activicon';
+	font-family: 'activicon', 'activicon2';
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -408,3 +419,11 @@
 	content: "\e600";
 }
 
+/* New (2) added for twitter and facebook */
+
+.activicon-update-status:before {
+	content: "\e800";
+}
+.activicon-share-retweet:before {
+	content: "\e801";
+}

@@ -9,7 +9,12 @@
         <div class="control-group">
             <div class="controls activity-output">
                 <i class="glyphicons-icon star modal-icon"></i>
-                <p>{{ instance.activity }}</p>
+                {% if not performs_provider_instance %}
+                    <p>{{ instance.activity }}</p>
+                {% else %}
+                    <p><a href="{{ performs_provider_instance.provider_instance_url }}"
+                          target="_blank">{{ instance.activity }}</a></p>
+                {% endif %}
             </div>
         </div>
         <div class="control-group">
@@ -117,6 +122,12 @@
 			mapShow = new google.maps.Map(mapCanvas, mapOptions);
 			marker.setMap(mapShow);
 		}
+        $(document).ready(function () {
+            try {
+                initializeShowMap()
+            }
+            catch (e) {}
+        });
 		</script>
 
 

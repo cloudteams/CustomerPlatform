@@ -129,6 +129,7 @@ class PerformsProviderInfo(models.Model):
     instance = models.OneToOneField(Performs, related_name='instance')
     provider = models.CharField(max_length=100)
     provider_instance_id = models.CharField(max_length=50)
+    provider_instance_url = models.URLField(null=True)
 
     def __str__(self):
         return '%d %s %s' % (self.instance.id, self.provider, self.provider_instance_id)

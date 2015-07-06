@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django.contrib.auth.models
 import django.utils.timezone
 from django.conf import settings
 import django.core.validators
@@ -10,7 +11,7 @@ import django.core.validators
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0005_alter_user_last_login_null'),
+        ('auth', '0006_require_contenttypes_0002'),
     ]
 
     operations = [
@@ -28,8 +29,8 @@ class Migration(migrations.Migration):
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
                 ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('gender', models.CharField(default=b'M', max_length=2, choices=[(b'M', b'Male'), (b'F', b'Female')])),
-                ('date_of_birth', models.DateField()),
+                ('gender', models.CharField(max_length=2, null=True, choices=[(b'M', b'Male'), (b'F', b'Female')])),
+                ('date_of_birth', models.DateField(null=True)),
                 ('groups', models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Permission', blank=True, help_text='Specific permissions for this user.', verbose_name='user permissions')),
             ],
@@ -38,7 +39,9 @@ class Migration(migrations.Migration):
                 'verbose_name': 'user',
                 'verbose_name_plural': 'users',
             },
-            bases=(models.Model,),
+            managers=[
+                ('objects', django.contrib.auth.models.UserManager()),
+            ],
         ),
         migrations.CreateModel(
             name='Activity',
@@ -49,9 +52,6 @@ class Migration(migrations.Migration):
                 ('icon_classname', models.CharField(default=b'', max_length=50)),
                 ('category', models.CharField(max_length=20, null=True, choices=[(b'black', b'Self-care/Everyday Needs'), (b'blue', b'Communication/Socializing'), (b'greenLight', b'Sports/Fitness'), (b'orange', b'Fun/Leisure/Hobbies'), (b'redDark', b'Responsibilities'), (b'purple', b'Transportation')])),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Friend',
@@ -60,9 +60,14 @@ class Migration(migrations.Migration):
                 ('friend_name', models.CharField(max_length=100)),
                 ('friend_of_user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='hasSuperActivity',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('subactivity', models.ForeignKey(related_name='subactivity', to='activitytracker.Activity')),
+                ('superactivity', models.ForeignKey(related_name='superactivity', to='activitytracker.Activity')),
+            ],
         ),
         migrations.CreateModel(
             name='Object',
@@ -71,28 +76,34 @@ class Migration(migrations.Migration):
                 ('object_name', models.CharField(max_length=100)),
                 ('object_of_user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Performs',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('goal', models.CharField(max_length=200)),
-                ('friends', models.CharField(max_length=200, null=True)),
+                ('result', models.CharField(default=b'', max_length=200)),
+                ('friends', models.CharField(max_length=200)),
                 ('start_date', models.DateTimeField(verbose_name=b'Start Time')),
                 ('end_date', models.DateTimeField(verbose_name=b'End Time')),
                 ('goal_status', models.CharField(max_length=20, null=True, choices=[(b'Reached', b'Reached'), (b'InProgress', b'In Progress'), (b'Failed', b'Failed')])),
-                ('location_address', models.CharField(max_length=200, null=True)),
-                ('location_latLng', models.CharField(max_length=50, null=True)),
+                ('location_address', models.CharField(max_length=200)),
+                ('location_lat', models.FloatField(null=True)),
+                ('location_lng', models.FloatField(null=True)),
                 ('activity', models.ForeignKey(to='activitytracker.Activity', db_column=b'activity_key')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
                 ('using', models.ManyToManyField(to='activitytracker.Object')),
             ],
-            options={
-            },
-            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='PerformsProviderInfo',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('provider', models.CharField(max_length=100)),
+                ('provider_instance_id', models.CharField(max_length=50)),
+                ('performs_provider_url', models.CharField(default=b'33', max_length=200)),
+                ('instance', models.OneToOneField(related_name='instance', to='activitytracker.Performs')),
+            ],
         ),
         migrations.CreateModel(
             name='Places',
@@ -100,12 +111,18 @@ class Migration(migrations.Migration):
                 ('place_id', models.AutoField(serialize=False, primary_key=True)),
                 ('place_name', models.CharField(max_length=200)),
                 ('place_address', models.CharField(max_length=200)),
-                ('place_latLng', models.CharField(max_length=50)),
+                ('place_lat', models.FloatField(null=True)),
+                ('place_lng', models.FloatField(null=True)),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-            },
-            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='UserVerification',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('verification_code', models.CharField(max_length=50)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+            ],
         ),
         migrations.AlterUniqueTogether(
             name='places',

@@ -6,6 +6,9 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta
 from pygeocoder import Geocoder
+from config import *
+from tweetpony import APIError
+import tweetpony
 
 
 def haversine(lat1, lon1, lat2, lon2):
@@ -22,6 +25,44 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * asin(sqrt(a))
     km = 6367 * c
     return km
+
+def addActivityFromProvider(user, goal, goal_status, friends, objects, result, location_lat, location_lng,
+                            location_address, start_date, end_date, activity):
+
+    performs_instance = Performs(user=user, activity=activity, friends=friends, goal=goal, goal_status=goal_status,
+             location_address=location_address, location_lat=location_lat, location_lng=location_lng,
+             start_date=start_date, end_date=end_date, result=result)
+    performs_instance.save()
+
+    for friend in friends.split(','):
+        try:
+            user.friend_set.get(friend_name=friend)
+        except ObjectDoesNotExist:
+            if not friend:
+                continue
+            instance = Friend(friend_name=friend, friend_of_user=user)
+            instance.save()
+
+    for tool in objects.split(','):
+        try:
+            object_instance = user.object_set.get(object_name=tool)
+        except ObjectDoesNotExist:
+            if not tool:
+                continue
+            object_instance = Object(object_name=tool, object_of_user=user)
+            object_instance.save()
+        performs_instance.using.add(object_instance)
+
+    return performs_instance
+
+
+def createActivityLinks(provider, instance, provider_instance_id, url ):
+    if createActivityLinks:
+        link_instance = PerformsProviderInfo(provider=provider, instance=instance,
+                                             provider_instance_id=str(provider_instance_id), provider_instance_url=url)
+        link_instance.save()
+    return 'Done'
+
 
 
 def placesNearActivity(user, activity, place, radius):
@@ -64,22 +105,7 @@ def assignDurationInterval(duration):
         return "0-0.5"
 
 
-def providerData(provider, access_token):
-    url_headers_dict = {
-        'runkeeper': {
-                    'headers':{
-                         'Host': 'api.runkeeper.com',
-                         'Authorization': 'Bearer '+ str(access_token),
-                         'Accept': 'application/vnd.com.runkeeper.User+json'
-                     },
-                    'url': 'http://api.runkeeper.com/user'
-        }
-    }
-    return url_headers_dict[provider]
-
-
 def syncRunkeeperActivities(user):
-
     # function that will fetch us the ids based on the url and headers we provided. Returns the list passed + the new ids
     def fetchRunkeeperFitnessActivityIds(passed_url, passed_headers):
         list_of_ids = []
@@ -187,8 +213,8 @@ def syncRunkeeperActivities(user):
                     object_object = user.object_set.get(object_name=object)
                     performs_instance.using.add(object_object)
                     performs_instance.save()
-                p = PerformsProviderInfo(provider='runkeeper', instance=performs_instance, provider_instance_id=str(runkeeper_id))
-                p.save()
+
+                createActivityLinks('runkeeper', performs_instance, str(runkeeper_id), r['activity'] )
 
         return
     # End of Function 2 ----------------------------- Start of function for sleep activities
@@ -315,26 +341,170 @@ def syncRunkeeperActivities(user):
         return HttpResponse('Runkeeper Activities have been synced')
 
 
+def syncTwitterActivities(user):
+    social_auth_instance = user.social_auth.get(provider='twitter')
+    twitter_user_id = social_auth_instance.extra_data['id']
+    try:
+        api = tweetpony.API(consumer_key=SOCIAL_AUTH_TWITTER_KEY,
+                            consumer_secret=SOCIAL_AUTH_TWITTER_SECRET,
+                            access_token_secret=str(social_auth_instance.extra_data['access_token']['oauth_token_secret']),
+                            access_token=str(social_auth_instance.extra_data['access_token']['oauth_token'])
+        )
+    except APIError:
+        return HttpResponse('Too many requests. Please try again in a few minutes')
+
+    while True:
+        try:
+            # I am breaking the Calls so that im only asking for old OR new tweets. If i asked for both i would waste
+            # the 15 calls/15 minutes that twitter provides me. This way i can get more data inside the 15min window
+
+            since_id = social_auth_instance.extra_data['since_id']
+            max_id = social_auth_instance.extra_data['max_id']
+            read_all_past_tweets = social_auth_instance.extra_data['read_all_past_tweets']
+
+            # If i haven't read all the past tweets i'll ask only for old tweets until i get them all
+            if not read_all_past_tweets:
+                tweets= api.user_timeline(user_id=twitter_user_id, count=200, trim_user=True, include_rts=True,
+                                       exclude_replies=True, max_id=max_id, contributor_details=True)
+                if not tweets:
+                    read_all_past_tweets = social_auth_instance.extra_data['read_all_past_tweets'] = True
+
+            # If i have finished with the old, i can ask only for new tweets that happen after the last sync
+            if read_all_past_tweets:
+                tweets = api.user_timeline(user_id=twitter_user_id, count=200, trim_user=True, include_rts=True,
+                                       exclude_replies=True, since_id=since_id, contributor_details=True)
+
+        # Exception happens if i haven't synced before
+        except KeyError:
+            tweets = api.user_timeline(user_id=twitter_user_id, count=200, trim_user=False, include_rts=True,
+                                       exclude_replies=True, contributor_details=True)
+            max_id = since_id = 0
+            social_auth_instance.extra_data['read_all_past_tweets'] = False
+
+        # If set is Empty i'm done syncing
+        if not tweets:
+            social_auth_instance.save()
+            break
+
+        # If max API Calls for the time window is reached, tweets variable will contain a field 'errors'
+        try:
+            tweets[0]['errors']
+            return HttpResponseBadRequest('Request Limit Reached. Please Re-Sync in a few minutes time')
+        except:
+            pass
 
 
+        for tweet in tweets:
+
+            # Get type of tweet, simple or retweet and choose the proper "result" text
+            if tweet.retweeted:
+                activity_performed = Activity.objects.get(activity_name="Share / Retweet")
+                result = "Including yours, there is a total of " + str(tweet.retweet_count) + " retweets at the moment."
+                if tweet.favorited:
+                    result = "You have favorited this tweet. " + result
+            else:
+                activity_performed = Activity.objects.get(activity_name="Status Update")
+                result = "Your tweet has been retweeted " + str(tweet.retweet_count) + " and favorited " + \
+                         str(tweet.favorite_count) + " times at the moment"
+
+            # Check if the user has picked the "Exact Location" Option
+            if tweet.coordinates is not None:
+                location_lat = tweet.coordinates['coordinates'][1]
+                location_lng = tweet.coordinates['coordinates'][0]
+                location_address = str(Geocoder.reverse_geocode(location_lat, location_lng)[0])
+            # Else if check if the user has chosen the simple "Location" Option
+            elif tweet.place is not None:
+                location_lat = (tweet.place['bounding_box']['coordinates'][0][0][1] \
+                               + tweet.place['bounding_box']['coordinates'][0][2][1]) /2.0
+                location_lng = (tweet.place['bounding_box']['coordinates'][0][0][0] \
+                               + tweet.place['bounding_box']['coordinates'][0][1][0]) /2.0
+                location_address = tweet.place['full_name']
+            # Else, if there was no Location added
+            else:
+                location_lat = None
+                location_lng = None
+                location_address = ""
+
+            # The medium used for the status update. Here is Twitter but elsewhere could be others i.e. Facebook
+            object_used = "Twitter"
+
+            # We cant access the Goal of the user from Twitter
+            goal = ""
+            goal_status = None
+
+            # The starting time of the tweet is standardized as 1 min before the tweet was posted
+            start_date = datetime.strptime(str(tweet.created_at), "%Y-%m-%d %H:%M:%S") - timedelta(seconds=60)
+            end_date = datetime.strptime(str(tweet.created_at), "%Y-%m-%d %H:%M:%S")
+
+            # The physical entities that participated in the tweet
+            friends = ','.join([user_mention['name'] for user_mention in tweet.entities['user_mentions']])
+
+            # Add the activity to the database
+            performs_instance = addActivityFromProvider(user=user, activity=activity_performed, friends=friends,
+                                    goal=goal, goal_status=goal_status, location_address=location_address,
+                                    location_lat=location_lat, location_lng=location_lng, start_date=start_date,
+                                    end_date=end_date, result=result, objects=object_used)
+
+            # Update max_id (will help to get tweets older than the id of this tweet) for optimization of results
+            if (tweet.id < max_id) or (max_id == 0):
+                max_id = tweet.id
+
+            # Update since_id (will help to get tweets more recent than this tweet) for optimization of results
+            if (tweet.id > since_id) or (since_id == 0):
+                since_id = tweet.id
+
+            # Store the activity "linking" in our database
+            tweet_url = "https://twitter.com/statuses/" + tweet.id_str
+            createActivityLinks('twitter', performs_instance, str(tweet.id), tweet_url)
+
+        # reduce by 1 so we don't fetch the same tweet again
+        if max_id != 0:
+            max_id -= 1
+
+        # Store user variables inside the database
+        social_auth_instance.extra_data['max_id'] = max_id
+        social_auth_instance.extra_data['since_id'] = since_id
+
+        # Save everything
+        social_auth_instance.save()
+
+    return HttpResponse("Twitter Activities have been synced")
 
 
+def verifyRunkeeperAccess(social_auth_instance):
+    if requests.get(
+        url='http://api.runkeeper.com/user',
+        headers= {
+            'Host': 'api.runkeeper.com',
+            'Authorization': 'Bearer '+ str(social_auth_instance.extra_data['access_token']),
+            'Accept': 'application/vnd.com.runkeeper.User+json'
+        }
+    ).status_code == 200:
+        return 'Authentication Successful'
+    else:
+        return 'Authentication Failed'
+
+def verifyTwitterAccess(social_auth_instance):
+    try:
+        api = tweetpony.API(consumer_key=SOCIAL_AUTH_TWITTER_KEY,
+                        consumer_secret=SOCIAL_AUTH_TWITTER_SECRET,
+                        access_token_secret=str(social_auth_instance.extra_data['access_token']['oauth_token_secret']),
+                        access_token=str(social_auth_instance.extra_data['access_token']['oauth_token'])
+        )
+        return 'Authentication Successful'
+    except APIError as error:
+        if error.code == 88:
+            return "Cannot Process Request"
+        else:
+            return 'Authentication Failed'
 
 
 def checkConnection(user, provider):
     try:
-        social = user.social_auth.get(provider=provider)
-        access_token = social.extra_data['access_token']
+        social_auth_instance = user.social_auth.get(provider=provider)
+        return  providerAuthenticationFunctions[provider](social_auth_instance)
     except ObjectDoesNotExist:
         return 'Not Connected'
-    provider_data = providerData('runkeeper', str(access_token))
-    r = requests.get(provider_data['url'], headers=provider_data['headers']).json()
-    try:
-        if r['reason'] == "Revoked":
-            return 'Authentication Failed'
-    except KeyError:
-        pass
-    return 'Authentication Successful'
 
 
 def getAppManagementDomValues(status, provider):
@@ -354,6 +524,14 @@ def getAppManagementDomValues(status, provider):
                      'statusFontColor': 'orange',
                      'providerIconName': provider
         }
+    elif status == "Cannot Process Request":
+        return {     'buttonText': 'Try again',
+                     'buttonClassColor': 'grey',
+                     'statusText': 'Too many requests sent. Try again later',
+                     'statusIcon': 'icon-warning-sign',
+                     'statusFontColor': 'red',
+                     'providerIconName': provider
+        }
     else:
         return {     'buttonText': 'Disconnect',
                      'buttonClassColor': 'red',
@@ -365,9 +543,17 @@ def getAppManagementDomValues(status, provider):
 
 
 # only providers that cant supply our app with activity data. Not providers for simply logging in
-available_providers = ['runkeeper']
+available_providers = ['twitter', 'runkeeper', 'instagram']
 providerSyncFunctions = {
         'runkeeper': syncRunkeeperActivities,
+        'twitter': syncTwitterActivities,
+        #'instagram': syncInstagramActivities,
         #'facebook': syncFacebookActivities,
         #'google': syncGoogleActivities
     }
+
+providerAuthenticationFunctions = {
+    'runkeeper': verifyRunkeeperAccess,
+    'twitter': verifyTwitterAccess,
+    #'instagram': verifyInstagramAccess
+}
