@@ -112,12 +112,10 @@
                     window.location.reload();
                 },
                 success: function (response) {
-                    var currentscrollpos = $(window).scrollTop();
                     $('#showActivityModal').modal('hide');
                     var viewInstance = $('#main_calendar').fullCalendar('getView');
                     RenderViewActivities(viewInstance); // redraws activities based on view
                     $('#main_calendar').fullCalendar( 'refetchEvents' ); // re-render events on Calendar
-                    $("html, body").animate({ scrollTop: currentscrollpos }, 1300);
                     Done();
                 }
             });

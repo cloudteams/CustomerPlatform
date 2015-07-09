@@ -1,5 +1,6 @@
 from math import radians, cos, sin, asin, sqrt
 import requests
+import json
 from social.apps.django_app.default.models import *
 from activitytracker.models import *
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -9,8 +10,8 @@ from pygeocoder import Geocoder
 from config import *
 from tweetpony import APIError
 import tweetpony
-
-
+from instagram.client import InstagramAPI
+from instagram.bind import InstagramAPIError
 def haversine(lat1, lon1, lat2, lon2):
     """
     Calculate the great circle distance between two points
@@ -172,8 +173,7 @@ def syncRunkeeperActivities(user):
                 location_lng = float(r['path'][0]['longitude'])
                 location_address = str(Geocoder.reverse_geocode(r['path'][0]['latitude'],r['path'][0]['longitude'])[0])
             except:
-                location_lat = None
-                location_lng = None
+                location_lat = location_lng = None
                 location_address = ""
 
             # if object != none and it's not registered under the user, register it
@@ -393,7 +393,6 @@ def syncTwitterActivities(user):
         except:
             pass
 
-
         for tweet in tweets:
 
             # Get type of tweet, simple or retweet and choose the proper "result" text
@@ -421,8 +420,7 @@ def syncTwitterActivities(user):
                 location_address = tweet.place['full_name']
             # Else, if there was no Location added
             else:
-                location_lat = None
-                location_lng = None
+                location_lat = location_lng = None
                 location_address = ""
 
             # The medium used for the status update. Here is Twitter but elsewhere could be others i.e. Facebook
@@ -437,7 +435,15 @@ def syncTwitterActivities(user):
             end_date = datetime.strptime(str(tweet.created_at), "%Y-%m-%d %H:%M:%S")
 
             # The physical entities that participated in the tweet
-            friends = ','.join([user_mention['name'] for user_mention in tweet.entities['user_mentions']])
+            # If it exists, remove the user from the list of friends (since he might have tagged himself)
+            friends_list = (list(set([user_mention['name'] for user_mention in tweet.entities['user_mentions']])))
+            try:
+                friends_list.remove(tweet.user.name)
+            except ValueError:
+                pass
+
+            # The friends that participated in the Activity
+            friends = ','.join(friends_list)
 
             # Add the activity to the database
             performs_instance = addActivityFromProvider(user=user, activity=activity_performed, friends=friends,
@@ -471,6 +477,128 @@ def syncTwitterActivities(user):
     return HttpResponse("Twitter Activities have been synced")
 
 
+def syncInstagramActivities(user):
+    social_auth_instance = user.social_auth.get(provider='instagram')
+    user_instagram_id = social_auth_instance.uid
+
+    # Fetch InstagramUser instance and check if call limit exceeded or if user de-authenticated while the Activity
+    # Tracker page hasn't been refreshed and updated
+    try:
+        api = InstagramAPI(access_token=social_auth_instance.extra_data['access_token'],
+                           client_secret=SOCIAL_AUTH_INSTAGRAM_SECRET)
+    except InstagramAPIError as error:
+        if error.status_code in (420, 429):
+            return HttpResponse('Too many requests. Please try again in a few minutes')
+        else:
+            return HttpResponseBadRequest('Authentication Error. Please refresh the page and re-authorize')
+
+    # If another sync has already taken place for the user
+    try:
+        since_id = social_auth_instance.extra_data['since_id']
+        feed, next_url = api.user_recent_media(user_id=user_instagram_id, min_id=since_id)
+        if not feed:
+            return HttpResponse("Instagram Activities are already up to date")
+
+    # If this is the first sync
+    except KeyError:
+        feed, next_url = api.user_recent_media(user_id=user_instagram_id)
+
+    highest_found_id = ""
+    lowest_found_id = ""
+    while True:
+
+        # Stop when there is an empty result set
+        if not feed:
+            break
+
+        # For every item in the results set
+        for media in feed:
+
+            # Choose a proper Activity depeinding on the Media found
+            if type == "video":
+                activity_performed = Activity.objects.get(activity_name="Video Upload")
+            else:
+                activity_performed = Activity.objects.get(activity_name="Image Upload")
+
+            # Assign the proper object used for the Activities
+            object_used = "Instagram"
+
+            # No goal can be found through these types of activities
+            goal = ''
+            goal_status = None
+
+            # Construct a proper result based on the amount of likes and comments found
+            try:
+                number_of_comments = media.comment_count
+            except:
+                number_of_comments = 0
+
+            try:
+                number_of_likes = media.like_count
+            except:
+                number_of_likes = 0
+
+            result = 'Your post has been liked by ' + str(number_of_likes) + \
+                     ' and commented by ' + str(number_of_comments) + ' people at the moment'
+
+            # Find the location (if it exists) that is related to this post
+            try:
+                location_address = media.location.name
+                location_lat = media.location.point.latitude
+                location_lng = media.location.point.longitude
+            except AttributeError:
+                location_lat = location_lng = None
+                location_address = ''
+
+            # The start and end date of the activity. We calculate a 2 minute interval due to the editing, captioning
+            # etc. that each photograph or video subjects to
+            start_date = datetime.strptime(str(media.created_time), "%Y-%m-%d %H:%M:%S") - timedelta(seconds=120)
+            end_date = datetime.strptime(str(media.created_time), "%Y-%m-%d %H:%M:%S")
+
+            # The friends related with the specific media (derive from tags). This field doesnt exist if it's empty
+            try:
+                friends_list = (list(set(media.users_in_photo)))
+            except AttributeError:
+                friends_list = ''
+
+            # If it exists, remove the user from the list of friends (since he might have tagged himself)
+            try:
+                friends_list.remove(media.user.full_name)
+            except ValueError:
+                pass
+
+            # The friends that participated in the Activity
+            friends = ','.join(friends_list)
+
+            performs_instance = addActivityFromProvider(user=user, activity=activity_performed, friends=friends,
+                                    goal=goal, goal_status=goal_status, location_address=location_address,
+                                    location_lat=location_lat, location_lng=location_lng, start_date=start_date,
+                                    end_date=end_date, result=result, objects=object_used)
+
+            # Store the activity "linking" in our database
+            createActivityLinks('instagram', performs_instance, str(media.id), media.link)
+
+        # get the IDs that will help optimize results of the next query
+        if highest_found_id < feed[0].id:
+            highest_found_id = str(int(feed[0].id.split('_')[0]) + 1) + '_' + feed[0].id.split('_')[1]
+
+        if (lowest_found_id > feed[-1].id) or (not lowest_found_id):
+            lowest_found_id = feed[-1].id
+
+        # Get the next page of results. "Since_id" won't be assigned a value if we haven't synced before
+        try:
+            feed, next_url = api.user_recent_media(user_id=user_instagram_id, min_id=since_id, max_id=lowest_found_id)
+        except UnboundLocalError:
+            feed, next_url = api.user_recent_media(user_id=user_instagram_id, max_id=lowest_found_id)
+
+    # Store user sync checkpoint inside the database
+    social_auth_instance.extra_data['since_id'] = highest_found_id
+    # Save everything
+    social_auth_instance.save()
+
+    return HttpResponse("Instagram Activities have been synced")
+
+
 def verifyRunkeeperAccess(social_auth_instance):
     if requests.get(
         url='http://api.runkeeper.com/user',
@@ -495,6 +623,18 @@ def verifyTwitterAccess(social_auth_instance):
     except APIError as error:
         if error.code == 88:
             return "Cannot Process Request"
+        else:
+            return 'Authentication Failed'
+
+
+def verifyInstagramAccess(social_auth_instance):
+   try:
+        InstagramAPI(access_token=social_auth_instance.extra_data['access_token'],
+                           client_secret=SOCIAL_AUTH_INSTAGRAM_SECRET)
+        return 'Authentication Successful'
+   except InstagramAPIError as error:
+        if error.status_code in (420, 429):
+            return 'Cannot Process Request'
         else:
             return 'Authentication Failed'
 
@@ -547,7 +687,7 @@ available_providers = ['twitter', 'runkeeper', 'instagram']
 providerSyncFunctions = {
         'runkeeper': syncRunkeeperActivities,
         'twitter': syncTwitterActivities,
-        #'instagram': syncInstagramActivities,
+        'instagram': syncInstagramActivities,
         #'facebook': syncFacebookActivities,
         #'google': syncGoogleActivities
     }
@@ -555,5 +695,5 @@ providerSyncFunctions = {
 providerAuthenticationFunctions = {
     'runkeeper': verifyRunkeeperAccess,
     'twitter': verifyTwitterAccess,
-    #'instagram': verifyInstagramAccess
+    'instagram': verifyInstagramAccess
 }
