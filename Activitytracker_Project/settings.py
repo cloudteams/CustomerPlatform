@@ -132,6 +132,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.google.GoogleOAuth2',
     'social.backends.runkeeper.RunKeeperOAuth2',
+    'social.backends.youtube.YoutubeOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 

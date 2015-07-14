@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+import math
 # Basic User model
 
 
@@ -99,7 +100,7 @@ class Performs(models.Model):
         d = self.end_date - self.start_date
         days, seconds = d.days, d.seconds
         hours = seconds/3600
-        minutes = (seconds - hours*3600)/60
+        minutes = int(math.ceil((seconds - hours*3600)/60.0))
         return [days, hours, minutes]
 
     def displayable_date(self):

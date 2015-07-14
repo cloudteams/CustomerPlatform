@@ -1,6 +1,6 @@
 from math import radians, cos, sin, asin, sqrt
 import requests
-import json
+import re
 from social.apps.django_app.default.models import *
 from activitytracker.models import *
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -12,6 +12,28 @@ from tweetpony import APIError
 import tweetpony
 from instagram.client import InstagramAPI
 from instagram.bind import InstagramAPIError
+import httplib2
+from oauth2client.client import AccessTokenCredentials, AccessTokenCredentialsError
+from googleapiclient.discovery import build
+
+def parseYoutubeDurationToTimedelta(time_str):
+    """
+    This function calculates the timedelta (in seconds) of a Youtube Duration
+    format. The main type of format is ISO8601, that is PT#H#M#S or PT#M#S.
+    We ignore videos that are greater than 24 hours in duration
+    """
+    regex = re.compile(r'PT((?P<hours>\d+?)H)?((?P<minutes>\d+?)M)?((?P<seconds>\d+?)S)?')
+    parts = regex.match(time_str)
+    if not parts:
+        return
+    parts = parts.groupdict()
+    time_params = {}
+    for (name, param) in parts.iteritems():
+        if param:
+            time_params[name] = int(param)
+    return timedelta(**time_params)
+
+
 def haversine(lat1, lon1, lat2, lon2):
     """
     Calculate the great circle distance between two points
@@ -599,10 +621,157 @@ def syncInstagramActivities(user):
     return HttpResponse("Instagram Activities have been synced")
 
 
+def syncYoutubeActivities(user):
+
+    # The max amount of results that i ask the Youtube API to fetch me
+    MAX_YOUTUBE_RESULTS = 5
+
+    # The current api name of the provider
+    YOUTUBE_API_NAME = 'youtube'
+
+    # The current API version
+    YOUTUBE_API_VERSION = 'v3'
+
+    def fetchAndInsertVideoActivities(type, api, max_results):
+
+         # We poll the Channels in order to get the ID of the "Watch History Channel" thats lets us access past seen videos
+        channels = api.channels().list(part="contentDetails", mine=True).execute()
+
+        # The ID of the selected Channel type. Can be 'watchHistory' or 'uploads'
+        channel_type_id = channels['items'][0]['contentDetails']['relatedPlaylists'][type]
+
+        # We poll the  Channel to get the  most recent watched or uploaded videos. The data returned DOESN'T
+        # contain the durations of the videos or any other similar data so another call must be made
+        channel_type_videos = api.playlistItems().list(part="snippet,contentDetails",
+                                                            playlistId=channel_type_id,
+                                                            maxResults=max_results).execute()
+
+        # We create a comma-seperated list of the Ids of the 50 most recently watched or uploaded videos, based
+        # on the value of the 'type' parameter
+        channel_type_videoIds = ','.join(video['contentDetails']['videoId'] for video in channel_type_videos['items'])
+
+
+        # We ask for the details (to get the Duration and Statistics) of the videos whose IDs are in the list above
+        channel_type_video_details = api.videos().list(part="contentDetails,statistics",
+                                                    id=channel_type_videoIds,
+                                                        maxResults=max_results).execute()
+
+
+
+
+        # The flag that lets us know we are done. It is triggered either by trying to add a previously added video
+        # or by reaching the end of the video list
+        more_new_videos_exist = True
+
+        while more_new_videos_exist:
+
+            # We iterate simultaneously through both lists, since each of them will give us an info the other cannot
+            # provide. Specifically we get video duration from the 2nd and published (i.e. watched) date from the 1st
+            for video, video_details in zip(channel_type_videos['items'], channel_type_video_details['items']):
+
+                # The name of the performed activity
+                if type == 'uploads':
+                    activity_performed = Activity.objects.get(activity_name="Video Upload")
+                else:
+                    activity_performed = Activity.objects.get(activity_name="Video Watching")
+
+                # The provider used for this activity
+                object_used = "Youtube"
+
+                # We can't get a goal for this activity, unless the user explicitly declares it
+                goal = ""
+                goal_status = None
+
+                # The start date derives from the 1st list, while the end date is calculated via the duration of the video
+                start_date = datetime.strptime(video['snippet']['publishedAt'][:-5], "%Y-%m-%dT%H:%M:%S")
+                if type == 'uploads':
+                    end_date = start_date + timedelta(seconds=300)
+                else:
+                    end_date = start_date + parseYoutubeDurationToTimedelta(video_details['contentDetails']['duration'])
+
+                # Get the unique ID of the video in the provider's database
+                video_id = video['contentDetails']['videoId']
+                # The url that points to the actual Youtube video
+                video_url = 'https://www.youtube.com/watch?v=' + video_id
+
+                # Can't get any other participants in this type of Activity
+                friends = ""
+
+                # Can't get the location that the user watched the video. The only option was through their browser but
+                # that not only isn't active all the time, but also gives a rather rough estimate of the actual location
+                location_address = ""
+                location_lat = location_lng = None
+
+                # The result of this Activity
+                result = "Including your activity, this video has been viewed " + \
+                         str(video_details['statistics']['viewCount']) + " and liked " + \
+                         str(video_details['statistics']['likeCount']) + " times in total"
+
+                # Check if we reached the video that was inserted at a former Sync Action, then we are done here
+                if PerformsProviderInfo.objects.filter(provider='youtube',
+                                                       provider_instance_id=str(video_id)
+                                                       ).count() > 0:
+                    more_new_videos_exist = False
+                    break
+
+                # Add the activity to the database
+                performs_instance = addActivityFromProvider(user=user, activity=activity_performed, friends=friends,
+                                        goal=goal, goal_status=goal_status, location_address=location_address,
+                                        location_lat=location_lat, location_lng=location_lng, start_date=start_date,
+                                        end_date=end_date, result=result, objects=object_used)
+
+                # Create a connection/link of the Activity representation between Activity Tracker and corresponding Provider
+                createActivityLinks('youtube', performs_instance, str(video_id), video_url)
+
+            # If we got here because we reached the end of the "new and not inserted" videos
+            if not more_new_videos_exist:
+                break
+
+            # Try to get the next page of results
+            try:
+                channel_type_videos = api.playlistItems().list(part="snippet,contentDetails",
+                                                               playlistId=channel_type_id,
+                                                               nextPage=channel_type_videos['nextPageToken'],
+                                                               maxResults=max_results).execute()
+
+            # If there is not a next Page, stop iteration and return
+            except:
+                break
+
+
+            # If there was a new page of results, proceed as normal
+            channel_type_videoIds = ','.\
+                join(video['contentDetails']['videoId'] for video in channel_type_videos['items'])
+
+            channel_type_video_details = api.videos().list(part="contentDetails,statistics",
+                                                    id=channel_type_videoIds,
+                                                        maxResults=max_results).execute()
+
+        return 'Ok'
+
+    # Check if the user has de-authorized the App or the Secret Key has expired, and the page hasn't been refreshed
+    social_auth_instance = user.social_auth.get(provider='youtube')
+    if verifyInstagramAccess(social_auth_instance) != "Authentication Successful":
+        return HttpResponse("Activity Tracker has been manually de-authorized from accessing Youtube")
+
+    # The validated data needed by Google to produce an API object of Youtube
+    credentials = AccessTokenCredentials(social_auth_instance.extra_data['access_token'], 'Activity-Tracker/1.0')
+
+    # The api object of Youtube that corresponds to the current User
+    api = build(YOUTUBE_API_NAME, YOUTUBE_API_VERSION, http=credentials.authorize(httplib2.Http()))
+
+    # Get and insert the video activities regarding uploaded videos
+    fetchAndInsertVideoActivities('uploads', api, MAX_YOUTUBE_RESULTS)
+
+    # Get and insert the video activities regarding recently watched videos
+    fetchAndInsertVideoActivities('watchHistory', api, MAX_YOUTUBE_RESULTS)
+
+    return HttpResponse("Youtube Activities have been synced")
+
 def verifyRunkeeperAccess(social_auth_instance):
     if requests.get(
         url='http://api.runkeeper.com/user',
-        headers= {
+        headers={
             'Host': 'api.runkeeper.com',
             'Authorization': 'Bearer '+ str(social_auth_instance.extra_data['access_token']),
             'Accept': 'application/vnd.com.runkeeper.User+json'
@@ -611,6 +780,7 @@ def verifyRunkeeperAccess(social_auth_instance):
         return 'Authentication Successful'
     else:
         return 'Authentication Failed'
+
 
 def verifyTwitterAccess(social_auth_instance):
     try:
@@ -635,6 +805,36 @@ def verifyInstagramAccess(social_auth_instance):
    except InstagramAPIError as error:
         if error.status_code in (420, 429):
             return 'Cannot Process Request'
+        else:
+            return 'Authentication Failed'
+
+
+def verifyYoutubeAccess(social_auth_instance):
+
+        # Check Access token
+        google_authentication_url = 'https://www.googleapis.com/oauth2/v3/tokeninfo?access_token='
+        r = requests.get(google_authentication_url + social_auth_instance.extra_data['access_token']).json()
+
+        if 'error_description' not in r:
+            return 'Authentication Successful'
+
+        # If there is an error, it might have expired. User the Refresh Token to fetch a new Access Token
+        google_access_token_creator_url = 'https://www.googleapis.com/oauth2/v3/token'
+        params = {'client_id': SOCIAL_AUTH_YOUTUBE_KEY,
+                  'client_secret': SOCIAL_AUTH_YOUTUBE_SECRET,
+                  'refresh_token': social_auth_instance.extra_data['refresh_token'],
+                  'grant_type': 'refresh_token'
+                  }
+        r = requests.post(google_access_token_creator_url, params=params).json()
+
+        # If the new Access Token is valid, store it in the database
+        if 'error_description' not in r:
+            social_auth_instance.extra_data['access_token'] = r['access_token']
+            social_auth_instance.save()
+            return 'Authentication Successful'
+
+        # The 1st error wasn't because the Access Token had expired, but because the Authorization has been revoked by
+        # the user. In this case there is nothing we can do, but wait for the user to re-authorize it manually
         else:
             return 'Authentication Failed'
 
@@ -683,11 +883,12 @@ def getAppManagementDomValues(status, provider):
 
 
 # only providers that cant supply our app with activity data. Not providers for simply logging in
-available_providers = ['twitter', 'runkeeper', 'instagram']
+available_providers = ['twitter', 'runkeeper', 'instagram', 'youtube']
 providerSyncFunctions = {
         'runkeeper': syncRunkeeperActivities,
         'twitter': syncTwitterActivities,
         'instagram': syncInstagramActivities,
+        'youtube': syncYoutubeActivities,
         #'facebook': syncFacebookActivities,
         #'google': syncGoogleActivities
     }
@@ -695,5 +896,6 @@ providerSyncFunctions = {
 providerAuthenticationFunctions = {
     'runkeeper': verifyRunkeeperAccess,
     'twitter': verifyTwitterAccess,
-    'instagram': verifyInstagramAccess
+    'instagram': verifyInstagramAccess,
+    'youtube': verifyYoutubeAccess,
 }
