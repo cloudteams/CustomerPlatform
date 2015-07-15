@@ -386,7 +386,7 @@ def syncTwitterActivities(user):
 
             # If i haven't read all the past tweets i'll ask only for old tweets until i get them all
             if not read_all_past_tweets:
-                tweets= api.user_timeline(user_id=twitter_user_id, count=200, trim_user=True, include_rts=True,
+                tweets = api.user_timeline(user_id=twitter_user_id, count=200, trim_user=True, include_rts=True,
                                        exclude_replies=True, max_id=max_id, contributor_details=True)
                 if not tweets:
                     read_all_past_tweets = social_auth_instance.extra_data['read_all_past_tweets'] = True
@@ -514,19 +514,17 @@ def syncInstagramActivities(user):
         else:
             return HttpResponseBadRequest('Authentication Error. Please refresh the page and re-authorize')
 
-    # If another sync has already taken place for the user
-    try:
-        since_id = social_auth_instance.extra_data['since_id']
-        feed, next_url = api.user_recent_media(user_id=user_instagram_id, min_id=since_id)
-        if not feed:
-            return HttpResponse("Instagram Activities are already up to date")
+    # The id of the last media object we have synced. We grab it so we dont fetch older media than this id
+    since_id = social_auth_instance.extra_data['since_id']
+    feed, next_url = api.user_recent_media(user_id=user_instagram_id, min_id=since_id)
+    if not feed:
+        return HttpResponse("Instagram Activities are already up to date")
 
-    # If this is the first sync
-    except KeyError:
-        feed, next_url = api.user_recent_media(user_id=user_instagram_id)
-
-    highest_found_id = ""
-    lowest_found_id = ""
+    # On each sync we want to monitor the highest and the lowest found id. Highest id means more "recent" and lowest
+    # more "old". The highest id will play the role of the "since_id" of the NEXT sync, while the lowest id will help
+    # when iterating through queries that cannot contain the whole needed media in only 1 results, thus we need a
+    # breakpoint id
+    highest_found_id = lowest_found_id = ""
     while True:
 
         # Stop when there is an empty result set
@@ -601,6 +599,7 @@ def syncInstagramActivities(user):
             createActivityLinks('instagram', performs_instance, str(media.id), media.link)
 
         # get the IDs that will help optimize results of the next query
+        # This id will act as a since_id for future calls, we add +1 so we don't have to re-fetch it
         if highest_found_id < feed[0].id:
             highest_found_id = str(int(feed[0].id.split('_')[0]) + 1) + '_' + feed[0].id.split('_')[1]
 
@@ -624,7 +623,7 @@ def syncInstagramActivities(user):
 def syncYoutubeActivities(user):
 
     # The max amount of results that i ask the Youtube API to fetch me
-    MAX_YOUTUBE_RESULTS = 5
+    MAX_YOUTUBE_RESULTS = 50
 
     # The current api name of the provider
     YOUTUBE_API_NAME = 'youtube'
@@ -650,14 +649,13 @@ def syncYoutubeActivities(user):
         # on the value of the 'type' parameter
         channel_type_videoIds = ','.join(video['contentDetails']['videoId'] for video in channel_type_videos['items'])
 
-
         # We ask for the details (to get the Duration and Statistics) of the videos whose IDs are in the list above
         channel_type_video_details = api.videos().list(part="contentDetails,statistics",
-                                                    id=channel_type_videoIds,
-                                                        maxResults=max_results).execute()
+                                                       id=channel_type_videoIds,
+                                                       maxResults=max_results).execute()
 
-
-
+        # Get the time of the last synchronization (and store it safely)
+        last_updated = social_auth_instance.extra_data['last_updated']
 
         # The flag that lets us know we are done. It is triggered either by trying to add a previously added video
         # or by reaching the end of the video list
@@ -682,7 +680,7 @@ def syncYoutubeActivities(user):
                 goal = ""
                 goal_status = None
 
-                # The start date derives from the 1st list, while the end date is calculated via the duration of the video
+                # The start date derives from the 1st list, while the end date is calculated via the video duration
                 start_date = datetime.strptime(video['snippet']['publishedAt'][:-5], "%Y-%m-%dT%H:%M:%S")
                 if type == 'uploads':
                     end_date = start_date + timedelta(seconds=300)
@@ -707,10 +705,9 @@ def syncYoutubeActivities(user):
                          str(video_details['statistics']['viewCount']) + " and liked " + \
                          str(video_details['statistics']['likeCount']) + " times in total"
 
-                # Check if we reached the video that was inserted at a former Sync Action, then we are done here
-                if PerformsProviderInfo.objects.filter(provider='youtube',
-                                                       provider_instance_id=str(video_id)
-                                                       ).count() > 0:
+                # Check if we reached the video that was inserted at a former Sync Action, by comparing the time of the
+                # last sync, with the time that we saw/heard the currently examined video
+                if start_date <= datetime.strptime(last_updated,"%Y-%m-%d %H:%M:%S"):
                     more_new_videos_exist = False
                     break
 
@@ -720,33 +717,26 @@ def syncYoutubeActivities(user):
                                         location_lat=location_lat, location_lng=location_lng, start_date=start_date,
                                         end_date=end_date, result=result, objects=object_used)
 
-                # Create a connection/link of the Activity representation between Activity Tracker and corresponding Provider
+                # Create a connection/link of the Activity representation between Activity Tracker and Provider
                 createActivityLinks('youtube', performs_instance, str(video_id), video_url)
 
-            # If we got here because we reached the end of the "new and not inserted" videos
-            if not more_new_videos_exist:
+            # If there aren't any more new-and-still-not-inserted videos or if there is not a next page of results
+            if (not more_new_videos_exist) or (not 'nextPageToken' in channel_type_videos):
                 break
 
-            # Try to get the next page of results
-            try:
-                channel_type_videos = api.playlistItems().list(part="snippet,contentDetails",
-                                                               playlistId=channel_type_id,
-                                                               nextPage=channel_type_videos['nextPageToken'],
-                                                               maxResults=max_results).execute()
+            # If there is a next page of results ( = still more videos to be processed ) then get the next result page
+            # and proceed as normal
+            channel_type_videos = api.playlistItems().list(part="snippet,contentDetails",
+                                                           playlistId=channel_type_id,
+                                                           pageToken=channel_type_videos['nextPageToken'],
+                                                           maxResults=max_results).execute()
 
-            # If there is not a next Page, stop iteration and return
-            except:
-                break
-
-
-            # If there was a new page of results, proceed as normal
             channel_type_videoIds = ','.\
                 join(video['contentDetails']['videoId'] for video in channel_type_videos['items'])
 
             channel_type_video_details = api.videos().list(part="contentDetails,statistics",
                                                     id=channel_type_videoIds,
                                                         maxResults=max_results).execute()
-
         return 'Ok'
 
     # Check if the user has de-authorized the App or the Secret Key has expired, and the page hasn't been refreshed
@@ -760,11 +750,18 @@ def syncYoutubeActivities(user):
     # The api object of Youtube that corresponds to the current User
     api = build(YOUTUBE_API_NAME, YOUTUBE_API_VERSION, http=credentials.authorize(httplib2.Http()))
 
+    # The current time that represents the start of the sync process
+    sync_beginning_time = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+
     # Get and insert the video activities regarding uploaded videos
     fetchAndInsertVideoActivities('uploads', api, MAX_YOUTUBE_RESULTS)
 
     # Get and insert the video activities regarding recently watched videos
     fetchAndInsertVideoActivities('watchHistory', api, MAX_YOUTUBE_RESULTS)
+
+    # Update the time of the last synchronization to match the current UTC time
+    social_auth_instance.extra_data['last_updated'] = sync_beginning_time
+    social_auth_instance.save()
 
     return HttpResponse("Youtube Activities have been synced")
 
@@ -819,6 +816,7 @@ def verifyYoutubeAccess(social_auth_instance):
             return 'Authentication Successful'
 
         # If there is an error, it might have expired. User the Refresh Token to fetch a new Access Token
+        """
         google_access_token_creator_url = 'https://www.googleapis.com/oauth2/v3/token'
         params = {'client_id': SOCIAL_AUTH_YOUTUBE_KEY,
                   'client_secret': SOCIAL_AUTH_YOUTUBE_SECRET,
@@ -837,7 +835,8 @@ def verifyYoutubeAccess(social_auth_instance):
         # the user. In this case there is nothing we can do, but wait for the user to re-authorize it manually
         else:
             return 'Authentication Failed'
-
+        """
+        return 'Authentication Failed'
 
 def checkConnection(user, provider):
     try:
