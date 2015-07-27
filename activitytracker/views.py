@@ -10,14 +10,21 @@ from django.template.response import SimpleTemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage
+from config import *
 import string
 import random
 import json
 import calendar
 import operator
 import collections
-import requests
 from myfunctions import *
+from AuthorizationChecks import *
+from InstagramClass import Instagram
+from TwitterClass import Twitter
+from YoutubeClass import Youtube
+from RunkeeperClass import Runkeeper
+from FitbitClass import Fitbit
+
 from datetime import datetime
 
 # Terms and Conditions page
@@ -92,7 +99,7 @@ def register(request):
     size = 20
     characters = string.ascii_letters + string.digits
     random_verification_code = ''.join(random.choice(characters) for _ in range(size))
-    verification_url = 'http://127.0.0.1:8000/activitytracker/account/verification/' + random_verification_code
+    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, random_verification_code)
     verification_instance = UserVerification(user=user, verification_code=random_verification_code)
     verification_instance.save()
     mail_title = "Activity Tracker Account Verification"
@@ -211,8 +218,15 @@ def settings(request):
         birth = user.date_of_birth.strftime("%m/%d/%Y")
 
     providerDomValues = {}
-    for provider_name in available_providers:
-        providerDomValues[provider_name] = getAppManagementDomValues(checkConnection(user, provider_name), provider_name)
+
+    for provider in AVAILABLE_PROVIDERS:
+
+        if user.social_auth.filter(provider=provider).count == 0:
+            providerDomValues[provider] = "Not Connected"
+            continue
+
+        provider_object = eval(provider.capitalize())(user.social_auth.get(provider=provider))
+        providerDomValues[provider] = getAppManagementDomValues(provider_object.validate(), provider)
 
     context = {'username': user.get_username(),
                'firstname': user.get_short_name(),
@@ -503,12 +517,19 @@ def showgroupactivity(request, group_identification):
         end_date = details.end_date.strftime('%m/%d/%Y')
         start_time = details.start_date.strftime('%H:%M')
         end_time = details.end_date.strftime('%H:%M')
+
+        try:
+            provider_instance = PerformsProviderInfo.objects.get(instance=details)
+        except ObjectDoesNotExist:
+            provider_instance = None
+
         context_list.append({'tools': tools_string,
                              'start_time': start_time,
                              'end_time': end_time,
                              'end_date': end_date,
                              'start_date': start_date,
                              'instance': details,
+                             'performs_provider_instance': provider_instance
                              })
     colour = colourDict[Performs.objects.get(id=id_list[0]).activity.category]
     context = { 'activity_list': context_list, 'color': colour, 'total_grouped_activities': len(id_list) }
@@ -2289,8 +2310,7 @@ def social_login(request, action):
     return render(request, 'activitytracker/social-login.html',{'action': action})
 
 def syncProviderActivities(request, provider):
-    user = request.user
-    if checkConnection(user, provider) in ("Not Connected", "Authentication Failed", "Cannot Process Request"):
-        return HttpResponseBadRequest("Provider Error. Please refresh the page or try again")
+    social_instance = request.user.social_auth.get(provider=provider)
+    provider_object = eval(provider.capitalize())(social_instance)
 
-    return providerSyncFunctions[provider](user)
+    return provider_object.fetchData()

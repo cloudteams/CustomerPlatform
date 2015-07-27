@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from config import *
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,6 +26,9 @@ DEBUG = True
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+
+SECRET_KEY = 'o2gyhpz9aodq95f#*=jj#(sb@0c&ss&07+8-p3k&97mhqcx349'
+
 
 
 # Application definition
@@ -81,6 +85,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'Activitytracker.app@gmail.com'
 DEFAULT_TO_EMAIL = 'to email'
+EMAIL_HOST_USER = 'Activitytracker.app@gmail.com'
+EMAIL_HOST_PASSWORD = 'Activitytrackerpassword'
 
 LANGUAGE_CODE = 'en-us'
 
@@ -133,6 +139,8 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.youtube.YoutubeOAuth2',
+    'social.backends.googlefit.GoogleFitOAuth2',
+    'social.backends.fitbit.FitbitOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 

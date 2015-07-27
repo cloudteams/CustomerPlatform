@@ -132,7 +132,6 @@
 
 				}
 			});
-
 		}
 
 
@@ -484,9 +483,12 @@
 					}
 				});
             }
-            else {
-                var url = (SERVER_URL + "/login/" +  provider);
-                window.open( url, 'newwindow', 'width=500, height=500')
-            }
+            else if($('.'+ provider +' .connected-app-button').text() == "Try again") {
+				window.location.reload();
+			}
+			else {
+					var url = (SERVER_URL + "/login/" +  provider);
+					window.open( url, 'newwindow', 'width=500, height=500')
+				}
         }
 

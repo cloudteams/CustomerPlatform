@@ -31,7 +31,12 @@
         <div class="control-group">
             <div class="controls activity-output">
                 <i class="glyphicons-icon star modal-icon"></i>
-                <p>{{ activity_performed.instance.activity }}</p>
+                {% if not activity_performed.performs_provider_instance %}
+                    <p>{{ activity_performed.instance.activity }}</p>
+                {% else %}
+                    <p><a href="{{ activity_performed.performs_provider_instance.provider_instance_url }}"
+                          target="_blank">{{ activity_performed.instance.activity }}</a></p>
+                {% endif %}
             </div>
         </div>
         <div class="control-group">
@@ -81,7 +86,7 @@
         <div class="control-group">
 			<div class="controls activity-output">
 				<i class="glyphicons-icon ok modal-icon"></i>
-                {% if instance.result %}
+                {% if activity_performed.instance.result %}
 					<p>{{ activity_performed.instance.result}}</p>
                 {% else %}
                 	<p>n/a</p>
@@ -91,7 +96,7 @@
         <div class="control-group">
 			<div class="controls activity-output">
 				<i class="glyphicons-icon group modal-icon"></i>
-                {% if instance.friends %}
+                {% if activity_performed.instance.friends %}
 					<p>{{ activity_performed.instance.friends|addSpaceAfterComma }}</p>
                 {% else %}
                 	<p>n/a</p>
@@ -101,7 +106,7 @@
 		<div class="control-group">
 			<div class="controls activity-output">
 				<i class="glyphicons-icon claw_hammer modal-icon"></i>
-				{% if tools %}
+				{% if activity_performed.tools %}
 					<p>{{ activity_performed.tools }}</p>
                 {% else %}
                 	<p>n/a</p>
