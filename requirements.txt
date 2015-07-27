@@ -2,3 +2,4 @@ pygeocoder==1.2.5
 python-oauth2==0.7.0
 python-social-auth==0.2.7
 requests==2.6.2
+requests_oauthlib

@@ -18,7 +18,7 @@ class Fitbit(OAuth1Validation):
                                     auth=auth
                                     ).json()
 
-        if not 'offsetFromUTCMillis' in profile_data['user']:
+        if 'offsetFromUTCMillis' not in profile_data['user']:
             return timedelta(seconds=0)
 
         return timedelta(milliseconds=profile_data['user']['offsetFromUTCMillis'])
