@@ -97,7 +97,7 @@ class Twitter(OAuth1Validation):
 
     def fetchData(self):
 
-        if verify(self.user_social_instance) != 'Authentication Successful':
+        if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         auth = OAuth1(self.client_key,

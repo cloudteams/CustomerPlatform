@@ -24,6 +24,8 @@ from TwitterClass import Twitter
 from YoutubeClass import Youtube
 from RunkeeperClass import Runkeeper
 from FitbitClass import Fitbit
+from FoursquareClass import Foursquare
+from GmailClass import Gmail
 
 from datetime import datetime
 
@@ -221,8 +223,8 @@ def settings(request):
 
     for provider in AVAILABLE_PROVIDERS:
 
-        if user.social_auth.filter(provider=provider).count == 0:
-            providerDomValues[provider] = "Not Connected"
+        if user.social_auth.filter(provider=provider).count() == 0:
+            providerDomValues[provider] = getAppManagementDomValues("Not Connected", provider)
             continue
 
         provider_object = eval(provider.capitalize())(user.social_auth.get(provider=provider))
@@ -589,7 +591,6 @@ def editactivity(request, performs_id):
                     "Responsibilities": activity_context_list[4],
                     "Transportation": activity_context_list[5],
                    }
-
 
     context = {'instance': details,
                'instance_object_list': instance_object_list,

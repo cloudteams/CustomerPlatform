@@ -15,9 +15,28 @@
         $('#showActivityModal').on("hidden", function (e) {
             $(e.target).removeData("modal").find(".modal-body").empty();
         });
+        $('#showActivityModal').on("shown", function (e) {
+            try {
+                initializeShowMap()
+            }
+            catch (err) {}
+        });
+        $('#showGroupActivityModal').on("shown", function (e) {
+            try {
+                initializeGroupShowMaps()
+            }
+            catch (err) {}
+        });
+        $('#editActivityModal').on("shown", function (e) {
+            try {
+                initializeEditMap()
+            }
+            catch (err) {}
+        });
         $('#editActivityModal').on("hidden", function (e) {
             $(e.target).removeData("modal").find(".modal-body").empty();
         });
+
         $('#showGroupActivityModal').on("hidden", function (e) {
             $(e.target).removeData("modal").find(".modal-body").empty();
         });

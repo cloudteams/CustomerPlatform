@@ -81,7 +81,7 @@ class Instagram(OAuth2Validation):
 
     def fetchData(self):
 
-        if verify(self.user_social_instance) != 'Authentication Successful':
+        if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         params = {'access_token': self.provider_data['access_token']}

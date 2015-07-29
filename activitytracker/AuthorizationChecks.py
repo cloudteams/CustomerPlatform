@@ -14,9 +14,7 @@ SUCCESS_MESSAGE = " Activities have been synced"
 
 DUMMY_LAST_UPDATED_INIT_VALUE = '0000-00-00 00:00:00'
 
-AVAILABLE_PROVIDERS = ['twitter', 'runkeeper', 'instagram', 'youtube', 'fitbit']
-
-OAUTH1_PROVIDERS = ['twitter', 'fitbit']
+AVAILABLE_PROVIDERS = ['twitter', 'runkeeper', 'instagram', 'youtube', 'fitbit', 'foursquare', 'gmail']
 
 TWITTER_API_VALIDATION_URL = 'https://api.twitter.com/1.1/account/verify_credentials.json'
 
@@ -26,9 +24,13 @@ INSTAGRAM_API_VALIDATION_URL = 'https://api.instagram.com/v1/users/self'
 
 FITBIT_API_VALIDATION_URL = 'https://api.fitbit.com/1/user/-/profile.json'
 
+FOURSQUARE_API_VALIDATION_URL = 'https://api.foursquare.com/v2/users/self'
+
 YOUTUBE_API_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
 YOUTUBE_API_REFRESH_TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
 
+GMAIL_API_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
+GMAIL_API_REFRESH_TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
 
 class Validation(object):
 
@@ -155,15 +157,3 @@ class OAuth2Validation(Validation):
             return self.attemptTokenRefresh()
         else:
             return answer
-
-
-def verify(user_social_instance):
-    """
-    :param user_social_instance: an object of python-social-auth library
-    :return: the outcome of the validation, by selecting OAuth1 or OAuth2 depending
-    on the provider supplied
-    """
-    if user_social_instance.provider in OAUTH1_PROVIDERS:
-        return OAuth1Validation(user_social_instance).validate()
-    else:
-        return OAuth2Validation(user_social_instance).validate()

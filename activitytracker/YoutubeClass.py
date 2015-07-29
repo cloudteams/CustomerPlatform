@@ -166,7 +166,7 @@ class Youtube(OAuth2Validation):
 
         sync_time = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
 
-        if verify(self.user_social_instance) != 'Authentication Successful':
+        if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         for resource in fetched_resources:

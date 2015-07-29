@@ -85,7 +85,7 @@ class Runkeeper(OAuth2Validation):
 
         RUNKEEPER_FITNESS_URI = '/fitnessActivities'
 
-        if verify(self.user_social_instance) != 'Authentication Successful':
+        if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         request_url = self.api_base_url + RUNKEEPER_FITNESS_URI
