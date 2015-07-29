@@ -91,7 +91,7 @@ class Gmail(OAuth2Validation):
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         params = {'access_token':self.provider_data['access_token'],
-                  'includeSpamTrash' : 'false',
+                  'includeSpamTrash': 'false',
                   'maxResults': MAX_RESULTS
                   }
 
