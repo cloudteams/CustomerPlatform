@@ -2,46 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="543bdd4d-ab4c-4139-9e16-aa84b2b9b39d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/activitytracker/FacebookActivityClass.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-routine.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/analytics-routine.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/jquery.tokenize-2.5.1.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/jquery.tokenize-2.5.1.js" />
-      <change type="DELETED" beforePath="C:\Users\Aggelos\Dropbox\activity-tracker-testing\extended-plugins\social_auth.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/AuthorizationChecks.py" afterPath="$PROJECT_DIR$/activitytracker/AuthorizationChecks.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/FitbitClass.py" afterPath="$PROJECT_DIR$/activitytracker/FitbitClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/FoursquareClass.py" afterPath="$PROJECT_DIR$/activitytracker/FoursquareClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/GmailClass.py" afterPath="$PROJECT_DIR$/activitytracker/GmailClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/InstagramClass.py" afterPath="$PROJECT_DIR$/activitytracker/InstagramClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/RunkeeperClass.py" afterPath="$PROJECT_DIR$/activitytracker/RunkeeperClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/TwitterClass.py" afterPath="$PROJECT_DIR$/activitytracker/TwitterClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/YoutubeClass.py" afterPath="$PROJECT_DIR$/activitytracker/YoutubeClass.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/admin.py" afterPath="$PROJECT_DIR$/activitytracker/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-activities.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-activities.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-friends.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-friends.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-goals.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-goals.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-objects.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-objects.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-places.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/analytics-places.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/management/commands/autosync.py" afterPath="$PROJECT_DIR$/activitytracker/management/commands/autosync.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/bootstrap-clockpicker.css" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/bootstrap-clockpicker.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templatetags/custom_templates.py" afterPath="$PROJECT_DIR$/activitytracker/templatetags/custom_templates.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/extended-plugins/backends/facebook.py" afterPath="$PROJECT_DIR$/extended-plugins/backends/facebook.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/goals.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/goals.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/index.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/models.py" afterPath="$PROJECT_DIR$/activitytracker/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/myfunctions.py" afterPath="$PROJECT_DIR$/activitytracker/myfunctions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/pipeline.py" afterPath="$PROJECT_DIR$/activitytracker/pipeline.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/settings.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/settings.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Activitytracker_Project/settings.py" afterPath="$PROJECT_DIR$/Activitytracker_Project/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style-forms.css" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style-forms.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style.css" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/templates/activitytracker/timeline.html" afterPath="$PROJECT_DIR$/activitytracker/templates/activitytracker/timeline.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/uniform.default.css" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/css/uniform.default.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/urls.py" afterPath="$PROJECT_DIR$/activitytracker/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/views.py" afterPath="$PROJECT_DIR$/activitytracker/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="activity-tracker-testing.iws" />
@@ -102,11 +63,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="social-login.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="social-login.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/activitytracker/templates/activitytracker/social-login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.4070797">
+            <state vertical-scroll-proportion="31.384615">
               <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.13972603">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -159,16 +130,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="18" column="42" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pipeline.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/activitytracker/pipeline.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -240,6 +201,7 @@
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style-forms.css" />
         <option value="$PROJECT_DIR$/activitytracker/templates/activitytracker/settings.html" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -833,13 +795,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/css/clockpicker.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/js/bootstrap-clockpicker.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -1219,8 +1174,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/templates/activitytracker/social-login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.4070797">
+        <state vertical-scroll-proportion="31.384615">
           <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13972603">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
         </state>
       </provider>
