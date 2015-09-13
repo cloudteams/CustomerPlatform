@@ -209,7 +209,7 @@ class Fitbit(OAuth1Validation):
 
         FITBIT_FITNESS_URI = '/1/user/-/activities/list.json'
 
-        last_sync = self.provider_data['last_updated']
+        last_sync = self.metadata.last_updated
 
         params = {'afterDate': last_sync.replace(' ', 'T'),
                   'sort': 'desc',
@@ -247,7 +247,7 @@ class Fitbit(OAuth1Validation):
 
     def fetchFoodActivities(self, auth):
 
-        last_sync = self.provider_data['last_updated'][:10]
+        last_sync = self.metadata.last_updated[:10]
 
         if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
             last_sync = EARLIEST_DATA_DATE
@@ -277,7 +277,7 @@ class Fitbit(OAuth1Validation):
 
     def fetchSleepActivities(self, auth):
 
-        last_sync = self.provider_data['last_updated'][:10]
+        last_sync = self.metadata.last_updated[:10]
 
         if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
             last_sync = EARLIEST_DATA_DATE
@@ -307,7 +307,7 @@ class Fitbit(OAuth1Validation):
 
     def fetchData(self):
 
-        if verify(self.user_social_instance) != 'Authentication Successful':
+        if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         auth = OAuth1(self.client_key,
@@ -316,7 +316,7 @@ class Fitbit(OAuth1Validation):
                       self.resource_owner_secret
                       )
 
-        self.provider_data['last_updated'] = (datetime.utcnow() + self.utcOffset(auth)).strftime("%Y-%m-%d %H:%M:%S")
+        self.metadata.last_updated = (datetime.utcnow() + self.utcOffset(auth)).strftime("%Y-%m-%d %H:%M:%S")
 
         status = self.fetchFitnessActivities(auth)
 
@@ -333,6 +333,6 @@ class Fitbit(OAuth1Validation):
         if status != 'Ok':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        self.user_social_instance.save()
+        self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

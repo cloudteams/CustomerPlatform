@@ -83,22 +83,27 @@ def addActivityFromProvider(user, goal, goal_status, friends, objects, result, l
 
     performs_instance.save()
 
-    for friend in friends.split(','):
+    for friend_name in friends.split(','):
 
+        friend = friend_name.lstrip(' ')
         if user.friend_set.filter(friend_name=friend).count() == 0 and friend:
 
             instance = Friend(friend_name=friend, friend_of_user=user)
             instance.save()
 
-    for tool in objects.split(','):
+    for tool_name in objects.split(','):
 
+        tool = tool_name.lstrip(' ')
         if user.object_set.filter(object_name=tool).count() == 0 and tool:
 
             object_instance = Object(object_name=tool, object_of_user=user)
             object_instance.save()
 
-        else:
+        elif tool:
             object_instance = user.object_set.get(object_name=tool)
+
+        else:
+            continue
 
         performs_instance.using.add(object_instance)
 
@@ -162,14 +167,6 @@ def assignDurationInterval(duration):
         return "0.5-1"
     else:
         return "0-0.5"
-
-
-def checkConnection(user, provider):
-    try:
-        social_auth_instance = user.social_auth.get(provider=provider)
-        return verify(social_auth_instance)
-    except ObjectDoesNotExist:
-        return 'Not Connected'
 
 
 def getAppManagementDomValues(status, provider):

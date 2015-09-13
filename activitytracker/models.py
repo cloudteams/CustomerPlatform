@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from social.apps.django_app.default.models import UserSocialAuth
+from django.db.models import signals
 import math
+
 # Basic User model
 
 
@@ -17,7 +20,8 @@ class User(AbstractUser):
                               null=True
     )
     date_of_birth = models.DateField(null=True)
-
+    location = models.CharField(max_length=200, null=True)
+    logged_in_before = models.BooleanField(default=False)
 
 
 class UserVerification(models.Model):
@@ -169,3 +173,47 @@ class hasSuperActivity(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.super_activity, self.sub_activity)
+
+
+class Routine(models.Model):
+    user = models.ForeignKey(User)
+    activity = models.ForeignKey(Activity)
+    start_time = models.TimeField('Start Time', null=True)
+    end_time = models.TimeField('End Time', null=True)
+    DAY_TYPE_CHOICES = (
+        ('Weekdays', 'Weekdays'),
+        ('Weekend', 'Weekend'),
+    )
+
+    day_type = models.CharField(max_length=8,
+                                choices=DAY_TYPE_CHOICES,
+                                default='Weekdays')
+
+    def __str__(self):
+        return '%s %s %s %s' % (self.user,
+                                self.activity,
+                                self.start_time,
+                                self.end_time
+                                )
+
+class UserExtraProviderInfo(models.Model):
+    social_instance = models.OneToOneField(UserSocialAuth)
+    last_updated = models.CharField(max_length=20, default='0000-00-00 00:00:00')
+    since_id = models.CharField(default='0', max_length=50)
+
+    def __str__(self):
+        return '%s %s %s %s' % (
+            self.social_instance.user,
+            self.social_instance.provider,
+            self.last_updated,
+            self.since_id
+
+        )
+
+def auto_create_user_provider_info(sender, instance, created, **kwargs):
+    if created:
+        self_instance = UserExtraProviderInfo(social_instance=instance)
+        self_instance.save()
+
+
+signals.post_save.connect(auto_create_user_provider_info, sender=UserSocialAuth)

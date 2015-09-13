@@ -26,7 +26,7 @@
 }
 
 .clockpicker-popover{
-	z-index: 999999999;
+	z-index: 999999999 !important;
 }
 
 .clockpicker-popover .popover-title {

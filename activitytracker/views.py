@@ -19,205 +19,265 @@ import operator
 import collections
 from myfunctions import *
 from AuthorizationChecks import *
+from config import *
 from InstagramClass import Instagram
 from TwitterClass import Twitter
 from YoutubeClass import Youtube
 from RunkeeperClass import Runkeeper
 from FitbitClass import Fitbit
 from FoursquareClass import Foursquare
-from GmailClass import Gmail
-
+from FacebookActivityClass import FacebookActivity
 from datetime import datetime
 
-# Terms and Conditions page
+colourDict = {'black': "rgba(1, 1, 1, 0.8)",
+              'blue': "#578EBE",
+              'greenLight': "#99B433",
+              'orange': "#e09100",
+              'redDark': "#850521",
+              'purple': "#800080"
+              }
+
 
 def terms_and_conditions(request):
     return render(request, 'activitytracker/terms_and_conditions.html', {})
 
-# Page that logs in the user + Checks
+
 def login(request):
+
+    EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
+    INVALID_USER_MSG = 'No such User exists'
+    WRONG_CREDENTIALS_MSG = 'Wrong Combination of Username and Password'
+
     if request.method != 'POST':
-        if not request.user.is_authenticated():
-            return render(request, 'activitytracker/login.html',{'redirect_url': request.GET.get('next','/activitytracker/index')})
-        else:
+        if request.user.is_authenticated():
             return HttpResponseRedirect(reverse('index'))
+
+        return render(request,
+                      'activitytracker/login.html',
+                      {'redirect_url': request.GET.get('next',
+                                                       '/activitytracker/index'
+                                                       )
+                       }
+                      )
 
     username = request.POST['username']
     password = request.POST['password']
-    try:
-        User.objects.get(username=username)
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                if user.last_login is None:
-                    user_type = "NewUser"
-                else:
-                    user_type = "OldUser"
-                auth_login(request, user)
-                return HttpResponse(user_type)
-            else:
-                return HttpResponseBadRequest("You need to verify your E-mail in order to log in!")
-        else:
-            return HttpResponseBadRequest("Wrong Combination of Username and Password")
-    except ObjectDoesNotExist:
-        return HttpResponseBadRequest("No such User exists")
 
+    if User.objects.filter(username=username).count() == 0:
+        return HttpResponseBadRequest(INVALID_USER_MSG)
+
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        return HttpResponseBadRequest(WRONG_CREDENTIALS_MSG)
+
+    if not user.is_active:
+        return HttpResponseBadRequest(EMAIL_VERIFICATION_MSG)
+
+    auth_login(request, user)
+
+    return HttpResponse('Ok')
 
 
 # Flush Session and redirect
 def logout(request):
+
     auth_logout(request)
     return HttpResponseRedirect(reverse('login'))
 
 
-# Check and Register the User (check is done here due to incompatability with AJAX)
+# Check and Register the User
 def register(request):
-    if request.method != 'POST':
-        return render(request, 'activitytracker/register.html')
+
+    USERNAME_EXISTS_MSG = 'Username already exists'
+    EMAIL_EXISTS_MSG = 'This email is already in use'
+    EMPTY_FIELDS_MSG = 'You need to fill out all the registration fields'
+    BIRTHDAY_ERROR_MSG = 'You cannot be born in the future, duh!'
+    SUCCESS_MSG = 'Registration Successful! ' \
+                  'We have sent you an e-mail with a validation link to follow'
 
     username = request.POST['username']
-    if User.objects.filter(username__iexact=username).exists():
-        return HttpResponseBadRequest("1")
-
     email = request.POST['email']
-    if User.objects.filter(email__iexact=email).exists():
-        return HttpResponseBadRequest("2")
-
-    passw = request.POST['password']
+    password = request.POST['password']
     firstname = request.POST['firstname']
     lastname = request.POST['lastname']
     gender = request.POST['gender']
-    bday = request.POST['birthday']
-    if bday == "" or username == "" or firstname == "" or lastname == "" or email == "" or passw == "":
-        return HttpResponseBadRequest("4")
+    birthday = request.POST['birthday']
 
-    birthday = datetime.strptime(request.POST['birthday'], "%m/%d/%Y").date()
-    if birthday > datetime.now().date():
-        return HttpResponseBadRequest('3')
+    if request.method != 'POST':
+        return render(request, 'activitytracker/register.html')
 
-    user = User.objects.create_user(username, email, passw, first_name=firstname, last_name=lastname, gender=gender, date_of_birth=birthday)
+    if User.objects.filter(username__iexact=username).exists():
+        return HttpResponseBadRequest(USERNAME_EXISTS_MSG)
+
+    if User.objects.filter(email__iexact=email).exists():
+        return HttpResponseBadRequest(EMAIL_EXISTS_MSG)
+
+    if '' in (birthday, username, firstname, lastname, email, password):
+        return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
+
+    datetime_birthday = datetime.strptime(request.POST['birthday'], "%m/%d/%Y").date()
+
+    if datetime_birthday > datetime.now().date():
+        return HttpResponseBadRequest(BIRTHDAY_ERROR_MSG)
+
+    user = User.objects.create_user(username=username,
+                                    email=email,
+                                    password=password,
+                                    first_name=firstname,
+                                    last_name=lastname,
+                                    gender=gender,
+                                    date_of_birth=birthday
+                                    )
     user.is_active = False
     user.save()
-    size = 20
+
     characters = string.ascii_letters + string.digits
-    random_verification_code = ''.join(random.choice(characters) for _ in range(size))
-    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, random_verification_code)
-    verification_instance = UserVerification(user=user, verification_code=random_verification_code)
+    verification_code = ''.join(random.choice(characters) for _ in range(20))
+    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, verification_code)
+    verification_instance = UserVerification(user=user, verification_code=verification_code)
     verification_instance.save()
-    mail_title = "Activity Tracker Account Verification"
-    mail_message = 'Hello user '+ user.get_username() + '.In order to verify your account click the following link: ' + verification_url
+
     email = "Activitytracker.app@gmail.com"
+    mail_title = "Activity Tracker Account Verification"
     recipient = [user.email.encode('utf8')]
+    mail_message = 'Hello user %s. In order to verify your account click the following link: %s' \
+                   % (user.get_username(), verification_url)
+
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
-    return HttpResponse('Registration successful! We have sent you an e-mail with a link to verify your e-mail (can be marked as Spam)')
+
+    return HttpResponse(SUCCESS_MSG)
 
 
-# Produce random pass and send it with e-mail
+# Produce new random pass and send it with e-mail
 def passwordforget(request):
+
+    USER_NOT_EXISTS_MSG = 'No such User exists'
+    SUCCESS_MSG = 'We have sent you an email with a new temporary password'
 
     if request.method != 'POST':
         return render(request, 'activitytracker/passforget.html')
 
-    user = request.POST['username']
-    try:
-        user = User.objects.get(username=user)
-        size = 8
-        characters = string.ascii_lowercase + string.digits
-        new_pass = ''.join(random.choice(characters) for _ in range(size))
-        user.set_password(new_pass)
-        user.save()
-        mail_title = "Password Reset"
-        mail_message = 'You have recently forgot your password. Your new password is: ' + new_pass + ' which you can ' \
-           'always change it through your account options.\n Please do not reply to this message.\n Always at your' \
-           ' disposal,\n Activity Tracker Support Team'
-        email = "Activitytracker.app@gmail.com"
-        recipient = [user.email.encode('utf8')]
-        send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
-        return HttpResponse('We have sent you an E-mail with a temporary password. You will now be redirected'
-                            ' to the Login Page.')
-    except ObjectDoesNotExist:
-        return HttpResponseBadRequest("Sorry no such User exists")
+    if User.objects.filter(username=request.POST['username']).count() == 0:
+        return HttpResponse(USER_NOT_EXISTS_MSG)
+
+    user = User.objects.get(username=request.POST['username'])
+    characters = string.ascii_lowercase + string.digits
+    new_pass = ''.join(random.choice(characters) for _ in range(8))
+    user.set_password(new_pass)
+    user.save()
+
+    email = "Activitytracker.app@gmail.com"
+    recipient = [user.email.encode('utf8')]
+    mail_title = "Password Reset"
+    mail_message = 'You have recently forgot your password. Your new password is: %s' % new_pass
+    send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
+
+    return HttpResponse(SUCCESS_MSG)
 
 
 # view to handle the email verification
 def email_verification(request, verification_code):
+
     try:
         verification_instance = UserVerification.objects.get(verification_code=verification_code)
         user = verification_instance.user
         user.is_active = True
         user.save()
         verification_instance.delete()
-        verification_successful = True
+        success = True
+
     except ObjectDoesNotExist:
-        verification_successful = False
-    return render(request,'activitytracker/account-verification.html',{'verification_successful': verification_successful})
+        success = False
+
+    return render(request,'activitytracker/account-verification.html',
+                  {'verification_successful': success}
+                  )
 
 
 
 # Handle settings options
 @login_required
 def settings(request):
+
+    WRONG_PASS_MSG = 'The password you entered didnt match your current password'
+    EMPTY_FIELDS_MSG = 'You cannot have a field empty'
+    USERNAME_EXISTS_MSG = 'This username is already in use'
+    BIRTHDAY_ERROR_MSG = 'You cannot be born in the future, duh!'
+    PASS_MISSMATCH_MSG = 'Sorry the passwords you entered didnt match eachother'
+    basic_routine_activities = [
+        'Eating',
+        'Working',
+        'Commuting',
+        'Education',
+        'Sleeping'
+    ]
+
+    day_types = [
+        'Weekdays',
+        'Weekend'
+    ]
+
     user = request.user
 
     if request.method == 'POST':
+
         if request.POST['settingAction'] == 'deleteaccount':
-            curr_password = request.POST['password']
-            if user.check_password(curr_password):
+
+            if user.check_password(request.POST['password']):
                 user.delete()
                 return HttpResponseRedirect(reverse('login'))
-            else:
-                return HttpResponseBadRequest("The password you have entered didn't match your current password")
+
+            return HttpResponseBadRequest(WRONG_PASS_MSG)
+
         elif request.POST['settingAction'] == 'editinfo':
+
+                old_username = user.get_username()
                 user.username = request.POST['username']
                 user.first_name = request.POST['firstname']
                 user.last_name = request.POST['lastname']
                 user.gender = request.POST['gender']
-                if request.POST['birthday'] == "" or user.first_name == "" or user.last_name == "":
-                    return HttpResponseBadRequest("Cannot update with empty fields")
-                try:
-                    if user != User.objects.get(username=request.POST['username']):
-                        return HttpResponseBadRequest("Username already exists. Try another")
-                except ObjectDoesNotExist:
-                    pass
                 user.date_of_birth = datetime.strptime(request.POST['birthday'], "%m/%d/%Y").date()
 
-                if user.date_of_birth < datetime.now().date():
-                    user.save()
-                    return HttpResponse(
-                                        json.dumps(
-                                            {
-                                                'username': user.get_username(),
-                                                'fname': user.first_name,
-                                                'lname': user.last_name,
-                                                'email': user.email,
-                                                'birthday': request.POST['birthday'],
-                                                'gender': user.gender,
+                if '' in (user.username, user.first_name, user.last_name, user.gender):
+                    return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
+
+                if user.username != old_username and User.objects.filter(username=user.username).count() > 0:
+                    return HttpResponseBadRequest(USERNAME_EXISTS_MSG)
+
+                if user.date_of_birth > datetime.now().date():
+                    return HttpResponseBadRequest(BIRTHDAY_ERROR_MSG)
+
+                user.save()
+
+                return HttpResponse(json.dumps({
+                                            'username': user.get_username(),
+                                            'fname': user.first_name,
+                                            'lname': user.last_name,
+                                            'email': user.email,
+                                            'birthday': request.POST['birthday'],
+                                            'gender': user.gender,
                                             }
                                         ),
                                         content_type='application/json'
-                                        )
-                else:
-                    return HttpResponseBadRequest("You can't be born in the future dude...")
+                                    )
+
         elif request.POST['settingAction'] == 'passchange':
+
             if request.POST['new_password'] != request.POST['new_password_repeat']:
-                return HttpResponseBadRequest("Sorry the new passwords you entered didn't match each other")
+                return HttpResponseBadRequest(PASS_MISSMATCH_MSG)
 
             if user.has_usable_password():
                 if not user.check_password(request.POST['old_password']):
-                    return HttpResponseBadRequest("Sorry the password you entered is not your current password")
+                    return HttpResponseBadRequest(WRONG_PASS_MSG)
 
             user.set_password(request.POST['new_password'])
             user.save()
+
             return HttpResponseRedirect(reverse('login'))
 
-    if user.gender == None:
-        gender = ''
-    else:
-        gender = user.gender
-    if user.date_of_birth == None:
-        birth = ''
-    else:
-        birth = user.date_of_birth.strftime("%m/%d/%Y")
+    gender = '' if not user.gender else user.gender
+    birth = '' if not user.date_of_birth else user.date_of_birth.strftime("%m/%d/%Y")
 
     providerDomValues = {}
 
@@ -227,8 +287,35 @@ def settings(request):
             providerDomValues[provider] = getAppManagementDomValues("Not Connected", provider)
             continue
 
-        provider_object = eval(provider.capitalize())(user.social_auth.get(provider=provider))
+        provider_object = eval(provider.title().replace('-', ''))(user.social_auth.get(provider=provider))
         providerDomValues[provider] = getAppManagementDomValues(provider_object.validate(), provider)
+
+    basicRoutineActivities = list()
+
+    for activity_name in basic_routine_activities:
+
+            activity = Activity.objects.get(activity_name=activity_name)
+            routine_times = list()
+
+            for day_type in day_types:
+                try:
+                    routine_data = user.routine_set.get(activity=activity, day_type=day_type)
+                except:
+                    routine_times += ''
+                    continue
+                start_time = '' if not routine_data.start_time else routine_data.start_time
+                end_time = '' if not routine_data.end_time else routine_data.end_time
+
+                start_string = '' if not start_time else start_time.strftime('%H:%M')
+                end_string = '' if not end_time else end_time.strftime('%H:%M')
+                routine_times.append('%s - %s' % (start_string, end_string))
+
+            basicRoutineActivities.append({
+                'activity': activity.activity_name,
+                'color': activity.category,
+                'times': routine_times,
+                'icon_classname': activity.icon_classname,
+            })
 
     context = {'username': user.get_username(),
                'firstname': user.get_short_name(),
@@ -237,254 +324,239 @@ def settings(request):
                'birth': birth,
                'gender': gender,
                'social_login': not user.has_usable_password(),
-               'providerDomValues': providerDomValues
+               'providerDomValues': providerDomValues,
+               'basicRoutineActivities': basicRoutineActivities
                }
+
     return render(request, 'activitytracker/settings.html', context)
+
 
 # Handler for the Places in Settings.html
 @login_required
 def places(request):
+
     user = request.user
 
     if request.method != "POST":
         return HttpResponseRedirect(reverse('settings'))
 
-    if request.POST['setting'] == "addPlace" or request.POST['setting'] == "editPlace":
+    if request.POST['setting'] in ('addPlace', 'editPlace'):
+
         name = request.POST['place_name']
         address = request.POST['address']
         lat = request.POST['lat']
         lng = request.POST['lng']
-        if name == "":
+
+        if not name:
             return HttpResponseBadRequest('Empty')
 
         if request.POST['setting'] == "addPlace":
-            a = Places(user=user, place_name=name, place_address=address, place_lat=lat, place_lng=lng)
+            a = Places(user=user,
+                       place_name=name,
+                       place_address=address,
+                       place_lat=lat,
+                       place_lng=lng
+                       )
+
         else:
-            place_id = request.POST['place_id']
-            a = user.places_set.get(place_id=place_id)
-            a.place_name = name
-            a.place_address = address
-            a.place_lat = lat
-            a.place_lng = lng
+            a = user.places_set.get(place_id=request.POST['place_id'])
+            a.place_name, a.place_address = name, address
+            a.place_lat, a.place_lng = lat, lng
 
         try:
             a.save()
             return HttpResponse('ok')
+
         except IntegrityError:
             return HttpResponseBadRequest('Unique')
 
     elif request.POST['setting'] == "deletePlace":
-        id_to_del = request.POST['place_id']
-        place = user.places_set.get(place_id=id_to_del)
+
+        place = user.places_set.get(place_id=request.POST['place_id'])
         place.delete()
         return HttpResponse('ok')
 
 
 def placestojson(request):
+
     user = request.user
-    places = user.places_set.all()
     json_list = {"data": []}
-    for p in places:
-        json_entry = {'id': p.place_id,
-                      'lat': p.place_lat,
-                      'lng': p.place_lng,
-                      'place_name': p.place_name,
-                      'place_address': p.place_address
-        }
-        json_list['data'].append(json_entry)
+
+    for p in user.places_set.all():
+        json_list['data'].append({
+            'id': p.place_id,
+            'lat': p.place_lat,
+            'lng': p.place_lng,
+            'place_name': p.place_name,
+            'place_address': p.place_address
+        })
+
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 
 
 # Basic View, Gets called on "History" page load
 @login_required
-def index(request, user_type="RegisteredUser"):
+def index(request):
+
     user = request.user
     object_list = [i.object_name for i in user.object_set.all()] #for form
     friend_list = [i.friend_name for i in user.friend_set.all()] #for form
-    goal_list = [i.goal for i in user.performs_set.exclude(goal__exact='')] #for form
 
-    colourdict = {'black': 0, 'blue': 1, 'greenLight': 2,
-                  'orange': 3, 'redDark': 4, 'purple': 5 }
-    act_name_list = Activity.objects.values('activity_name', 'category').order_by('activity_name').distinct()
-    activity_context_list = [[],[],[],[],[],[]]
-    for activity in act_name_list:
-        list_to_append = activity_context_list[colourdict[activity['category']]]
-        list_to_append.append(activity['activity_name'])
+    activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
+    for activity in Activity.objects.all():
+        activity_data[activity.get_category_display()].append(activity.activity_name)
 
-    activity_data = {
-                    "Selfcare/Everyday Needs": activity_context_list[0],
-                    "Communication/Socializing": activity_context_list[1],
-                    "Sports/Fitness": activity_context_list[2],
-                    "Fun/Leisure/Hobbies": activity_context_list[3],
-                    "Responsibilities": activity_context_list[4],
-                    "Transportation": activity_context_list[5],
-                   }
-
-    if user_type == "NewUser":
-        show_carousel_guide = True
-    else:
-        show_carousel_guide = False
-    context = {'list_of_objects': object_list,
+    context = {
+               'list_of_objects': object_list,
                'username': user.get_username(),
                'list_of_friends': friend_list,
-               'list_of_goals': goal_list,
                'activity_data': activity_data,
-               'show_carousel_guide': show_carousel_guide
-               }
+               'show_carousel_guide': False
+    }
 
+    if not user.logged_in_before:
 
-
+        context['show_carousel_guide'] = True
+        user.logged_in_before = True
+        user.save()
 
     return render(request, 'activitytracker/index.html', context)
 
+
+
 # Gets called on "Group common" click, to return grouped activities
 def getgroupedactivities(request):
+
     user = request.user
-    if len(request.POST['grouped_data']) > 0:
-        ids = (request.POST['grouped_data'])[1:].split("_")
-    else:
+    if len(request.POST['grouped_data']) == 0:
         return HttpResponse(json.dumps([]), content_type='application/json')
 
+    ids = (request.POST['grouped_data']).split("_")
     instances = user.performs_set.filter(id__in=ids)
-    json_list = []
+    json_list = list()
+
     if request.POST['box'] == "checked":
-        ordered = instances.order_by('activity')
-        for index, i in enumerate(ordered):
-            if index == 0:
-                event = i
-                grouped_id = str(i.id);
-            elif i.activity != prev_i.activity:
-                json_entry = {'id': grouped_id,
-                              'duration': event.displayable_date(),
-                              'start_date': event.start_date.strftime('%Y%m%d%H%M'),
-                              'activity': event.activity.activity_name,
-                              'colour': str(event.activity.category),
-                              'icon_classname': event.activity.icon_classname
-                        }
-                json_list.append(json_entry)
-                event = i
-                grouped_id = str(i.id);
-            else:
-                event.end_date += i.end_date - i.start_date
-                grouped_id = grouped_id + '_' + str(i.id)
-            prev_i = i
-        #######################
-        json_entry = {  'id': grouped_id,
-                        'duration': event.displayable_date(),
-                        'start_date': event.start_date.strftime('%Y%m%d%H%M'),
-                        'activity': event.activity.activity_name,
-                        'colour': str(event.activity.category),
-                        'icon_classname': event.activity.icon_classname
-                     }
-        json_list.append(json_entry)
+
+        entries = dict()
+
+        for instance in instances:
+
+            if instance.activity.activity_name in entries:
+               entries[instance.activity.activity_name][0].end_date += instance.end_date - instance.start_date
+               entries[instance.activity.activity_name][1] += '_%s' % str(instance.id)
+               continue
+
+            entries[instance.activity.activity_name] = [instance, str(instance.id)]
+
+        for activity_name, activity_data in entries.iteritems():
+
+            [instance, grouped_id] = activity_data
+
+            json_list.append({
+                'id': grouped_id,
+                'start_date': instance.start_date.strftime('%Y%m%d%H%M'),
+                'duration': instance.displayable_date(),
+                'activity': instance.activity.activity_name,
+                'colour': str(instance.activity.category),
+                'icon_classname': instance.activity.icon_classname
+            })
+
     else:
         for event in instances:
-            json_entry = {  'id': event.id,
-                            'start_date': event.start_date.strftime('%Y%m%d%H%M'),
-                            'duration': event.displayable_date(),
-                            'activity': event.activity.activity_name,
-                            'colour': str(event.activity.category),
-                            'icon_classname': event.activity.icon_classname
-                         }
-            json_list.append(json_entry)
+            json_list.append(
+                            { 'id': event.id,
+                               'start_date': event.start_date.strftime('%Y%m%d%H%M'),
+                               'duration': event.displayable_date(),
+                               'activity': event.activity.activity_name,
+                               'colour': str(event.activity.category),
+                               'icon_classname': event.activity.icon_classname
+                            }
+            )
+
     sort = request.POST['sort']
+
     if sort == "Activity":
-        dummy = sorted(json_list, key=operator.itemgetter('activity', 'start_date'))
+        json_list = sorted(json_list, key=operator.itemgetter('activity', 'start_date'))
     elif sort == "Category":
-        dummy = sorted(json_list, key=operator.itemgetter('colour', 'start_date'))
+        json_list = sorted(json_list, key=operator.itemgetter('colour', 'start_date'))
     else:
-        dummy = sorted(json_list, key=operator.itemgetter('start_date'))
-    json_list = dummy
+        json_list = sorted(json_list, key=operator.itemgetter('start_date'))
+
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 
 # Gets called each time an activity is added
 def addactivity(request):
+
+    DB_ERROR = 'Database Insertion Error. Check your fields and try again'
+    FIELD_ERROR = 'Please fill up at least date and time fields correctly'
+    DATE_ERROR = 'Activity cant end sooner than it began'
+
+    if '' in (request.POST['start_date'],
+              request.POST['end_date'],
+              request.POST['start_time'],
+              request.POST['end_time'],
+              request.POST['name_of_activity']
+              ):
+        return HttpResponseBadRequest(FIELD_ERROR)
+
     user = request.user
-    act_name = request.POST['name_of_activity']
-    try:
-        the_activity = Activity.objects.get(activity_name=act_name)
-    except Activity.DoesNotExist:
-        return HttpResponseBadRequest('Invalid Activity Input. Please try again')
-    start_datetime = request.POST['start_date'] + " " + request.POST['start_time'] + ":00"
-    end_datetime = request.POST['end_date'] + " " + request.POST['end_time'] + ":00"
-    the_goal = request.POST['goal']
-    the_result = request.POST['result']
-    friendlist = request.POST['friend_list']
-    object_list = request.POST['tool'].split(",")
-    friends = request.POST['friend_list'].split(",")
+    activity = Activity.objects.get(activity_name=request.POST['name_of_activity'])
+    start_datetime = '%s %s:00' % (request.POST['start_date'], request.POST['start_time'])
+    end_datetime = '%s %s:00' % (request.POST['end_date'], request.POST['end_time'])
+    goal = request.POST['goal']
+    goal_status = '' if 'goalstatus' not in request.POST else request.POST['goalstatus']
+    result = request.POST['result']
+    objects = request.POST['tool']
+    friends = request.POST['friend_list']
     location_address = request.POST['location_address']
-    lat = request.POST['lat']
-    lng = request.POST['lng']
-    if not lat:
-        lat = lng = None
-    try:
-        start_datetimeformat = datetime.strptime(start_datetime, "%m/%d/%Y %H:%M:%S")
-        end_datetimeformat = datetime.strptime(end_datetime, "%m/%d/%Y %H:%M:%S")
-    except ValueError:
-        return HttpResponseBadRequest('Please fill up at least Date and Time fields correctly')
-    if start_datetimeformat > end_datetimeformat:
-        return HttpResponseBadRequest("Activity can't end sooner than it started. Please try again")
+    location_lat = None if request.POST['lng'] == ''  else request.POST['lat']
+    location_lng = None if request.POST['lng'] == '' else request.POST['lng']
 
-    for f in friends:
-        try:
-            user.friend_set.get(friend_name=f.lstrip(' '))
-        except ObjectDoesNotExist:
-            a = Friend(friend_name=f.lstrip(' '), friend_of_user=user)
-            if a.friend_name != "":
-                a.save()
+    start_datetime = datetime.strptime(start_datetime, "%m/%d/%Y %H:%M:%S")
+    end_datetime = datetime.strptime(end_datetime, "%m/%d/%Y %H:%M:%S")
 
-    for o in object_list:
-        try:
-            user.object_set.get(object_name=o.lstrip(' '))
-        except ObjectDoesNotExist:
-            a = Object(object_name=o.lstrip(' '), object_of_user=user)
-            if a.object_name != "":
-                a.save()
+    if start_datetime > end_datetime:
+        return HttpResponseBadRequest(DATE_ERROR)
 
-    try:
-        a = Performs(user=user, activity=the_activity, goal=the_goal, result=the_result, start_date=start_datetimeformat,
-            end_date=end_datetimeformat, friends=friendlist, location_address=location_address, location_lat=lat, location_lng=lng)
-        a.save()
-        if the_goal != "":
-            a.goal_status = request.POST['goalstatus']
-            a.save()
-    except ValueError:
-        return HttpResponseBadRequest('Database insertion Error. Please check your fields and try again')
-
-
-    for o in object_list:
-        if o != "":
-            object_used = Object.objects.get(object_name=o)
-            a.using.add(object_used)
+    instance = addActivityFromProvider(user=user,
+                                       activity=activity,
+                                       start_date=start_datetime,
+                                       end_date=end_datetime,
+                                       goal=goal,
+                                       goal_status=goal_status,
+                                       friends=friends,
+                                       objects=objects,
+                                       result=result,
+                                       location_lat=location_lat,
+                                       location_lng=location_lng,
+                                       location_address=location_address
+                                       )
+    #print instance
+    #except ValueError:
+    #    return HttpResponseBadRequest(DB_ERROR)
 
     return HttpResponse(
         json.dumps(
             {
-                'id': str(a.id),
-                'duration': a.displayable_date(),
-                'activity': a.activity.activity_name,
-                'colour': str(a.activity.category)
+                'id': str(instance.id),
+                'duration': instance.displayable_date(),
+                'activity': instance.activity.activity_name,
+                'colour': instance.activity.category
             }
         ),
         content_type='application/json'
     )
 
 
+
 # Gets called each time a single activity is clicked
 def showactivity(request, performs_identification):
-    colourDict = {'black': "rgba(1, 1, 1, 0.8)",
-                  'blue': "#578EBE",
-                  'greenLight': "#99B433",
-                  'orange': "#e09100",
-                  'redDark': "#850521",
-                  'purple': "#800080"
-    }
+
     user = request.user
     details = user.performs_set.get(id=performs_identification)
-    tools = details.using.all()
-    tools_string = ', '.join(str(t.object_name) for t in tools)
+    tools = ', '.join(object.object_name for object in details.using.all())
     start_date = details.start_date.strftime('%m/%d/%Y')
     end_date = details.end_date.strftime('%m/%d/%Y')
     end_time = details.end_date.strftime('%H:%M')
@@ -495,37 +567,41 @@ def showactivity(request, performs_identification):
     except ObjectDoesNotExist:
         provider_instance = None
 
-    context = {'instance': details, 'tools': tools_string, 'start_t': start_time, 'end_t': end_time,
-               'end_date': end_date, 'start_date': start_date, 'color': colourDict[details.activity.category],
-               'performs_provider_instance': provider_instance}
+    context = {'instance': details,
+               'tools': tools,
+               'start_t': start_time,
+               'end_t': end_time,
+               'end_date': end_date,
+               'start_date': start_date,
+               'color': colourDict[details.activity.category],
+               'performs_provider_instance': provider_instance
+               }
+
     return SimpleTemplateResponse('activitytracker/display-activity.html', context)
+
 
 # Gets called when a grouped activity needs to be shown
 def showgroupactivity(request, group_identification):
-    colourDict = {'black': "rgba(1, 1, 1, 0.8)",
-                  'blue': "#578EBE",
-                  'greenLight': "#99B433",
-                  'orange': "#e09100",
-                  'redDark': "#850521",
-                  'purple': "#800080"
-    }
-    id_list = group_identification.split('_')
+
     user = request.user
+    id_list = group_identification.split('_')
     events = user.performs_set.filter(id__in=id_list).order_by('start_date')
-    context_list = []
+    activity_group = []
+
     for details in events:
         tools_string = ', '.join(str(t.object_name) for t in details.using.all())
         start_date = details.start_date.strftime('%m/%d/%Y')
         end_date = details.end_date.strftime('%m/%d/%Y')
         start_time = details.start_date.strftime('%H:%M')
         end_time = details.end_date.strftime('%H:%M')
+        colour = colourDict[details.activity.category]
 
         try:
             provider_instance = PerformsProviderInfo.objects.get(instance=details)
         except ObjectDoesNotExist:
             provider_instance = None
 
-        context_list.append({'tools': tools_string,
+        activity_group.append({'tools': tools_string,
                              'start_time': start_time,
                              'end_time': end_time,
                              'end_date': end_date,
@@ -533,66 +609,58 @@ def showgroupactivity(request, group_identification):
                              'instance': details,
                              'performs_provider_instance': provider_instance
                              })
-    colour = colourDict[Performs.objects.get(id=id_list[0]).activity.category]
-    context = { 'activity_list': context_list, 'color': colour, 'total_grouped_activities': len(id_list) }
-    return SimpleTemplateResponse('activitytracker/display-group-activity.html', context)
+
+    activities = {'activity_list': activity_group,
+                  'color': colour,
+                  'total_grouped_activities': len(id_list)
+                  }
+
+    return SimpleTemplateResponse('activitytracker/display-group-activity.html',
+                                  activities
+                                  )
 
 # Deletes an activity
 def deleteactivity(request):
 
-    the_id = request.POST['act_id']
-    act = Performs.objects.get(id=the_id)
-    act.delete()
+    activity = Performs.objects.get(id=request.POST['act_id'])
+    activity.delete()
+
     return HttpResponse('Deleted')
+
 
 # Gives all the activities as JSON
 @login_required
 def listallactivities(request):
+
     context = {'activity_list': Activity.objects.all()}
-    return render(request, 'activitytracker/activitytable.html', context)
+
+    return render(request,
+                  'activitytracker/activitytable.html',
+                  context
+                  )
 
 
 
 #Gets called when Edit button is clicked, to instantiate values of inputs in the template
 def editactivity(request, performs_id):
-    colourDict = {'black': "rgba(1, 1, 1, 0.8)",
-                  'blue': "#578EBE",
-                  'greenLight': "#99B433",
-                  'orange': "#e09100",
-                  'redDark': "#850521",
-                  'purple': "#800080"
-    }
+
     user = request.user
-    details = Performs.objects.get(id=int(performs_id))
-    start_date = details.start_date.strftime('%m/%d/%Y')
-    end_date = details.end_date.strftime('%m/%d/%Y')
-    end_time = details.end_date.strftime('%H:%M')
-    start_time = details.start_date.strftime('%H:%M')
+    instance = Performs.objects.get(id=int(performs_id))
+    start_date = instance.start_date.strftime('%m/%d/%Y')
+    end_date = instance.end_date.strftime('%m/%d/%Y')
+    end_time = instance.end_date.strftime('%H:%M')
+    start_time = instance.start_date.strftime('%H:%M')
+    instance_object_list = [i.object_name for i in instance.using.all()]
+    instance_friend_list = filter(None, instance.friends.split(","))
 
-    instance_object_list = [i.object_name for i in details.using.all()]
     object_list = [i.object_name for i in user.object_set.all()] #for form
-    instance_friend_list = filter(None, details.friends.split(","))
     friend_list = [i.friend_name for i in user.friend_set.all()] #for form
-    goal_list = [i.goal for i in user.performs_set.exclude(goal__exact='')] #for form
-    category_dict = {'black': 0, 'blue': 1, 'greenLight': 2,
-                  'orange': 3, 'redDark': 4, 'purple': 5 }
 
-    act_name_list = Activity.objects.values('activity_name', 'category').order_by('activity_name').distinct()
-    activity_context_list = [[],[],[],[],[],[]]
-    for activity in act_name_list:
-        list_to_append = activity_context_list[category_dict[activity['category']]]
-        list_to_append.append(activity['activity_name'])
+    activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
+    for activity in Activity.objects.all():
+        activity_data[activity.get_category_display()].append(activity.activity_name)
 
-    activity_data = {
-                    "Selfcare/Everyday Needs": activity_context_list[0],
-                    "Communication/Socializing": activity_context_list[1],
-                    "Sports/Fitness": activity_context_list[2],
-                    "Fun/Leisure/Hobbies": activity_context_list[3],
-                    "Responsibilities": activity_context_list[4],
-                    "Transportation": activity_context_list[5],
-                   }
-
-    context = {'instance': details,
+    context = {'instance': instance,
                'instance_object_list': instance_object_list,
                'instance_friend_list': instance_friend_list,
                'start_t': start_time,
@@ -602,188 +670,171 @@ def editactivity(request, performs_id):
                'activity_data': activity_data,
                'list_of_objects': object_list,
                'list_of_friends': friend_list,
-               'list_of_goals': goal_list,
-               'color': colourDict[details.activity.category],
-    }
+               'color': colourDict[instance.activity.category],
+               }
 
     return SimpleTemplateResponse('activitytracker/edit-activity.html', context)
 
 
 #Gets called on update activity
 def updateactivity(request):
+
+    DATE_ERROR_MSG = 'Activity cannot end sooner than it started'
+    FIELD_ERROR_MSG = 'Please fill out all the fields correctly'
+
     user = request.user
-    the_id = request.POST['the_id']
-    details = Performs.objects.get(id=int(the_id))
-    activity = request.POST['name_of_activity']
-    location_address = request.POST['location_address']
-    lat = request.POST['lat']
-    lng = request.POST['lng']
-    try:
-        details.activity = Activity.objects.get(activity_name=activity)
-    except Activity.DoesNotExist:
-        return HttpResponseBadRequest('Invalid Activity Input. Please try again')
+    instance = Performs.objects.get(id=int(request.POST['the_id']))
 
-    end_date = request.POST['end_date'] + " " + request.POST['end_time'] + ":00"
-    start_date = request.POST['start_date'] + " " + request.POST['start_time'] + ":00"
     try:
-        details.end_date = datetime.strptime(end_date, "%m/%d/%Y %H:%M:%S")
-        details.start_date = datetime.strptime(start_date, "%m/%d/%Y %H:%M:%S")
-        if details.start_date > details.end_date:
-            return HttpResponseBadRequest("Activity can't end sooner than it started. Please try again")
+        start_date = '%s %s:00' % (request.POST['start_date'], request.POST['start_time'])
+        end_date = '%s %s:00' % (request.POST['end_date'], request.POST['end_time'])
+        start_date = datetime.strptime(start_date, "%m/%d/%Y %H:%M:%S")
+        end_date = datetime.strptime(end_date, "%m/%d/%Y %H:%M:%S")
+
+        if start_date > end_date:
+            return HttpResponseBadRequest(DATE_ERROR_MSG)
+
+        activity = Activity.objects.get(activity_name=request.POST['name_of_activity'])
+        friends = ','.join(list(set(request.POST['friend_list'].split(','))))
+        objects = ','.join(list(set(request.POST['tool'].split(','))))
+        location_address = request.POST['location_address']
+        location_lat = request.POST['lat']
+        location_lng = request.POST['lng']
+        goal = request.POST['goal']
+        result = request.POST['result']
+        goal_status = None if not instance.goal else request.POST['goalstatus']
+
+        instance.delete()
+
+        instance = addActivityFromProvider(user=user,
+                                           activity=activity,
+                                           start_date=start_date,
+                                           end_date=end_date,
+                                           goal=goal,
+                                           goal_status=goal_status,
+                                           friends=friends,
+                                           objects=objects,
+                                           result=result,
+                                           location_lat=location_lat,
+                                           location_lng=location_lng,
+                                           location_address=location_address
+                                           )
+
     except ValueError:
-        return HttpResponseBadRequest('Please fill up at least Date and Time fields correctly')
+        return HttpResponseBadRequest(FIELD_ERROR_MSG)
 
-    details.friends = ','.join(list(set(request.POST['friend_list'].split(','))))
-    details.location_address = location_address
-    details.location_lat = lat
-    details.location_lng = lng
-
-    details.goal = request.POST['goal']
-    details.result = request.POST['result']
-    if details.goal != "":
-        details.goal_status = request.POST['goalstatus']
-    else:
-        details.goal_status = None
-
-    friends = request.POST['friend_list'].split(",")
-    for f in friends:
-        try:
-            user.friend_set.get(friend_name=f.lstrip(' '))
-        except ObjectDoesNotExist:
-            a = Friend(friend_name=f.lstrip(' '), friend_of_user=user)
-            if a.friend_name != "":
-                a.save()
-
-    object_list = request.POST['tool'].split(",")
-    for o in object_list:
-        try:
-            user.object_set.get(object_name=o.lstrip(' '))
-        except ObjectDoesNotExist:
-            a = Object(object_name=o.lstrip(' '), object_of_user=user)
-            if a.object_name != "":
-                a.save()
-
-    try:
-        details.save()
-    except ValueError:
-        return HttpResponseBadRequest('Database insertion Error. Please check your fields and try again')
-
-    for previous_obj in details.using.all():
-        details.using.remove(previous_obj)
-
-    for o in object_list:
-        if o != "":
-            object_used = Object.objects.get(object_name=o)
-            details.using.add(object_used)
-
-    date_format = details.start_date.strftime('%I:%M%p (%m/%d/%Y)')
     return HttpResponse(
         json.dumps(
             {
-                'id': str(details.id),
-                'duration': details.displayable_date(),
-                'activity': details.activity.activity_name,
-                'colour': str(details.activity.category),
-                'start_date': str(date_format),
-                'goal': details.goal,
-                'goal_status': details.goal_status,
-                'friends': details.friends,
-                'location_address': details.location_address,
-                'tools': ', '.join(str(t.object_name) for t in details.using.all()),
-                'icon_classname': details.activity.icon_classname,
+                'id': str(instance.id),
+                'duration': instance.displayable_date(),
+                'activity': instance.activity.activity_name,
+                'colour': instance.activity.category,
+                'goal': instance.goal,
+                'goal_status': instance.goal_status,
+                'friends': instance.friends,
+                'location_address': instance.location_address,
+                'start_date': instance.start_date.strftime('%I:%M%p (%m/%d/%Y)'),
+                'tools': ', '.join(t.object_name for t in instance.using.all()),
+                'icon_classname': instance.activity.icon_classname,
 
             }
         ),
         content_type='application/json'
     )
 
+
 # provides the JSON to the chart of Index Page
 def chartdatajson(request):
     user = request.user
-    if len(request.GET['chart_data']) > 0:
-        ids = (request.GET['chart_data'])[1:].split("_")
-    else:
+
+    if len(request.GET['chart_data']) == 0:
         return HttpResponse(json.dumps([]), content_type='application/json')
-    colourdict = {'black': 0, 'blue': 1, 'greenLight': 2,
-                  'orange': 3, 'redDark': 4, 'purple': 5 }
-    durations = [0, 0, 0, 0, 0, 0]
-    for event_id in ids:
-            entry = user.performs_set.get(id=int(event_id))
-            dur = entry.end_date - entry.start_date
-            minutes = dur.seconds/60 + dur.days*24*60
-            durations[colourdict[entry.activity.category]] += minutes
-    json_list = [{'label': "Selfcare/Everyday Needs",  'data': durations[0], 'color': "rgba(1, 1, 1, 0.9)"},
-                 {'label': "Communication/Socializing",  'data': durations[1], 'color': "#1b0297"},
-                 {'label': "Sports/Fitness",  'data': durations[2], 'color': "#99B433"},
-                 {'label': "Fun/Leisure/Hobbies",  'data': durations[3], 'color': "#e09100"},
-                 {'label': "Responsibilities",  'data': durations[4], 'color': "#850521"},
-                 {'label': "Transportation",  'data': durations[5], 'color': "#800080"}
-                 ]
-    return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+    ids = request.GET['chart_data'].split("_")
+    instances = user.performs_set.filter(id__in=map(int, ids))
+
+    chart_data = [
+        {
+            'label': category,
+            'data': 0,
+            'color': colourDict[colour]
+        } for (colour, category) in Activity.CATEGORY_CHOICES
+    ]
+
+    for instance in instances:
+        duration = instance.end_date - instance.start_date
+        minutes = duration.seconds/60 + duration.days*24*60
+
+        for index, category_dict in enumerate(chart_data):
+            if category_dict['label'] == instance.activity.get_category_display():
+                chart_data[index]['data'] += minutes
+                break
+
+    return HttpResponse(json.dumps(chart_data), content_type='application/json')
 
 # Provides the event to the calendar
 def eventstojson(request):
 
-    colourdict= {'black': "rgba(1, 1, 1, 0.9)",
-                 'orange': "#e09100",
-                 'purple': "purple",
-                 'blue': "#1b0297",
-                 'redDark': "#850521",
-                 'greenLight': "#99B433"
-                }
     user = request.user
-    allevents = user.performs_set.all()
-
     json_list = []
-    for event in allevents:
-        the_id = event.id
-        title = event.activity.activity_name
-        start = event.start_date.strftime("%Y-%m-%dT%H:%M:%S")
-        end = event.end_date.strftime("%Y-%m-%dT%H:%M:%S")
-        allDay = False
-        editable = False
-        colour = colourdict[event.activity.category]
-        json_entry = {'id': the_id,
-                      'start': start,
-                      'allDay': allDay,
-                      'end': end,
-                      'editable': editable,
-                      'title': title,
-                      'color': colour,
-                    }
-        json_list.append(json_entry)
+
+    for instance in user.performs_set.all():
+        json_list.append({
+            'id': instance.id,
+            'start': instance.start_date.strftime("%Y-%m-%dT%H:%M:%S"),
+            'allDay': False,
+            'end': instance.end_date.strftime("%Y-%m-%dT%H:%M:%S"),
+            'editable': False,
+            'title': instance.activity.activity_name,
+            'color': colourDict[instance.activity.category],
+        })
+
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 # Gets called when calendar changes view
 def displayperiod(request):
 
     user = request.user
-
-    monthDict = {'Jan': 1, 'Feb': 2, 'Mar': 3,
-                 'Apr': 4,  'May': 5,   'Jun': 6,
-                 'Jul': 7,  'Aug': 8,   'Sep': 9,
-                 'Oct': 10,  'Nov': 11,   'Dec': 12,
-                 }
     mode = request.POST['mode']
+
     if mode == "month":
         year = request.POST['year']
-
-
         month = request.POST['month']
 
+        month_first_moment = datetime.strptime(
+            '%s-%s-01 00:00:00' % (year, month),
+            "%Y-%b-%d %H:%M:%S"
+        )
 
-        month_last_moment = datetime.strptime(year + '-' + month + '-' + str(calendar.monthrange(int(year),
-                                                         int(monthDict[month]))[1]) + ' 23:59:59',"%Y-%b-%d %H:%M:%S")
-        month_first_moment = datetime.strptime(year + '-' + month + '-01 00:00:00', "%Y-%b-%d %H:%M:%S")
-        instances = user.performs_set.filter(start_date__lte=month_last_moment, end_date__gte=month_first_moment)
+        month_last_moment = datetime.strptime(
+            '%s-%s-%s 23:59:59' % (year, month, str(calendar.monthrange(
+                int(year),
+                datetime.strptime(month, '%b').month)[1])
+                                   ),
+                "%Y-%b-%d %H:%M:%S"
+        )
+
+        instances = user.performs_set.filter(start_date__lte=month_last_moment,
+                                             end_date__gte=month_first_moment
+                                             )
+
     elif mode == "agendaDay":
         day = request.POST['day']
         year = request.POST['year']
         month = request.POST['month']
 
-        day_last_moment = datetime.strptime(year + '-' + month + '-' + day + ' 23:59:59', "%Y-%b-%d %H:%M:%S")
-        day_first_moment = datetime.strptime(year + '-' + month + '-' + day + ' 00:00:00', "%Y-%b-%d %H:%M:%S")
-        instances = user.performs_set.filter(start_date__lte=day_last_moment, end_date__gte=day_first_moment)
+        day_first_moment = datetime.strptime('%s-%s-%s 00:00:00' % (year, month, day),
+                                             "%Y-%b-%d %H:%M:%S"
+                                             )
+
+        day_last_moment = datetime.strptime('%s-%s-%s 23:59:59' % (year, month,day),
+                                            "%Y-%b-%d %H:%M:%S"
+                                            )
+
+        instances = user.performs_set.filter(start_date__lte=day_last_moment,
+                                             end_date__gte=day_first_moment
+                                             )
     else:
         day = request.POST['day']
         year = request.POST['year']
@@ -793,90 +844,126 @@ def displayperiod(request):
         year2 = request.POST['year2']
         month2 = request.POST['month2']
 
-        week_first_moment = datetime.strptime(year + '-' + month + '-' + day + ' 00:00:00', "%Y-%b-%d %H:%M:%S")
-        week_last_moment = datetime.strptime(year2 + '-' + month2 + '-' + day2 + ' 23:59:59', "%Y-%b-%d %H:%M:%S")
-        instances = user.performs_set.filter(start_date__lte=week_last_moment, end_date__gte=week_first_moment)
+        week_first_moment = datetime.strptime('%s-%s-%s 00:00:00' % (year, month, day),
+                                              "%Y-%b-%d %H:%M:%S"
+                                              )
 
-    responseString = ""
-    for event in instances:
-        responseString = responseString + "_" + str(event.id)
-    return HttpResponse(responseString)
+        week_last_moment = datetime.strptime('%s-%s-%s 23:59:59' % (year2, month2, day2),
+                                             "%Y-%b-%d %H:%M:%S"
+                                             )
+
+        instances = user.performs_set.filter(start_date__lte=week_last_moment,
+                                             end_date__gte=week_first_moment
+                                             )
+
+    ids = '_'.join(str(instance.id) for instance in instances)
+
+    return HttpResponse(ids)
 
 
 # Called to instantiate HTML and redirect to Goals Page
 @login_required
 def goals(request):
+
     user = request.user
     total_goals = len(user.performs_set.exclude(goal=""))
-    return render(request, 'activitytracker/goals.html', {'username': user.get_username(), 'total_number': total_goals})
+
+    return render(request,
+                  'activitytracker/goals.html',
+                  {
+                      'username': user.get_username(),
+                      'total_number': total_goals
+                  }
+                 )
 
 
 # Feeds the jQuery.dataTable that is the table in the Goals page
 def goalstojson(request):
+
     user = request.user
-    activities = user.performs_set.exclude(goal="")
     json_list = {"data": []}
-    for a in activities:
-        if a.goal != "":
-            json_entry = {'goal': a.goal,
-                          'date': a.start_date.strftime('%m/%d/%Y'),
-                          'activity': a.activity.activity_name,
-                          'goal_status': a.goal_status,
-                          'id': a.id,
-            }
-            json_list['data'].append(json_entry)
+    activities = user.performs_set.exclude(goal="")
+
+    for activity in activities:
+        json_list['data'].append({
+            'goal': activity.goal,
+            'date': activity.start_date.strftime('%m/%d/%Y'),
+            'activity': activity.activity.activity_name,
+            'goal_status': activity.goal_status,
+            'id': activity.id,
+        })
+
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 
 # Gets called when any action from Goals.html is being performed
 def goalhandler(request):
+
+    DELETE_ERROR_MSG = 'Goal cant be empty! You can delete it though options'
+
     user = request.user
     setting = request.POST['setting']
+
     if setting == "deleteGoal":
-        deletegoal_id = request.POST['performs_id']
-        performs_instance = user.performs_set.get(id=deletegoal_id)
+        performs_instance = user.performs_set.get(id=request.POST['performs_id'])
         performs_instance.goal, performs_instance.goal_status = "", None
         performs_instance.save()
         return HttpResponse(len(user.performs_set.exclude(goal="")))
+
     elif setting == "updateGoal":
         updatedgoal = request.POST['data']
         updatedgoal_id = request.POST['performs_id']
+
         if updatedgoal == "":
-            return HttpResponseBadRequest("Goal can't be empty! If you want to delete it you can do so through options.")
+            return HttpResponseBadRequest(DELETE_ERROR_MSG)
+
         performs_instance = user.performs_set.get(id=updatedgoal_id)
         performs_instance.goal = updatedgoal
         performs_instance.save()
+
         return HttpResponse('Ok')
+
     else:
         updategoalstatus_id = request.POST['performs_id']
         updategoalstatus_newstatus = request.POST['data']
         performs_instance = user.performs_set.get(id=updategoalstatus_id)
         performs_instance.goal_status = updategoalstatus_newstatus
         performs_instance.save()
+
         return HttpResponse('Ok')
 
 # A json display of an activity that the user performs. Suitable for sync with other apps
 def activitydetails(request, performs_id):
+
     user = request.user
     details = user.performs_set.get(id=performs_id)
-    tools_string = ', '.join(str(t.object_name) for t in details.using.all())
-    json_list = {'id': details.id,
-                   'activity': details.activity.activity_name,
-                   'start_date': str(details.start_date),
-                   'end_date': str(details.end_date),
-                   'goal': details.goal,
-                   'goal_status': details.goal_status,
-                   'friends': details.friends,
-                   'tools': tools_string,
+    tools_string = ', '.join(t.object_name for t in details.using.all())
+
+    json_list = {
+        'id': details.id,
+        'activity': details.activity.activity_name,
+        'start_date': str(details.start_date),
+        'end_date': str(details.end_date),
+        'goal': details.goal,
+        'goal_status': details.goal_status,
+        'friends': details.friends,
+        'tools': tools_string,
     }
+
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 
 # Loads the basic HTML of the Timeline Page
 @login_required
 def timeline(request):
-    user = request.user
-    return render(request, 'activitytracker/timeline.html',{'username':user.get_username()})
+
+    return render(
+        request,
+        'activitytracker/timeline.html',
+        {
+          'username': request.user.get_username()
+        }
+    )
 
  # Feeds the activities as json and paginates them to the html
 def timeline_events_json(request):
@@ -884,30 +971,34 @@ def timeline_events_json(request):
 
     total_events = user.performs_set.order_by('-start_date')
     paginator = Paginator(total_events, 10)
-
     requested_page = request.GET['page']
+    json_list = []
+
     try:
-        json_list = []
         requested_events = paginator.page(requested_page)
-        for details in requested_events:
-            tools_string = ', '.join(str(t.object_name) for t in details.using.all())
-            start_date = details.start_date.strftime('%I:%M%p (%m/%d/%Y)')
-            json_entry = { 'activity': details.activity.activity_name,
-                           'start_date': str(start_date),
-                           'duration': details.displayable_date(),
-                           'goal': details.goal,
-                           'goal_status': details.goal_status,
-                           'friends': details.friends,
-                           'tools': tools_string,
-                           'result': details.result,
-                           'colour': details.activity.category,
-                           'id': details.id,
-                           'location_address': details.location_address,
-                           'icon_classname': details.activity.icon_classname,
+
+        for instance in requested_events:
+            tools_string = ', '.join(t.object_name for t in instance.using.all())
+            start_date = instance.start_date.strftime('%I:%M%p (%m/%d/%Y)')
+            json_entry = {
+                'activity': instance.activity.activity_name,
+                'start_date': start_date,
+                'duration': instance.displayable_date(),
+                'goal': instance.goal,
+                'goal_status': instance.goal_status,
+                'friends': instance.friends,
+                'tools': tools_string,
+                'result': instance.result,
+                'colour': instance.activity.category,
+                'id': instance.id,
+                'location_address': instance.location_address,
+                'icon_classname': instance.activity.icon_classname,
             }
             json_list.append(json_entry)
+
     except EmptyPage:
         pass
+
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 
@@ -937,6 +1028,36 @@ def analytics_activities(request):
                    'activity_data': context_data,
                   }
     )
+
+
+@login_required
+def analytics_routine(request):
+
+    user = request.user
+    colourdict = {'black': 0, 'blue': 1, 'greenLight': 2,
+                  'orange': 3, 'redDark': 4, 'purple': 5 }
+    act_name_list = user.performs_set.values('activity__activity_name',
+                                             'activity__category').order_by('activity__activity_name').distinct()
+    activity_context_list = [[],[],[],[],[],[]]
+    for activity in act_name_list:
+        list_to_append = activity_context_list[colourdict[activity['activity__category']]]
+        list_to_append.append(activity['activity__activity_name'])
+
+    context_data = {
+                    "Selfcare/Everyday Needs": activity_context_list[0],
+                    "Communication/Socializing": activity_context_list[1],
+                    "Sports/Fitness": activity_context_list[2],
+                    "Fun/Leisure/Hobbies": activity_context_list[3],
+                    "Responsibilities": activity_context_list[4],
+                    "Transportation": activity_context_list[5],
+                   }
+    return render(request, 'activitytracker/analytics-routine.html',
+                  {
+                   'username': user.get_username(),
+                   'activity_data': context_data,
+                  }
+    )
+
 
 @login_required
 def analytics_friends(request):
@@ -2312,6 +2433,212 @@ def social_login(request, action):
 
 def syncProviderActivities(request, provider):
     social_instance = request.user.social_auth.get(provider=provider)
-    provider_object = eval(provider.capitalize())(social_instance)
+    provider_object = eval(provider.title().replace('-', ''))(social_instance)
 
-    return provider_object.fetchData()
+    return HttpResponse(provider_object.fetchData())
+
+
+def routineSettings(request, setting='show'):
+
+    TIME_ERROR = 'You cannot start earlier than you finish. The update will not be performed'
+    basic_routine_activities = [
+        'Eating',
+        'Working',
+        'Commuting',
+        'Education',
+        'Sleeping'
+    ]
+
+    user = request.user
+
+    json_response = {
+            'timeline_data': {},
+            'input_data': []
+        }
+
+    if not setting:
+
+        for activity_name in basic_routine_activities:
+            activity = Activity.objects.get(activity_name=activity_name)
+            json_response['input_data'].append({
+                'activity': activity.activity_name,
+                'color': activity.category,
+                'icon_classname': activity.icon_classname,
+            })
+
+        for activity in Routine.objects.filter(user=user):
+            pass
+
+        return HttpResponse(
+            json.dumps(json_response),
+            content_type="application/json"
+        )
+
+    if setting == 'insert_more':
+
+        for activity in Activity.objects.all().order_by('activity_name'):
+            if activity.activity_name not in basic_routine_activities:
+                json_response['input_data'].append({
+                    'activity': activity.activity_name,
+                    'color': activity.category,
+                    'icon_classname': activity.icon_classname,
+                })
+
+        for activity in Routine.objects.filter(user=user):
+            pass
+
+        return HttpResponse(
+            json.dumps(json_response),
+            content_type="application/json"
+        )
+
+    elif setting == "configure_periods":
+
+        day_type = request.POST['day_type']
+        routine_activity = Activity.objects.get(activity_name=request.POST['activity'])
+
+        if (request.POST['start_time'] and request.POST['end_time']):
+            if request.POST['start_time'] > request.POST['end_time']:
+                return HttpResponseBadRequest(TIME_ERROR)
+
+        start_time = None if not request.POST['start_time'] \
+            else datetime.strptime(request.POST['start_time'] + ':00', "%H:%M:%S")
+        end_time = None if not request.POST['end_time'] \
+            else datetime.strptime(request.POST['end_time'] + ':00', "%H:%M:%S")
+
+        if user.routine_set.filter(day_type=day_type,
+                                   activity=routine_activity
+                                   ).count() > 0:
+
+            instance = user.routine_set.get(
+                day_type=day_type,
+                activity=routine_activity
+            )
+            instance.start_time = start_time
+            instance.end_time = end_time
+
+        else:
+            instance = Routine(
+                user=user,
+                activity=routine_activity,
+                start_time=start_time,
+                end_time=end_time,
+                day_type=day_type
+            )
+
+        instance.save()
+        return HttpResponse('Ok')
+
+
+    return HttpResponse('Ok')
+
+
+def updateallroutinecharts(request):
+
+    user = request.user
+    day_type_requested = request.POST['day_type']
+    datestart = (request.POST['range']).split('-')[0]
+    dateend = (request.POST['range']).split('-')[1]
+    range_left = chosen_start = datetime.strptime(datestart, "%m/%d/%Y ")
+    range_right = chosen_end = datetime.strptime(dateend, " %m/%d/%Y")
+    routine = request.POST['routine'].replace('-',' ')
+    routine_activity = Activity.objects.get(activity_name=routine)
+    chart_data = collections.OrderedDict()
+    print routine
+    while True:
+
+        if range_left > range_right:
+            break
+
+        day_type = "Weekdays" if range_left.weekday() <= 4 else "Weekend"
+
+        if day_type_requested in ("Weekdays", "Weekend"):
+            if day_type_requested != day_type:
+                range_left += timedelta(days=1)
+                continue
+
+        try:
+            routine_range = user.routine_set.get(
+                activity=routine_activity,
+                day_type=day_type
+            )
+        except ObjectDoesNotExist:
+            range_left += timedelta(days=1)
+            continue
+
+        try:
+            routine_start = datetime.combine(range_left, routine_range.start_time)
+            routine_end = datetime.combine(range_left, routine_range.end_time)
+        except:
+            range_left += timedelta(days=1)
+            continue
+
+        background_actions = user.performs_set.filter(
+            start_date__lte=routine_end,
+            end_date__gte=routine_start
+        )
+
+        for action in background_actions:
+
+            action_start = action.start_date
+            action_end = action.end_date
+
+            if (routine_start < action_start) and (routine_end > action_end) :
+                intersection_time = action_end - action_start
+                rest_time = action_end - action_end         # It is 0 of course
+
+
+            elif (routine_start < action_start) and (routine_end <= action_end):
+                intersection_time = routine_end - action_start
+                rest_time = action_start - routine_start + action_end - routine_end
+
+            elif (routine_start >= action_start) and (routine_end > action_end):
+                intersection_time = action_end - routine_start
+                rest_time = routine_start - action_start + routine_end - action_end
+
+            else:
+                intersection_time  = routine_end - routine_start
+                rest_time = routine_start - action_start + action_end - routine_end
+
+            try:
+                chart_data[action.activity.activity_name]['count'] += 1
+                chart_data[action.activity.activity_name]['intersection_time'] += intersection_time
+                chart_data[action.activity.activity_name]['rest_time'] += rest_time
+
+            except KeyError:
+                chart_data[action.activity.activity_name] = {}
+                chart_data[action.activity.activity_name]['count'] = 1
+                chart_data[action.activity.activity_name]['intersection_time'] = intersection_time
+                chart_data[action.activity.activity_name]['rest_time'] = rest_time
+
+        range_left += timedelta(days=1)
+
+    json_list = []
+    for key, value in chart_data.iteritems():
+        json_entries = [
+
+            {'Action': key ,
+            'Instances': str(value['count']),
+            'Hours': round(value['intersection_time'].seconds/float(3600) + value['intersection_time'].days*float(24), 2),
+            'Timeslice': 'Routine Metric Overlap',
+            'OrderByTime': round(value['intersection_time'].seconds/float(3600) + value['intersection_time'].days*float(24), 2),
+            'OrderByInstances': str(value['count']),
+            },
+            {'Action': key ,
+            'Instances': str(user.performs_set.filter(
+                start_date__lte=chosen_end,
+                end_date__gte=chosen_start,
+                activity=Activity.objects.get(activity_name=key)
+            ).count() - (value['count'])),
+            'Hours': round(value['rest_time'].seconds/float(3600) + value['rest_time'].days*float(24), 2),
+            'Timeslice': 'Routine Metric Disjointedness',
+            'OrderByTime': round(value['intersection_time'].seconds/float(3600) + value['intersection_time'].days*float(24), 2),
+            'OrderByInstances': str(value['count']),
+            },
+
+
+        ]
+        json_list += json_entries
+
+    print json.dumps(json_list)
+    return HttpResponse(json.dumps(json_list), content_type='application/json')

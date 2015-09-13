@@ -2,10 +2,10 @@ from myfunctions import *
 from AuthorizationChecks import *
 from django.db import transaction
 
-class Instagram(OAuth2Validation):
+class FacebookActivity(OAuth2Validation):
 
     def __init__(self, user_social_instance):
-        super(Instagram, self).__init__(user_social_instance)
+        super(FacebookActivity, self).__init__(user_social_instance)
         self.api_user_timeline_url = 'https://api.instagram.com/v1/users/self/media/recent/'
 
     @transaction.atomic()
@@ -84,12 +84,13 @@ class Instagram(OAuth2Validation):
         if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        params = {'access_token': self.provider_data['access_token']}
+        params = {'access_token': self.provider_data['access_token'], 'fields': 'location,birthday'}
 
-        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
+        """
+        if self.provider_data['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['min_id'] = self.provider_data['since_id']
 
-        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.provider_data['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -108,6 +109,9 @@ class Instagram(OAuth2Validation):
             if status == "Barrier Reached":
                 break
 
-        self.metadata.save()
-
+        self.user_social_instance.save()
+        """
+        print params
+        response = requests.get(url='https://graph.facebook.com/v2.4/me', params=params).json()
+        print response
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

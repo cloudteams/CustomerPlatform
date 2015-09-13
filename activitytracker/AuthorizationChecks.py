@@ -14,29 +14,12 @@ SUCCESS_MESSAGE = " Activities have been synced"
 
 DUMMY_LAST_UPDATED_INIT_VALUE = '0000-00-00 00:00:00'
 
-AVAILABLE_PROVIDERS = ['twitter', 'runkeeper', 'instagram', 'youtube', 'fitbit', 'foursquare', 'gmail']
-
-TWITTER_API_VALIDATION_URL = 'https://api.twitter.com/1.1/account/verify_credentials.json'
-
-RUNKEEPER_API_VALIDATION_URL = 'https://api.runkeeper.com/user'
-
-INSTAGRAM_API_VALIDATION_URL = 'https://api.instagram.com/v1/users/self'
-
-FITBIT_API_VALIDATION_URL = 'https://api.fitbit.com/1/user/-/profile.json'
-
-FOURSQUARE_API_VALIDATION_URL = 'https://api.foursquare.com/v2/users/self'
-
-YOUTUBE_API_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
-YOUTUBE_API_REFRESH_TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
-
-GMAIL_API_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
-GMAIL_API_REFRESH_TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
-
 class Validation(object):
 
     def __init__(self, user_social_instance):
         self.user = user_social_instance.user
         self.user_social_instance = user_social_instance
+        self.metadata = user_social_instance.userextraproviderinfo
         self.provider_data = user_social_instance.extra_data
         self.provider_id = user_social_instance.uid
         self.PROVIDER = user_social_instance.provider.replace('-', '_').upper()

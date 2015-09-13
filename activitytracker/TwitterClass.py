@@ -110,22 +110,24 @@ class Twitter(OAuth1Validation):
                   'count': 200,
                   'trim_user': False,
                   'include_rts': True,
-                  'exclude_replies': True,
+                  'exclude_replies': False,
                   'contributor_details': True,
                   }
 
-        if self.provider_data['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['since_id'] = self.provider_data['since_id']
 
-        self.provider_data['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
+            print self.api_user_timeline_url
+            print params
 
             tweets = requests.get(url=self.api_user_timeline_url,
                                   params=params,
                                   auth=auth
                                   ).json()
-
+            print tweets
             if not tweets:
                 break
 
@@ -137,6 +139,6 @@ class Twitter(OAuth1Validation):
             if status == "Barrier Reached":
                 break
 
-        self.user_social_instance.save()
+        self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

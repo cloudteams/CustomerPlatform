@@ -280,7 +280,9 @@ textarea,
 .controls-row [class*="span"] + [class*="span"] {
   margin-left: 20px;
 }
-.controls.activity-input{
+.controls.activity-input,
+.controls.weekend-input,
+.controls.seasonality-input{
   width:65%;
   margin-left:auto;
   margin-right:auto;

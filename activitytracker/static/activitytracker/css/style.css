@@ -677,7 +677,7 @@ border-bottom: 1px solid transparent;
 .nav-tabs.nav-stacked  > li.active > ul {
 	padding: 5px 0px;
   	color: #3b3b41;
-  	background: #fff;
+  	/*background: #fff; */
 }
 
 .nav-tabs.nav-stacked > li:first-child > a {
@@ -1350,6 +1350,44 @@ ul.messages li .message {
 	transition: all 0.3s ease;
 
 }
+
+.quick-button.metro.circle:hover{
+	color: #fff;;
+}
+
+.quick-button.metro.circle i {
+	font-size: 40px;
+	position: relative;
+	top: -20px;
+	left: -4%;
+}
+
+.quick-button.metro.circle {
+	border: 1px solid #000;
+	position: relative;
+	margin-left:0px ;
+	margin-right: 4.8% ;
+	margin-bottom:0px !important;
+	margin-top:28px;
+	height: 28px;
+	width:40px;
+	color: #fff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .25);
+	filter: none;
+	-webkit-box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
+	   -moz-box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
+			box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
+  	-webkit-border-radius: 30px;
+       -moz-border-radius: 30px;
+          	border-radius: 30px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+
+}
+
 .quick-button.metro.settings{
 	color: rgba(50,50,50,0.75) !important;
 	text-shadow: none !important;
@@ -3485,6 +3523,11 @@ ul.messagesList li span.date {
 	padding: 4px 0.1% !important;
 }
 
+.routine-activity {
+	cursor: default
+
+}
+
 .connected-apps {
 	margin-bottom:60px;
 	width:450px;"
@@ -3510,9 +3553,13 @@ ul.messagesList li span.date {
 	top:10px;
 }
 
+.routine-activity-text {
+	position: relative;
+	top:35px;
+}
 
-
-.connected-app-details {
+.connected-app-details,
+.routine-activity-details{
 	position:relative;
 	left:-24%;
 	top:12px;
@@ -3604,4 +3651,55 @@ ul.messagesList li span.date {
 	position:relative;
 	top:5px;
 	width: 39% !important;
+}
+
+.analytics-radio {
+	float: none !important;
+	margin: 0 !important;
+}
+
+#routine-activity-list .quick-button.metro.circle {
+	margin-top: 0 !important;
+}
+
+#range-slider {
+	width:34% !important;
+}
+
+#RoutineTable td p {
+	position: relative;
+	top: 15px;
+	margin:5px 0;
+}
+
+#RoutineTable .quick-button {
+	margin: 0 auto !important;
+	position:relative;
+}
+
+#RoutineTable label {
+	margin-top: 10px;
+}
+
+.range-picker {
+	margin-left:20px;
+	margin-top:10px;
+}
+
+input[name='range-logger'] {
+	margin-top:10px;
+}
+
+.controls.activity-input i {
+	top: -13px;
+	position:relative;
+}
+
+#seasonality-controls div{
+	margin: 30px 0;
+}
+
+.routine-controls {
+	margin: 30px 0;
+	border-top: 2px solid darkblue;
 }

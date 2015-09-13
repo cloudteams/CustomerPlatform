@@ -33,8 +33,8 @@ class Youtube(OAuth2Validation):
             if time_youtubed < _time_barrier:
                 return None, 'Reached Barrier'
 
-            if not self.provider_data['last_updated'].startswith('0') \
-               and time_youtubed <= datetime.strptime(self.provider_data['last_updated'],
+            if not self.metadata.last_updated.startswith('0') \
+               and time_youtubed <= datetime.strptime(self.metadata.last_updated,
                                                       "%Y-%m-%d %H:%M:%S"
                                                       ):
                 return None, 'Reached End'
@@ -176,8 +176,8 @@ class Youtube(OAuth2Validation):
             if outcome == "Error":
                 return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        self.provider_data['last_updated'] = sync_time
-        self.user_social_instance.save()
+        self.metadata.last_updated = sync_time
+        self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)
 

@@ -13,12 +13,26 @@ SOCIAL_AUTH_INACTIVE_USER_URL = '%s/activitytracker/social_login/InactiveUser' %
 SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '%s/admin' % SERVER_URL
 SOCIAL_AUTH_SANITIZE_REDIRECTS = False
 
-SOCIAL_AUTH_FACEBOOK_KEY = '995769567124024' if SERVER_URL.startswith('127.0.0.1') \
-                            else '949415351759446'
-SOCIAL_AUTH_FACEBOOK_SECRET = '5e6c4fcf2e8c1cd3eb948442e85d93cf' if SERVER_URL.startswith('127.0.0.1') \
-                               else 'f94e933e4c742e0cf70cd7ed7bb50c24'
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+AVAILABLE_PROVIDERS = ['twitter', 'runkeeper', 'instagram', 'youtube', 'fitbit', 'foursquare', 'facebook-activity']
+
+SOCIAL_AUTH_FACEBOOK_KEY = '949415351759446'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f94e933e4c742e0cf70cd7ed7bb50c24'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_location', 'user_birthday']
 SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [('gender','gender')]
+
+SOCIAL_AUTH_FACEBOOK_ACTIVITY_KEY = '949415351759446'
+SOCIAL_AUTH_FACEBOOK_ACTIVITY_SECRET = 'f94e933e4c742e0cf70cd7ed7bb50c24'
+SOCIAL_AUTH_FACEBOOK_ACTIVITY_SCOPE = [
+    'email',
+    'public_profile',
+    'user_status',
+    'user_location',
+    'user_birthday',
+    'user_friends',
+    'user_actions.books',
+    'user_actions.fitness',
+    'user_actions.music'
+]
 
 SOCIAL_AUTH_RUNKEEPER_KEY = '8208f31a27664d69aa3f6e50997bd794'
 SOCIAL_AUTH_RUNKEEPER_SECRET = '94f8def53dae4e88aeffb9ee2ae5dd5e'
@@ -57,6 +71,26 @@ SOCIAL_AUTH_FITBIT_SECRET = '8ed77d08a5ec6546a58f60a9eff5c71b'
 
 SOCIAL_AUTH_FOURSQUARE_KEY = 'G34EKEHPMJNM1MHO2MR0NVODUYXWN0UCZ22TDPVMHKAIHY3A'
 SOCIAL_AUTH_FOURSQUARE_SECRET = 'MAQHFX3BZUUGPG2ONMJ2QJED0SN4V3U0CTVWEZZZ30WOEYTJ'
+
+""" Needed info for the above applications """
+
+TWITTER_API_VALIDATION_URL = 'https://api.twitter.com/1.1/account/verify_credentials.json'
+
+RUNKEEPER_API_VALIDATION_URL = 'https://api.runkeeper.com/user'
+
+INSTAGRAM_API_VALIDATION_URL = 'https://api.instagram.com/v1/users/self'
+
+FACEBOOK_ACTIVITY_API_VALIDATION_URL = 'https://graph.facebook.com/me'
+
+FITBIT_API_VALIDATION_URL = 'https://api.fitbit.com/1/user/-/profile.json'
+
+FOURSQUARE_API_VALIDATION_URL = 'https://api.foursquare.com/v2/users/self'
+
+YOUTUBE_API_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
+YOUTUBE_API_REFRESH_TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
+
+GMAIL_API_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
+GMAIL_API_REFRESH_TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
 
 SOCIAL_AUTH_PIPELINE = (
     (

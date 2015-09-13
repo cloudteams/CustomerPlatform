@@ -43,10 +43,7 @@ function ShownIds(){
 	list = $(".activity-flag").map(function(){
 		return $(this).attr("id");
 	}).get();
-	for (var i = 0; i < list.length; i++) {
-		IdString += "_" + list[i];
-	}
-	return IdString;
+	return list.join('_');
 }
 
 function plotDonutChart(data){
@@ -1471,12 +1468,7 @@ function widthFunctions(e) {
 			},
 			success: function (user_type) {
 				$('#messageParagraph').text('');
-				if (user_type == "OldUser") {
-					window.location.replace(SERVER_URL + next_redirect_url);
-				}
-				else {
-					window.location.replace(BASE_URL + 'index/NewUser');
-				}
+				window.location.replace(SERVER_URL + next_redirect_url);
 			}
 		});
 	});

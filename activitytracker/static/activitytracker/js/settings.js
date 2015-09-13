@@ -492,3 +492,318 @@
 				}
         }
 
+		$(window).on('load', function() {
+			$('.clockpicker').clockpicker({
+				placement: 'bottom',
+				align: 'left',
+				autoclose: true
+			});
+		});
+		/* modify routine javascript */
+
+		function routineInsertMore() {
+			$.ajax({
+				type: "get",
+				url: BASE_URL + 'account/routine/insert_more',
+				dataType: "json",
+				error: function (xhr, status, error) {
+					alert("Error occured, try again")
+				},
+				success: function (responseJSON) {
+
+					var container;
+					$('#routineInsertMore').remove();
+
+					$.each(responseJSON['input_data'], function (i, e) {
+
+						if (i % 5 == 0) {
+							container = document.createElement("div");
+							container.className = 'routine-canvas routine-canvas-show-more';
+							$(container).css('margin-left', '27px');
+							$(container).css('display', 'flex');
+						}
+						var innerContainer = document.createElement("div");
+						$(innerContainer).css('width', '60px');
+                    	$(innerContainer).css('margin-right', '4.8%');
+						var routine_activity = document.createElement("a");
+						routine_activity.id = e.activity.replace(/ /g, '-');
+						routine_activity.className = 'quick-button metro circle routine ' + e.color;
+						$(routine_activity).attr('title', e.activity);
+
+						var icon = document.createElement("i");
+						icon.className = 'activicon-' + e.icon_classname;
+						routine_activity.appendChild(icon);
+
+						var rdio = document.createElement('input');
+						rdio.className = 'routine-radiobutton';
+						rdio.id = e.activity.replace(/ /g, '-');
+						rdio.type = 'radio';
+						rdio.name = 'routine-radiobutton';
+						$(rdio).css('height', '15px');
+						$(rdio).css('width', '20px');
+						$(rdio).css('margin-top', '8px');
+						$(rdio).css('margin-left', '22px');
+						$(rdio).prop('value', rdio.id);
+
+						routine_activity.appendChild(icon);
+
+						$(innerContainer).append(routine_activity);
+						$(innerContainer).append(rdio);
+						$(container).append(innerContainer);
+
+						if (i % 5 == 0) {
+							$(container).insertBefore('.weekday-controls')
+						}
+					});
+
+				}
+			});
+
+		}
+
+		function printTime() {
+			var h = $('.clockpicker-span-hours').text();
+			var m = $('.clockpicker-span-minutes').text();
+			var d = $('#duration-select').data('slider').getValue();
+			console.log(h + ':' + m + '  Duration: ' + d)
+		}
+
+		var input;
+		$('#routineModal').one('shown', function () {
+			$.ajax({
+				type: "get",
+				url: BASE_URL + 'account/routine',
+				dataType: "json",
+				error: function (xhr, status, error) {
+					alert("Error occured, try again")
+				},
+				success: function (responseJSON) {
+
+					var container = $('.routine-canvas');
+
+					$.each(responseJSON['input_data'], function (i, e) {
+
+						var innerContainer = document.createElement("div");
+						$(innerContainer).css('width', '60px');
+                    	$(innerContainer).css('margin-right', '4.8%');
+						var routine_activity = document.createElement("a");
+						routine_activity.id = e.activity.replace(/ /g, '-');
+						routine_activity.className = 'quick-button metro circle routine ' + e.color;
+						$(routine_activity).attr('title', e.activity);
+
+						var icon = document.createElement("i");
+						icon.className = 'activicon-' + e.icon_classname;
+						routine_activity.appendChild(icon);
+
+						var rdio = document.createElement('input');
+						rdio.className = 'routine-radiobutton';
+						rdio.id = e.activity.replace(/ /g, '-');
+						rdio.type = 'radio';
+						rdio.name = 'routine-radiobutton';
+						$(rdio).css('height', '15px');
+						$(rdio).css('width', '20px');
+						$(rdio).css('margin-top', '8px');
+						$(rdio).css('margin-left', '22px');
+						$(rdio).prop('value', rdio.id);
+
+						routine_activity.appendChild(icon);
+
+						$(innerContainer).append(routine_activity);
+						$(innerContainer).append(rdio);
+						$(container).append(innerContainer);
+					});
+				}
+			});
+		});
+
+		$('#routineModal').on('hidden', function() {
+			$('.routine-canvas-show-more').remove()
+		});
+
+		$('#RoutineTable').find('.clearRoutineFields').on('click', function(e) {
+			var rowId = $(this).closest('tr').attr('id');
+			var colIndex = $(this).closest("td").index();
+			var divs = $('#' + rowId).find('td:eq(' + colIndex.toString() + ')').children().slice(0,2);
+			$(divs[0]).find('input').val('');
+			$(divs[1]).find('input').val('');
+			// So that the clearance of the fields can trigger a DB update
+			$(divs[0]).find('input').trigger('change');
+		});
+
+		$('.routine-assigner').off().on('change', function() {
+			var rowId = $(this).closest('tr').attr('id');
+			var colIndex = $(this).closest("td").index();
+
+			// Enumeration starts from 1, but colIdx has a base of 0
+			var colId = $('#RoutineTable th:nth-child(' + (colIndex + 1).toString() + ')').text();
+
+			var divs = $(this).closest('td').children().slice(0,2);
+			var start_time = $(divs[0]).find('input').val();
+			var end_time = $(divs[1]).find('input').val();
+
+			$.ajax({
+				type: "post",
+				data: {
+					activity: rowId,
+					day_type: colId,
+					start_time: start_time,
+					end_time: end_time,
+					csrfmiddlewaretoken: getCookie('csrftoken')
+				},
+				url: BASE_URL + 'account/routine/configure_periods/',
+				dataType: "text",
+				error: function (xhr, status, error) {
+					alert(xhr.responseText);
+				},
+				success: function (responseJSON) {
+
+				}
+			});
+
+
+		});
+
+		$('#seasonality').on('click', function() {
+			if ($(this).attr('class') == 'icon-chevron-down') {
+				$('.seasonality-input').removeClass('hidden');
+				$(this).removeClass("icon-chevron-down").addClass("icon-chevron-up")
+			}
+
+			else {
+				$('.seasonality-input').addClass('hidden');
+				$(this).removeClass("icon-chevron-up").addClass("icon-chevron-down")
+			}
+		});
+
+		$('#weekend').on('click', function() {
+			if ($(this).attr('class') == 'icon-chevron-down') {
+				$('.weekend-input').removeClass('hidden');
+				$(this).removeClass("icon-chevron-down").addClass("icon-chevron-up")
+			}
+
+			else {
+				$('.weekend-input').addClass('hidden');
+				$(this).removeClass("icon-chevron-up").addClass("icon-chevron-down")
+			}
+		});
+
+		$('.tokenize').tokenize({
+			placeholder: "Select Time Frames"
+		});
+
+		$('.datepicker').datepicker();
+
+		$('#log-weekday-time').on('click', function() {
+			var range = $('#weekday-range-from').text() + ' - ' + $('#weekday-range-to').text();
+			$('#weekday-times').tokenize().tokenAdd(range, range);
+		});
+
+		$('#log-weekend-time').on('click', function() {
+					var range = $('#weekend-range-from').text() + ' - ' + $('#weekend-range-to').text();
+					$('#weekend-times').tokenize().tokenAdd(range, range);
+				});
+
+		$('#weekday-range-select').slider({
+			min: 0,
+			tooltip: "hide",
+			max: 96,
+			step: 1,
+			value: [24,70],
+			formater: function(value) {
+				return 'Time: ' + value;
+			}
+		}).on('slide', function(evt){
+
+			var from = parseInt(evt.value.toString().split(',')[0]);
+			var to =  parseInt(evt.value.toString().split(',')[1]);
+
+			var fromString = Math.floor((from/4).toString()) + ':' + ((from%4)*15).toString();
+			var toString = Math.floor((to/4).toString()) + ':' + ((to%4)*15).toString();
+
+			if (fromString.slice(-2) == ':0') {
+				fromString += '0'
+			}
+			if (/^[0-9]:$/.test(fromString.substring(0,2)))  {
+				fromString = '0'+ fromString
+			}
+			if (toString.slice(-2) == ':0') {
+				toString += '0'
+			}
+
+			$("#weekday-range-from").text(fromString);
+			$("#weekday-range-to").text(toString);
+		});
+
+		$('#weekend-range-select').slider({
+			min: 0,
+			tooltip: "hide",
+			max: 96,
+			step: 1,
+			value: [24,70],
+			formater: function(value) {
+				return 'Time: ' + value;
+			}
+		}).on('slide', function(evt){
+
+			var from = parseInt(evt.value.toString().split(',')[0]);
+			var to =  parseInt(evt.value.toString().split(',')[1]);
+
+			var fromString = Math.floor((from/4).toString()) + ':' + ((from%4)*15).toString();
+			var toString = Math.floor((to/4).toString()) + ':' + ((to%4)*15).toString();
+
+			if (fromString.slice(-2) == ':0') {
+				fromString += '0'
+			}
+			if (/^[0-9]:$/.test(fromString.substring(0,2)))  {
+				fromString = '0'+ fromString
+			}
+			if (toString.slice(-2) == ':0') {
+				toString += '0'
+			}
+
+			$("#weekend-range-from").text(fromString);
+			$("#weekend-range-to").text(toString);
+		});
+
+
+function initializeEditRoutineModal(element_clicked) {
+
+		var row = $(this).closest('tr');
+		var activity = $(row).id;
+		var weekday_times = $('#' + activity + ' td:nth-child(3)').find('p').text();
+		var weekend_times = $('#' + activity + ' td:nth-child(4)').find('p').text();
+		var seasonality_enabled = $('#' + activity + ' td:nth-child(5) input[name="seasonality-enabled"]').prop('checked');
+
+		$('#routineModal').modal('show');
+
+		if ($('.routine-canvas').find('#' + activity).length == 0) {
+
+			routineInsertMore();
+		}
+
+		//check the proper icon
+		$('.routine-canvas').find('#' + activity).prop('checked', true);
+
+		//fill weekday values
+		if (weekday_times != '-') {
+			$('#weekend').trigger('click');
+			$.each(weekday_times, function (i, range) {
+				$('#weekday-times').tokenize().tokenAdd(range, range);
+			});
+		}
+
+		//fill weekend times
+		if (weekday_times != '-') {
+			$.each(weekday_times, function (i, range) {
+				$('#weekday-times').tokenize().tokenAdd(range, range);
+			});
+		}
+
+		//fill seasonality
+		if (seasonality_enabled) {
+			$('#seasonality').trigger('click');
+
+		}
+
+}
+/* modify routine javascript END */

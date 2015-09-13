@@ -231,7 +231,7 @@ div.radio.active span {
 
 div.radio.focus span, 
 div.radio:hover span {
-  background-position: -36px -279px;
+   background-position: -36px -279px;
 }
 
 div.radio.focus:active span,
@@ -251,7 +251,7 @@ div.radio.active span.checked {
 }
 
 div.radio.focus span.checked, div.radio:hover span.checked {
-  background-position: -108px -279px;
+  /*background-position: -108px -279px;*/
 }
 
 div.radio.focus:active span.checked, 

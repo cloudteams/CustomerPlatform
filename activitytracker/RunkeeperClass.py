@@ -91,10 +91,10 @@ class Runkeeper(OAuth2Validation):
         request_url = self.api_base_url + RUNKEEPER_FITNESS_URI
         params = {'access_token': self.provider_data['access_token']}
 
-        if self.provider_data['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
-            params['noEarlierThan'] = self.provider_data['last_updated'][:10]
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
+            params['noEarlierThan'] = self.metadata.last_updated[:10]
 
-        self.provider_data['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -115,6 +115,6 @@ class Runkeeper(OAuth2Validation):
 
             request_url = self.api_base_url + feed['next']
 
-        self.user_social_instance.save()
+        self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

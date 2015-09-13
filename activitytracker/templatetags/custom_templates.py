@@ -90,3 +90,7 @@ def capitalizeFirstLetter(value):
 def addSpaceAfterComma(value):
     parts = value.split(',')
     return ', '.join(parts)
+
+@register.filter
+def removeDashes(value):
+    return value.replace('-', ' ')

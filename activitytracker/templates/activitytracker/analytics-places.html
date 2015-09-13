@@ -123,12 +123,13 @@ svg {
 						<li>
 							<a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Analytics</span></a>
 							<ul>
+                                <li><a class="submenu" href="{% url 'analytics-routine' %}"><i class="icon-calendar"></i><span class="hidden-tablet"> Routine</span></a></li>
 								<li><a class="submenu" href="{% url 'analytics-activities' %}"><i class="icon-star"></i><span class="hidden-tablet"> Activities</span></a></li>
 								<li><a class="submenu" href="{% url 'analytics-friends' %}"><i class="icon-group"></i><span class="hidden-tablet"> Friends</span></a></li>
 								<li><a class="submenu" href="{% url 'analytics-goals' %}"><i class="icon-trophy"></i><span class="hidden-tablet"> Goals</span></a></li>
                                 <li><a class="submenu" href="{% url 'analytics-places' %}"><i class="icon-globe"></i><span class="hidden-tablet"> Places</span></a></li>
                                 <li><a class="submenu" href="{% url 'analytics-objects' %}"><i class="icon-wrench"></i><span class="hidden-tablet"> Objects</span></a></li>
-							</ul>
+                            </ul>
 						</li>
 					</ul>
 				</div>

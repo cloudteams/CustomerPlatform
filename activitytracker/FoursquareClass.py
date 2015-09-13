@@ -93,7 +93,7 @@ class Foursquare(OAuth2Validation):
                                            )
                   }
 
-        if self.provider_data['last_updated'] == DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated == DUMMY_LAST_UPDATED_INIT_VALUE:
             params['afterTimestamp'] = int(time.mktime(
                                            datetime.strptime(
                                                EARLIEST_DATA_DATE + ' 00:00:00',
@@ -101,7 +101,7 @@ class Foursquare(OAuth2Validation):
                                                ).timetuple())
                                            )
 
-        self.provider_data['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -119,6 +119,6 @@ class Foursquare(OAuth2Validation):
 
             params['offset'] += params['limit']
 
-        self.user_social_instance.save()
+        self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

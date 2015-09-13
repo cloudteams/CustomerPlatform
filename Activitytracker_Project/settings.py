@@ -134,6 +134,7 @@ TEMPLATES = [
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.facebook.FacebookActivityOAuth2',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.google.GoogleOAuth2',

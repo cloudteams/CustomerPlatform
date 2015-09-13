@@ -129,6 +129,121 @@ class FacebookOAuth2(BaseOAuth2):
             response
         ) and response.content == 'true'
 
+		
+class FacebookActivityOAuth2(BaseOAuth2):
+    """Facebook OAuth2 authentication backend"""
+    name = 'facebook-activity'
+    RESPONSE_TYPE = None
+    SCOPE_SEPARATOR = ','
+    AUTHORIZATION_URL = 'https://www.facebook.com/v2.3/dialog/oauth'
+    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.3/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.3/{uid}/permissions'
+    REVOKE_TOKEN_METHOD = 'DELETE'
+    USER_DATA_URL = 'https://graph.facebook.com/v2.3/me'
+    EXTRA_DATA = [
+        ('id', 'id'),
+        ('expires', 'expires')
+    ]
+
+    def get_user_details(self, response):
+        """Return user details from Facebook account"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('name', ''),
+            response.get('first_name', ''),
+            response.get('last_name', '')
+        )
+        return {'username': response.get('username', response.get('name')),
+                'email': response.get('email', ''),
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Loads user data from service"""
+        params = self.setting('PROFILE_EXTRA_PARAMS', {})
+        params['access_token'] = access_token
+
+        if self.setting('APPSECRET_PROOF', True):
+            _, secret = self.get_key_and_secret()
+            params['appsecret_proof'] = hmac.new(
+                secret.encode('utf8'),
+                msg=access_token.encode('utf8'),
+                digestmod=hashlib.sha256
+            ).hexdigest()
+        return self.get_json(self.USER_DATA_URL, params=params)
+
+    def process_error(self, data):
+        super(FacebookActivityOAuth2, self).process_error(data)
+        if data.get('error_code'):
+            raise AuthCanceled(self, data.get('error_message') or
+                                     data.get('error_code'))
+
+    @handle_http_errors
+    def auth_complete(self, *args, **kwargs):
+        """Completes loging process, must return user instance"""
+        self.process_error(self.data)
+        if not self.data.get('code'):
+            raise AuthMissingParameter(self, 'code')
+        state = self.validate_state()
+        key, secret = self.get_key_and_secret()
+        response = self.request(self.ACCESS_TOKEN_URL, params={
+            'client_id': key,
+            'redirect_uri': self.get_redirect_uri(state),
+            'client_secret': secret,
+            'code': self.data['code']
+        })
+        # API v2.3 returns a JSON, according to the documents linked at issue
+        # #592, but it seems that this needs to be enabled(?), otherwise the
+        # usual querystring type response is returned.
+        try:
+            response = response.json()
+        except ValueError:
+            response = parse_qs(response.text)
+        access_token = response['access_token']
+        return self.do_auth(access_token, response, *args, **kwargs)
+
+    def process_refresh_token_response(self, response, *args, **kwargs):
+        return parse_qs(response.content)
+
+    def refresh_token_params(self, token, *args, **kwargs):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'fb_exchange_token': token,
+            'grant_type': 'fb_exchange_token',
+            'client_id': client_id,
+            'client_secret': client_secret
+        }
+
+    def do_auth(self, access_token, response=None, *args, **kwargs):
+        response = response or {}
+
+        data = self.user_data(access_token)
+
+        if not isinstance(data, dict):
+            # From time to time Facebook responds back a JSON with just
+            # False as value, the reason is still unknown, but since the
+            # data is needed (it contains the user ID used to identify the
+            # account on further logins), this app cannot allow it to
+            # continue with the auth process.
+            raise AuthUnknownError(self, 'An error ocurred while retrieving '
+                                         'users Facebook data')
+
+        data['access_token'] = access_token
+        if 'expires' in response:
+            data['expires'] = response['expires']
+        kwargs.update({'backend': self, 'response': data})
+        return self.strategy.authenticate(*args, **kwargs)
+
+    def revoke_token_url(self, token, uid):
+        return self.REVOKE_TOKEN_URL.format(uid=uid)
+
+    def revoke_token_params(self, token, uid):
+        return {'access_token': token}
+
+    def process_revoke_token_response(self, response):
+        return super(FacebookActivityOAuth2, self).process_revoke_token_response(
+            response
+        ) and response.content == 'true'
 
 class FacebookAppOAuth2(FacebookOAuth2):
     """Facebook Application Authentication support"""
