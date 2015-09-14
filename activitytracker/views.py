@@ -214,6 +214,7 @@ def password_reset(request, passwordreset_token):
         user = token_instance.user
         user.set_password(password)
         user.save()
+        token_instance.delete()
         return HttpResponse(SUCCESS_MSG)
 
 # Updates the password to its new value. Differs from the "change password" action, since it doesn't require an old pass
