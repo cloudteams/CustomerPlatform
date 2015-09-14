@@ -2,6 +2,8 @@
 *.sqlite3
 *.json
 
-#Pycharm
+# Pycharm
 *.idea
 .idea/
+
+config.py
