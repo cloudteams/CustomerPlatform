@@ -620,90 +620,31 @@
 			$('.routine-canvas-show-more').remove()
 		});
 
-		$('#RoutineTable').find('.clearRoutineFields').on('click', function(e) {
-			var rowId = $(this).closest('tr').attr('id');
-			var colIndex = $(this).closest("td").index();
-			var divs = $('#' + rowId).find('td:eq(' + colIndex.toString() + ')').children().slice(0,2);
-			$(divs[0]).find('input').val('');
-			$(divs[1]).find('input').val('');
-			// So that the clearance of the fields can trigger a DB update
-			$(divs[0]).find('input').trigger('change');
-		});
-
-		$('.routine-assigner').off().on('change', function() {
-			var rowId = $(this).closest('tr').attr('id');
-			var colIndex = $(this).closest("td").index();
-
-			// Enumeration starts from 1, but colIdx has a base of 0
-			var colId = $('#RoutineTable th:nth-child(' + (colIndex + 1).toString() + ')').text();
-
-			var divs = $(this).closest('td').children().slice(0,2);
-			var start_time = $(divs[0]).find('input').val();
-			var end_time = $(divs[1]).find('input').val();
-
-			$.ajax({
-				type: "post",
-				data: {
-					activity: rowId,
-					day_type: colId,
-					start_time: start_time,
-					end_time: end_time,
-					csrfmiddlewaretoken: getCookie('csrftoken')
-				},
-				url: BASE_URL + 'account/routine/configure_periods/',
-				dataType: "text",
-				error: function (xhr, status, error) {
-					alert(xhr.responseText);
-				},
-				success: function (responseJSON) {
-
-				}
-			});
-
-
-		});
-
-		$('#seasonality').on('click', function() {
-			if ($(this).attr('class') == 'icon-chevron-down') {
-				$('.seasonality-input').removeClass('hidden');
-				$(this).removeClass("icon-chevron-down").addClass("icon-chevron-up")
-			}
-
-			else {
-				$('.seasonality-input').addClass('hidden');
-				$(this).removeClass("icon-chevron-up").addClass("icon-chevron-down")
-			}
-		});
-
-		$('#weekend').on('click', function() {
-			if ($(this).attr('class') == 'icon-chevron-down') {
-				$('.weekend-input').removeClass('hidden');
-				$(this).removeClass("icon-chevron-down").addClass("icon-chevron-up")
-			}
-
-			else {
-				$('.weekend-input').addClass('hidden');
-				$(this).removeClass("icon-chevron-up").addClass("icon-chevron-down")
-			}
-		});
-
 		$('.tokenize').tokenize({
 			placeholder: "Select Time Frames"
 		});
 
 		$('.datepicker').datepicker();
 
-		$('#log-weekday-time').on('click', function() {
-			var range = $('#weekday-range-from').text() + ' - ' + $('#weekday-range-to').text();
-			$('#weekday-times').tokenize().tokenAdd(range, range);
+		$('#seasonality, #weekend').on('click', function() {
+			if ($(this).attr('class') == 'icon-chevron-down') {
+				$('.' + $(this).attr('id') + '-input').removeClass('hidden');
+				$(this).removeClass("icon-chevron-down").addClass("icon-chevron-up")
+			}
+
+			else {
+				$('.' + $(this).attr('id') + '-input').addClass('hidden');
+				$(this).removeClass("icon-chevron-up").addClass("icon-chevron-down")
+			}
 		});
 
-		$('#log-weekend-time').on('click', function() {
-					var range = $('#weekend-range-from').text() + ' - ' + $('#weekend-range-to').text();
-					$('#weekend-times').tokenize().tokenAdd(range, range);
-				});
+		$('#log-weekday-time, #log-weekend-time').on('click', function() {
+			var daytype = $(this).prop('id').split('-')[1];
+			var range = $('#'+ daytype + '-range-from').text() + ' - ' + $('#'+ daytype + '-range-to').text();
+			$('#'+ daytype + '-times').tokenize().tokenAdd(range, range);
+		});
 
-		$('#weekday-range-select').slider({
+		$('#weekday-range-select, #weekend-range-select').slider({
 			min: 0,
 			tooltip: "hide",
 			max: 96,
@@ -730,39 +671,9 @@
 				toString += '0'
 			}
 
-			$("#weekday-range-from").text(fromString);
-			$("#weekday-range-to").text(toString);
-		});
-
-		$('#weekend-range-select').slider({
-			min: 0,
-			tooltip: "hide",
-			max: 96,
-			step: 1,
-			value: [24,70],
-			formater: function(value) {
-				return 'Time: ' + value;
-			}
-		}).on('slide', function(evt){
-
-			var from = parseInt(evt.value.toString().split(',')[0]);
-			var to =  parseInt(evt.value.toString().split(',')[1]);
-
-			var fromString = Math.floor((from/4).toString()) + ':' + ((from%4)*15).toString();
-			var toString = Math.floor((to/4).toString()) + ':' + ((to%4)*15).toString();
-
-			if (fromString.slice(-2) == ':0') {
-				fromString += '0'
-			}
-			if (/^[0-9]:$/.test(fromString.substring(0,2)))  {
-				fromString = '0'+ fromString
-			}
-			if (toString.slice(-2) == ':0') {
-				toString += '0'
-			}
-
-			$("#weekend-range-from").text(fromString);
-			$("#weekend-range-to").text(toString);
+			var daytype = $(this).prop('id').split('-')[0];
+			$('#' + daytype + '-range-from').text(fromString);
+			$('#' + daytype + '-range-to').text(toString);
 		});
 
 
@@ -770,8 +681,19 @@ function initializeEditRoutineModal(element_clicked) {
 
 		var row = $(this).closest('tr');
 		var activity = $(row).id;
-		var weekday_times = $('#' + activity + ' td:nth-child(3)').find('p').text();
-		var weekend_times = $('#' + activity + ' td:nth-child(4)').find('p').text();
+
+		var weekday_times = [];
+		$('#' + activity + ' td:nth-child(3)').find('p').each(function() {
+			weekend_times.push($(this).text())
+		});
+		var weekday_times_string = weekend_times.join('_');
+
+		var weekend_times = [];
+		$('#' + activity + ' td:nth-child(4)').find('p').each(function() {
+			weekend_times.push($(this).text())
+		});
+		var weekend_times_string = weekend_times.join('_');
+
 		var seasonality_enabled = $('#' + activity + ' td:nth-child(5) input[name="seasonality-enabled"]').prop('checked');
 
 		$('#routineModal').modal('show');

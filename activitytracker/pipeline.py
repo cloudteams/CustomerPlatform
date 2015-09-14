@@ -11,11 +11,15 @@ def fill_extra_info(backend, user, response, *args, **kwargs):
     birthday = response.get('birthday', None)
 
     if birthday:
+
+
         if backend.name == "google-oauth2":
-            if birthday.split("-")[0] == '0000':
-                birthday = '%s-%s-%s' % ('2000', birthday.split("-")[1], birthday.split("-")[2])
+            birthday_parts = birthday.split('-')
+            if birthday_parts[0] == '0000':
+                birthday = '%s-%s-%s' % ('2000', birthday_parts[1], birthday_parts("-")[2])
         else:
-            birthday = birthday.replace('/', '-')
+            birthday_parts = birthday.split('/')
+            birthday = '%s-%s-%s' % (birthday_parts[2], birthday_parts[0], birthday_parts[1])
 
         user.date_of_birth = birthday
 
