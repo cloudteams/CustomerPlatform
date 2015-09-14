@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="543bdd4d-ab4c-4139-9e16-aa84b2b9b39d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/pipeline.py" afterPath="$PROJECT_DIR$/activitytracker/pipeline.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/views.py" afterPath="$PROJECT_DIR$/activitytracker/views.py" />
     </list>
     <ignored path="activity-tracker-testing.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,11 +44,9 @@
       <file leaf-file-name="settings.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="706" column="39" selection-start-line="706" selection-start-column="39" selection-end-line="706" selection-end-column="39" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="6.448276">
+              <caret line="1" column="6" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="6" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -56,9 +54,21 @@
       <file leaf-file-name="custom.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+            <state vertical-scroll-proportion="-1.5714285">
+              <caret line="1526" column="41" selection-start-line="1526" selection-start-column="41" selection-end-line="1526" selection-end-column="41" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/activitytracker/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.78869045">
+              <caret line="128" column="50" selection-start-line="128" selection-start-column="50" selection-end-line="128" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#45#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -103,24 +113,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pipeline.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pipeline.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/activitytracker/pipeline.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48767123">
+            <state vertical-scroll-proportion="-5.137931">
               <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/activitytracker/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2497" column="61" selection-start-line="2497" selection-start-column="61" selection-end-line="2497" selection-end-column="61" />
-              <folding>
-                <element signature="e#0#45#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -164,7 +162,6 @@
         <option value="$PROJECT_DIR$/activitytracker/Gmail.py" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/bootstrap-clockpicker.css" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/uniform.default.css" />
-        <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" />
         <option value="$PROJECT_DIR$/activitytracker/templates/activitytracker/timeline.html" />
         <option value="$PROJECT_DIR$/activitytracker/templates/activitytracker/index.html" />
         <option value="$PROJECT_DIR$/activitytracker/templates/activitytracker/goals.html" />
@@ -194,7 +191,6 @@
         <option value="$PROJECT_DIR$/activitytracker/YoutubeClass.py" />
         <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/activitytracker/FacebookActivityClass.py" />
-        <option value="$PROJECT_DIR$/activitytracker/views.py" />
         <option value="$PROJECT_DIR$/activitytracker/urls.py" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style.css" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style-forms.css" />
@@ -202,6 +198,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" />
         <option value="$PROJECT_DIR$/activitytracker/pipeline.py" />
+        <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" />
+        <option value="$PROJECT_DIR$/activitytracker/views.py" />
       </list>
     </option>
   </component>
@@ -1094,16 +1092,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/activitytracker/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2497" column="61" selection-start-line="2497" selection-start-column="61" selection-end-line="2497" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/css/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1144,6 +1132,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/activitytracker/pipeline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.137931">
+          <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/templates/activitytracker/settings.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.8727273">
@@ -1154,27 +1150,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
+        <state vertical-scroll-proportion="-1.5714285">
+          <caret line="1526" column="41" selection-start-line="1526" selection-start-column="41" selection-end-line="1526" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="706" column="39" selection-start-line="706" selection-start-column="39" selection-end-line="706" selection-end-column="39" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="6.448276">
+          <caret line="1" column="6" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/activitytracker/pipeline.py">
+    <entry file="file://$PROJECT_DIR$/activitytracker/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48767123">
-          <caret line="20" column="46" selection-start-line="20" selection-start-column="46" selection-end-line="20" selection-end-column="46" />
-          <folding />
+        <state vertical-scroll-proportion="0.78869045">
+          <caret line="128" column="50" selection-start-line="128" selection-start-column="50" selection-end-line="128" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

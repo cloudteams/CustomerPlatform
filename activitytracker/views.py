@@ -89,12 +89,15 @@ def logout(request):
 # Check and Register the User
 def register(request):
 
-    USERNAME_EXISTS_MSG = 'Username already exists'
-    EMAIL_EXISTS_MSG = 'This email is already in use'
-    EMPTY_FIELDS_MSG = 'You need to fill out all the registration fields'
-    BIRTHDAY_ERROR_MSG = 'You cannot be born in the future, duh!'
+    USERNAME_EXISTS_MSG = 'UsernameExists'
+    EMAIL_EXISTS_MSG = 'EmailExists'
+    EMPTY_FIELDS_MSG = 'EmptyFields'
+    BIRTHDAY_ERROR_MSG = 'BirthdayError!'
     SUCCESS_MSG = 'Registration Successful! ' \
                   'We have sent you an e-mail with a validation link to follow'
+
+    if request.method != 'POST':
+        return render(request, 'activitytracker/register.html')
 
     username = request.POST['username']
     email = request.POST['email']
@@ -103,9 +106,6 @@ def register(request):
     lastname = request.POST['lastname']
     gender = request.POST['gender']
     birthday = request.POST['birthday']
-
-    if request.method != 'POST':
-        return render(request, 'activitytracker/register.html')
 
     if User.objects.filter(username__iexact=username).exists():
         return HttpResponseBadRequest(USERNAME_EXISTS_MSG)
@@ -127,7 +127,7 @@ def register(request):
                                     first_name=firstname,
                                     last_name=lastname,
                                     gender=gender,
-                                    date_of_birth=birthday
+                                    date_of_birth=datetime_birthday
                                     )
     user.is_active = False
     user.save()

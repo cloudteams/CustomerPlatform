@@ -1523,18 +1523,18 @@ function widthFunctions(e) {
 			dataType: "text",
 			error: function (xhr, status, error) {
 				Done();
-				var code = xhr.responseText;
-				if (code == "1") {
+				var response = xhr.responseText;
+				if (response == "UsernameExists") {
 					$("#usernamemessage").removeClass('hidden');
 				}
-				else if (code == "2") {
+				else if (response == "EmailExists") {
 					$("#emailmessage").removeClass('hidden');
 				}
-				else if (code == "3") {
+				else if (response == "BirthdayError") {
 					$("#birthdaymessage").removeClass('hidden');
 				}
 				else {
-					alert('Please fill out all of the fields correctly to complete the registration')
+					alert('Some fields have not been filled')
 				}
 			},
 			success: function (response) {
