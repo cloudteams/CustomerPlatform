@@ -1,143 +1,26 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
+{% extends "base.html" %}
+{% load staticfiles %}
 
-	<!-- start: Meta -->
-	<meta charset="utf-8">
-	<title>Object Analytics</title>
-	<meta name="description" content="Activity Tracker Application">
-	<meta name="author" content="Aggelos Arvanitakis">
-	<meta name="keyword" content="Activity, Track, Tracker, Manage, Logs, Everyday Life">
-	<!-- end: Meta -->
-
-	<!-- start: Mobile Specific -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- end: Mobile Specific -->
-	
-	<!-- start: CSS -->
-    {% load staticfiles %}
-    {% load custom_templates %}
-    <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
-	<link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
-	<link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
-	<link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
-	<link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
-	<link href="{% static 'activitytracker/css/daterangepicker-bs2.css' %}" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,200italic,600italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
-    <!-- end: CSS -->
+{% block css %}
 	<style>
+		path.slice{
+			stroke-width:2px;
+		}
 
+		polyline{
+			opacity: .3;
+			stroke: black;
+			stroke-width: 2px;
+			fill: none;
+		}
 
-path.slice{
-	stroke-width:2px;
-}
+		svg {
+			overflow: visible !important;
+		}
+	</style>
+{% endblock %}
 
-polyline{
-	opacity: .3;
-	stroke: black;
-	stroke-width: 2px;
-	fill: none;
-}
-
-svg {
-    overflow: visible !important;
-}
-</style>
-	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
-	<!--[if lt IE 9]>
-	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<link id="ie-style" href="css/ie.css" rel="stylesheet">
-	<![endif]-->
-	
-	<!--[if IE 9]>
-		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
-	<![endif]-->
-		
-	<!-- start: Favicon -->
-	<link rel="shortcut icon" type="image/icon" href="/static/activitytracker/img/favicon.ico">
-	<!-- end: Favicon -->
-		
-</head>
-
-<body>
-		<!-- start: Header -->
-	<div class="navbar">
-		<div class="navbar-inner">
-			<div class="container-fluid">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="{% url 'index' %}"><span>Activity Tracker</span></a>
-								
-				<!-- start: Header Menu -->
-				<div class="nav-no-collapse header-nav">
-					<ul class="nav pull-right">
-						<!-- start: User Dropdown -->
-						<li class="dropdown">
-							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> {{ username }}
-								<span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li class="dropdown-menu-title">
- 									<span>Account Options</span>
-								</li>
-								<li>
-                                    <a href="{% url 'settings' %}"><i class="halflings-icon user"></i> Profile</a>
-							    </li>
-								<li>
-                                    <a href="{% url 'logout' %}"><i class="halflings-icon off"></i> Logout</a>
-                                </li>
-							</ul>
-						</li>
-						<!-- end: User Dropdown -->
-					</ul>
-				</div>
-				<!-- end: Header Menu -->
-				
-			</div>
-		</div>
-	</div>
-	<!-- start: Header -->
-	
-	<div class="container-fluid-full">
-		<div class="row-fluid">
-				
-			<!-- start: Main Menu -->
-			<div id="sidebar-left" class="span2">
-				<div class="nav-collapse sidebar-nav">
-					<ul class="nav nav-tabs nav-stacked main-menu">
-						<li><a href="{% url 'index' %}"><i class="icon-list-alt"></i><span class="hidden-tablet"> History</span></a></li>
-						<li><a href="{% url 'timeline' %}"><i class="icon-tasks"></i><span class="hidden-tablet"> Timeline</span></a></li>
-						<li><a href={% url 'goals' %}><i class="icon-trophy"></i><span class="hidden-tablet"> Goals</span></a></li>
-						<li>
-							<a class="dropmenu" href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Analytics</span></a>
-							<ul>
-                                <li><a class="submenu" href="{% url 'analytics-routine' %}"><i class="icon-calendar"></i><span class="hidden-tablet"> Routine</span></a></li>
-								<li><a class="submenu" href="{% url 'analytics-activities' %}"><i class="icon-star"></i><span class="hidden-tablet"> Activities</span></a></li>
-								<li><a class="submenu" href="{% url 'analytics-friends' %}"><i class="icon-group"></i><span class="hidden-tablet"> Friends</span></a></li>
-								<li><a class="submenu" href="{% url 'analytics-goals' %}"><i class="icon-trophy"></i><span class="hidden-tablet"> Goals</span></a></li>
-                                <li><a class="submenu" href="{% url 'analytics-places' %}"><i class="icon-globe"></i><span class="hidden-tablet"> Places</span></a></li>
-                                <li><a class="submenu" href="{% url 'analytics-objects' %}"><i class="icon-wrench"></i><span class="hidden-tablet"> Objects</span></a></li>
-                            </ul>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<!-- end: Main Menu -->
-			
-			<noscript>
-				<div class="alert alert-block span10">
-					<h4 class="alert-heading">Warning!</h4>
-					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
-				</div>
-			</noscript>
-
-			<!-- start: Content -->
-            <div id="content" class="span10">
+{% block content %}
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
@@ -225,56 +108,13 @@ svg {
                 </div>
             	<div class="span7 analytics-topChart "><h1 style="margin-left:25%"></h1></div>
 				<div class="span7 analytics-bottomChart "><h1 style="margin-left:20%"></h1></div>
-            </div>
-        </div>
-    </div>
-    <footer>
+{% endblock %}
 
-		<p>
-			<span style="text-align:left;float:left">&copy; 2015 <a href="https://www.facebook.com/aggelos.arvanitakis" alt="Bootstrap_Metro_Dashboard">Arvanitakis Labs</a></span>
-
-		</p>
-
-	</footer>
-
-	<!-- start: JavaScript-->
-
-    <script src="{% static 'activitytracker/js/jquery-1.9.1.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery-ui-1.10.0.custom.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery.ui.touch-punch.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery-migrate-1.0.0.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/bootstrap.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/modernizr.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery.cookie.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery.dataTables.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/excanvas.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery.chosen.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery.uniform.min.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/jquery.iphone.toggle.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/counter.js' %}"></script>
-
-    <script src="{% static 'activitytracker/js/custom.js' %}"></script>
-
+{% block js %}
     <script src="{% static 'activitytracker/js/moment.js' %}"></script>
-
 	<script src="{% static 'activitytracker/js/daterangepicker.js' %}"></script>
-
     <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
-
  	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
 
     <script src="{% static 'activitytracker/js/analytics-objects.js' %}"></script>
-</body>
-</html>
+{% endblock %}

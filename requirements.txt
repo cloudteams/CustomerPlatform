@@ -1,3 +1,4 @@
+django==1.8
 pygeocoder==1.2.5
 python-oauth2==0.7.0
 python-social-auth==0.2.7
