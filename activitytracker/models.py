@@ -24,12 +24,13 @@ class User(AbstractUser):
     logged_in_before = models.BooleanField(default=False)
 
 
-class UserVerification(models.Model):
+class UserUniqueTokens(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    verification_code = models.CharField(max_length=50)
+    token = models.CharField(max_length=50)
+    token_type = models.CharField(max_length=50)
 
     def __str__(self):              # __unicode__ on Python 2
-        return '%s' %  self.verification_code
+        return '%s %s' %  (self.token, self.token_type)
 
 # Activity class with name
 

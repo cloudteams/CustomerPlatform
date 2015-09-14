@@ -1544,3 +1544,28 @@ function widthFunctions(e) {
 			}
 		});
 	});
+
+	$("#passwordResetForm").submit(function(event) {
+		event.preventDefault();
+		var password = document.forms["passwordResetForm"]["password"].value;
+		var repeated_password = document.forms["passwordResetForm"]["repeat_password"].value;
+		Loading();
+		$.ajax({
+			type: "post",
+			data: {password:password, repeated_password:repeated_password, csrfmiddlewaretoken: getCookie('csrftoken')},
+			cache: false,
+			url: window.location.href,
+			dataType: "text",
+			error: function (xhr, status, error) {
+				Done();
+				$( "#responseMessage" ).css( "color", "red" );
+				$('#responseMessage').text(xhr.responseText);
+			},
+			success: function (response) {
+				Done();
+				$( "#responseMessage" ).css( "color", "green" );
+				$('#responseMessage').text(response);
+				setTimeout(function(){ window.location = BASE_URL + "login/"; }, 4000);
+			}
+		});
+	});

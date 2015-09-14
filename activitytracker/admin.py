@@ -37,7 +37,7 @@ admin.site.register(Performs, PerformsAdmin)
 admin.site.register(Friend)
 admin.site.register(Object)
 admin.site.register(Places)
-admin.site.register(UserVerification)
+admin.site.register(UserUniqueTokens)
 admin.site.register(Routine)
 admin.site.register(UserExtraProviderInfo, UserExtraProviderInfoAdmin)
 
