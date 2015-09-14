@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'oauth2',
     'social.apps.django_app.default',
 
+    # Projects app - access to CloudTeams Projects & related functionality
+    'ct_projects',
 )
 
 MIDDLEWARE_CLASSES = (
