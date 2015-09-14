@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="543bdd4d-ab4c-4139-9e16-aa84b2b9b39d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" afterPath="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/activitytracker/views.py" afterPath="$PROJECT_DIR$/activitytracker/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="activity-tracker-testing.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,10 +61,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/activitytracker/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.78869045">
+            <state vertical-scroll-proportion="-9.137931">
               <caret line="128" column="50" selection-start-line="128" selection-start-column="50" selection-end-line="128" selection-end-column="50" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
@@ -83,11 +83,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.13972603">
+              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -195,11 +195,11 @@
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style.css" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/css/style-forms.css" />
         <option value="$PROJECT_DIR$/activitytracker/templates/activitytracker/settings.html" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/js/settings.js" />
         <option value="$PROJECT_DIR$/activitytracker/pipeline.py" />
         <option value="$PROJECT_DIR$/activitytracker/static/activitytracker/js/custom.js" />
         <option value="$PROJECT_DIR$/activitytracker/views.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -1116,14 +1116,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/static/activitytracker/js/analytics-objects.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1166,11 +1158,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/activitytracker/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.78869045">
+        <state vertical-scroll-proportion="-9.137931">
           <caret line="128" column="50" selection-start-line="128" selection-start-column="50" selection-end-line="128" selection-end-column="50" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13972603">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
