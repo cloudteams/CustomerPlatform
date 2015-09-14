@@ -10,5 +10,6 @@ class CloudTeamsConnectorTests(TestCase):
         self.connector = CloudTeamsConnector()
 
     def test_list_projects(self):
-        self.assertTrue(len(self.connector.list_projects()) > 0)
-
+        project_list = self.connector.list_projects()
+        self.assertTrue(len(project_list) > 0)
+        self.assertTrue(project_list[0].pk >= 0)

@@ -16,6 +16,7 @@ class CloudTeamsConnector:
 
         entries = self.srv.lst_entries(self.PROJECTS_FOLDER_ID)[1]
         for entry in entries:
+            pk = entry['uid']
             title = entry['title']
             file_type_pos = entry['summary'].find('<span class="label_css">')
 
@@ -26,7 +27,7 @@ class CloudTeamsConnector:
             publisher_start = entry['summary'].rfind('</span>') + len('</span>')
             publisher = entry['summary'][publisher_start + 1:]
 
-            result.append(Project(title=title, description=description, publisher=publisher))
+            result.append(Project(pk=pk, title=title, description=description, publisher=publisher))
 
         return result
 
