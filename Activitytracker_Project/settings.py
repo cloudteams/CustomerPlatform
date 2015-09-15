@@ -108,6 +108,10 @@ USE_TZ = False
 STATIC_URL = '/static/'
 #STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,  'static'),
+)
+
 AUTH_USER_MODEL = 'activitytracker.User'
 
 TEMPLATE_DIRS = (

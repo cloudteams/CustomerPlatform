@@ -1,5 +1,18 @@
-<h1>CloudTeams Projects</h1>
+{% extends "ct_projects/base.html" %}
 
-<div class="project-wrapper">
-    {% include "ct_projects/project/list.html" %}
-</div>
+{% block content %}
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="/activitytracker/index/">Home</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li><a href="#">Projects</a></li>
+    </ul>
+
+    <h1>CloudTeams Projects</h1>
+
+    <div class="project-wrapper">
+        {% include "ct_projects/project/list.html" %}
+    </div>
+{% endblock %}
