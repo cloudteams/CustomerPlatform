@@ -3697,8 +3697,8 @@ ul.messagesList li span.date {
 }
 
 .range-picker {
-	margin-left:20px;
 	margin-top:10px;
+	width: 340px !important;
 }
 
 input[name='range-logger'] {
