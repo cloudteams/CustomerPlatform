@@ -133,9 +133,13 @@ def register(request):
     user.save()
 
     characters = string.ascii_letters + string.digits
-    verification_code = ''.join(random.choice(characters) for _ in range(20))
-    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, verification_code)
-    verification_instance = UserVerification(user=user, verification_code=verification_code)
+    verification_token = ''.join(random.choice(characters) for _ in range(20))
+    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, verification_token)
+    verification_instance = UserUniqueTokens(
+        user=user,
+        token=verification_token,
+        token_type="Verification"
+    )
     verification_instance.save()
 
     email = "Activitytracker.app@gmail.com"
@@ -153,7 +157,7 @@ def register(request):
 def passwordforget(request):
 
     USER_NOT_EXISTS_MSG = 'No such User exists'
-    SUCCESS_MSG = 'We have sent you an email with a new temporary password'
+    SUCCESS_MSG = 'We have sent you an email with instructions on how to reset your password'
 
     if request.method != 'POST':
         return render(request, 'activitytracker/passforget.html')
@@ -162,25 +166,69 @@ def passwordforget(request):
         return HttpResponse(USER_NOT_EXISTS_MSG)
 
     user = User.objects.get(username=request.POST['username'])
-    characters = string.ascii_lowercase + string.digits
-    new_pass = ''.join(random.choice(characters) for _ in range(8))
-    user.set_password(new_pass)
-    user.save()
+    characters = string.ascii_letters + string.digits
+    passwordforget_token = ''.join(random.choice(characters) for _ in range(20))
+    passwordforget_url = '%s/activitytracker/account/password_reset/%s' % (SERVER_URL, passwordforget_token)
+    passwordforget_instance = UserUniqueTokens(
+        user=user,
+        token=passwordforget_token,
+        token_type="PasswordReset"
+    )
+    passwordforget_instance.save()
 
     email = "Activitytracker.app@gmail.com"
+    mail_title = "Activity Tracker Password Reset"
     recipient = [user.email.encode('utf8')]
-    mail_title = "Password Reset"
-    mail_message = 'You have recently forgot your password. Your new password is: %s' % new_pass
+    mail_message = 'Hello user %s. You have recently requested a password reset. Please follow this link in order to ' \
+                   'start the process: %s' % (user.get_username(), passwordforget_url)
+
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
 
     return HttpResponse(SUCCESS_MSG)
 
+# If token is correct, it loads a proper page to reset the password
+def password_reset(request, passwordreset_token):
 
-# view to handle the email verification
-def email_verification(request, verification_code):
+    PASSWORD_MISMATCH_ERROR = "The password you entered don't match each other. Try again"
+    SUCCESS_MSG = "Your password has been successfully updated"
 
     try:
-        verification_instance = UserVerification.objects.get(verification_code=verification_code)
+        token_instance = UserUniqueTokens.objects.get(
+            token=passwordreset_token,
+            token_type="PasswordReset"
+        )
+        valid_token = True
+
+    except ObjectDoesNotExist:
+        valid_token = False
+
+    if request.method != "POST" or not valid_token:
+        return render(request,'activitytracker/password-reset.html',{'valid_token': valid_token})
+
+    else:
+        password = request.POST['password']
+        repeated_password = request.POST['repeated_password']
+        if password != repeated_password:
+            return HttpResponseBadRequest(PASSWORD_MISMATCH_ERROR)
+
+        user = token_instance.user
+        user.set_password(password)
+        user.save()
+        token_instance.delete()
+        return HttpResponse(SUCCESS_MSG)
+
+# Updates the password to its new value. Differs from the "change password" action, since it doesn't require an old pass
+def forgotten_password_update(request):
+    pass
+
+# view to handle the email verification
+def email_verification(request, verification_token):
+
+    try:
+        verification_instance = UserUniqueTokens.objects.get(
+            token=verification_token,
+            token_type="Verification"
+        )
         user = verification_instance.user
         user.is_active = True
         user.save()

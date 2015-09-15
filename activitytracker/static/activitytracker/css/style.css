@@ -919,7 +919,7 @@ ul.messages li .message {
 }
 
 .breadcrumb {
-	margin: -28px -28px 28px -28px;
+	margin: -28px -28px 28px -31px;
 	line-height: 34px;
 	background: #F7F7F7;
 	border: 0px;
@@ -2349,7 +2349,8 @@ fieldset[disabled] .btn-link:focus {
 /* Login Box
 =================================================================== */
 
-.login-box {
+.login-box,
+.accountOptions-box{
 	width: 400px;
 	margin: 10% auto;
 	background: rgb(245,245,245); /* Old browsers */
@@ -2369,13 +2370,15 @@ fieldset[disabled] .btn-link:focus {
          	box-shadow: 0px 0px 0px 5px rgba(0,0,0,0.15);
 }
 
-.login-box .icons {
+.login-box .icons,
+.accountOptions-box .icons{
 	text-align: right;
 	margin: 20px 15px;
 	
 }
 
-.login-box .icons i {
+.login-box .icons i,
+.accountOptions-box .icons i{
 	text-align: right;
 	opacity: .2;
 	filter: alpha(opacity=20);
@@ -2383,20 +2386,23 @@ fieldset[disabled] .btn-link:focus {
 	margin: 0px 5px;
 }
 
-.login-box .icons i:hover {
+.login-box .icons i:hover,
+.accountOptions-box .icons i:hover{
 	opacity: .8;
 	filter: alpha(opacity=80);
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
 }
 
-.login-box h2 {
+.login-box h2,
+.accountOptions-box h2{
 	color: #646464;
 	margin-left: 30px;
 	font-family: monaco;
 	font-weight: normal;
 }
 
-.login-box h3 {
+.login-box h3,
+.accountOptions-box h3{
 	color: #646464;
 	margin-left: 30px;
 	margin-right: 30px;
@@ -2404,12 +2410,14 @@ fieldset[disabled] .btn-link:focus {
 	font-weight: normal;
 }
 
-.login-box p {
+.login-box p,
+.accountOptions-box p{
 	margin: 10px 30px;
 	font-weight: normal;
 }
 
-.login-box .input-prepend {
+.login-box .input-prepend,
+.accountOptions-box .input-prepend{
 	background: #fff;
 	width: 100%;
 	text-align: center;
@@ -2417,7 +2425,8 @@ fieldset[disabled] .btn-link:focus {
 	border-left: 3px solid #fff;
 }
 
-.login-box .input-prepend-focus {
+.login-box .input-prepend-focus,
+.accountOptions-box .input-prepend-focus{
 	background: #fcfcfc;
 	width: 100%;
 	text-align: center;
@@ -2425,20 +2434,24 @@ fieldset[disabled] .btn-link:focus {
 	border-left: 3px solid #646464;
 }
 
-.login-box .add-on {
+.login-box .add-on,
+.accountOptions-box .add-on{
 	border: 1px solid #eee !important;
 	background: #fff;
 	margin-left: -10px;
 }
 
-.login-box .add-on i{
+.login-box .add-on i,
+.accountOptions-box .add-on i{
 	opacity: .1;
 	filter: alpha(opacity=10);
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=10)";
 }
 
 .login-box input[type="text"],
-.login-box input[type="password"] {
+.login-box input[type="password"],
+.accountOptions-box input[type="text"],
+.accountOptions-box input[type="password"]{
 	border: 1px solid #eee !important;
 	color: #aaa;
 	border-left: none !important;
@@ -2447,13 +2460,15 @@ fieldset[disabled] .btn-link:focus {
           	box-shadow: none;
 }
 
-.login-box .remember {
+.login-box .remember,
+.accountOptions-box .remember{
 	margin-top: 20px;
 	margin-left: 20px;
 	float: left;
 }
 
-.login-box .button-login {
+.button-login,
+.button-accountOptions{
 	margin-top: 20px;
 	margin-right: 20px;
 	margin-left: 20px;
