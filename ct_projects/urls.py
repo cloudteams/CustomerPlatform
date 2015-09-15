@@ -5,4 +5,6 @@ __author__ = 'dipap'
 
 urlpatterns = [
     url(r'^$', views.list_projects, name='all-projects'),
+
+    
 ]

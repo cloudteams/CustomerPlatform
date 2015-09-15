@@ -13,3 +13,7 @@ class CloudTeamsConnectorTests(TestCase):
         project_list = self.connector.list_projects()
         self.assertTrue(len(project_list) > 0)
         self.assertTrue(project_list[0].pk >= 0)
+
+    def test_get_project(self):
+        self.assertNotEqual(self.connector.get_project('13417'), None)
+        self.assertEqual(self.connector.get_project('13418'), None)

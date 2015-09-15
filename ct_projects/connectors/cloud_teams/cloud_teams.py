@@ -12,11 +12,14 @@ class CloudTeamsConnector:
         self.PROJECTS_FOLDER_ID = XAPI_TEST_FOLDER
 
     def list_projects(self):
+        """
+        :return: A list with all projects found on BSCW
+        """
         result = []
 
         entries = self.srv.lst_entries(self.PROJECTS_FOLDER_ID)[1]
         for entry in entries:
-            pk = entry['uid']
+            pk = entry['oid']
             title = entry['title']
             file_type_pos = entry['summary'].find('<span class="label_css">')
 
@@ -31,3 +34,13 @@ class CloudTeamsConnector:
 
         return result
 
+    def get_project(self, pk):
+        """
+        :param pk: The unique identifier of the project
+        :return: A project instance if found, None otherwise
+        """
+        for project in self.list_projects():
+            if project.pk == pk:
+                return project
+
+        return None
