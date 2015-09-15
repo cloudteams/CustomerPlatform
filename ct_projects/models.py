@@ -26,4 +26,5 @@ class ProjectFollowing(models.Model):
     A following relationship between a CloudTeams customer and a project
     """
     user = models.ForeignKey(User)
-    project = models.IntegerField(validators=[MinValueValidator(0)])
+    project_pk = models.IntegerField(validators=[MinValueValidator(0)])
+    created = models.DateTimeField(auto_now_add=True, editable=False)  # relationship timestamp
