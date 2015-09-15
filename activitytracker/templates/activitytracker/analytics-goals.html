@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
+{% load custom_templates %}
+{% block css %}
+    <link href="{% static 'activitytracker/css/daterangepicker-bs2.css' %}" rel="stylesheet">
+{% endblock %}
 {% block content %}
                 <ul class="breadcrumb">
                     <li>
@@ -80,6 +83,5 @@
 	<script src="{% static 'activitytracker/js/daterangepicker.js' %}"></script>
     <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
  	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
-
     <script src="{% static 'activitytracker/js/analytics-goals.js' %}"></script>
 {% endblock %}

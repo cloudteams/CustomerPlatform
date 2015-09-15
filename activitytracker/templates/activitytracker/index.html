@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load custom_templates %}
+{% block css %}
+    <link href="{% static 'activitytracker/css/fullcalendar.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 			<ul class="breadcrumb">
@@ -315,6 +319,11 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'activitytracker/js/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/index.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery.flot.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
 	<script>var show_carousel_guide = '{{ show_carousel_guide }}'</script>
-	<script src="{% static 'activitytracker/js/index.js' %}"></script>
 {% endblock %}

@@ -1,29 +1,10 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
+{% load custom_templates %}
 {% block css %}
-	<style>
-		#placesSlider .slider-selection {
-			background: none;
-			border: none;
-		}
-
-
-		path.slice{
-			stroke-width:2px;
-		}
-
-		polyline{
-			opacity: .3;
-			stroke: black;
-			stroke-width: 2px;
-			fill: none;
-		}
-
-		svg {
-			overflow: visible !important;
-		}
-	</style>
+    <link href="{% static 'activitytracker/css/analytics-extra.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/daterangepicker-bs2.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/slider.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -114,5 +95,10 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'activitytracker/js/moment.js' %}"></script>
+	<script src="{% static 'activitytracker/js/daterangepicker.js' %}"></script>
+    <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
+ 	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/bootstrap-slider.js' %}"></script>
     <script src="{% static 'activitytracker/js/analytics-places.js' %}"></script>
 {% endblock %}

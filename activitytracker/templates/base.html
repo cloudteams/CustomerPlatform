@@ -18,16 +18,17 @@
 	<!-- start: CSS -->
     {% load staticfiles %}
     {% load custom_templates %}
-    <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
-	<link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
-	<link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
-    <link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap-tokenfield.css' %}" rel="stylesheet">
-	<link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
-	<link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/bootstrap-clockpicker.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/jquery.tokenize.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/style-font.css' %}" rel="stylesheet">
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
+        <link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
+        <link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap-tokenfield.css' %}" rel="stylesheet">
+        <link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
+        <link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/bootstrap-clockpicker.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/jquery.tokenize.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/style-font.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/chosen.css' %}" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
     {% block css %}
     {% endblock %}
     <!-- end: CSS -->
@@ -112,14 +113,12 @@
                 {% block content %}
                 {% endblock %}
             </div>
-
-            	<footer>
-
+        </div>
+    </div>
+    <footer>
 		<p>
 			<span style="text-align:left;float:left">&copy; 2015 <a href="https://www.facebook.com/aggelos.arvanitakis" alt="Bootstrap_Metro_Dashboard">Arvanitakis Labs</a></span>
-
 		</p>
-
 	</footer>
 
 	<!-- start: JavaScript-->
@@ -138,29 +137,21 @@
 
 		<script src="{% static 'activitytracker/js/jquery.cookie.js' %}"></script>
 
-		<script src="{% static 'activitytracker/js/fullcalendar.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'activitytracker/js/jquery.dataTables.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/excanvas.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.pie.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/jquery.chosen.min.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/jquery.uniform.min.js' %}"></script>
 
-		<script src="{% static 'activitytracker/js/jquery.iphone.toggle.js' %}"></script>
-
 		<script src="{% static 'activitytracker/js/counter.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/custom.js' %}"></script>
 
         <script src="{% static 'activitytracker/js/bootstrap-clockpicker.min.js' %}"></script>
 
         <script src="{% static 'activitytracker/js/jquery.tokenize.js' %}"></script>
+
+        <script src="{% static 'activitytracker/js/custom.js' %}"></script>
 
         <script type="text/javascript"
 			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
