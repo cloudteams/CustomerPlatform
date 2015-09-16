@@ -25,7 +25,7 @@ class ProjectFollowingTestCase(TestCase):
     def test_project_follow(self):
         # make sure I can follow an existing project
         post = self.client.post(reverse('follow-project', args=('13417', )))
-        self.assertEqual(post.status_code, 200)
+        self.assertEqual(post.status_code, 302)
 
         # I shouldn't be able to follow a project that does not exist
         post = self.client.post(reverse('follow-project', args=('13418', )))
@@ -38,11 +38,11 @@ class ProjectFollowingTestCase(TestCase):
     def test_project_unfollow(self):
         # follow an existing project
         post = self.client.post(reverse('follow-project', args=('13417', )))
-        self.assertEqual(post.status_code, 200)
+        self.assertEqual(post.status_code, 302)
 
         # make sure I can un-follow a project I folow
         post = self.client.post(reverse('unfollow-project', args=('13417', )))
-        self.assertEqual(post.status_code, 200)
+        self.assertEqual(post.status_code, 302)
 
         # make sure I can un-follow a project that doesn't exist
         post = self.client.post(reverse('unfollow-project', args=('13418', )))

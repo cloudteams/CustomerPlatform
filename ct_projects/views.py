@@ -9,8 +9,11 @@ source = CloudTeamsConnector()
 
 
 def list_projects(request):
+    q = request.GET.get('q', '')
+
     context = {
-        'projects': source.list_projects(),
+        'projects': source.list_projects(q),
+        'q': q,
     }
 
     return render(request, 'ct_projects/project/all.html', context)

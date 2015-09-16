@@ -11,6 +11,11 @@
 
     <h1>CloudTeams Projects</h1>
 
+    <form class="project-search" action="." method="GET">
+        <input type="search" name="q" placeholder="Discover projects" value="{{q}}"/>
+        <input type="submit" class="btn btn-default" value="Search" />
+    </form>
+
     <div class="project-wrapper">
         {% include "ct_projects/project/list.html" %}
     </div>

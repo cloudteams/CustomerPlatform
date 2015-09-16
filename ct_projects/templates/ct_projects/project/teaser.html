@@ -5,12 +5,16 @@
     <div class="clearfix">
         <h4>{{project.title}}</h4>
         <div class="pull-right">
-            {% with is_followed=project|is_followed_by:request.user %}
-                <form action="{% if is_followed %}{% url 'unfollow-project' project.pk %}{% else %}{% url 'follow-project' project.pk %}{% endif %}" method="POST">
-                    {% csrf_token %}
-                    <input type="submit" class="btn {% if is_followed %}btn-danger{% else %}btn-success{% endif %}" value="{% if is_followed %}Unfollow{% else %}Follow{% endif %}" />
-                </form>
-            {% endwith %}
+            {% if request.user.is_authenticated %}
+                {% with is_followed=project|is_followed_by:request.user %}
+                    <form action="{% if is_followed %}{% url 'unfollow-project' project.pk %}{% else %}{% url 'follow-project' project.pk %}{% endif %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn follow-button {% if is_followed %}btn-danger{% else %}btn-success{% endif %}" value="{% if is_followed %}Unfollow{% else %}Follow{% endif %}" />
+                    </form>
+                {% endwith %}
+            {% else %}
+                <a href="{% url 'index' %}" class="btn btn-success follow-button">Follow</a>
+            {% endif %}
         </div>
 
 

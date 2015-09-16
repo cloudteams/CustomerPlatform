@@ -1,0 +1,11 @@
+.follow-button {
+    min-width: 100px;
+}
+
+.project-search input {
+    vertical-align: top;
+}
+
+.project-search input[type="search"] {
+    height: 25px;
+}

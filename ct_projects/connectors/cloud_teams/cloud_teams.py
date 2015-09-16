@@ -12,34 +12,43 @@ class CloudTeamsConnector:
         self.PROJECTS_FOLDER_ID = XAPI_TEST_FOLDER
         self.projects = None
 
-    def list_projects(self):
+    def list_projects(self, q=None):
         """
         :return: A list with all projects found on BSCW
         """
-        if self.projects:
-            return self.projects
+        if not self.projects:
+            result = []
 
-        result = []
+            entries = self.srv.lst_entries(self.PROJECTS_FOLDER_ID)[1]
+            for entry in entries:
+                pk = entry['oid']
+                title = entry['title']
+                file_type_pos = entry['summary'].find('<span class="label_css">')
 
-        entries = self.srv.lst_entries(self.PROJECTS_FOLDER_ID)[1]
-        for entry in entries:
-            pk = entry['oid']
-            title = entry['title']
-            file_type_pos = entry['summary'].find('<span class="label_css">')
+                # find description
+                description = entry['summary'][:file_type_pos-1]
 
-            # find description
-            description = entry['summary'][:file_type_pos-1]
+                # find publisher info
+                publisher_start = entry['summary'].rfind('</span>') + len('</span>')
+                publisher = entry['summary'][publisher_start + 1:]
 
-            # find publisher info
-            publisher_start = entry['summary'].rfind('</span>') + len('</span>')
-            publisher = entry['summary'][publisher_start + 1:]
+                result.append(Project(pk=pk, title=title, description=description, publisher=publisher))
 
-            result.append(Project(pk=pk, title=title, description=description, publisher=publisher))
+            # cache the result
+            self.projects = result
 
-        # cache the result
-        self.projects = result
+        # filter out results
+        if not q:
+            results = self.projects
+        else:
+            q = q.lower()
+            results = []
 
-        return result
+            for project in self.projects:
+                if q in project.title.lower() or q in project.description.lower() or q in project.publisher.lower():
+                    results.append(project)
+
+        return results
 
     def get_project(self, pk):
         """

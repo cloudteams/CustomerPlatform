@@ -17,3 +17,7 @@ class CloudTeamsConnectorTests(TestCase):
     def test_get_project(self):
         self.assertNotEqual(self.connector.get_project('13417'), None)
         self.assertEqual(self.connector.get_project('13418'), None)
+
+    def test_filter_project(self):
+        project_list = self.connector.list_projects(q='SNOOZ')
+        self.assertEqual(len(project_list), 1)
