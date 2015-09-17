@@ -17,6 +17,10 @@
     </form>
 
     <div class="project-wrapper">
-        {% include "ct_projects/project/list.html" %}
+        {% with projects=page_obj.object_list %}
+            {% include "ct_projects/project/list.html" %}
+        {% endwith %}
     </div>
+
+    {% include "ct_projects/util/paginator.html" %}
 {% endblock %}

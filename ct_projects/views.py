@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -13,9 +14,11 @@ def list_projects(request):
     A list of all projects in cloud teams
     """
     q = request.GET.get('q', '')
+    projects = source.list_projects(q)
+    pages = Paginator(projects, 2)
 
     context = {
-        'projects': source.list_projects(q),
+        'page_obj': pages.page(int(request.GET.get('page', '1'))),
         'q': q,
     }
 

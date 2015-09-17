@@ -1,3 +1,18 @@
+.centered {
+    text-align: center;
+}
+
+.pagination {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.pagination .current {
+    background: #1C2B36;
+    color: #fff;
+}
+
 .follow-button {
     min-width: 100px;
 }
