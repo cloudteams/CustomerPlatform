@@ -51,3 +51,11 @@ class ProjectFollowingTestCase(TestCase):
         # make sure I can un-follow a project that I don't follow
         post = self.client.post(reverse('unfollow-project', args=('13417', )))
         self.assertEqual(post.status_code, 403)
+
+    def test_project_details(self):
+        # view an existing project
+        request = self.client.get(reverse('project-details', args=('13417', )))
+        self.assertEqual(request.status_code, 200)
+        # view a non-existing project
+        request = self.client.get(reverse('project-details', args=('13418', )))
+        self.assertEqual(request.status_code, 404)

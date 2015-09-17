@@ -9,6 +9,9 @@ source = CloudTeamsConnector()
 
 
 def list_projects(request):
+    """
+    A list of all projects in cloud teams
+    """
     q = request.GET.get('q', '')
 
     context = {
@@ -17,6 +20,24 @@ def list_projects(request):
     }
 
     return render(request, 'ct_projects/project/all.html', context)
+
+
+@login_required
+def followed_projects(request):
+    """
+    A list of projects in cloud teams that I follow
+    """
+    q = request.GET.get('q', '')
+
+    projects = [p for p in source.list_projects(q)
+                if ProjectFollowing.objects.filter(user=request.user, project_pk=p.pk)]
+
+    context = {
+        'projects': projects,
+        'q': q,
+    }
+
+    return render(request, 'ct_projects/project/followed.html', context)
 
 
 @login_required
@@ -36,7 +57,7 @@ def follow_project(request, pk):
         ProjectFollowing.objects.create(project_pk=pk, user=request.user)
         return redirect(reverse('all-projects'))
     else:
-        return HttpResponse('Only POST allowed', status=403)
+        return HttpResponse('Only POST allowed', status=400)
 
 
 @login_required
@@ -57,4 +78,21 @@ def unfollow_project(request, pk):
         pfs.delete()
         return redirect(reverse('all-projects'))
     else:
-        return HttpResponse('Only POST allowed', status=403)
+        return HttpResponse('Only POST allowed', status=400)
+
+
+def project_details(request, pk):
+    # only gets allowed to this method
+    if request.method == 'GET':
+        # get project
+        project = source.get_project(pk)
+        if not project:
+            return HttpResponse('Project #%s does not exist' % pk, status=403)
+
+        context = {
+            'project': project,
+        }
+
+        return render(request, 'ct_projects/project/details.html', context)
+    else:
+        return HttpResponse('Only GET allowed', status=400)
