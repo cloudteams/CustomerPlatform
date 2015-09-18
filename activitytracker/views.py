@@ -37,6 +37,19 @@ colourDict = {'black': "rgba(1, 1, 1, 0.8)",
               'purple': "#800080"
               }
 
+basic_routine_activities = [
+    'Eating',
+    'Working',
+    'Commuting',
+    'Education',
+    'Sleeping'
+]
+
+day_types = [
+    'Weekdays',
+    'Weekend'
+]
+
 
 def terms_and_conditions(request):
     return render(request, 'activitytracker/terms_and_conditions.html', {})
@@ -253,18 +266,6 @@ def settings(request):
     USERNAME_EXISTS_MSG = 'This username is already in use'
     BIRTHDAY_ERROR_MSG = 'You cannot be born in the future, duh!'
     PASS_MISSMATCH_MSG = 'Sorry the passwords you entered didnt match eachother'
-    basic_routine_activities = [
-        'Eating',
-        'Working',
-        'Commuting',
-        'Education',
-        'Sleeping'
-    ]
-
-    day_types = [
-        'Weekdays',
-        'Weekend'
-    ]
 
     user = request.user
 
@@ -338,30 +339,13 @@ def settings(request):
         provider_object = eval(provider.title().replace('-', ''))(user.social_auth.get(provider=provider))
         providerDomValues[provider] = getAppManagementDomValues(provider_object.validate(), provider)
 
-    basicRoutineActivities = list()
-
-    for activity_name in basic_routine_activities:
-
-            activity = Activity.objects.get(activity_name=activity_name)
-            routine_times = list()
-
-            for day_type in day_types:
-                try:
-                    routine_data = user.routine_set.get(activity=activity, day_type=day_type)
-                except:
-                    routine_times += ''
-                    continue
-                start_time = '' if not routine_data.start_time else routine_data.start_time
-                end_time = '' if not routine_data.end_time else routine_data.end_time
-
-                start_string = '' if not start_time else start_time.strftime('%H:%M')
-                end_string = '' if not end_time else end_time.strftime('%H:%M')
-                routine_times.append('%s - %s' % (start_string, end_string))
-
-            basicRoutineActivities.append({
+    routine_activities = getFormattedRoutines(user, basic_routine_activities, day_types)
+    routine_extra_activities = list()
+    for activity in Activity.objects.all().order_by('activity_name'):
+        if activity.activity_name not in basic_routine_activities:
+            routine_extra_activities.append({
                 'activity': activity.activity_name,
                 'color': activity.category,
-                'times': routine_times,
                 'icon_classname': activity.icon_classname,
             })
 
@@ -373,7 +357,8 @@ def settings(request):
                'gender': gender,
                'social_login': not user.has_usable_password(),
                'providerDomValues': providerDomValues,
-               'basicRoutineActivities': basicRoutineActivities
+               'routineActivities': routine_activities,
+               'routineExtraActivities': routine_extra_activities
                }
 
     return render(request, 'activitytracker/settings.html', context)
@@ -2488,52 +2473,55 @@ def syncProviderActivities(request, provider):
 
 def routineSettings(request, setting='show'):
 
-    TIME_ERROR = 'You cannot start earlier than you finish. The update will not be performed'
-    basic_routine_activities = [
-        'Eating',
-        'Working',
-        'Commuting',
-        'Education',
-        'Sleeping'
-    ]
+    def updateRoutine(user, routine_activity, time_string, day_type, delimiter, seasonality, db_setting):
+
+        seasonality_parts = seasonality.split(' - ')
+        seasonality_start, seasonality_end = seasonality_parts[0], seasonality_parts[1]
+        seasonality_start_dateformat = None if not seasonality_start \
+            else datetime.strptime(seasonality_start, "%m/%d").date()
+        seasonality_end_dateformat = None if not seasonality_end \
+            else datetime.strptime(seasonality_end, "%m/%d").date()
+
+        if db_setting == 'edit':
+            previous_instances = user.routine_set.filter(day_type=day_type, activity=routine_activity)
+            for instance in previous_instances:
+                instance.delete()
+
+        if not time_string:
+            return
+
+        time_list = time_string.split(delimiter)
+        for time_range in time_list:
+            time_parts = time_range.split(' - ')
+            start_time, end_time = time_parts[0], time_parts[1]
+            start_datetimeformat = None if not start_time else datetime.strptime(start_time + ':00', "%H:%M:%S")
+            end_datetimeformat = None if not end_time else datetime.strptime(end_time + ':00', "%H:%M:%S")
+
+            instance = Routine(
+                user=user,
+                activity=routine_activity,
+                start_time=start_datetimeformat,
+                end_time=end_datetimeformat,
+                day_type=day_type,
+                seasonal_start=seasonality_start_dateformat,
+                seasonal_end=seasonality_end_dateformat
+            )
+            instance.save()
+
+        return
 
     user = request.user
-
-    json_response = {
-            'timeline_data': {},
-            'input_data': []
-        }
-
-    if not setting:
-
-        for activity_name in basic_routine_activities:
-            activity = Activity.objects.get(activity_name=activity_name)
-            json_response['input_data'].append({
-                'activity': activity.activity_name,
-                'color': activity.category,
-                'icon_classname': activity.icon_classname,
-            })
-
-        for activity in Routine.objects.filter(user=user):
-            pass
-
-        return HttpResponse(
-            json.dumps(json_response),
-            content_type="application/json"
-        )
+    json_response = list()
 
     if setting == 'insert_more':
 
         for activity in Activity.objects.all().order_by('activity_name'):
             if activity.activity_name not in basic_routine_activities:
-                json_response['input_data'].append({
+                json_response.append({
                     'activity': activity.activity_name,
                     'color': activity.category,
                     'icon_classname': activity.icon_classname,
                 })
-
-        for activity in Routine.objects.filter(user=user):
-            pass
 
         return HttpResponse(
             json.dumps(json_response),
@@ -2542,44 +2530,36 @@ def routineSettings(request, setting='show'):
 
     elif setting == "configure_periods":
 
-        day_type = request.POST['day_type']
-        routine_activity = Activity.objects.get(activity_name=request.POST['activity'])
+        db_setting = request.POST['db_setting']
+        activity_name = request.POST['activity']
+        weekday_times = request.POST['weekday_times']
+        weekend_times = request.POST['weekend_times']
+        weekday_seasonality = request.POST['weekday_seasonality']
+        weekend_seasonality = request.POST['weekend_seasonality']
 
-        if (request.POST['start_time'] and request.POST['end_time']):
-            if request.POST['start_time'] > request.POST['end_time']:
-                return HttpResponseBadRequest(TIME_ERROR)
+        routine_activity = Activity.objects.get(activity_name=activity_name)
 
-        start_time = None if not request.POST['start_time'] \
-            else datetime.strptime(request.POST['start_time'] + ':00', "%H:%M:%S")
-        end_time = None if not request.POST['end_time'] \
-            else datetime.strptime(request.POST['end_time'] + ':00', "%H:%M:%S")
+        updateRoutine(user, routine_activity, weekday_times, 'Weekdays', '_', weekday_seasonality, db_setting)
+        updateRoutine(user, routine_activity, weekend_times, 'Weekend', '_', weekend_seasonality, db_setting)
 
-        if user.routine_set.filter(day_type=day_type,
-                                   activity=routine_activity
-                                   ).count() > 0:
+        routine_activities = getFormattedRoutines(user, basic_routine_activities, day_types)
 
-            instance = user.routine_set.get(
-                day_type=day_type,
-                activity=routine_activity
-            )
-            instance.start_time = start_time
-            instance.end_time = end_time
+        return HttpResponse(
+            json.dumps(routine_activities),
+            content_type="application/json"
+        )
 
+    elif setting == "delete_routine":
+
+        activity_name = request.POST['activity_name']
+        activity = Activity.objects.get(activity_name=activity_name)
+        for routine in user.routine_set.filter(activity=activity):
+            routine.delete()
+
+        if activity_name not in basic_routine_activities:
+            return HttpResponse('RowRemoval')
         else:
-            instance = Routine(
-                user=user,
-                activity=routine_activity,
-                start_time=start_time,
-                end_time=end_time,
-                day_type=day_type
-            )
-
-        instance.save()
-        return HttpResponse('Ok')
-
-
-    return HttpResponse('Ok')
-
+            return HttpResponse('RowPersistance')
 
 def updateallroutinecharts(request):
 

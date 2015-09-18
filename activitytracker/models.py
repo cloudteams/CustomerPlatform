@@ -181,6 +181,8 @@ class Routine(models.Model):
     activity = models.ForeignKey(Activity)
     start_time = models.TimeField('Start Time', null=True)
     end_time = models.TimeField('End Time', null=True)
+    seasonal_start = models.DateField(null=True)
+    seasonal_end = models.DateField(null=True)
     DAY_TYPE_CHOICES = (
         ('Weekdays', 'Weekdays'),
         ('Weekend', 'Weekend'),
@@ -191,11 +193,14 @@ class Routine(models.Model):
                                 default='Weekdays')
 
     def __str__(self):
-        return '%s %s %s %s' % (self.user,
-                                self.activity,
-                                self.start_time,
-                                self.end_time
-                                )
+        return '%s %s | %s %s | %s - %s' % (
+            self.user,
+            self.activity,
+            self.start_time,
+            self.end_time,
+            self.seasonal_start,
+            self.seasonal_end
+        )
 
 class UserExtraProviderInfo(models.Model):
     social_instance = models.OneToOneField(UserSocialAuth)

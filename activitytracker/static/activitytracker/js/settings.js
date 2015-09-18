@@ -467,13 +467,13 @@
    		}
 
         function appFunctionHandler(provider) {
-            if ($('.'+ provider +' .connected-app-button').text() == "SynchronizeDisconnect") {
-               LoadingWithBackdrop();
-               $.ajax({
+			if ($('.' + provider + ' .connected-app-button').text() == "SynchronizeDisconnect") {
+				LoadingWithBackdrop();
+				$.ajax({
 					type: "post",
-                    data: {csrfmiddlewaretoken: getCookie('csrftoken')},
+					data: {csrfmiddlewaretoken: getCookie('csrftoken')},
 					cache: false,
-					url:  SERVER_URL + '/disconnect/' + provider,
+					url: SERVER_URL + '/disconnect/' + provider,
 					dataType: "text",
 					error: function (xhr, status, error) {
 						alert("Couldn't disconnect, try again")
@@ -482,149 +482,45 @@
 						window.location.reload();
 					}
 				});
-            }
-            else if($('.'+ provider +' .connected-app-button').text() == "Try again") {
+			}
+			else if ($('.' + provider + ' .connected-app-button').text() == "Try again") {
 				window.location.reload();
 			}
 			else {
-					var url = (SERVER_URL + "/login/" +  provider);
-					window.open( url, 'newwindow', 'width=500, height=500')
-				}
-        }
-
-		$(window).on('load', function() {
-			$('.clockpicker').clockpicker({
-				placement: 'bottom',
-				align: 'left',
-				autoclose: true
-			});
-		});
-		/* modify routine javascript */
+				var url = (SERVER_URL + "/login/" + provider);
+				window.open(url, 'newwindow', 'width=500, height=500')
+			}
+		}
 
 		function routineInsertMore() {
-			$.ajax({
-				type: "get",
-				url: BASE_URL + 'account/routine/insert_more',
-				dataType: "json",
-				error: function (xhr, status, error) {
-					alert("Error occured, try again")
-				},
-				success: function (responseJSON) {
-
-					var container;
-					$('#routineInsertMore').remove();
-
-					$.each(responseJSON['input_data'], function (i, e) {
-
-						if (i % 5 == 0) {
-							container = document.createElement("div");
-							container.className = 'routine-canvas routine-canvas-show-more';
-							$(container).css('margin-left', '27px');
-							$(container).css('display', 'flex');
-						}
-						var innerContainer = document.createElement("div");
-						$(innerContainer).css('width', '60px');
-                    	$(innerContainer).css('margin-right', '4.8%');
-						var routine_activity = document.createElement("a");
-						routine_activity.id = e.activity.replace(/ /g, '-');
-						routine_activity.className = 'quick-button metro circle routine ' + e.color;
-						$(routine_activity).attr('title', e.activity);
-
-						var icon = document.createElement("i");
-						icon.className = 'activicon-' + e.icon_classname;
-						routine_activity.appendChild(icon);
-
-						var rdio = document.createElement('input');
-						rdio.className = 'routine-radiobutton';
-						rdio.id = e.activity.replace(/ /g, '-');
-						rdio.type = 'radio';
-						rdio.name = 'routine-radiobutton';
-						$(rdio).css('height', '15px');
-						$(rdio).css('width', '20px');
-						$(rdio).css('margin-top', '8px');
-						$(rdio).css('margin-left', '22px');
-						$(rdio).prop('value', rdio.id);
-
-						routine_activity.appendChild(icon);
-
-						$(innerContainer).append(routine_activity);
-						$(innerContainer).append(rdio);
-						$(container).append(innerContainer);
-
-						if (i % 5 == 0) {
-							$(container).insertBefore('.weekday-controls')
-						}
-					});
-
-				}
-			});
+			$('#routineInsertMore').addClass('hidden');
+			$('.routine-canvas-show-more').removeClass('hidden')
 
 		}
 
-		function printTime() {
-			var h = $('.clockpicker-span-hours').text();
-			var m = $('.clockpicker-span-minutes').text();
-			var d = $('#duration-select').data('slider').getValue();
-			console.log(h + ':' + m + '  Duration: ' + d)
-		}
-
-		var input;
-		$('#routineModal').one('shown', function () {
-			$.ajax({
-				type: "get",
-				url: BASE_URL + 'account/routine',
-				dataType: "json",
-				error: function (xhr, status, error) {
-					alert("Error occured, try again")
-				},
-				success: function (responseJSON) {
-
-					var container = $('.routine-canvas');
-
-					$.each(responseJSON['input_data'], function (i, e) {
-
-						var innerContainer = document.createElement("div");
-						$(innerContainer).css('width', '60px');
-                    	$(innerContainer).css('margin-right', '4.8%');
-						var routine_activity = document.createElement("a");
-						routine_activity.id = e.activity.replace(/ /g, '-');
-						routine_activity.className = 'quick-button metro circle routine ' + e.color;
-						$(routine_activity).attr('title', e.activity);
-
-						var icon = document.createElement("i");
-						icon.className = 'activicon-' + e.icon_classname;
-						routine_activity.appendChild(icon);
-
-						var rdio = document.createElement('input');
-						rdio.className = 'routine-radiobutton';
-						rdio.id = e.activity.replace(/ /g, '-');
-						rdio.type = 'radio';
-						rdio.name = 'routine-radiobutton';
-						$(rdio).css('height', '15px');
-						$(rdio).css('width', '20px');
-						$(rdio).css('margin-top', '8px');
-						$(rdio).css('margin-left', '22px');
-						$(rdio).prop('value', rdio.id);
-
-						routine_activity.appendChild(icon);
-
-						$(innerContainer).append(routine_activity);
-						$(innerContainer).append(rdio);
-						$(container).append(innerContainer);
-					});
-				}
-			});
-		});
-
-		$('#routineModal').on('hidden', function() {
-			$('.routine-canvas-show-more').remove()
-		});
 
 		$('.tokenize').tokenize({
 			placeholder: "Select Time Frames"
 		});
 
-		$('.datepicker').datepicker();
+		$('.datepicker').datepicker( {
+			changeMonth: true,
+			dateFormat: 'mm/dd'
+		});
+
+		$('#routineModal').on('hidden', function() {
+			$('.routine-canvas').find('span').removeClass('checked');
+			$('#routineInsertMore').removeClass('hidden');
+			$('.routine-canvas-show-more').addClass('hidden');
+			$('#seasonality, #weekend').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+			$('.seasonality-input, .weekend-input').addClass('hidden');
+			$('#submitRoutine').prop('value', 'add');
+			$('input[name="weekday_seasonality_start"], input[name="weekday_seasonality_end"], ' +
+			  'input[name="weekend_seasonality_start"], input[name="weekend_seasonality_end"]').prop('value','');
+			$('#weekday-times, #weekend-times').each(function() {
+				$(this).tokenize().clear();
+			});
+		});
 
 		$('#seasonality, #weekend').on('click', function() {
 			if ($(this).attr('class') == 'icon-chevron-down') {
@@ -676,56 +572,195 @@
 			$('#' + daytype + '-range-to').text(toString);
 		});
 
+		$('#routineForm').on('submit', function(evt) {
+			Loading();
+			evt.preventDefault();
+
+			var activity = $('.routine-canvas .checked input').val();
+			var setting = $('#submitRoutine').prop('value');
+			var weekday_times_string = $('#weekday-times').val();
+			var weekend_times_string = $('#weekend-times').val();
+			weekday_times_string = (weekday_times_string == null) ? '' : weekday_times_string.join('_');
+			weekend_times_string = (weekend_times_string == null) ? '' : weekend_times_string.join('_');
+			var weekday_seasonality = $('input[name="weekday_seasonality_start"]').val() + ' - ' + $('input[name="weekday_seasonality_end"]').val();
+			var weekend_seasonality = $('input[name="weekend_seasonality_start"]').val() + ' - ' + $('input[name="weekend_seasonality_end"]').val();
+
+			if (activity == undefined) {
+				alert('You must select a recurring activity');
+				Done();
+				return
+			}
+
+			if ((weekday_seasonality.length> 8 && weekday_seasonality.length < 13) ||
+				(weekend_seasonality.length> 8 && weekend_seasonality.length < 13)){
+				alert('You must select proper seasonality boundaries');
+				Done();
+				return
+			}
+
+			$.ajax({
+				type: "post",
+				data: {
+					activity: activity,
+					weekday_times: weekday_times_string,
+					weekend_times: weekend_times_string,
+					weekday_seasonality: weekday_seasonality,
+					weekend_seasonality: weekend_seasonality,
+					db_setting: setting,
+					csrfmiddlewaretoken: getCookie('csrftoken')
+				},
+				cache: false,
+				url: BASE_URL + "account/routine/configure_periods/",
+				dataType: "json",
+				error: function (xhr, status, error) {
+					Done();
+					alert('An Error has occured. Please try again');
+				},
+				success: function (response) {
+					updateRoutineTableValues(response);
+					$('#routineModal').modal('hide');
+					Done()
+				}
+			});
+		});
+
+function updateRoutineTableValues(responseJSON) {
+
+	$('#RoutineTable tbody').empty();
+
+	$.each(responseJSON, function(activity, activity_data) {
+
+		var newRow = document.createElement('tr');
+		newRow.id = activity.replace(/ /g, '-').replace(/\//g, '_');
+
+
+		var iconCell = document.createElement('td');
+		$(iconCell).append(
+			'<a class="quick-button metro circle routine-activity ' + activity_data['color'] + '">' +
+				'<i class="activicon-' +  activity_data['icon_classname'] + '"></i>' +
+			'</a>'
+		);
+
+		var titleCell = document.createElement('td');
+		$(titleCell).append('<p class="routine-activity-text">' +  activity + '</p>');
+
+		var weekdayTimesCell = document.createElement('td');
+		$.each(activity_data['Weekdays'], function (i, timeRange) {
+			$(weekdayTimesCell).append('<p>' + timeRange + '</p>');
+		});
+
+
+		var weekendTimesCell = document.createElement('td');
+		$.each(activity_data['Weekend'], function (i, timeRange) {
+			$(weekendTimesCell).append('<p>' + timeRange + '</p>');
+		});
+
+		var weekdaySeasonalityCell = document.createElement('td');
+		$.each(activity_data['Weekdays_seasonality'], function (i, dateRange) {
+			$(weekdaySeasonalityCell).append('<p>' + dateRange + '</p>');
+		});
+
+		var weekendSeasonalityCell = document.createElement('td');
+		$.each(activity_data['Weekend_seasonality'], function (i, dateRange) {
+			$(weekendSeasonalityCell).append('<p>' + dateRange + '</p>');
+		});
+
+
+		var optionsCell = document.createElement('td');
+		$(optionsCell).append(
+			'<a class="btn btn-info" href="#" onclick="initializeEditRoutineModal(this)">' +
+				'<i class="halflings-icon edit white"></i>' +
+			'</a>' +
+			'<a class="btn btn-info" href="#" onclick="deleteRoutine(this)">' +
+				'<i class="halflings-icon trash white"></i>' +
+			'</a>'
+		);
+
+		$(newRow).append(iconCell);
+		$(newRow).append(titleCell);
+		$(newRow).append(weekdayTimesCell);
+		$(newRow).append(weekdaySeasonalityCell);
+		$(newRow).append(weekendTimesCell);
+		$(newRow).append(weekendSeasonalityCell);
+		$(newRow).append(optionsCell);
+
+		$('#RoutineTable tbody').append(newRow)
+	});
+}
+
+function deleteRoutine(element_clicked) {
+
+	Loading();
+
+	var row = $(element_clicked).closest('tr');
+	var activity_id = $(row).prop('id');
+	var activity_name = activity_id.replace(/-/g, ' ').replace(/_/g, '/');
+
+	$.ajax({
+		type: "post",
+		data: {
+			activity_name: activity_name,
+			csrfmiddlewaretoken: getCookie('csrftoken')
+		},
+		cache: false,
+		url: BASE_URL + "account/routine/delete_routine/",
+		dataType: "text",
+		error: function (xhr, status, error) {
+			Done();
+			alert('An Error has occured. Please try again');
+		},
+		success: function (response) {
+			(response == "RowRemoval") ? $('#' + activity_id).remove() : $('#' + activity_id +' td').slice(2,6).text(' - ');
+			Done()
+		}
+	});
+
+}
 
 function initializeEditRoutineModal(element_clicked) {
 
-		var row = $(this).closest('tr');
-		var activity = $(row).id;
+	var row = $(element_clicked).closest('tr');
+	var activity = $(row).prop('id');
 
-		var weekday_times = [];
-		$('#' + activity + ' td:nth-child(3)').find('p').each(function() {
-			weekend_times.push($(this).text())
-		});
-		var weekday_times_string = weekend_times.join('_');
+	var weekday_times = [];
+	$('#' + activity + ' td:nth-child(3)').find('p').each(function() {
+		weekday_times.push($(this).text())
+	});
+	var weekday_times_string = weekday_times.join('_');
 
-		var weekend_times = [];
-		$('#' + activity + ' td:nth-child(4)').find('p').each(function() {
-			weekend_times.push($(this).text())
-		});
-		var weekend_times_string = weekend_times.join('_');
+	var weekend_times = [];
+	$('#' + activity + ' td:nth-child(5)').find('p').each(function() {
+		weekend_times.push($(this).text())
+	});
+	var weekend_times_string = weekend_times.join('_');
 
-		var seasonality_enabled = $('#' + activity + ' td:nth-child(5) input[name="seasonality-enabled"]').prop('checked');
+	$('#routineModal').modal('show');
+	/*
+	if ($('.routine-canvas').find('#' + activity).length == 0) {
 
-		$('#routineModal').modal('show');
-
-		if ($('.routine-canvas').find('#' + activity).length == 0) {
-
-			routineInsertMore();
-		}
-
-		//check the proper icon
+		routineInsertMore();
 		$('.routine-canvas').find('#' + activity).prop('checked', true);
+	}
+	*/
 
-		//fill weekday values
-		if (weekday_times != '-') {
-			$('#weekend').trigger('click');
-			$.each(weekday_times, function (i, range) {
-				$('#weekday-times').tokenize().tokenAdd(range, range);
-			});
-		}
+	//check the proper icon
+	$('.routine-canvas').find('#' + activity + ' span').addClass('checked');
 
-		//fill weekend times
-		if (weekday_times != '-') {
-			$.each(weekday_times, function (i, range) {
-				$('#weekday-times').tokenize().tokenAdd(range, range);
-			});
-		}
+	//fill weekday values
+	if (weekday_times != ' - ') {
+		$.each(weekday_times, function (i, range) {
+			$('#weekday-times').tokenize().tokenAdd(range, range);
+		});
+	}
 
-		//fill seasonality
-		if (seasonality_enabled) {
-			$('#seasonality').trigger('click');
+	//fill weekend times
+	if (weekend_times != ' - ') {
+		$('#weekend').trigger('click');
+		$.each(weekend_times, function (i, range) {
+			$('#weekend-times').tokenize().tokenAdd(range, range);
+		});
+	}
 
-		}
-
+	$('#submitRoutine').prop('value', 'edit')
 }
 /* modify routine javascript END */

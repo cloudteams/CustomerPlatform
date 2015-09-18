@@ -94,3 +94,9 @@ def addSpaceAfterComma(value):
 @register.filter
 def removeDashes(value):
     return value.replace('-', ' ')
+
+@register.filter
+def addDashes(value):
+    return value.replace(' ', '-')
+
+

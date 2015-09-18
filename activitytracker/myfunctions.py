@@ -203,5 +203,52 @@ def getAppManagementDomValues(status, provider):
                      'providerIconName': provider
         }
 
+# Returns the data of the routines in a formatted way, to present them in settings
+def getFormattedRoutines(user, routine_list, day_types):
 
+    user_extra_routines = user.routine_set.exclude(
+        activity__activity_name__in=routine_list
+    ).values_list('activity__activity_name', flat=True)
 
+    user_routines_all = routine_list + list(user_extra_routines)
+    basicRoutineActivities = dict()
+    for activity_name in user_routines_all:
+
+        activity = Activity.objects.get(activity_name=activity_name)
+        basicRoutineActivities[activity.activity_name] = {
+            'color': activity.category,
+            'icon_classname': activity.icon_classname,
+        }
+
+        for day_type in day_types:
+
+            if day_type not in basicRoutineActivities[activity.activity_name]:
+                basicRoutineActivities[activity.activity_name][day_type] = list()
+                basicRoutineActivities[activity.activity_name][day_type + '_seasonality'] = list()
+
+            routine_data_logs = user.routine_set.filter(activity=activity, day_type=day_type)
+            if not routine_data_logs:
+                (basicRoutineActivities[activity.activity_name][day_type]).append(' - ')
+                (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append(' - ')
+                continue
+
+            for routine_data_log in routine_data_logs:
+
+                start_time = '' if not routine_data_log.start_time else routine_data_log.start_time.strftime('%H:%M')
+                end_time = '' if not routine_data_log.end_time else routine_data_log.end_time.strftime('%H:%M')
+
+                seasonality_start = '' if not routine_data_log.seasonal_start else routine_data_log.seasonal_start.strftime('%m/%d')
+                seasonality_end = '' if not routine_data_log.seasonal_end else routine_data_log.seasonal_end.strftime('%m/%d')
+
+                (basicRoutineActivities[activity.activity_name][day_type]).append(
+                    '%s - %s' % (start_time, end_time)
+                )
+
+                if not seasonality_start:
+                    (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append('All Year')
+                else:
+                    (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append(
+                        '%s - %s' % (seasonality_start, seasonality_end)
+                    )
+
+    return basicRoutineActivities

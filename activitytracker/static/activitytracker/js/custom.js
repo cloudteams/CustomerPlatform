@@ -610,7 +610,9 @@ function template_functions(){
 	});
 	
 	/* ---------- Datapicker ---------- */
-	$('.datepicker').datepicker();
+	$('.datepicker').datepicker({
+		showButtonPanel: true
+	});
 	
 	/* ---------- Notifications ---------- */
 	$('.noty').click(function(e){

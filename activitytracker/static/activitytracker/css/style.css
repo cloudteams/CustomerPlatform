@@ -2187,6 +2187,7 @@ fieldset[disabled] .btn-link:focus {
 .table td {
   border-top: 1px solid #eee;
 	text-align:center;
+	vertical-align: middle;
 }
 
 .table-bordered {
@@ -3684,7 +3685,6 @@ ul.messagesList li span.date {
 #RoutineTable td p {
 	position: relative;
 	top: 15px;
-	margin:5px 0;
 }
 
 #RoutineTable .quick-button {
@@ -3717,4 +3717,50 @@ input[name='range-logger'] {
 .routine-controls {
 	margin: 30px 0;
 	border-top: 2px solid darkblue;
+}
+
+.routine-canvas {
+	display:flex;
+	margin: 0px 27px;
+}
+
+.routine-canvas.hidden {
+	display:none;
+	visibility: hidden;
+
+}
+
+.routine-canvas .routine-container{
+	width: 60px;
+	margin-right: 4.8%;
+
+}
+
+.routine-canvas .routine-container .radio {
+	margin-top: 8px !important;
+}
+
+.routine-canvas .routine-container input[type='radio'] {
+	margin-left: 0 !important;
+
+}
+
+.underlined-link {
+	margin:10px 0;
+	top:17px;
+	position:relative;
+	text-decoration:underline;
+}
+
+.diversification-border {
+	border-bottom: 1px solid #052656;
+	padding-bottom:10px;
+}
+
+form {
+	margin-bottom: 0px;
+}
+
+#RoutineTable {
+	vertical-align: middle !important;
 }
