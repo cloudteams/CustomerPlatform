@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'oauth2',
     'social.apps.django_app.default',
 
+    # Projects app - access to CloudTeams Projects & related functionality
+    'ct_projects',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,6 +107,10 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 #STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,  'static'),
+)
 
 AUTH_USER_MODEL = 'activitytracker.User'
 

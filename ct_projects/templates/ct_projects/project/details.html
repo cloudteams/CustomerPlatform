@@ -1,0 +1,28 @@
+{% extends "ct_projects/base.html" %}
+{% load url from future %}
+{% load project_tags %}
+
+{% block content %}
+{% autoescape off %}
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'all-projects' %}">Projects</a>
+        </li>
+        <i class="icon-angle-right"></i>
+        <li>
+            <a href="{% url 'project-details' project.pk %}">{{project.title}}</a>
+        </li>
+    </ul>
+
+    <h1>{{project.title}}</h1>
+        <div class="pull-right">
+            {% include "ct_projects/project/follow-form.html" %}
+        </div>
+
+
+    <p class="info">{{project|count_followers}} followers</p>
+    <p>{{project.description}}</p>
+    <p>{{project.publisher}}</p>
+{% endautoescape %}
+{% endblock %}

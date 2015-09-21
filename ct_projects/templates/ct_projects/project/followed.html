@@ -1,0 +1,26 @@
+{% extends "ct_projects/base.html" %}
+{% load url from future %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'all-projects' %}">Projects</a>
+        </li>
+        <i class="icon-angle-right"></i>
+        <li>
+            <a href="{% url 'followed-projects' %}">Projects I follow</a>
+        </li>
+    </ul>
+
+    <h1>Projects I follow</h1>
+
+    <form class="project-search" action="." method="GET">
+        <input type="search" name="q" placeholder="Search projects" value="{{q}}"/>
+        <input type="submit" class="btn btn-primary" value="Search" />
+    </form>
+
+    <div class="project-wrapper">
+        {% include "ct_projects/project/list.html" %}
+    </div>
+{% endblock %}

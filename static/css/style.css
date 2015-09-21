@@ -1,0 +1,7 @@
+.navbar .nav > li > a {
+    text-shadow: none;
+}
+
+.navbar .nav > li > a:hover {
+    color: #fff;
+}
