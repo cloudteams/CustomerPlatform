@@ -1,0 +1,19 @@
+{% load url from future %}
+
+{% autoescape off %}
+    <div class="clearfix">
+        <h4><a href="{% url 'project-details' project.pk %}">{{project.title}}</a></h4>
+        <div class="pull-right">
+            {% include "ct_projects/project/follow-form.html" %}
+        </div>
+
+
+        <p>{{project.description}}</p>
+        <p>
+            {% if project.publisher %}
+                Published by {{project.publisher}} |
+            {% endif %}
+            <a href="{% url 'project-details' project.pk %}">View details</a>
+        </p>
+    </div>
+{% endautoescape %}
