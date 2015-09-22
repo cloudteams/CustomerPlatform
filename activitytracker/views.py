@@ -59,8 +59,7 @@ def terms_and_conditions(request):
 def login(request):
 
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
-    INVALID_USER_MSG = 'No such User exists'
-    WRONG_CREDENTIALS_MSG = 'Wrong Combination of Username and Password'
+    INVALID_CREDENTIALS_MSG = 'Invalid Username and Password'
 
     if request.method != 'POST':
         if request.user.is_authenticated():
@@ -78,12 +77,12 @@ def login(request):
     password = request.POST['password']
 
     if User.objects.filter(username=username).count() == 0:
-        return HttpResponseBadRequest(INVALID_USER_MSG)
+        return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
 
     user = authenticate(username=username, password=password)
 
     if user is None:
-        return HttpResponseBadRequest(WRONG_CREDENTIALS_MSG)
+        return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
 
     if not user.is_active:
         return HttpResponseBadRequest(EMAIL_VERIFICATION_MSG)
