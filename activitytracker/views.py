@@ -147,7 +147,7 @@ def register(request):
 
     characters = string.ascii_letters + string.digits
     verification_token = ''.join(random.choice(characters) for _ in range(20))
-    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, verification_token)
+    verification_url = '%s/activitytracker/account/verification/%s' % (request.get_host(), verification_token)
     verification_instance = UserUniqueTokens(
         user=user,
         token=verification_token,
