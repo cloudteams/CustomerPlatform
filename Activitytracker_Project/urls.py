@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^activitytracker/', include('activitytracker.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
 
+    # projects
     url(r'^projects/', include('ct_projects.urls')),
 ]

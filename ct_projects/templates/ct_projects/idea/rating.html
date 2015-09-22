@@ -1,0 +1,24 @@
+{% load url from future %}
+{% load project_tags %}
+
+{% with n_of_ratings=idea.get_rating_count rating=idea.get_average_rating rate=idea|get_user_rate:request.user%}
+    <form class="rating-form" method="POST" action="{% url 'rate-idea' idea.project_pk idea.pk %}">{% csrf_token %}
+        {% for i in '12345'|make_list %}
+            <i class="rating-input fa fa-star{% if not rating|rate_larger_than:i %}-o{% endif %}{% if not rate %} active{% endif %}"
+               data-value="{{i}}"
+               title="Click to rate with {{i}} stars">
+            </i>
+        {% endfor %}
+
+        {% if rating %}
+            <span class="info">
+                {{rating}} out of {{n_of_ratings}} rating{{n_of_ratings|pluralize}}
+                {% if rate %}
+                    , your rating was {{rate.value}}
+                {% endif %}
+            </span>
+        {% endif %}
+        <input type="number" name="value" value="" class="hidden" />
+        <input type="submit" class="hidden" value="Submit rating" />
+    </form>
+{% endwith %}

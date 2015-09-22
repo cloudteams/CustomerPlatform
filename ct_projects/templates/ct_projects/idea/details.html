@@ -1,0 +1,52 @@
+{% extends "ct_projects/base.html" %}
+{% load url from future %}
+{% load project_tags %}
+
+{% load comments %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'all-projects' %}">Projects</a>
+        </li>
+        <i class="icon-angle-right"></i>
+        <li>
+            <a href="{% url 'project-details' idea.project_pk %}">{{project.title}}</a>
+        </li>
+        <i class="icon-angle-right"></i>
+        <li>
+            <a href="{% url 'idea-details' idea.project_pk idea.pk %}">{{idea.title}}</a>
+        </li>
+    </ul>
+
+    <div class="clearfix">
+        <h1>
+            {{idea.title}}
+        </h1>
+        <a href="{% url 'project-details' idea.project_pk %}" class="btn pull-right">Back to project</a>
+    </div>
+
+    <p>{{idea.description|linebreaksbr}}</p>
+
+    {% include "ct_projects/idea/rating.html" %}
+
+    {% get_comment_count for ct_projects.idea idea.pk as comment_count %}
+    <p>{{comment_count}} comment{{comment_count|pluralize}}</p>
+
+    {% render_comment_list for idea %}
+
+    {% if request.user.is_authenticated %}
+        {% include "ct_projects/comments/form.html" %}
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('.rating-input.active').on('click', function() {
+            $(this).closest('form').find('input[type="number"]').val($(this).data('value'));
+            $(this).closest('form').submit();
+        });
+    </script>
+{% endblock %}
