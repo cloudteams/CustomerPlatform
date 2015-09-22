@@ -203,14 +203,22 @@ def getAppManagementDomValues(status, provider):
                      'providerIconName': provider
         }
 
-# Returns the data of the routines in a formatted way, to present them in settings
-def getFormattedRoutines(user, routine_list, day_types):
+
+# Returns a list of the names of the user's personal routine activities
+def getRoutineList(user, shared_routine_list):
 
     user_extra_routines = user.routine_set.exclude(
-        activity__activity_name__in=routine_list
+        activity__activity_name__in=shared_routine_list
     ).values_list('activity__activity_name', flat=True)
 
-    user_routines_all = routine_list + list(user_extra_routines)
+    return shared_routine_list + list(user_extra_routines)
+
+
+# Returns the data of the routines in a formatted way, to present them in settings
+def getFormattedRoutines(user, shared_routine_list, day_types):
+
+    user_routines_all = getRoutineList(user, shared_routine_list)
+
     basicRoutineActivities = dict()
     for activity_name in user_routines_all:
 

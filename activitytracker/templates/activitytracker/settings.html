@@ -342,6 +342,7 @@
                             {% endfor %}
 
                         </div>
+
                         {% for extra_activity in routineExtraActivities%}
 
                             {% if forloop.counter0|divisibleby:5 %}<div class="hidden routine-canvas routine-canvas-show-more">{% endif %}
@@ -352,10 +353,11 @@
                                     </a>
                                     <input name="routine-radiobutton" type="radio" value="{{ extra_activity.activity }}"/>
                                 </div>
-                            {% if forloop.counter|divisibleby:5 %}</div>{% endif %}
+                            {% if forloop.counter|divisibleby:5 %} </div> {% endif %}
 
                         {% endfor %}
-                        </div>
+                        {% if not routineExtraActivities|length|divisibleby:5 %} </div> {% endif %}
+
                         <a href='#'  class='underlined-link' id="routineInsertMore" onclick="routineInsertMore()">Show More</a>
                             <div class="weekday-controls" style="margin-top:35px">
                                 <i class="glyphicons-icon clock modal-icon"></i>

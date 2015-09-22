@@ -24,7 +24,23 @@
 						Pick a date range:
 						<input type='text' id="dateRange" value="" name="dateRange" />
 					</div>
-					<div class="span5" id='routine-activity-list' style="margin-bottom:2%;display:flex"></div>
+
+                    {% for activity, activity_data in routineActivities.iteritems %}
+
+                        {% if forloop.counter0|divisibleby:5 %}<div class="span5 routine-canvas">{% endif %}
+
+                            <div class='routine-container' id="{{ activity|addDashes }}">
+                                <a title="{{ activity }}" class="quick-button metro circle routine-activity {{ activity_data.color }}">
+                                    <i class="activicon-{{ activity_data.icon_classname }}"></i>
+                                </a>
+                                <input name="routine-radiobutton" checked type="radio" value="{{ activity }}" onchange="updateRoutineCharts()"/>
+                            </div>
+                        {% if forloop.counter|divisibleby:5 %} </div> {% endif %}
+
+                    {% endfor %}
+
+                    {% if not routineActivities|length|divisibleby:5 %} </div> {% endif %}
+
                     <div class="span5">
                         <table style="border-collapse: initial;border-spacing: 10px 20px;">
                             <tr>
@@ -70,32 +86,31 @@
 						<p align="center" id="date-range-total-analytics"></p>
                         <div class="row-fluid">
                             <span>
-                                <span id="totalActivitiesLabel">Total Activities performed:</span>
+                                Total Background Actions performed
                             </span>
                             <span >
-                                <p><span id="totalActivities"></span>&nbsp;&nbsp;<i class="icon-star"></i></p>
+                                <p><span id="totalActions"></span>&nbsp;&nbsp;<i class="icon-star"></i></p>
 							</span>
                         </div>
                         <div class="row-fluid">
                             <span>
-                                <span id="extraMutableAnalyticLabel">Percentage of unique Activities:</span>
+                                Percentage of Overlapping Actions
                             </span>
                             <span >
-                                <p><span id="extraMutableAnalytic"></span>&nbsp;&nbsp;<i class="icon-star"></i></p>
+                                <p><span id="actionOverlapPercentage"></span>&nbsp;&nbsp;<i class="icon-star"></i></p>
 							</span>
                         </div>
                         <div class="row-fluid" style="margin-bottom:5%">
                             <span>
-                                <span id="totalTimeSpentLabel">Total Time spent on Activities:</span>
+                                Total Hours of Overlapping Actions
                             </span>
                             <span >
-                                <p><span id="totalTimeSpent"></span>&nbsp;&nbsp;<i class="icon-time"></i></p>
+                                <p><span id="totalTimeShared"></span>&nbsp;&nbsp;<i class="icon-time"></i></p>
 							</span>
                         </div>
 					</div>
                 </div>
             	<div class="span7 analytics-topChart "><h1 style="margin-left:25%"></h1></div>
-				<div class="span7 analytics-bottomChart "><h1 style="margin-left:25%"></h1></div>
 {% endblock %}
 
 {% block js %}

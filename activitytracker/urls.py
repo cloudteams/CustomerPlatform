@@ -63,6 +63,5 @@ urlpatterns = [
     url(r'^analytics/activities/update/activities_single/$', views.updatesingleactivitycharts, name='updateSingleActivityCharts'),
     url(r'^analytics/activities/update/activities_chartbanner/$', views.updateactivitiesbanner, name='updateActivitiesBanner'),
     url(r'^analytics/routine/update/activities_all/$', views.updateallroutinecharts, name='updateAllRoutineCharts'),
-    url(r'^analytics/routine/update/activities_single/$', views.updatesingleactivitycharts, name='updateSingleActivityCharts'),
-    url(r'^analytics/routine/update/activities_chartbanner/$', views.updateactivitiesbanner, name='updateActivitiesBanner'),
+    url(r'^analytics/routine/update/activities_chartbanner/$', views.updateactivitiesbanner, name='updateRoutineBanner'),
 ]

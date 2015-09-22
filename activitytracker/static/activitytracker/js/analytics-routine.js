@@ -3,7 +3,6 @@
  */
 
 var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
-//var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 
     $('input[name="daytype"],  #dateRange').on('change', function(){
         updateRoutineCharts()
@@ -17,7 +16,6 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
         var routineChecked = $('input[name="routine-radiobutton"]:checked').val();
 
         $('.analytics-topChart h1').text('Routine Action Distribution');
-       // $('.analytics-bottomChart h1').text('Activity Metric Categorization');
 
 		$.ajax({
 			type: "post",
@@ -31,13 +29,11 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 			url: BASE_URL + "analytics/routine/update/activities_all/",
 			dataType: "json",
 			error: function (xhr, status, error) {
-				console.log('went bad');
+				console.log('Oh oh, something went bad');
 			},
 			success: function (response) {
-                console.log(response);
                 try {
                     svg.selectAll('*').remove();
-                   // svg2.selectAll('*').remove();
                 }
                 catch(err) {}
 
@@ -66,6 +62,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
                 barChart.addLegend(60, 10, 510, 20, "right");
                 barChart.width = $('.analytics-bottomChart').width()- 100;
                 barChart.draw();
+                updateRoutineBanner(response);
 
 
 
@@ -97,39 +94,28 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 
  /**************************************************************************************/
 
-    function updateActivitiesBanner(activity_selected) {
-        var range = $('#dateRange').val();
-        $.ajax({
-            type: "post",
-            data: {range: range, csrfmiddlewaretoken: getCookie('csrftoken'), activity: activity_selected},
-            cache: false,
-            url: BASE_URL + "analytics/activities/update/activities_chartbanner/",
-            dataType: "json",
-            error: function (xhr, status, error) {
-                Done();
-                console.log('went bad');
-            },
-            success: function (response) {
-                $('#totalActivities').text(response.total_activities);
-                $('#extraMutableAnalytic').text(response.extra_mutable_analytic.toFixed(1) + "%");
-                $('#totalTimeSpent').text(response.total_time_spent);
-                $('#date-range-total-analytics').text(range);
+    function updateRoutineBanner(response) {
 
-                if (activity_selected == "all") {
-                    $('#totalActivitiesLabel').text("Total Activities performed:");
-                    $('#extraMutableAnalyticLabel').text("Percentage of unique Activities:");
-                    $('#totalTimeSpentLabel').text("Total Time spent on Activities:");
-                }
-                else {
-                    $('#totalActivitiesLabel').text("Total Instances of Activity:");
-                    $('#extraMutableAnalyticLabel').text("Presence in it's Category:");
-                    $('#totalTimeSpentLabel').text("Time spent on this Activity:");
-                }
+        var total_time = 0;
+        var shared_time = 0;
+
+        $.each(response, function(i, object) {
+            if (object['Timeslice'] == "Routine Metric Overlap" ) {
+                shared_time += object['Hours']
             }
+            total_time += object['Hours']
         });
+
+        var shared_duration_percentage = ((shared_time/total_time) * 100).toFixed(2);
+
+        $('#date-range-total-analytics').text($('#dateRange').val());
+
+        $('#totalActions').text(response.length);
+        $('#actionOverlapPercentage').text(shared_duration_percentage + '%');
+        $('#totalTimeShared').text(shared_time.toFixed(2));
     }
 
-
+    /******************************************************************************/
 
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
@@ -153,76 +139,6 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 		}
 	});
 
-
     $(window).on('load', function(){
-        $.ajax({
-            type: "get",
-            url: BASE_URL + 'account/routine',
-            dataType: "json",
-            error: function (xhr, status, error) {
-                alert("Error occured, try again")
-            },
-            success: function (responseJSON) {
-
-                var container = $('#routine-activity-list');
-
-                $.each(responseJSON['input_data'], function (i, e) {
-
-                    var innerContainer = document.createElement('div');
-                    $(innerContainer).css('width', '60px');
-                    $(innerContainer).css('margin-right', '28px');
-                    var routine_activity = document.createElement("a");
-                    routine_activity.className = 'quick-button metro circle routine ' + e.color;
-                    $(routine_activity).attr('title', e.activity);
-
-                    var icon = document.createElement("i");
-                    icon.className = 'activicon-' + e.icon_classname;
-
-                    routine_activity.appendChild(icon);
-
-                    var rdio = document.createElement('input');
-                    rdio.className = 'routine-radiobutton';
-                    rdio.id = e.activity.replace(/ /g, '-');
-                    rdio.type = 'radio';
-                    rdio.name = 'routine-radiobutton';
-                    $(rdio).css('height', '15px');
-                    $(rdio).css('width', '20px');
-                    $(rdio).css('margin-top', '8px');
-                    $(rdio).css('margin-left', '22px');
-                    $(rdio).prop('value', rdio.id);
-                    $(innerContainer).append(routine_activity);
-                    $(innerContainer).append(rdio);
-
-
-                    $(container).append(innerContainer);
-                });
-                $('.routine-radiobutton').on('change', function(){
-                    updateRoutineCharts();
-                });
-                $('.routine').on('click', function() {
-                    var corresponding_radio_id = $(this).closest('div').find('input').prop('id');
-                    $('#' +corresponding_radio_id).prop('checked',true);
-                    $('#' +corresponding_radio_id).trigger('change')
-                });
-
-                $('#Working').prop('checked', true);
-                $('#Working').trigger('change');
-            }
-        })
+        updateRoutineCharts()
     });
-
-    function sortByKey(array, key) {
-        return array.sort(function(a, b) {
-            var x = a[key];
-            var y = b[key];
-            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-        });
-    }
-    function sortReverseByKey(array, key) {
-        return array.sort(function(a, b) {
-            var x = a[key];
-            var y = b[key];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        });
-    }
-

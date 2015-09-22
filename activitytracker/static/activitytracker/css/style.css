@@ -3719,7 +3719,8 @@ input[name='range-logger'] {
 	border-top: 2px solid darkblue;
 }
 
-.routine-canvas {
+.routine-canvas,
+.span5.routine-canvas{
 	display:flex;
 	margin: 0px 27px;
 }

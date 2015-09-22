@@ -28,6 +28,7 @@ from FitbitClass import Fitbit
 from FoursquareClass import Foursquare
 from FacebookActivityClass import FacebookActivity
 from datetime import datetime
+from django.db.models import Q
 
 colourDict = {'black': "rgba(1, 1, 1, 0.8)",
               'blue': "#578EBE",
@@ -1067,27 +1068,21 @@ def analytics_activities(request):
 def analytics_routine(request):
 
     user = request.user
-    colourdict = {'black': 0, 'blue': 1, 'greenLight': 2,
-                  'orange': 3, 'redDark': 4, 'purple': 5 }
-    act_name_list = user.performs_set.values('activity__activity_name',
-                                             'activity__category').order_by('activity__activity_name').distinct()
-    activity_context_list = [[],[],[],[],[],[]]
-    for activity in act_name_list:
-        list_to_append = activity_context_list[colourdict[activity['activity__category']]]
-        list_to_append.append(activity['activity__activity_name'])
+    personal_routine_list = getRoutineList(user, basic_routine_activities)
 
-    context_data = {
-                    "Selfcare/Everyday Needs": activity_context_list[0],
-                    "Communication/Socializing": activity_context_list[1],
-                    "Sports/Fitness": activity_context_list[2],
-                    "Fun/Leisure/Hobbies": activity_context_list[3],
-                    "Responsibilities": activity_context_list[4],
-                    "Transportation": activity_context_list[5],
-                   }
+    routine_activities = dict()
+    for activity_name in personal_routine_list:
+
+        activity = Activity.objects.get(activity_name=activity_name)
+        routine_activities[activity.activity_name] = {
+            'color': activity.category,
+            'icon_classname': activity.icon_classname,
+        }
+    print routine_activities
     return render(request, 'activitytracker/analytics-routine.html',
                   {
                    'username': user.get_username(),
-                   'activity_data': context_data,
+                   'routineActivities': routine_activities,
                   }
     )
 
@@ -2563,81 +2558,97 @@ def routineSettings(request, setting='show'):
 
 def updateallroutinecharts(request):
 
+
+    # This is a very slow function. The only way to increase speed is by integrating django 1.9 or reforming the database.
+    # In this reform we have 2 options. Either split datetime into date & time fields (requires recoding the views.py)
+    # , or add duplicate data on each save that will help isolate the query components better (but DUPLICATE THINGS WILL EXIST)
+
     user = request.user
     day_type_requested = request.POST['day_type']
     datestart = (request.POST['range']).split('-')[0]
     dateend = (request.POST['range']).split('-')[1]
-    range_left = chosen_start = datetime.strptime(datestart, "%m/%d/%Y ")
-    range_right = chosen_end = datetime.strptime(dateend, " %m/%d/%Y")
-    routine = request.POST['routine'].replace('-',' ')
+    range_left = chosen_start = datetime.strptime(datestart, "%m/%d/%Y ").date()
+    range_right = chosen_end = datetime.strptime(dateend, " %m/%d/%Y").date()
+    routine = request.POST['routine'].replace('-', ' ')
     routine_activity = Activity.objects.get(activity_name=routine)
     chart_data = collections.OrderedDict()
-    print routine
+    routine_instances = dict()
+    routine_instances['Weekdays'] = user.routine_set.filter(activity=routine_activity, day_type="Weekdays")
+    routine_instances['Weekend'] = user.routine_set.filter(activity=routine_activity, day_type="Weekend")
+
     while True:
 
+        # If we finished with all the days then break
         if range_left > range_right:
             break
 
+        # Find out what type of day is the current day
         day_type = "Weekdays" if range_left.weekday() <= 4 else "Weekend"
 
-        if day_type_requested in ("Weekdays", "Weekend"):
-            if day_type_requested != day_type:
+        # If the day requested by the user is either "Weekend" or "Weekdays" (thus NOT full week), then if the current
+        # day doesnt match the user's request, move to the next day
+        if day_type_requested in ("Weekdays", "Weekend") and day_type_requested != day_type:
                 range_left += timedelta(days=1)
                 continue
 
-        try:
-            routine_range = user.routine_set.get(
-                activity=routine_activity,
-                day_type=day_type
+        # If the current day_type doesnt hold any routine activities, move to the next day. Should break if both day
+        # types were empty but the overhead is little at the moment
+        if not routine_instances[day_type]:
+            range_left += timedelta(days=1)
+            continue
+
+        background_actions = []
+        # For each of the found routine instances (= different hours/seasonalities)
+        for routine_instance in routine_instances[day_type]:
+
+            # Check for assigned seasonality. If there is one, check if the current day belongs in this season. If not
+            # then simply continue to the next day
+            if (routine_instance.seasonal_start and routine_instance.seasonal_end) is not None:
+                if not (routine_instance.seasonal_start < range_left < routine_instance.seasonal_end):
+                    continue
+
+            # Produce a datetime object (needed for 1.8 django) combining the current day and the times of the routine
+            routine_start = datetime.combine(range_left, routine_instance.start_time)
+            routine_end = datetime.combine(range_left, routine_instance.end_time)
+
+            # Find the background activities that fall underneath the time span of the routine
+            background_actions = user.performs_set.filter(
+                start_date__lte=routine_end,
+                end_date__gte=routine_start
             )
-        except ObjectDoesNotExist:
-            range_left += timedelta(days=1)
-            continue
 
-        try:
-            routine_start = datetime.combine(range_left, routine_range.start_time)
-            routine_end = datetime.combine(range_left, routine_range.end_time)
-        except:
-            range_left += timedelta(days=1)
-            continue
+            for action in background_actions:
 
-        background_actions = user.performs_set.filter(
-            start_date__lte=routine_end,
-            end_date__gte=routine_start
-        )
+                action_start = action.start_date
+                action_end = action.end_date
 
-        for action in background_actions:
-
-            action_start = action.start_date
-            action_end = action.end_date
-
-            if (routine_start < action_start) and (routine_end > action_end) :
-                intersection_time = action_end - action_start
-                rest_time = action_end - action_end         # It is 0 of course
+                if (routine_start < action_start) and (routine_end > action_end) :
+                    intersection_time = action_end - action_start
+                    rest_time = action_end - action_end         # It is 0 of course
 
 
-            elif (routine_start < action_start) and (routine_end <= action_end):
-                intersection_time = routine_end - action_start
-                rest_time = action_start - routine_start + action_end - routine_end
+                elif (routine_start < action_start) and (routine_end <= action_end):
+                    intersection_time = routine_end - action_start
+                    rest_time = action_start - routine_start + action_end - routine_end
 
-            elif (routine_start >= action_start) and (routine_end > action_end):
-                intersection_time = action_end - routine_start
-                rest_time = routine_start - action_start + routine_end - action_end
+                elif (routine_start >= action_start) and (routine_end > action_end):
+                    intersection_time = action_end - routine_start
+                    rest_time = routine_start - action_start + routine_end - action_end
 
-            else:
-                intersection_time  = routine_end - routine_start
-                rest_time = routine_start - action_start + action_end - routine_end
+                else:
+                    intersection_time  = routine_end - routine_start
+                    rest_time = routine_start - action_start + action_end - routine_end
 
-            try:
-                chart_data[action.activity.activity_name]['count'] += 1
-                chart_data[action.activity.activity_name]['intersection_time'] += intersection_time
-                chart_data[action.activity.activity_name]['rest_time'] += rest_time
+                try:
+                    chart_data[action.activity.activity_name]['count'] += 1
+                    chart_data[action.activity.activity_name]['intersection_time'] += intersection_time
+                    chart_data[action.activity.activity_name]['rest_time'] += rest_time
 
-            except KeyError:
-                chart_data[action.activity.activity_name] = {}
-                chart_data[action.activity.activity_name]['count'] = 1
-                chart_data[action.activity.activity_name]['intersection_time'] = intersection_time
-                chart_data[action.activity.activity_name]['rest_time'] = rest_time
+                except KeyError:
+                    chart_data[action.activity.activity_name] = {}
+                    chart_data[action.activity.activity_name]['count'] = 1
+                    chart_data[action.activity.activity_name]['intersection_time'] = intersection_time
+                    chart_data[action.activity.activity_name]['rest_time'] = rest_time
 
         range_left += timedelta(days=1)
 
@@ -2663,10 +2674,7 @@ def updateallroutinecharts(request):
             'OrderByTime': round(value['intersection_time'].seconds/float(3600) + value['intersection_time'].days*float(24), 2),
             'OrderByInstances': str(value['count']),
             },
-
-
         ]
         json_list += json_entries
 
-    print json.dumps(json_list)
     return HttpResponse(json.dumps(json_list), content_type='application/json')
