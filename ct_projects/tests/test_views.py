@@ -8,6 +8,13 @@ __author__ = 'dipap'
 
 class ProjectViewsTestCase(TestCase):
 
+    def setUp(self):
+        # create user
+        self.user = User.objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
+
+        # login
+        self.client.post('/activitytracker/', data={'username': 'temporary', 'password': 'temporary'})
+        
     def test_projects_home(self):
         response = self.client.get(urlresolvers.reverse('all-projects'))
         self.assertEqual(response.status_code, 200)
