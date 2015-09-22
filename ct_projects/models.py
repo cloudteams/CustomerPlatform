@@ -46,12 +46,12 @@ class Idea(models.Model):
     description = models.TextField()
 
     def get_rating_count(self):
-        return self.ideas.all().count()
+        return self.ratings.all().count()
 
     def get_average_rating(self):
-        count = self.get_rating_count
-        if count:
-            return self.ideas.all().aggregate(Sum('value')) / (count + 0.0)
+        count = self.get_rating_count()
+        if count > 0:
+            return self.ratings.all().aggregate(Sum('value'))['value__sum'] / (count + 0.0)
         else:
             return None
 
@@ -60,7 +60,7 @@ class IdeaRating(models.Model):
     """
     The rating of an idea by a user
     """
-    idea = models.ForeignKey(Idea, related_name='ideas')
+    idea = models.ForeignKey(Idea, related_name='ratings')
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now=True, editable=False)

@@ -28,3 +28,17 @@
 form.ct_projects_form input[type="text"], form.ct_projects_form textarea {
     width: 100%;
 }
+
+.info {
+    color: #aaa;
+}
+
+/* Rating */
+.rating-input {
+    color: #1C2B36;
+}
+
+.rating-input.active:hover {
+    color: red;
+    cursor: pointer;
+}

@@ -9,7 +9,10 @@
 
 
         <p>{{project.description}}</p>
-        <p>{{project.ideas.count}} ideas</p>
+        {% with idea_count=project.ideas.count %}
+            <p>{{idea_count}} idea{{idea_count|pluralize}}</p>
+        {% endwith %}
+
         <p>
             {% if project.publisher %}
                 Published by {{project.publisher}} |

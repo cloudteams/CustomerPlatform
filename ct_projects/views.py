@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 import django_comments
 from django_comments.forms import CommentForm
 from django_comments.models import Comment
 from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
-from ct_projects.forms import IdeaForm
+from ct_projects.forms import IdeaForm, IdeaRatingForm
 from ct_projects.models import ProjectFollowing, Idea
 
 source = CloudTeamsConnector()
@@ -154,7 +154,10 @@ class IdeaDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
-        context['comment_form'] = CommentForm(context['idea'])
+
+        idea = context['idea']
+        context['comment_form'] = CommentForm(idea)
+        context['project'] = source.get_project(str(idea.project_pk))
         return context
 
 idea_details = IdeaDetailView.as_view()
@@ -167,3 +170,23 @@ def comment_posted(request):
         idea = Idea.objects.get(id=comment.object_pk)
         if idea:
             return redirect(reverse('idea-details', args=(idea.project_pk, idea.pk)))
+
+
+@login_required
+def rate_idea(request, project_pk, pk):
+    idea = get_object_or_404(Idea, pk=pk)
+
+    if request.method == 'POST':
+        if idea.ratings.filter(user=request.user):
+            return HttpResponseForbidden('You can not rate more than once')
+
+        # save the rating
+        form = IdeaRatingForm(request.POST)
+        rating = form.save(commit=False)
+        rating.user = request.user
+        rating.idea = idea
+        rating.save()
+
+        return redirect(reverse('idea-details', args=(idea.project_pk, idea.pk)))
+    else:
+        return HttpResponse('Only POST allowed', status=400)

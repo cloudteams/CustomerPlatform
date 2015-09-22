@@ -1,13 +1,17 @@
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django_comments.forms import CommentForm
 from activitytracker.models import User
+from ct_projects.models import Idea
 
 __author__ = 'dipap'
 
 
 class ProjectViewsTestCase(TestCase):
-
+    """
+    The the Project entity
+    """
     def setUp(self):
         # create user
         self.user = User.objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
@@ -25,7 +29,9 @@ class ProjectViewsTestCase(TestCase):
 
 
 class ProjectFollowingTestCase(TestCase):
-
+    """
+    Test following and unfollowing projects
+    """
     def setUp(self):
         # create user
         self.user = User.objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
@@ -70,3 +76,69 @@ class ProjectFollowingTestCase(TestCase):
         # view a non-existing project
         request = self.client.get(reverse('project-details', args=('13418', )))
         self.assertEqual(request.status_code, 404)
+
+
+class IdeaTestCase(TestCase):
+    """
+    Test the Idea entity
+    """
+    def setUp(self):
+        # create user
+        self.user = User.objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
+
+        # login
+        self.client.post('/activitytracker/', data={'username': 'temporary', 'password': 'temporary'})
+
+        # make sure i can post ideas to projects
+        request = self.client.post(reverse('post-idea', args=('13417', )), data={
+            'title': 'my idea',
+            'description': 'this is an awesome idea'
+        })
+        self.assertEqual(request.status_code, 302)
+
+    def test_create_idea(self):
+        # assert fail on non-existing project
+        request = self.client.post(reverse('post-idea', args=('13418', )), data={'title': 'my idea'})
+        self.assertEqual(request.status_code, 404)
+        # assert fail on missing description
+        request = self.client.post(reverse('post-idea', args=('13417', )), data={'title': 'my idea'})
+        self.assertEqual(request.status_code, 400)
+
+    def test_view_idea(self):
+        # test i can see the created idea
+        request = self.client.get(reverse('idea-details', args=('13417', 1)))
+        self.assertEqual(request.status_code, 200)
+
+    def test_comment_on_idea(self):
+        comment_post_url = '/projects/comments/post/'
+        form = CommentForm(Idea.objects.get(pk=1))
+        data = form.initial
+
+        # verify i can't post some empty comment
+        # unfortunately the framework returns a 200 OK response, so we have to check based on response contents
+        request = self.client.post(comment_post_url, data=data)
+        self.assertIn('This field is required.', request.content)
+
+        # verify i can post some comment
+        data['comment'] = 'nice!'
+        request = self.client.post(comment_post_url, data=data)
+        self.assertEqual(request.status_code, 302)
+
+    def test_rating_idea(self):
+        # test wrong value
+        with self.assertRaises(ValueError):
+            self.client.post(reverse('rate-idea', args=('13417', 1)), data={'value': 6})
+
+        # verify i can rate an idea
+        request = self.client.post(reverse('rate-idea', args=('13417', 1)), data={'value': 4})
+        self.assertEqual(request.status_code, 302)
+
+        idea = Idea.objects.get(pk=1)
+        self.assertEqual(idea.get_rating_count(), 1)
+        self.assertAlmostEqual(idea.get_average_rating(), 4)
+
+        # verify i can rate an idea only once
+        request = self.client.post(reverse('rate-idea', args=('13417', 1)), data={'value': 5})
+        self.assertEqual(request.status_code, 403)
+
+

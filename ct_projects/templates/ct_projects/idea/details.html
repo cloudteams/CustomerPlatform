@@ -29,6 +29,8 @@
 
     <p>{{idea.description|linebreaksbr}}</p>
 
+    {% include "ct_projects/idea/rating.html" %}
+
     {% get_comment_count for ct_projects.idea idea.pk as comment_count %}
     <p>{{comment_count}} comment{{comment_count|pluralize}}</p>
 
@@ -38,4 +40,13 @@
         {% include "ct_projects/comments/form.html" %}
     {% endif %}
 
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('.rating-input.active').on('click', function() {
+            $(this).closest('form').find('input[type="number"]').val($(this).data('value'));
+            $(this).closest('form').submit();
+        });
+    </script>
 {% endblock %}
