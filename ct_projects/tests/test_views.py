@@ -12,6 +12,10 @@ class ProjectViewsTestCase(TestCase):
         response = self.client.get(urlresolvers.reverse('all-projects'))
         self.assertEqual(response.status_code, 200)
 
+    def test_followed_home(self):
+        response = self.client.get(urlresolvers.reverse('followed-projects'))
+        self.assertEqual(response.status_code, 200)
+
 
 class ProjectFollowingTestCase(TestCase):
 
@@ -29,7 +33,7 @@ class ProjectFollowingTestCase(TestCase):
 
         # I shouldn't be able to follow a project that does not exist
         post = self.client.post(reverse('follow-project', args=('13418', )))
-        self.assertEqual(post.status_code, 403)
+        self.assertEqual(post.status_code, 404)
 
         # I shouldn't be able to follow a project multiple times
         post = self.client.post(reverse('follow-project', args=('13417', )))
@@ -46,7 +50,7 @@ class ProjectFollowingTestCase(TestCase):
 
         # make sure I can un-follow a project that doesn't exist
         post = self.client.post(reverse('unfollow-project', args=('13418', )))
-        self.assertEqual(post.status_code, 403)
+        self.assertEqual(post.status_code, 404)
 
         # make sure I can un-follow a project that I don't follow
         post = self.client.post(reverse('unfollow-project', args=('13417', )))

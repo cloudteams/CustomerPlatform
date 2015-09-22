@@ -50,7 +50,7 @@ def follow_project(request, pk):
         # get project
         project = source.get_project(pk)
         if not project:
-            return HttpResponse('Project #%s does not exist' % pk, status=403)
+            return HttpResponse('Project #%s does not exist' % pk, status=404)
 
         # check if already followed
         if ProjectFollowing.objects.filter(project_pk=pk, user=request.user):
@@ -70,7 +70,7 @@ def unfollow_project(request, pk):
         # get project
         project = source.get_project(pk)
         if not project:
-            return HttpResponse('Project #%s does not exist' % pk, status=403)
+            return HttpResponse('Project #%s does not exist' % pk, status=404)
 
         # check if actually followed
         pfs = ProjectFollowing.objects.filter(project_pk=pk, user=request.user)
@@ -90,7 +90,7 @@ def project_details(request, pk):
         # get project
         project = source.get_project(pk)
         if not project:
-            return HttpResponse('Project #%s does not exist' % pk, status=403)
+            return HttpResponse('Project #%s does not exist' % pk, status=404)
 
         context = {
             'project': project,
