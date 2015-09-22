@@ -18,11 +18,20 @@
     <h1>{{project.title}}</h1>
         <div class="pull-right">
             {% include "ct_projects/project/follow-form.html" %}
+            <a href="{% url 'post-idea' project.pk %}" class="btn btn-primary">+ Post idea</a>
         </div>
 
 
     <p class="info">{{project|count_followers}} followers</p>
     <p>{{project.description}}</p>
     <p>{{project.publisher}}</p>
+
+    {% with idea_count=project.ideas.all.count %}
+        <p>{{idea_count}} idea{{idea_count|pluralize}}</p>
+    {% endwith %}
+
+    {% for idea in project.ideas.all %}
+        {% include "ct_projects/idea/teaser.html" %}
+    {% endfor %}
 {% endautoescape %}
 {% endblock %}

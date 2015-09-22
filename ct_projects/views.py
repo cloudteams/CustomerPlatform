@@ -3,8 +3,13 @@ from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
+import django_comments
+from django_comments.forms import CommentForm
+from django_comments.models import Comment
 from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
-from ct_projects.models import ProjectFollowing
+from ct_projects.forms import IdeaForm
+from ct_projects.models import ProjectFollowing, Idea
 
 source = CloudTeamsConnector()
 
@@ -85,6 +90,9 @@ def unfollow_project(request, pk):
 
 
 def project_details(request, pk):
+    """
+    View the details page of a specific project
+    """
     # only gets allowed to this method
     if request.method == 'GET':
         # get project
@@ -99,3 +107,63 @@ def project_details(request, pk):
         return render(request, 'ct_projects/project/details.html', context)
     else:
         return HttpResponse('Only GET allowed', status=400)
+
+
+@login_required
+def post_idea(request, pk):
+    """
+    Post a new idea on a project
+    """
+    # get project
+    project = source.get_project(pk)
+    if not project:
+        return HttpResponse('Project #%s does not exist' % pk, status=404)
+
+    context = {
+        'project': project
+    }
+    status = 200
+
+    if request.method == 'GET':
+        context['form'] = IdeaForm()
+    elif request.method == 'POST':
+        form = IdeaForm(request.POST)
+
+        if form.is_valid():
+            # save the idea
+            idea = form.save(commit=False)
+            idea.user = request.user
+            idea.project_pk = project.pk
+            idea.save()
+
+            # redirect to project home page
+            return redirect(reverse('project-details', args=(pk, )))
+        else:
+            context['form'] = form
+            status = 400
+    else:
+        return HttpResponse('Only GET,POST allowed', status=400)
+
+    return render(request, 'ct_projects/project/post-idea.html', context, status=status)
+
+
+class IdeaDetailView(DetailView):
+    model = Idea
+    template_name = 'ct_projects/idea/details.html'
+    context_object_name = 'idea'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        context['comment_form'] = CommentForm(context['idea'])
+        return context
+
+idea_details = IdeaDetailView.as_view()
+
+
+def comment_posted(request):
+    if request.GET['c']:
+        comment_id = request.GET['c']
+        comment = Comment.objects.get(pk=comment_id)
+        idea = Idea.objects.get(id=comment.object_pk)
+        if idea:
+            return redirect(reverse('idea-details', args=(idea.project_pk, idea.pk)))

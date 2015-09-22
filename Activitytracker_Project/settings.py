@@ -46,6 +46,10 @@ INSTALLED_APPS = (
     'oauth2',
     'social.apps.django_app.default',
 
+    # comments app
+    'django.contrib.sites',
+    'django_comments',
+
     # Projects app - access to CloudTeams Projects & related functionality
     'ct_projects',
 )
@@ -100,7 +104,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-
+SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/

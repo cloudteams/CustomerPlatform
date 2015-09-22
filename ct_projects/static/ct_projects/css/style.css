@@ -24,3 +24,7 @@
 .project-search input[type="search"] {
     height: 25px;
 }
+
+form.ct_projects_form input[type="text"], form.ct_projects_form textarea {
+    width: 100%;
+}
