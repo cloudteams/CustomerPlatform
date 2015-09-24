@@ -94,8 +94,8 @@ class FacebookActivity(OAuth2Validation):
                 self.provider_data['since_id'] = media['id']
 
             # To be fixed
-            if (_max_id > feed[-1]['id']) or (_max_id == 0):
-                _max_id = feed[-1]['id']
+            if (_max_id > media['id']) or (_max_id == 0):
+                _max_id = media['id']
 
             media_url = 'www.facebook.com/' + media['id']
             createActivityLinks(provider=self.PROVIDER.lower(),
@@ -115,34 +115,34 @@ class FacebookActivity(OAuth2Validation):
                   'fields': 'created_time,type,status_type,place,likes.summary(true),comments.summary(true),story_tags,with_tags'
         }
 
-        """
         if self.provider_data['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
-            params['min_id'] = self.provider_data['since_id']
+            params['since'] = time.mktime(datetime.datetime.strptime(
+                                self.provider_data['last_updated'],
+                                "%Y-%m-%d %H:%M:%S"
+                              ).timetuple())
 
         self.provider_data['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
+        response = requests.get(url=self.api_user_timeline_url, params=params).json()
+
         while True:
-            # ok
-            response = requests.get(url=self.api_user_timeline_url, params=params).json()
-            #ok
+
             feed = response['data']
-            #ok
+
             if not feed:
                 break
-            #ok
+
             if 'error' in response:
                 return HttpResponse(ERROR_MESSAGE)
 
-            params['max_id'], status = self._insertMedia(feed)
+            _ , status = self._insertMedia(feed)
 
             if status == "Barrier Reached":
                 break
 
-        self.user_social_instance.save()
-        """
+            response = requests.get(url=feed['paging']['next']).json()
 
-        response = requests.get(url=self.api_user_timeline_url, params=params).json()
-        print response
+        self.user_social_instance.save()
 
         # I still need to get the checkins, both personal and from other people. Also need access to posts of photos
         # or videos by others that i have been tagged in.
