@@ -21,7 +21,7 @@ class Instagram(OAuth2Validation):
             if time_posted < _time_barrier:
                 return _max_id, 'Reached Barrier'
 
-            if type == "video":
+            if media['type'] == "video":
                 activity_performed = Activity.objects.get(activity_name="Video Upload")
             else:
                 activity_performed = Activity.objects.get(activity_name="Image Upload")

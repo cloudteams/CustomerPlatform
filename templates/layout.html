@@ -52,7 +52,7 @@
 </head>
 
 <body>
-		<!-- start: Header -->
+    <!-- start: Header -->
 	<div class="navbar">
 		<div class="navbar-inner">
 			<div class="container-fluid">
@@ -92,9 +92,10 @@
 					</ul>
 				</div>
 				<!-- end: Header Menu -->
-				
 			</div>
+            <!-- end: Container Fluid -->
 		</div>
+        <!-- end: Navbar -->
 	</div>
 	<!-- start: Header -->
 
@@ -118,18 +119,20 @@
                 {% block content %}
                 {% endblock %}
             </div>
+            <!-- Loading .gif -->
+            <div id="overlay"><img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" /></div>
+            <div class="clearfix"></div>
+            <!-- end: Loading .fig -->
+        </div>
+        <!-- end: row-fluid -->
+    </div>
+    <!-- end: container-fluid-full -->
 
-            	<footer>
-
-		<p>
-			<span style="text-align:left;float:left">&copy; 2015 <a href="https://www.facebook.com/aggelos.arvanitakis" alt="Bootstrap_Metro_Dashboard">Arvanitakis Labs</a></span>
-
-		</p>
-
+    <footer>
+        <p style="float:left">&copy; 2015 <a href="https://academics.epu.ntua.gr" target="_blank">Decision Support Systems Lab</a></p>
 	</footer>
 
 	<!-- start: JavaScript-->
-
 		<script src="{% static 'activitytracker/js/jquery-1.9.1.min.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/jquery-ui-1.10.0.custom.min.js' %}"></script>
@@ -146,17 +149,9 @@
 
 		<script src="{% static 'activitytracker/js/jquery.dataTables.js' %}"></script>
 
-		<script src="{% static 'activitytracker/js/excanvas.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.pie.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
-
 		<script src="{% static 'activitytracker/js/jquery.chosen.min.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/jquery.uniform.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.iphone.toggle.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/counter.js' %}"></script>
 
@@ -169,9 +164,10 @@
         <script type="text/javascript"
 			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
 		</script>
-
 		<!-- end: JavaScript-->
+
         {% block js %}
         {% endblock %}
+
 </body>
 </html>

@@ -45,10 +45,22 @@ INSTALLED_APPS = (
     'requests_oauthlib',
     'oauth2',
     'social.apps.django_app.default',
+    'djangobower',
 
     # Projects app - access to CloudTeams Projects & related functionality
     'ct_projects',
 )
+"""
+BOWER_INSTALLED_APPS = (
+    'jquery#1.9',
+    'underscore',
+)
+
+
+STATICFILES_FINDERS = (
+'djangobower.finders.BowerFinder',
+)
+"""
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -61,6 +73,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'activitytracker.middleware.SocialAuthExceptionMiddleware'
 )
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/components')
 
 ROOT_URLCONF = 'Activitytracker_Project.urls'
 

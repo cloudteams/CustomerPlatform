@@ -14,510 +14,493 @@
 
 {% block content %}
 
-				<ul class="breadcrumb">
-					<li>
-						<i class="icon-home"></i>
-						<a href="{% url 'index' %}">Home</a>
-						<i class="icon-angle-right"></i>
-					</li>
-					<li><a href="#">Settings</a></li>
-				</ul>
-               <!-- Content begins HERE ------------------------------------------------------------------>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'index' %}">Home</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li><a href="#">Settings</a></li>
+    </ul>
+   <!-- Content begins HERE ------------------------------------------------------------------>
 
-                <div class="row-fluid ">
-					<div class="box span12 blueNavy">
-						<div class="box-header blueNavy" data-original-title>
-							<h2 align="center"><i class="halflings-icon user white"></i><span class="break"></span>User Profile</h2>
-							<div class="box-icon">
-                                <a href="#" class="btn-setting" data-toggle="modal" data-target="#routineModal"><i class="halflings-icon white calendar"></i></a>
-								<a href="#" class="btn-setting" data-toggle="modal" data-target="#editinfo"><i class="halflings-icon white edit"></i></a>
-								<a href="#" class="btn-setting" data-toggle="modal" data-target="#changepassword"><i class="halflings-icon white lock"></i></a>
-								<a href="#" class="btn-setting" data-toggle="modal" data-target="#deleteaccount"><i class="halflings-icon white ban-circle"></i></a>
-							</div>
-						</div>
-						<div class="box-content">
-							<table class="table table-striped table-bordered bootstrap-datatable datatable">
-							<thead class="goal-header">
-								<tr>
-								  <th>Username</th>
-								  <th>First Name</th>
-								  <th>Last Name</th>
-								  <th>E-Mail Address</th>
-								  <th>Date of Birth</th>
-								  <th>Gender</th>
-								</tr>
-							</thead>
-							<tbody>
-							<tr>
-								<td class="center" id="Tblusername">{{ username }}</td>
-								<td class="center" id="Tblfirstname">{{ firstname }}</td>
-								<td class="center" id="Tbllastname">{{ lastname }}</td>
-								<td class="center" id="Tblemail">{{ email }}</td>
-								<td class="center" id="Tblbirth">{{ birth }}</td>
-								<td class="center" id="Tblgender">{{ gender }}</td>
-							</tr>
-							</tbody>
-							</table>
-						</div>
-					</div>
+    <div class="row-fluid ">
+        <div class="box span12 blueNavy">
+            <div class="box-header blueNavy" data-original-title>
+                <h2 align="center"><i class="halflings-icon user white"></i><span class="break"></span>User Profile</h2>
+                <div class="box-icon">
+                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#routineModal"><i class="halflings-icon white calendar"></i></a>
+                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#editinfo"><i class="halflings-icon white edit"></i></a>
+                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#changepassword"><i class="halflings-icon white lock"></i></a>
+                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#deleteaccount"><i class="halflings-icon white ban-circle"></i></a>
                 </div>
-
-				<div class="row-fluid">
-					<div class="row-fluid">
-						<p id="successmsg" align="center" style="font-weight:bold;color:green">&nbsp;</p>
-					</div>
-				</div>
-				<div id="overlay">
-					<img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-				</div>
-                <div class="row-fluid ">
-					<div class="box span12 blueNavy">
-						<div class="box-header blueNavy" data-original-title>
-							<h2 align="center"><i class="icon-calendar white"></i><span class="break"></span>Daily Schedule Management</h2>
-						    <div class="box-icon">
-                                <a href="#" class="btn-setting" style='color:white' data-toggle="modal" data-target="#routineModal"><i class="halflings-icon white plus"></i>add recurring activity</a>
-							</div>
-                        </div>
-						<div class="box-content">
-							<table id="RoutineTable" class="table table-striped table-bordered bootstrap-datatable datatable"><thead class="goal-header">
-								<thead class='goal-header'>
-									<tr>
-									  <th style="min-width: 140px">Activity</th>
-									  <th style="min-width: 140px">Title</th>
-									  <th>Weekdays</th>
-                                      <th>Weekday Season</th>
-									  <th>Weekend</th>
-                                      <th>Weekend Season</th>
-                                      <th>Options</th>
-									</tr>
-								</thead>
-								<tbody>
-
-                                    {% for activity, activity_data in routineActivities.items %}
-
-                                        <tr id="{{ activity|addDashes }}">
-
-                                            <td>
-                                                <a class="quick-button metro circle routine-activity {{ activity_data.color }}">
-                                                    <i class="activicon-{{ activity_data.icon_classname }}"></i>
-                                                </a>
-                                            </td>
-
-                                            <td>
-                                                <p class="routine-activity-text">{{ activity }}</p>
-                                            </td>
-                                            <td>
-                                                {% for weekday_log in activity_data.Weekdays %}
-                                                    <p>{{ weekday_log }}</p>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for weekday_seasonal_log in activity_data.Weekdays_seasonality %}
-                                                    <p>{{ weekday_seasonal_log }}</p>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for weekend_log in activity_data.Weekend %}
-                                                    <p>{{ weekend_log }}</p>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for weekend_seasonal_log in activity_data.Weekend_seasonality %}
-                                                    <p>{{ weekend_seasonal_log }}</p>
-                                                {% endfor %}
-                                            </td>
-
-                                            <td>
-                                                <a class="btn btn-info" href="#" onclick="initializeEditRoutineModal(this)">
-                                                    <i class="halflings-icon edit white"></i>
-                                                </a>
-                                                <a class="btn btn-info" href="#" onclick="deleteRoutine(this)">
-                                                    <i class="halflings-icon trash white"></i>
-                                                </a>
-                                            </td>
-									    </tr>
-                                    {% endfor %}
-								</tbody>
-							</table>
-						</div>
-					</div>
-                </div>
-            	<div class="row-fluid ">
-					<div class="box span12 blueNavy">
-						<div class="box-header blueNavy" data-original-title>
-							<h2 align="center"><i class="icon-cloud white"></i><span class="break"></span>Provider Management</h2>
-						</div>
-						<div class="box-content">
-							<table id=PlacesTable" class="table table-striped table-bordered bootstrap-datatable datatable"><thead class="goal-header">
-								<thead class='goal-header'>
-									<tr>
-									  <th>Provider</th>
-									  <th>Name</th>
-									  <th>Status</th>
-									  <th>Options</th>
-									</tr>
-								</thead>
-								<tbody>
-
-                                    {% for provider_name,provider_data in providerDomValues.items %}
-                                    <tr class="connected-app {{ provider_name }}">
-										<td class="center" ><img src="{% static 'activitytracker/img/'|add:provider_name|add:'.png' %}"/></td>
-										<td class="center"><span class="connected-app-text">{{ provider_name|capitalizeFirstLetter|removeDashes }}</span></td>
-										<td class="center "><span class="connected-app-text" style="color:{{ provider_data.statusFontColor }}"><i class='{{ provider_data.statusIcon }}'></i>&nbsp;{{ provider_data.statusText }}</span></td>
-										<td class="center">
-                                            {% if provider_data.statusText == "App connected" %}
-                                            <a class="btn connected-app-button synchronize-button" onclick="synchronizeProvider('{{ provider_name }}')">Synchronize</a>
-                                            {% endif %}
-                                            <a onclick="appFunctionHandler('{{ provider_name }}')" class="btn connected-app-button {{ provider_data.buttonClassColor }}">{{ provider_data.buttonText }}</a>
-                                        </td>
-									</tr>
-                                    {% endfor %}
-                                	<tr class='disconnected-app'>
-										<td class="center" ><img src="{% static 'activitytracker/img/gmail.png' %}"/></td>
-										<td class="center"><span class="connected-app-text">Gmail</span></td>
-										<td class="center " style='color:red'><span class="connected-app-text"><i class='icon-remove-circle'></i>&nbsp;Unavailable</span></td>
-										<td class="center"><a class="btn dead connected-app-button">Unavailable</a></td>
-									</tr>
-                                    <tr class='disconnected-app'>
-										<td class="center" ><img  src="{% static 'activitytracker/img/paypal.png' %}"/></td>
-										<td class="center"><span class="connected-app-text">Paypal</span></td>
-										<td class="center " style='color:red'><span class="connected-app-text"><i class='icon-remove-circle'></i>&nbsp;Unavailable</span></td>
-										<td class="center"><a class="btn dead connected-app-button">Unavailable</a></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-                </div>
-                <div class='row-fluid'>
-                    <div class="box span12 blueNavy">
-						<div class="box-header blueNavy" data-original-title>
-							<h2 align="center"><i class="halflings-icon map-marker white"></i><span class="break"></span>Your Places</h2>
-							<div class="box-icon">
-								<a href="#" class="btn-setting" data-toggle="modal" data-target="#addPlaceModal" style="color:white"><i class="halflings-icon white plus"></i>add another</a>
-							</div>
-						</div>
-						<div class="box-content">
-							<table id="PlacesTable" class="table table-striped table-bordered bootstrap-datatable">
-								<thead class="goal-header">
-									<tr>
-										<th>Place Name</th>
-										<th>Place Address</th>
-                                        <th>Hidden Lat</th>
-                                        <th>Hidden Lng</th>
-										<th>Options</th>
-									</tr>
-								</thead>
-								<tbody>
-									<!-- data from jQuery -->
-								</tbody>
-							</table>
-						</div>
-					</div>
-                </div>
-			</div>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                <thead class="goal-header">
+                    <tr>
+                      <th>Username</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>E-Mail Address</th>
+                      <th>Date of Birth</th>
+                      <th>Gender</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="center" id="Tblusername">{{ username }}</td>
+                    <td class="center" id="Tblfirstname">{{ firstname }}</td>
+                    <td class="center" id="Tbllastname">{{ lastname }}</td>
+                    <td class="center" id="Tblemail">{{ email }}</td>
+                    <td class="center" id="Tblbirth">{{ birth }}</td>
+                    <td class="center" id="Tblgender">{{ gender }}</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
         </div>
+    </div>
 
-			<!-- Modal to delete the account -->
-			<div class="modal hide fade" id="deleteaccount">
-				<form action="{% url 'settings' %}" method="post" id="deleteaccountForm" name="deleteaccountForm" >
-					{% csrf_token %}
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Delete Account</h4>
-					</div>
-					<div class="modal-body" align="center">
-						<p>To delete your account type your password and click the "Delete" button:</p>
+    <div class="row-fluid">
+        <div class="row-fluid">
+            <p id="successmsg" align="center" style="font-weight:bold;color:green">&nbsp;</p>
+        </div>
+    </div>
+    <div class="row-fluid ">
+        <div class="box span12 blueNavy">
+            <div class="box-header blueNavy" data-original-title>
+                <h2 align="center"><i class="icon-calendar white"></i><span class="break"></span>Daily Schedule Management</h2>
+                <div class="box-icon">
+                    <a href="#" class="btn-setting" style='color:white' data-toggle="modal" data-target="#routineModal"><i class="halflings-icon white plus"></i>add recurring activity</a>
+                </div>
+            </div>
+            <div class="box-content">
+                <table id="RoutineTable" class="table table-striped table-bordered bootstrap-datatable datatable"><thead class="goal-header">
+                    <thead class='goal-header'>
+                        <tr>
+                          <th style="min-width: 140px">Activity</th>
+                          <th style="min-width: 140px">Title</th>
+                          <th>Weekdays</th>
+                          <th>Weekday Season</th>
+                          <th>Weekend</th>
+                          <th>Weekend Season</th>
+                          <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                        <div class="input-prepend row-fluid" title="Password">
-							<span class="add-on"><i class="halflings-icon lock"></i></span>
-							<input class="input-large" name="password" type="password" placeholder="current password"/>
-						</div>
+                        {% for activity, activity_data in routineActivities.items %}
 
-                        <div class="row-fluid">
-								<p id="deleteaccountmsg" align="center" style="color:red"></p>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-info" data-dismiss="modal">Cancel</a>
-						<input type="submit" class="btn btn-danger" name="submitDelete" value="Delete">
-					</div>
-				</form>
-			</div>
+                            <tr id="{{ activity|addDashes }}">
 
-    		<!-- Modal to add another place to your account -->
-    		<div class="modal hide fade" id="addPlaceModal">
-				<form action="{% url 'places' %}" method="post" id="addPlaceForm" name="addPlaceForm" style="margin-bottom:0;">
-					{% csrf_token %}
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Add a new Place</h4>
-					</div>
-					<div class="modal-body" align="center">
-						<p>First, give this place a nickname:</p>
-						<div class="input-prepend row-fluid" title="Placename">
-							<span class="add-on"><i class="halflings-icon map-marker"></i></span>
-							<input class="input-large" name="placename" type="text" placeholder="Home, Work, etc"/>
-						</div>
-                        <p>Then find it by giving the address in the map below:</p>
-                        <div>
-                           <input id="places-input" class="map-controls places-input" type="text" placeholder="Search for Places">
-							<div id="map-canvas" class="map-canvas"></div>
-                   		</div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-						<input type="button" class="btn btn-info" name="submitAddPlace" id="submitAddPlace" value="Add Place">
-					</div>
-				</form>
-			</div>
-
-			<!-- modal to edit a place -->
-    		<div class="modal hide fade" id="editPlaceModal">
-				<form action="{% url 'places' %}" method="post" id="editPlaceForm" name="editPlaceForm" style="margin-bottom:0;">
-					{% csrf_token %}
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Update Details of Place</h4>
-					</div>
-					<div class="modal-body" align="center">
-						<p>Optionally, modify the nickname:</p
-                                >
-						<div class="input-prepend row-fluid" title="Placename">
-							<span class="add-on"><i class="halflings-icon map-marker"></i></span>
-							<input class="input-large" name="placename" type="text" placeholder="Home, Work, etc"/>
-						</div>
-                        <p>Or change the location of the Place:</p>
-                        <div>
-                           <input id="places-input-2" class="map-controls places-input" type="text" placeholder="Search for Places">
-							<div id="map-canvas-2" class="map-canvas"></div>
-                   		</div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-						<input type="button" class="btn btn-info" name="submitEditPlace" id="editPlaceModalConfirm" value="Update Place">
-					</div>
-				</form>
-			</div>
-
-    		<!-- Modal to Delete a Place -->
-			<div class="modal hide fade" id="deletePlaceModal">
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Delete Place</h4>
-					</div>
-					<div class="modal-body" align="center">
-						<p>Are you sure you want to delete this place?</p>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-info" data-dismiss="modal">Cancel</a>
-						<input type="submit" class="btn btn-danger" name="submitDelete" id="deletePlaceModalConfirm" value="Delete">
-					</div>
-			</div>
-
-            <!-- Modal to modify user's daily schedule -->
-            <div class="modal hide fade" id="routineModal">
-                <form method="POST" action="#" name="routineForm" id="routineForm">
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Organize Recurring Activities</h4>
-					</div>
-					<div class="modal-body" align="center" style="padding:35px">
-
-                        <div class='diversification-border'>
-                            <p>Welcome to Activity Tracker. Tell us a bit about your habits</p>
-                        </div>
-
-                        <div class="routine-canvas">
-
-                            {% for activity, activity_data in routineActivities.iteritems %}
-
-                                <div class='routine-container' id="{{ activity|addDashes }}">
-                                    <a title="{{ activity }}" class="quick-button metro circle routine-activity {{ activity_data.color }}">
+                                <td>
+                                    <a class="quick-button metro circle routine-activity {{ activity_data.color }}">
                                         <i class="activicon-{{ activity_data.icon_classname }}"></i>
                                     </a>
-                                    <input name="routine-radiobutton" type="radio" value="{{ activity }}"/>
-                                </div>
+                                </td>
 
-                            {% endfor %}
+                                <td>
+                                    <p class="routine-activity-text">{{ activity }}</p>
+                                </td>
+                                <td>
+                                    {% for weekday_log in activity_data.Weekdays %}
+                                        <p>{{ weekday_log }}</p>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for weekday_seasonal_log in activity_data.Weekdays_seasonality %}
+                                        <p>{{ weekday_seasonal_log }}</p>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for weekend_log in activity_data.Weekend %}
+                                        <p>{{ weekend_log }}</p>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% for weekend_seasonal_log in activity_data.Weekend_seasonality %}
+                                        <p>{{ weekend_seasonal_log }}</p>
+                                    {% endfor %}
+                                </td>
 
+                                <td>
+                                    <a class="btn btn-info" href="#" onclick="initializeEditRoutineModal(this)">
+                                        <i class="halflings-icon edit white"></i>
+                                    </a>
+                                    <a class="btn btn-info" href="#" onclick="deleteRoutine(this)">
+                                        <i class="halflings-icon trash white"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid ">
+        <div class="box span12 blueNavy">
+            <div class="box-header blueNavy" data-original-title>
+                <h2 align="center"><i class="icon-cloud white"></i><span class="break"></span>Provider Management</h2>
+            </div>
+            <div class="box-content">
+                <table id=PlacesTable" class="table table-striped table-bordered bootstrap-datatable datatable"><thead class="goal-header">
+                    <thead class='goal-header'>
+                        <tr>
+                          <th>Provider</th>
+                          <th>Name</th>
+                          <th>Status</th>
+                          <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for provider_name,provider_data in providerDomValues.items %}
+                        <tr class="connected-app {{ provider_name }}">
+                            <td class="center" ><img src="{% static 'activitytracker/img/'|add:provider_name|add:'.png' %}"/></td>
+                            <td class="center"><span class="connected-app-text">{{ provider_name|capitalizeFirstLetter|removeDashes }}</span></td>
+                            <td class="center "><span class="connected-app-text" style="color:{{ provider_data.statusFontColor }}"><i class='{{ provider_data.statusIcon }}'></i>&nbsp;{{ provider_data.statusText }}</span></td>
+                            <td class="center">
+                                {% if provider_data.statusText == "App connected" %}
+                                <a class="btn connected-app-button synchronize-button" onclick="synchronizeProvider('{{ provider_name }}')">Synchronize</a>
+                                {% endif %}
+                                <a onclick="appFunctionHandler('{{ provider_name }}')" class="btn connected-app-button {{ provider_data.buttonClassColor }}">{{ provider_data.buttonText }}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr class='disconnected-app'>
+                            <td class="center" ><img src="{% static 'activitytracker/img/gmail.png' %}"/></td>
+                            <td class="center"><span class="connected-app-text">Gmail</span></td>
+                            <td class="center " style='color:red'><span class="connected-app-text"><i class='icon-remove-circle'></i>&nbsp;Unavailable</span></td>
+                            <td class="center"><a class="btn dead connected-app-button">Unavailable</a></td>
+                        </tr>
+                        <tr class='disconnected-app'>
+                            <td class="center" ><img  src="{% static 'activitytracker/img/paypal.png' %}"/></td>
+                            <td class="center"><span class="connected-app-text">Paypal</span></td>
+                            <td class="center " style='color:red'><span class="connected-app-text"><i class='icon-remove-circle'></i>&nbsp;Unavailable</span></td>
+                            <td class="center"><a class="btn dead connected-app-button">Unavailable</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class='row-fluid'>
+        <div class="box span12 blueNavy">
+            <div class="box-header blueNavy" data-original-title>
+                <h2 align="center"><i class="halflings-icon map-marker white"></i><span class="break"></span>Your Places</h2>
+                <div class="box-icon">
+                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#addPlaceModal" style="color:white"><i class="halflings-icon white plus"></i>add another</a>
+                </div>
+            </div>
+            <div class="box-content">
+                <table id="PlacesTable" class="table table-striped table-bordered bootstrap-datatable">
+                    <thead class="goal-header">
+                        <tr>
+                            <th>Place Name</th>
+                            <th>Place Address</th>
+                            <th>Hidden Lat</th>
+                            <th>Hidden Lng</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- data from jQuery -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to delete the account -->
+    <div class="modal hide fade" id="deleteaccount">
+        <form action="{% url 'settings' %}" method="post" id="deleteaccountForm" name="deleteaccountForm" >
+            {% csrf_token %}
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Delete Account</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <p>To delete your account type your password and click the "Delete" button:</p>
+
+                <div class="input-prepend row-fluid" title="Password">
+                    <span class="add-on"><i class="halflings-icon lock"></i></span>
+                    <input class="input-large" name="password" type="password" placeholder="current password"/>
+                </div>
+
+                <div class="row-fluid">
+                        <p id="deleteaccountmsg" align="center" style="color:red"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-info" data-dismiss="modal">Cancel</a>
+                <input type="submit" class="btn btn-danger" name="submitDelete" value="Delete">
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal to add another place to your account -->
+    <div class="modal hide fade" id="addPlaceModal">
+        <form action="{% url 'places' %}" method="post" id="addPlaceForm" name="addPlaceForm" style="margin-bottom:0;">
+            {% csrf_token %}
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Add a new Place</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <p>First, give this place a nickname:</p>
+                <div class="input-prepend row-fluid" title="Placename">
+                    <span class="add-on"><i class="halflings-icon map-marker"></i></span>
+                    <input class="input-large" name="placename" type="text" placeholder="Home, Work, etc"/>
+                </div>
+                <p>Then find it by giving the address in the map below:</p>
+                <div>
+                   <input id="places-input" class="map-controls places-input" type="text" placeholder="Search for Places">
+                    <div id="map-canvas" class="map-canvas"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+                <input type="button" class="btn btn-info" name="submitAddPlace" id="submitAddPlace" value="Add Place">
+            </div>
+        </form>
+    </div>
+
+    <!-- modal to edit a place -->
+    <div class="modal hide fade" id="editPlaceModal">
+        <form action="{% url 'places' %}" method="post" id="editPlaceForm" name="editPlaceForm" style="margin-bottom:0;">
+            {% csrf_token %}
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Update Details of Place</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <p>Optionally, modify the nickname:</p
+                        >
+                <div class="input-prepend row-fluid" title="Placename">
+                    <span class="add-on"><i class="halflings-icon map-marker"></i></span>
+                    <input class="input-large" name="placename" type="text" placeholder="Home, Work, etc"/>
+                </div>
+                <p>Or change the location of the Place:</p>
+                <div>
+                   <input id="places-input-2" class="map-controls places-input" type="text" placeholder="Search for Places">
+                    <div id="map-canvas-2" class="map-canvas"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+                <input type="button" class="btn btn-info" name="submitEditPlace" id="editPlaceModalConfirm" value="Update Place">
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal to Delete a Place -->
+    <div class="modal hide fade" id="deletePlaceModal">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Delete Place</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <p>Are you sure you want to delete this place?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-info" data-dismiss="modal">Cancel</a>
+                <input type="submit" class="btn btn-danger" name="submitDelete" id="deletePlaceModalConfirm" value="Delete">
+            </div>
+    </div>
+
+    <!-- Modal to modify user's daily schedule -->
+    < class="modal hide fade" id="routineModal">
+        <form method="POST" action="#" name="routineForm" id="routineForm">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Organize Recurring Activities</h4>
+            </div>
+            <div class="modal-body" align="center" style="padding:35px">
+
+                <p class='diversification-border'>Welcome to Activity Tracker. Tell us a bit about your habits</p>
+                <div class="routine-canvas">
+
+                    {% for activity, activity_data in routineActivities.iteritems %}
+
+                        <div class='routine-container' id="{{ activity|addDashes }}">
+                            <a title="{{ activity }}" class="quick-button metro circle routine-activity {{ activity_data.color }}">
+                                <i class="activicon-{{ activity_data.icon_classname }}"></i>
+                            </a>
+                            <input name="routine-radiobutton" type="radio" value="{{ activity }}"/>
                         </div>
 
-                        {% for extra_activity in routineExtraActivities%}
+                    {% endfor %}
+                </div>
 
-                            {% if forloop.counter0|divisibleby:5 %}<div class="hidden routine-canvas routine-canvas-show-more">{% endif %}
+                {% for extra_activity in routineExtraActivities%}
 
-                                <div class='routine-container' id="{{ extra_activity.activity|addDashes }}">
-                                    <a title="{{ extra_activity.activity }}" class="quick-button metro circle routine-activity {{ extra_activity.color }}">
-                                        <i class="activicon-{{ extra_activity.icon_classname }}"></i>
-                                    </a>
-                                    <input name="routine-radiobutton" type="radio" value="{{ extra_activity.activity }}"/>
-                                </div>
-                            {% if forloop.counter|divisibleby:5 %} </div> {% endif %}
+                    {% if forloop.counter0|divisibleby:5 %}<div class="hidden routine-canvas routine-canvas-show-more">{% endif %}
 
-                        {% endfor %}
-                        {% if not routineExtraActivities|length|divisibleby:5 %} </div> {% endif %}
+                        <div class='routine-container' id="{{ extra_activity.activity|addDashes }}">
+                            <a title="{{ extra_activity.activity }}" class="quick-button metro circle routine-activity {{ extra_activity.color }}">
+                                <i class="activicon-{{ extra_activity.icon_classname }}"></i>
+                            </a>
+                            <input name="routine-radiobutton" type="radio" value="{{ extra_activity.activity }}"/>
+                        </div>
+                    {% if forloop.counter|divisibleby:5 %} </div> {% endif %}
 
-                        <a href='#'  class='underlined-link' id="routineInsertMore" onclick="routineInsertMore()">Show More</a>
-                            <div class="weekday-controls" style="margin-top:35px">
-                                <i class="glyphicons-icon clock modal-icon"></i>
-                                <select id="weekday-times" multiple="multiple" class="input-modal tokenize" name="weekday-times"></select>
-                                <div style="margin-left:20px;margin-top:10px">
-                                    <span id="weekday-range-from">08:00</span>&nbsp;&nbsp;&nbsp;
-                                    <input id="weekday-range-select" data-slider-id="weekday-slider" type="text">
-                                    &nbsp;&nbsp;&nbsp;<span id="weekday-range-to">17:15</span>
-                                </div>
-                                <div style="margin-top:10px">
-                                    <input type="button" id="log-weekday-time" value="Log time" class="btn btn-info"/>
-                                </div>
-                            </div>
-                            <div id='weekend-controls' class=routine-controls'>
-                                <div style="margin: 30px 0">
-                                    <label for="weekend">Weekends</label>
-                                    <a href="#"><i id='weekend' class="icon-chevron-down"></i></a>
-                                </div>
-                                <div class="controls hidden weekend-input">
-                                    <i class="glyphicons-icon clock modal-icon"></i>
-                                    <select id="weekend-times" multiple="multiple" class="input-modal tokenize" name="weekend-times"></select>
-                                    <div class='range-picker'>
-                                        <span id="weekend-range-from">08:00</span>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <input id="weekend-range-select" data-slider-id="weekend-slider" type="text">
-                                        &nbsp;&nbsp;&nbsp;
-                                        <span id="weekend-range-to">17:15</span>
-                                    </div>
-                                    <input type="button" id="log-weekend-time" name='range-logger' value="Log time" class="btn btn-info"/>
-                                </div>
-                            </div>
-                            <div id='seasonality-controls' class=routine-controls'>
-                                <div>
-                                    <label for="seasonality">Seasonalities</label>
-                                    <a href="#"><i id='seasonality' class="icon-chevron-down"></i></a>
-                                </div>
-                                <div class="controls seasonality-input hidden diversification-border">
-                                    <i class="glyphicons-icon calendar modal-icon"></i>
-                                    <input placeholder="Weekday season start..." type="text" name="weekday_seasonality_start" class="datepicker">
-                                    <i class="glyphicons-icon calendar modal-icon"></i>
-                                    <input placeholder="Weekday season end..." type="text" name="weekday_seasonality_end" class="datepicker">
-                                </div>
-                                <div class="controls seasonality-input hidden">
-                                    <i class="glyphicons-icon calendar modal-icon"></i>
-                                    <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_start" class="datepicker">
-                                    <i class="glyphicons-icon calendar modal-icon"></i>
-                                    <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_end" class="datepicker">
-                                </div>
-                            </div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-edit" data-dismiss="modal">Cancel</a>
-                        <button type="submit" class="btn btn-info" id="submitRoutine" value="add">Save</button>
-					</div>
-                </form>
-			</div>
+                {% endfor %}
+                {% if not routineExtraActivities|length|divisibleby:5 %} </div> {% endif %}
 
+                <a href='#'  class='underlined-link' id="routineInsertMore" onclick="routineInsertMore()">Show More</a>
+                <div class="weekday-controls" style="margin-top:35px">
+                    <i class="glyphicons-icon clock modal-icon"></i>
+                    <select id="weekday-times" multiple="multiple" class="input-modal tokenize" name="weekday-times"></select>
+                    <div style="margin-left:20px;margin-top:10px">
+                        <span id="weekday-range-from">08:00</span>&nbsp;&nbsp;&nbsp;
+                        <input id="weekday-range-select" data-slider-id="weekday-slider" type="text">
+                        &nbsp;&nbsp;&nbsp;<span id="weekday-range-to">17:15</span>
+                    </div>
+                    <div style="margin-top:10px">
+                        <input type="button" id="log-weekday-time" value="Log time" class="btn btn-info"/>
+                    </div>
+                </div>
+                <div id='weekend-controls' class=routine-controls'>
+                    <div style="margin: 30px 0">
+                        <label for="weekend">Weekends</label>
+                        <a href="#"><i id='weekend' class="icon-chevron-down"></i></a>
+                    </div>
+                    <div class="controls hidden weekend-input">
+                        <i class="glyphicons-icon clock modal-icon"></i>
+                        <select id="weekend-times" multiple="multiple" class="input-modal tokenize" name="weekend-times"></select>
+                        <div class='range-picker'>
+                            <span id="weekend-range-from">08:00</span>
+                            &nbsp;&nbsp;&nbsp;
+                            <input id="weekend-range-select" data-slider-id="weekend-slider" type="text">
+                            &nbsp;&nbsp;&nbsp;
+                            <span id="weekend-range-to">17:15</span>
+                        </div>
+                        <input type="button" id="log-weekend-time" name='range-logger' value="Log time" class="btn btn-info"/>
+                    </div>
+                </div>
+                <div id='seasonality-controls' class=routine-controls'>
+                    <div>
+                        <label for="seasonality">Seasonalities</label>
+                        <a href="#"><i id='seasonality' class="icon-chevron-down"></i></a>
+                    </div>
+                    <div class="controls seasonality-input hidden diversification-border">
+                        <i class="glyphicons-icon calendar modal-icon"></i>
+                        <input placeholder="Weekday season start..." type="text" name="weekday_seasonality_start" class="datepicker">
+                        <i class="glyphicons-icon calendar modal-icon"></i>
+                        <input placeholder="Weekday season end..." type="text" name="weekday_seasonality_end" class="datepicker">
+                    </div>
+                    <div class="controls seasonality-input hidden">
+                        <i class="glyphicons-icon calendar modal-icon"></i>
+                        <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_start" class="datepicker">
+                        <i class="glyphicons-icon calendar modal-icon"></i>
+                        <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_end" class="datepicker">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+                <a href="#" class="btn btn-edit" data-dismiss="modal">Cancel</a>
+                <button type="submit" class="btn btn-info" id="submitRoutine" value="add">Save</button>
+        </div>
+    </div>
 
+    <!-- Modal for User's info editing -->
+    <div class="modal hide fade" id="editinfo">
+        <form action="{% url 'settings' %}" method="post" name="editinfoForm" id="editinfoForm">
+            {% csrf_token %}
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Edit Account Information</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <p> Here you can modify all kind of personal information</p>
+                <br/>
+                <div class="input-prepend row-fluid" title="Username">
+                    <span class="add-on"><i class="icon-user"></i></span>
+                    <input class="input-large " name="username" type="text" value="{{ username }}" />
+                </div>
+                <div class="input-prepend row-fluid" title="FirstName">
+                    <span class="add-on"><i class="icon-user"></i></span>
+                    <input class="input-large " name="firstname" type="text" value="{{ firstname }}" />
+                </div>
+                <div class="input-prepend row-fluid" title="LastName">
+                    <span class="add-on"><i class="icon-user"></i></span>
+                    <input class="input-large " name="lastname" type="text" value="{{ lastname }}" />
+                </div>
+                <div class="input-prepend row-fluid" title="E-mail">
+                    <span class="add-on"><i class="icon-envelope-alt"></i></span>
+                    <input class="input-large "  disabled name="email" type="text" value="{{ email }}"/>
+                </div>
+                <div class="input-prepend row-fluid" title="UserBirthday">
+                    <span class="add-on"><i class="icon-calendar"></i></span>
+                    <input placeholder="{{ birth }}" type="text" name="birthday" value ="{{ birth }}"class="datepicker input-large" >
+                </div>
+                <div class=" row-fluid" title="Gender">
+                {% if gender == 'M' %}
+                    <select name="gender" class="input-small">
+                    <option value="M" selected >Male</option>
+                    <option value="F">Female</option>
+                    </select>
+                {% else %}
+                    <select name="gender" class="input-small">
+                    <option value="M">Male</option>
+                    <option value="F" selected >Female</option>
+                    </select>
+                {% endif %}
+                </div>
+                <div class="row-fluid">
+                        <p id="editinfomsg" align="center" style="color:red"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+                <input type="submit" class="btn btn-info" name="submitEdit" value="Update">
+            </div>
+        </form>
+    </div>
 
+    <!-- Modal to change the password -->
+    <div class="modal hide fade" id="changepassword">
+        <form action="{% url 'settings' %}" method="post" id="passchangeForm" name="passchangeForm">
+            {% csrf_token %}
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4>Password Change</h4>
+            </div>
+            <div class="modal-body" align="center">
+                {% if social_login %}
+                <p>Set a password, so you can enter without using social media:</p>
+                <p>(Performing this will log you out of all devices for safety)</p>
+                {% else %}
+                <p>Change your password easily by filling the fields bellow:</p>
+                <p>(Performing this will log you out of all devices)</p>
+                {% endif %}
 
-
-			<!-- Modal for User's info editing -->
-			<div class="modal hide fade" id="editinfo">
-				<form action="{% url 'settings' %}" method="post" name="editinfoForm" id="editinfoForm">
-					{% csrf_token %}
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Edit Account Information</h4>
-					</div>
-					<div class="modal-body" align="center">
-						<p> Here you can modify all kind of personal information</p>
-						<br/>
-                    	<div class="input-prepend row-fluid" title="Username">
-							<span class="add-on"><i class="icon-user"></i></span>
-							<input class="input-large " name="username" type="text" value="{{ username }}" />
-						</div>
-						<div class="input-prepend row-fluid" title="FirstName">
-							<span class="add-on"><i class="icon-user"></i></span>
-							<input class="input-large " name="firstname" type="text" value="{{ firstname }}" />
-						</div>
-						<div class="input-prepend row-fluid" title="LastName">
-							<span class="add-on"><i class="icon-user"></i></span>
-							<input class="input-large " name="lastname" type="text" value="{{ lastname }}" />
-						</div>
-						<div class="input-prepend row-fluid" title="E-mail">
-							<span class="add-on"><i class="icon-envelope-alt"></i></span>
-							<input class="input-large "  disabled name="email" type="text" value="{{ email }}"/>
-						</div>
-						<div class="input-prepend row-fluid" title="UserBirthday">
-							<span class="add-on"><i class="icon-calendar"></i></span>
-							<input placeholder="{{ birth }}" type="text" name="birthday" value ="{{ birth }}"class="datepicker input-large" >
-						</div>
-						<div class=" row-fluid" title="Gender">
-						{% if gender == 'M' %}
-							<select name="gender" class="input-small">
-							<option value="M" selected >Male</option>
-							<option value="F">Female</option>
-							</select>
-						{% else %}
-							<select name="gender" class="input-small">
-							<option value="M">Male</option>
-							<option value="F" selected >Female</option>
-							</select>
-						{% endif %}
-						</div>
-						<div class="row-fluid">
-								<p id="editinfomsg" align="center" style="color:red"></p>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-						<input type="submit" class="btn btn-info" name="submitEdit" value="Update">
-					</div>
-				</form>
-			</div>
-
-			<!-- Modal to change the password -->
-			<div class="modal hide fade" id="changepassword">
-				<form action="{% url 'settings' %}" method="post" id="passchangeForm" name="passchangeForm">
-					{% csrf_token %}
-					<div class="modal-header ">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h4>Password Change</h4>
-					</div>
-					<div class="modal-body" align="center">
-                        {% if social_login %}
-                        <p>Set a password, so you can enter without using social media:</p>
-                        <p>(Performing this will log you out of all devices for safety)</p>
-						{% else %}
-                        <p>Change your password easily by filling the fields bellow:</p>
-                        <p>(Performing this will log you out of all devices)</p>
-                        {% endif %}
-
-						<div class="input-prepend row-fluid {% if social_login %}hidden{% endif %}" title="Password">
-							<span class="add-on"><i class="halflings-icon lock"></i></span>
-							<input class="input-large " name="old_password" type="password" placeholder="current password"/>
-						</div>
-						<div class="input-prepend row-fluid" title="Password">
-							<span class="add-on"><i class="halflings-icon lock"></i></span>
-							<input class="input-large " name="new_password" type="password" placeholder="new password"/>
-						</div>
-						<div class="input-prepend row-fluid" title="Password">
-							<span class="add-on"><i class="halflings-icon lock"></i></span>
-							<input class="input-large " name="new_password_repeat" type="password" placeholder="repeat new password"/>
-						</div>
-						<div class="row-fluid">
-								<p id="passchangemsg" align="center" style="color:red"></p>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-						<input type="submit" class="btn btn-info" name="submitChangepass" value="Change">
-					</div>
-				</form>
-			</div>
-        	<!-- END of modals -> start of Google Maps attempt -->
-	</div>
-	<!-- END of Modal for user's settings -->
-
-	<div class="clearfix"></div>
+                <div class="input-prepend row-fluid {% if social_login %}hidden{% endif %}" title="Password">
+                    <span class="add-on"><i class="halflings-icon lock"></i></span>
+                    <input class="input-large " name="old_password" type="password" placeholder="current password"/>
+                </div>
+                <div class="input-prepend row-fluid" title="Password">
+                    <span class="add-on"><i class="halflings-icon lock"></i></span>
+                    <input class="input-large " name="new_password" type="password" placeholder="new password"/>
+                </div>
+                <div class="input-prepend row-fluid" title="Password">
+                    <span class="add-on"><i class="halflings-icon lock"></i></span>
+                    <input class="input-large " name="new_password_repeat" type="password" placeholder="repeat new password"/>
+                </div>
+                <div class="row-fluid">
+                        <p id="passchangemsg" align="center" style="color:red"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
+                <input type="submit" class="btn btn-info" name="submitChangepass" value="Change">
+            </div>
+        </form>
+    </div>
+        <!-- END of modals -> start of Google Maps attempt -->
 {% endblock %}
 
 {% block js %}

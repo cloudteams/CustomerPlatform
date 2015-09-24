@@ -3,13 +3,17 @@
 {% load custom_templates %}
 
 {% block content %}
-				<div class="accountOptions-box" align="center">
-                        {% if verification_successful %}
-                        <p style="color:green">You have successfully verified your e-mail address! You will be redirected in a jiffy</p>
-                        <script>setTimeout(function(){ window.location = '{% url 'login' %}'; }, 4000);</script>
-                        {% else %}
-                        <p style="color:red">Verification failed. Make sure you have visited the correct URL.</p>
-                        {% endif %}
-                        <p>Back to <a href="{% url 'login' %}">Login page</a></p>
-				</div><!--/span-->
+
+    <div class="accountOptions-box" align="center">
+
+        {% if verification_successful %}
+            <p style="color:green">You have successfully verified your e-mail address! You will be redirected in a jiffy</p>
+            <script>setTimeout(function(){ window.location = '{% url 'login' %}'; }, 4000);</script>
+        {% else %}
+            <p style="color:red">Verification failed. Make sure you have visited the correct URL.</p>
+        {% endif %}
+
+        <p>Back to <a href="{% url 'login' %}">Login page</a></p>
+    </div>
+
 {% endblock %}

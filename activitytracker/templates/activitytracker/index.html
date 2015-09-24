@@ -6,185 +6,170 @@
 {% endblock %}
 
 {% block content %}
-			<ul class="breadcrumb">
-				<li>
-					<i class="icon-home"></i>
-					<a href="{% url 'index' %}">Home</a>
-					<i class="icon-angle-right"></i>
-				</li>
-				<li><a href="#">History</a></li>
-			</ul>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'index' %}">Home</a>
+            <i class="icon-angle-right"></i>
+        </li>
+        <li><a href="#">History</a></li>
+    </ul>
 
-			<div class="row-fluid">
-                <!-- CALENDAR---------------------------------------------- -->
-				<div class="row-fluid">
-					<div class="box span12 calendar-centered blueNavy">
-						<div class="box-header" data-original-title>
-						  <h2><i class="halflings-icon white calendar"></i><span class="break"></span>Calendar</h2>
-						</div>
-						<div class="box-content">
-							<div id="main_calendar" class="span9"></div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
+    <!-- CALENDAR------------------------------------------------->
+    <div class="row-fluid">
+        <div class="box span12 calendar-centered blueNavy">
+            <div class="box-header" data-original-title>
+              <h2><i class="halflings-icon white calendar"></i><span class="break"></span>Calendar</h2>
             </div>
-
-	        <!-- CALENDAR---------------------------------------------- -->
-            <!--- Chart start -->
-            <div class="span12" id="activitylist" style="margin-left:0">
-                <div class="span6b">
-                	<div id="overlay">
-                        <img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-					</div>
-
-                    <div class='spanHeader blueNavy' style="height:37px;margin:0px 0px 27px 0px;color:white">
-						<form id="groupForm" action="{% url 'getgroupedactivities' %}" method="POST">
-							{% csrf_token %}
-							<span style="margin-left:15px">
-                                Group common
-                                <input type ="checkbox" id="groupcheckbox" name="group-activities" checked onChange="GroupUngroupSort()"/>
-                             </span>
-							<span class="sort-activities">
-								|&nbsp;&nbsp;Sort by:
-									<select name="sort-activities" id="sortdropdown" onchange="GroupUngroupSort()" >
-										<option value="Activity">Activity</option>
-										<option value="Category">Category</option>
-										<option value="Time">Time</option>
-									</select>
-							</span>
-						</form>
-                    </div>
-                    <div class="row-fluid"><!--content for 1st row--></div>
-                    <div class="row-fluid"><!--content for 2nd row--></div>
-                    <div class="row-fluid"><!--content for 3rd row--></div>
-                </div>
-
-
-				<!--- Chart -->
-				<div class="box span5b blueNavy" style="margin-left:0;height:561px">
-					<div class="box-header" data-original-title>
-						<h2><i class="halflings-icon tasks white"></i><span class="break" ></span>Activity Overview</h2>
-					</div>
-					<div class="box-content" id="donut-canvas">
-						 <div id="donutchart" ></div>
-					</div>
-			   </div>
-
-
-			</div>
-		</div>
-        <div class="span10" id="content-rest" style="padding-right:0;padding-top:0">
-
+            <div class="box-content">
+                <div id="main_calendar" class="span9"></div>
+            </div>
         </div>
-   </div>
-  </div><!--/container-fluid-full-->
+    </div>
+    <!-- CALENDAR---------------------------------------------- -->
+    <!--- Chart start -->
+    <div class="span12" id="activitylist" style="margin-left:0">
+        <div class="span6b">
+            <div class='spanHeader blueNavy' style="height:37px;margin:0px 0px 27px 0px;color:white">
+                <form id="groupForm" action="{% url 'getgroupedactivities' %}" method="POST">
+                    {% csrf_token %}
+                    <span style="margin-left:15px">
+                        Group common
+                        <input type ="checkbox" id="groupcheckbox" name="group-activities" checked onChange="GroupUngroupSort()"/>
+                     </span>
+                    <span class="sort-activities">
+                        |&nbsp;&nbsp;Sort by:
+                            <select name="sort-activities" id="sortdropdown" onchange="GroupUngroupSort()" >
+                                <option value="Activity">Activity</option>
+                                <option value="Category">Category</option>
+                                <option value="Time">Time</option>
+                            </select>
+                    </span>
+                </form>
+            </div>
+            <div class="row-fluid"><!--content for 1st row--></div>
+            <div class="row-fluid"><!--content for 2nd row--></div>
+            <div class="row-fluid"><!--content for 3rd row--></div>
+        </div>
+
+
+        <!--- Chart -->
+        <div class="box span5b blueNavy" style="margin-left:0;height:561px">
+            <div class="box-header" data-original-title>
+                <h2><i class="halflings-icon tasks white"></i><span class="break" ></span>Activity Overview</h2>
+            </div>
+            <div class="box-content" id="donut-canvas">
+                 <div id="donutchart" ></div>
+            </div>
+       </div>
+    </div>
+    <div class="span10" id="content-rest" style="padding-right:0;padding-top:0"></div>
 
 	<!------------------------------------------- END OF ACTIVITIES , START OF MODALS ----------------------------------------------------->
     <div class="modal hide fade" id="addActivityModal">
         <form action="{% url 'addactivity' %}" method="post" name="addForm" id="addForm" style="margin-bottom:0;">
             {% csrf_token %}
-					<div class="modal-header box-header blueNavy">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>New activity details</h2>
-					</div>
-					<div class="modal-body">
-						<div class="control-group">
-                            <a href="#" id="activitylistlink" onclick="return ListTheActivities()">Click here for a full list of available Activities</a>
-							<div class="controls activity-input">
-								<i class="glyphicons-icon star modal-icon"></i>
-								<select data-placeholder="Search for activities..." data-rel="chosen" id="name_of_activity" name="name_of_activity" class="analytics-filter input-modal span6">
-								{% for category,list in activity_data.items %}
-                                <option value=''></option>
-								<optgroup label="{{ category }}">
-									{% for name in list %}
-								    <option>{{ name }}</option>
-									{% endfor %}
-								</optgroup>
-								{% endfor %}
-							</select>
-                            </div>
+            <div class="modal-header box-header blueNavy">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>New activity details</h2>
+            </div>
+            <div class="modal-body">
+                <div class="control-group">
+                    <a href="#" id="activitylistlink" onclick="return ListTheActivities()">Click here for a full list of available Activities</a>
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon star modal-icon"></i>
+                        <select data-placeholder="Search for activities..." data-rel="chosen" id="name_of_activity" name="name_of_activity" class="analytics-filter input-modal span6">
+                        {% for category,list in activity_data.items %}
+                        <option value=''></option>
+                        <optgroup label="{{ category }}">
+                            {% for name in list %}
+                            <option>{{ name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon calendar modal-icon"></i>
+                        <input placeholder="Insert start date..." type="text" name="start_date" class="input-modal datepicker" >
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon calendar modal-icon"></i>
+                        <input placeholder="Insert end date..." type="text" name="end_date" class="input-modal datepicker" >
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon clock modal-icon"></i>
+                        <div class="input-prepend">
+                            <span class="add-on">from </span><input id="prependedInput" data-default="00:00" name="start_time" class="clockpicker input-large" data-autoclose="true" size="16" type="text" placeholder="HH:MM">
                         </div>
-                        <div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon calendar modal-icon"></i>
-								<input placeholder="Insert start date..." type="text" name="start_date" class="input-modal datepicker" >
-							</div>
-						</div>
-						<div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon calendar modal-icon"></i>
-								<input placeholder="Insert end date..." type="text" name="end_date" class="input-modal datepicker" >
-							</div>
-						</div>
-						<div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon clock modal-icon"></i>
-                            	<div class="input-prepend">
-									<span class="add-on">from </span><input id="prependedInput" data-default="00:00" name="start_time" class="clockpicker input-large" data-autoclose="true" size="16" type="text" placeholder="HH:MM">
-                           		</div>
-							</div>
-						</div>
-						<div class="control-group">
-							<div class="controls activity-input">
-							  <i class="glyphicons-icon history modal-icon"></i>
-							  <div class="input-prepend">
-								  <span class="add-on">up to</span><input id="end_time" name="end_time" class="input-large clockpicker" data-autoclose="true" size="16" type="text" placeholder="HH:MM">
-							  </div>
-							</div>
-						</div>
-                    	<div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon cup modal-icon"></i>
-								<input placeholder="Any goal at all?" type="text" name="goal" autocomplete='off'  id="goalinput" style="width:237px">
-								<div id="goalstatus" class="hidden">
-									<input type="radio" class="" name="goalstatus" value="Reached" id="Reached" />
-									<label for="Reached" style='color:green'>Reached</label>
-									<input type="radio" class="" name="goalstatus" value="InProgress" id="InProgress" checked="checked"/>
-									<label for="InProgress" style='color:orange'>In Progress</label>
-									<input type="radio" class="" name="goalstatus" value="Failed" id="Failed" />
-									<label for="Failed" style='color:red'>Failed</label>
-								</div>
-                            </div>
-						</div>
-                    	<div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon ok modal-icon"></i>
-								 <input placeholder="What did it result into?" type="text" name="result" autocomplete='off'  id="result" style="width:237px">
-                            </div>
-						</div>
-						<div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon group modal-icon"></i>
-								 <select id="friends" multiple="multiple" class="input-modal" name="friends">
-                                     {% for friend in list_of_friends %}
-                                     <option>{{ friend }}</option>
-                                     {% endfor %}
-                                 </select>
-                            </div>
-						</div>
-						<div class="control-group">
-							<div class="controls activity-input">
-								<i class="glyphicons-icon claw_hammer modal-icon"></i>
-                                <select id="tools" multiple="multiple" class="input-modal" name="tools">
-                                    {% for object in list_of_objects %}
-                                     <option>{{ object }}</option>
-                                     {% endfor %}
-                                </select>
-                            </div>
-						</div>
-                        <div class="control-group">
-                            <div class="controls activity-input">
-                                <i class="glyphicons-icon google_maps modal-icon"></i>
-								<input id="places-input" style="width:237px" name="location" type="text" placeholder="Search for Places">
-                      		</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                      <i class="glyphicons-icon history modal-icon"></i>
+                      <div class="input-prepend">
+                          <span class="add-on">up to</span><input id="end_time" name="end_time" class="input-large clockpicker" data-autoclose="true" size="16" type="text" placeholder="HH:MM">
+                      </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon cup modal-icon"></i>
+                        <input placeholder="Any goal at all?" type="text" name="goal" autocomplete='off'  id="goalinput" style="width:237px">
+                        <div id="goalstatus" class="hidden">
+                            <input type="radio" class="" name="goalstatus" value="Reached" id="Reached" />
+                            <label for="Reached" style='color:green'>Reached</label>
+                            <input type="radio" class="" name="goalstatus" value="InProgress" id="InProgress" checked="checked"/>
+                            <label for="InProgress" style='color:orange'>In Progress</label>
+                            <input type="radio" class="" name="goalstatus" value="Failed" id="Failed" />
+                            <label for="Failed" style='color:red'>Failed</label>
                         </div>
-                        <div id="map-canvas" class="map-canvas"></div>
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
-						<input type="button" class="btn btn-danger" value="Add Activity" id="addActivityModalSubmit"/>
-					</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon ok modal-icon"></i>
+                         <input placeholder="What did it result into?" type="text" name="result" autocomplete='off'  id="result" style="width:237px">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon group modal-icon"></i>
+                         <select id="friends" multiple="multiple" class="input-modal" name="friends">
+                             {% for friend in list_of_friends %}
+                             <option>{{ friend }}</option>
+                             {% endfor %}
+                         </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon claw_hammer modal-icon"></i>
+                        <select id="tools" multiple="multiple" class="input-modal" name="tools">
+                            {% for object in list_of_objects %}
+                             <option>{{ object }}</option>
+                             {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls activity-input">
+                        <i class="glyphicons-icon google_maps modal-icon"></i>
+                        <input id="places-input" style="width:237px" name="location" type="text" placeholder="Search for Places">
+                    </div>
+                </div>
+                <div id="map-canvas" class="map-canvas"></div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+                <input type="button" class="btn btn-danger" value="Add Activity" id="addActivityModalSubmit"/>
+            </div>
         </form>
     </div>
     <!-- END of Modal for adding activity -->
