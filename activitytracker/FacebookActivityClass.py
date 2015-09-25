@@ -25,7 +25,7 @@ class FacebookActivity(OAuth2Validation):
                 activity_performed = Activity.objects.get(activity_name="Status Update")
 
             elif media['type'] == "photo" and media['status_type'] == 'added_photo':
-                activity_performed = Activity.objects.get(activity_name="Status Update")
+                activity_performed = Activity.objects.get(activity_name="Image Upload")
 
             elif media['type'] == "video" and media['status_type'] == 'added_video':
                 activity_performed = Activity.objects.get(activity_name="Video Upload")
@@ -53,7 +53,8 @@ class FacebookActivity(OAuth2Validation):
             else:
                 location_lat, location_lng, location_address = None, None, ''
 
-            object_used = "Facebook" + ',Smartphone' if media['status_type'] == 'mobile_status_update' else ''
+            object_used = 'Facebook'
+            object_used += ',Smartphone' if media['status_type'] == 'mobile_status_update' else ''
 
             goal = ''
             goal_status = None
@@ -63,16 +64,18 @@ class FacebookActivity(OAuth2Validation):
 
             tags = list()
 
-            for key, tag_list in media['story_tags']:
-                for tag in tag_list:
-                    tags.append(tag['name'])
+            if 'story_tags' in media:
+                for key, tag_list in media['story_tags'].iteritems():
+                    for tag in tag_list:
+                        tags.append(tag['name'])
 
-            for key, tag_list in media['with_tags']:
-                for tag in tag_list:
-                    tags.append(tag['name'])
+            if 'with_tags' in media:
+                for key, tag_list in media['with_tags'].iteritems():
+                    for tag in tag_list:
+                        tags.append(tag['name'])
 
             tags = list(set(tags))
-            tags.remove('')
+            tags.remove('') if '' in tags else True
             #tags.remove('username')
 
             friends = ','.join(tags)
@@ -97,7 +100,7 @@ class FacebookActivity(OAuth2Validation):
             if (_max_id > media['id']) or (_max_id == 0):
                 _max_id = media['id']
 
-            media_url = 'www.facebook.com/' + media['id']
+            media_url = 'https://www.facebook.com/' + media['id']
             createActivityLinks(provider=self.PROVIDER.lower(),
                                 instance=performs_instance,
                                 provider_instance_id=str(media['id']),
@@ -116,7 +119,7 @@ class FacebookActivity(OAuth2Validation):
         }
 
         if self.provider_data['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
-            params['since'] = time.mktime(datetime.datetime.strptime(
+            params['since'] = time.mktime(datetime.strptime(
                                 self.provider_data['last_updated'],
                                 "%Y-%m-%d %H:%M:%S"
                               ).timetuple())
@@ -140,8 +143,8 @@ class FacebookActivity(OAuth2Validation):
             if status == "Barrier Reached":
                 break
 
-            response = requests.get(url=feed['paging']['next']).json()
-
+            response = requests.get(url=response['paging']['next']).json()
+            print response
         self.user_social_instance.save()
 
         # I still need to get the checkins, both personal and from other people. Also need access to posts of photos
