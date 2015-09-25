@@ -40,28 +40,19 @@
 	<link rel="shortcut icon" type="image/icon" href="/static/activitytracker/img/favicon.ico"/>
 	<!-- end: Favicon -->
 
-
-	<style type="text/css">
-			body { background: url({% static 'activitytracker/img/bg-login.jpg' %}) !important; }
-        	.container-fluid-full { background: url({% static 'activitytracker/img/bg-login.jpg' %}) !important; }
-	</style>
-		
-		
 		
 </head>
 
 <body>
-		<div class="container-fluid-full">
+    <div class="background-blurred"></div>
+    <div class="background-blurred-overlay"></div>
+    <div class="container-fluid-full">
+        <div id="overlay"><img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" /></div>
 		<div class="row-fluid">
-					
-			<div class="row-fluid">
-				{% block content %}
-                {% endblock %}
-			</div><!--/row-->
-			
+            {% block content %}
 
+            {% endblock %}
 	</div><!--/.fluid-container-->
-	
 </div><!--/fluid-row-->
 	
 	<!-- start: JavaScript-->
@@ -85,11 +76,7 @@
 
 		<script src="{% static 'activitytracker/js/excanvas.js' %}"></script>
 
-		<script src="{% static 'activitytracker/js/jquery.chosen.min.js' %}"></script>
-
 		<script src="{% static 'activitytracker/js/jquery.uniform.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.iphone.toggle.js' %}"></script>
 
         <script src="{% static 'activitytracker/js/jquery.dataTables.min.js' %}"></script>
 

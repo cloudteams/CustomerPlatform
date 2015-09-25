@@ -4,7 +4,7 @@
 {% block content %}
 				<div class="login-box">
 				
-					<h2 align="center">Login to your account</h2>
+					<h2 align="center">CloudTeams Community</h2>
 					<form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
 						{% csrf_token %}
                         <fieldset>
@@ -26,29 +26,18 @@
 							<div align="center" class="button-login">	
 								<button  type="submit" class="btn btn-primary">Login</button>
 							</div>
+
 							<div class="clearfix"></div>
                         </fieldset>
 					</form>
-                    <div id="overlay">
-                        <img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-					</div>
                     <div class="social-login" align="center">
-						<p style='color:rgb(104, 100, 100)'><b>or</b></p>
-						<div>
-							<a href="#" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')" class="btn blueDark" style="color:white">
-								<i class="icon-facebook" style="margin-right:10px"></i>
-								Login with Facebook
-							</a>
-						</div>
-						<div>
-							<a href="#" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')" class="btn red" style="color:white">
-								<i class="icon-google-plus" style="margin-right:10px"></i>
-								Login with Google&nbsp;
-							</a>
-						</div>
+                        <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
+                        <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
 					</div>
-					<h3 align="center"><a href="{% url 'passwordforget' %}">Forgot Password</a></h3>
-					<h3 align="center"><a href="{% url 'register' %}">Register here</a></h3>
+					<h3>
+                        <a style="float:left" href="{% url 'register' %}">Register here</a>
+                        <a style="float:right" href="{% url 'passwordforget' %}">Forgot Password</a>
+                    </h3>
 
 				</div><!--/span-->
 			
