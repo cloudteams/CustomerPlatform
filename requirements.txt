@@ -5,7 +5,7 @@ django==1.8
 # Apps
 
 # Bower, minification & concatenation
-compressor~=1.5
+django_compressor~=1.5
 django-bower~=5.0.4
 
 # Requests
