@@ -59,7 +59,7 @@ def terms_and_conditions(request):
 def login(request):
 
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
-    INVALID_CREDENTIALS_MSG = 'Invalid Username and Password'
+    INVALID_CREDENTIALS_MSG = 'Invalid Username or Password'
 
     if request.method != 'POST':
         if request.user.is_authenticated():
@@ -103,6 +103,7 @@ def logout(request):
 def register(request):
 
     USERNAME_EXISTS_MSG = 'UsernameExists'
+    PASSWORD_ERROR = 'PasswordMismatch'
     EMAIL_EXISTS_MSG = 'EmailExists'
     EMPTY_FIELDS_MSG = 'EmptyFields'
     BIRTHDAY_ERROR_MSG = 'BirthdayError!'
@@ -115,16 +116,21 @@ def register(request):
     username = request.POST['username']
     email = request.POST['email']
     password = request.POST['password']
+    password_repeat = request.POST['password_repeat']
     firstname = request.POST['firstname']
     lastname = request.POST['lastname']
     gender = request.POST['gender']
     birthday = request.POST['birthday']
+
+    if password != password_repeat:
+        return HttpResponseBadRequest(PASSWORD_ERROR)
 
     if User.objects.filter(username__iexact=username).exists():
         return HttpResponseBadRequest(USERNAME_EXISTS_MSG)
 
     if User.objects.filter(email__iexact=email).exists():
         return HttpResponseBadRequest(EMAIL_EXISTS_MSG)
+
 
     if '' in (birthday, username, firstname, lastname, email, password):
         return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
