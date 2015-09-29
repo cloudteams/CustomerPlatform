@@ -141,7 +141,7 @@ STATICFILES_DIRS = (
 )
 
 # Compress and minify
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 # COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter',  'compressor.filters.cssmin.CSSMinFilter']
 #COMPRESS_CSS_FILTERS = ['compressor.filters.yuglify.YUglifyCSSFilter']
 #COMPRESS_JS_FILTERS = ['compressor.filters.yuglify.YUglifyJSFilter']
