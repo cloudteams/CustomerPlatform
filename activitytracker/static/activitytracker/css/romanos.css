@@ -1,0 +1,40 @@
+
+
+/* Inputs with icons */
+.left-inner-addon {
+    position: relative;
+    margin-bottom: 2em;
+}
+.left-inner-addon input {
+    padding-left: 30px;
+}
+.left-inner-addon span {
+    color: brown;
+    position: absolute;
+    padding: 15px 12px;
+    pointer-events: none;
+}
+
+.login-margin {
+    margin-top: 10px;
+}
+
+@media (max-width: 767px) {
+    .login-box,
+    .accountOptions-box {
+        margin: 0;
+    }
+
+    .social-login {
+	    margin: 0;
+    }
+
+    .login-margin {
+        margin-top: 2px;
+        margin-bottom: 5px;
+    }
+
+    .register-margin {
+        margin-bottom: 10px;
+    }
+}

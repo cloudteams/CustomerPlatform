@@ -17,7 +17,7 @@
 @import url("font-awesome-ie7.min.css");								/* Font Awesome Styles */
 @import url("glyphicons.css");											/* Glyphicons Font */
 @import url("halflings.css");											/* Glyphicons Halflings Font */
-@import url("style-forms.css");											/* Forms */
+/*@import url("style-forms.css");											/!* Forms *!/*/
 
 /* Main Colors
 =================================================================== */
@@ -2387,8 +2387,9 @@ fieldset[disabled] .btn-link:focus {
     -ms-animation: reveal-banner 1s 0.25s ease-in-out;
     animation: reveal-banner 1s 0.25s ease-in-out;
 
-	width: 400px;
-	margin: 8% auto;
+	/*width: 400px;*/
+	/*margin: 8% auto;*/
+	margin-top: 16vh;
 	padding: 3em;
 	background: rgba(25, 22, 22, 0.53);
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -3834,10 +3835,9 @@ input[name='range-logger'] {
 }
 
 form {
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 
 #RoutineTable {
 	vertical-align: middle !important;
 }
-

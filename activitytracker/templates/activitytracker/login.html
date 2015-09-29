@@ -2,43 +2,47 @@
 {% load staticfiles %}
 {% load custom_templates %}
 {% block content %}
-				<div class="login-box">
-				
-					<h2 align="center">CloudTeams Community</h2>
-					<form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
-						{% csrf_token %}
-                        <fieldset>
-							
-							<div class="input-prepend" title="Username">
-								<span class="add-on"><i class="halflings-icon user"></i></span>
-								<input class="input-large span10" name="username" id="username" type="text" placeholder="type username"/>
-							</div>
-							<div class="clearfix"></div>
+    <div class="row">
+        <div class="login-box col-md-offset-4 col-md-4">
 
-							<div class="input-prepend" title="Password">
-								<span class="add-on"><i class="halflings-icon lock"></i></span>
-								<input class="input-large span10" name="password" id="password" type="password" placeholder="type password"/>
-							</div>
-							<div class="clearfix"></div>
+            <div class="row">
+                <div class="col-xs-offset-3 col-xs-6">
+                    <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+                </div>
+            </div>
+            <form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
+                {% csrf_token %}
+                <fieldset>
 
-                            <p id="messageParagraph" align="center"></p>
+                    <div class="left-inner-addon">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Username" />
+                    </div>
 
-							<div align="center" class="button-login">	
-								<button  type="submit" class="btn btn-primary">Login</button>
-							</div>
+                    <div class="left-inner-addon">
+                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                        <input name="password" id="password" type="text" class="form-control input-lg" placeholder="Password" />
+                    </div>
 
-							<div class="clearfix"></div>
-                        </fieldset>
-					</form>
-                    <div class="social-login" align="center">
-                        <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
-                        <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
-					</div>
-					<h3>
-                        <a style="float:left" href="{% url 'register' %}">Register here</a>
-                        <a style="float:right" href="{% url 'passwordforget' %}">Forgot Password</a>
-                    </h3>
+                    <h3 id="messageParagraph" class="text-center"></h3>
 
-				</div><!--/span-->
-			
+                    <div class="text-center login-margin">
+                        <button  type="submit" class="btn btn-large btn-primary">Login</button>
+                    </div>
+
+                </fieldset>
+            </form>
+            <div class="social-login text-center">
+                <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
+                <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
+            </div>
+            <div class="container-fluid">
+                <h3 class="row">
+                    <a class="col-sm-4 col-xs-12 register-margin" href="{% url 'register' %}">Register</a>
+                    <a class="col-sm-offset-4 col-sm-4 col-xs-12" href="{% url 'passwordforget' %}">Forgot Password</a>
+                </h3>
+            </div>
+
+        </div><!--/span-->
+    </div>
 {% endblock %}
