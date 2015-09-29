@@ -46,21 +46,11 @@ INSTALLED_APPS = (
     'oauth2',
     'social.apps.django_app.default',
     'djangobower',
+    'compressor',
 
     # Projects app - access to CloudTeams Projects & related functionality
     'ct_projects',
 )
-"""
-BOWER_INSTALLED_APPS = (
-    'jquery#1.9',
-    'underscore',
-)
-
-
-STATICFILES_FINDERS = (
-'djangobower.finders.BowerFinder',
-)
-"""
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -71,10 +61,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'activitytracker.middleware.SocialAuthExceptionMiddleware'
+    'activitytracker.middleware.SocialAuthExceptionMiddleware',
 )
-
-BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/components')
 
 ROOT_URLCONF = 'Activitytracker_Project.urls'
 
@@ -120,11 +108,47 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'activitytracker/static'
 #STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,  'static'),
+
+# django-bower. Bower components dir
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/')
+
+INSTALLED_FINDERS = {
+    'djangobower.finders.BowerFinder'
+}
+
+# django-bower. Installed js-css.
+BOWER_INSTALLED_APPS = (
+    'jquery#2.1.4',
+    'bootstrap',
+    'jquery-tokenize'
 )
+
+STATICFILES_FINDERS = (
+    # Bower
+    'djangobower.finders.BowerFinder',
+    # static
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Compress and minify
+COMPRESS_ENABLED = True
+# COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter',  'compressor.filters.cssmin.CSSMinFilter']
+COMPRESS_CSS_FILTERS = ['compressor.filters.yuglify.YUglifyCSSFilter']
+COMPRESS_JS_FILTERS = ['compressor.filters.yuglify.YUglifyJSFilter']
+# COMPRESS_OFFLINE = True
+COMPRESS_ROOT = 'static'
+
+
 
 AUTH_USER_MODEL = 'activitytracker.User'
 

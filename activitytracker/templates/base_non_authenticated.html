@@ -18,10 +18,14 @@
 	{% load staticfiles %}
     {% load custom_templates %}
 
+    {% load compress %}
+
+    {% compress css %}
 	<link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
 	<link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
 	<link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+    {% endcompress %}
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
 	<!-- end: CSS -->
 
@@ -54,10 +58,9 @@
             {% endblock %}
 	</div><!--/.fluid-container-->
 </div><!--/fluid-row-->
-	
-	<!-- start: JavaScript-->
 
 	<!-- start: JavaScript-->
+        {% compress js %}
         <script>var next_redirect_url = '{{ redirect_url }}'</script>
 
 		<script src="{% static 'activitytracker/js/jquery-1.9.1.min.js' %}"></script>
@@ -83,6 +86,8 @@
 		<script src="{% static 'activitytracker/js/counter.js' %}"></script>
 
 		<script src="{% static 'activitytracker/js/custom.js' %}"></script>
+
+        {% endcompress %}
 
 
 	<!-- end: JavaScript-->
