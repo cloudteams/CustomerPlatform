@@ -17,7 +17,7 @@
 
         <!-- CALENDAR------------------------------------------------->
         <div class="row-fluid">
-            <div class="box span12 calendar-centered blueNavy">
+            <div class="box box-transparent span12 calendar-centered blue-black">
                 <div class="box-header" data-original-title>
                   <h2><i class="halflings-icon white calendar"></i><span class="break"></span>Calendar</h2>
                 </div>
@@ -30,7 +30,7 @@
     <!--- Chart start -->
         <div class="span12" id="activitylist" style="margin-left:0">
             <div class="span6b">
-                <div class='spanHeader blueNavy' style="height:37px;margin:0px 0px 27px 0px;color:white">
+                <div class='spanHeader blue-black' style="height:37px;margin:0px 0px 27px 0px;color:white">
                     <form id="groupForm" action="{% url 'getgroupedactivities' %}" method="POST">
                         {% csrf_token %}
                         <span style="margin-left:15px">
@@ -54,7 +54,7 @@
 
 
             <!--- Chart -->
-            <div class="box span5b blueNavy" style="margin-left:0;height:561px">
+            <div class="box box-transparent span5b blue-black" style="margin-left:0;height:561px">
                 <div class="box-header" data-original-title>
                     <h2><i class="halflings-icon tasks white"></i><span class="break" ></span>Activity Overview</h2>
                 </div>

@@ -125,8 +125,8 @@
 .progress.redDark .ui-progressbar-value,
 .sliderVertical.redDark .ui-slider-range,
 .progressSlim.redDark .ui-progressbar-value {
-	background: rgba(133, 5, 33, 0.7) !important;
-	border-color: rgba(133, 5, 33, 0.7) !important;
+	background: rgba(133, 5, 33, 1) !important;
+	border-color: rgba(133, 5, 33, 1) !important;
 	color: #fff;
 }
 .yellow,
@@ -186,6 +186,14 @@
 	background: #1C2B36 !important;
 	border-color: #1C2B36 !important;
 	color: #000;
+}
+
+.blue-black,
+.blue-black [class="box-header"]
+ {
+	background-color: #080808 !important;
+	border-color: #080808 !important;
+	color: inherit;
 }
 
 .blueLight,
@@ -457,6 +465,10 @@ hr {
 	height: 75px;
 	width: 75px;
 	margin: 10px;
+	/*
+	border-radius: 50%;
+    background-color: white;
+	*/
 }
 
 h1 {
@@ -501,7 +513,7 @@ h6 {
   	min-height: 40px;
   	padding-right: 20px;
   	padding-left: 20px;
-	background: #080808;
+	background: transparent;
 	filter: none;
 	text-shadow: 1px 1px 1px #0a0c0e;
 	border: none;
@@ -534,7 +546,7 @@ h6 {
 }
 
 a.brand span {
-	color: #fff;
+	color: #38383D;
 	text-shadow: none;
 }
 
@@ -572,26 +584,26 @@ a.brand span {
 }
 
 .header-nav a.btn  {
-	color: #fff !important;
+	color: #38383D !important;
 	text-shadow: none !important;
 	padding: 15px 25px !important;
 }
 
 .header-nav .btn .caret {
-	border-top-color: #fff !important;
-	border-bottom-color: #fff !important;
+	border-top-color: #080808 !important;
+	border-bottom-color: #080808 !important;
 }
 
 .header-nav .btn:hover .caret {
-	border-top-color: #fff !important;
-	border-bottom-color: #fff !important;
+	border-top-color: #080808 !important;
+	border-bottom-color: #080808 !important;
 }
 
 /* Navigation Section
 =================================================================== */
 
 #sidebar-left {
-	background: #1C2B36;
+	background: transparent;
 }
 
 .sidebar-nav > ul{
@@ -604,13 +616,13 @@ a.brand span {
 	list-style: none;
 	margin: 0px;
 	display: none;
-	background: rgba(0,0,0,.25);
+	background: transparent;
 }
 
 .nav-tabs.nav-stacked > li > a,
 .nav-tabs.nav-stacked > li > ul > li > a {
 	padding: 15px 10px 14px 10px;
-	color: #fff;
+	color: #38383D;
 	border-top: none;
   	border-bottom: 1px solid transparent;
 	border-left: none;
@@ -656,22 +668,31 @@ a.brand span {
 
 .nav-tabs.nav-stacked  > li.active > a,
 .nav-tabs.nav-stacked  > li > ul > li.active > a {
-  	background: #578EBE;
-	border-bottom: 1px solid #578EBE;
+  	background: #296977;
+	border-bottom: 1px solid #296977;
+	color: #fff;
 }
 
 .nav-tabs.nav-stacked  > li.active > a:hover,
 .nav-tabs.nav-stacked  > li > ul > li.active > a:hover {
-  	background: #578EBE;
+  	background: #080808;
 	color: #fff;
 	border: none;
-	border-bottom: 1px solid #578EBE;
+	border-bottom: 1px solid #080808;
 }
+
+.nav>li>a:focus {
+	background-color: #080808 !important;
+	color: white;
+}
+/*
 .header-nav .nav li:hover{
 background: #3A3A3A;
-}
+} */
+
 .dropdown:hover .dropdown-menu {
     display: block;
+	background-color: #F9F7F9 !important;
  }
 .nav-tabs.nav-stacked>li>a:hover, .nav-tabs.nav-stacked>li>a:focus {
 z-index: 2;
@@ -765,9 +786,7 @@ border-bottom: 1px solid transparent;
   	white-space: normal !important;
 }
 
-.dropdown-menu li {
-	border-bottom: 1px solid #eee;
-}
+
 
 .dropdown-menu li:first-child {
 	border-top: 0px !important;
@@ -782,14 +801,14 @@ border-bottom: 1px solid transparent;
 .dropdown-submenu:hover > a {
   	color: #ffffff;
   	text-decoration: none;
-  	background: #578EBE;
+  	background: #080808 ;
 }
 
 .dropdown-menu .active > a,
 .dropdown-menu .active > a:hover {
   	color: #ffffff;
   	text-decoration: none;
-  	background: #578EBE;
+  	background: #080808;
 }
 
 .dropdown-menu .disabled > a,
@@ -900,15 +919,16 @@ ul.messages li .message {
 =================================================================== */
 
 #content {
-	background: #ffffff;
+	background: transparent;
 	filter: none;
-	min-height: 800px !important;
+	min-height: 582px !important;
 	padding: 20px 20px;
 	position: relative;
+	padding-bottom:0
 }
 
 #content-rest {
-	background: #ffffff;
+	background: transparent;
 	filter: none;
 	padding: 20px 20px;
 	position: relative;
@@ -924,7 +944,7 @@ ul.messages li .message {
 .breadcrumb {
 	margin: -28px -28px 28px -31px;
 	line-height: 34px;
-	background: #F7F7F7;
+	background: transparent;
 	border: 0px;
 	color: #888;
 	-webkit-box-shadow: none;
@@ -951,7 +971,7 @@ ul.messages li .message {
 }
 
 .dark {
-	background: #fdfdfd;
+	background: rgba(253, 253, 253, 0.38);;
 	text-shadow: 0px 1px 1px #fff !important;
 	padding: 20px;
 	top: -28px;
@@ -959,7 +979,6 @@ ul.messages li .message {
 	margin-bottom: -56px;
 	margin-right: -30px;
 	position: relative;
-	border-left: 2px solid #eee;
 	min-height: 100%;
 	/*overflow: hidden;	 */
 }
@@ -1034,9 +1053,18 @@ ul.messages li .message {
 
 .box {
 	border: 2px solid #578EBE;
-	background: #fff !important;
+	background: rgba(255, 255, 255, 0.9) !important;
 	margin-bottom: 28px;	
 }
+
+.box.box-transparent {
+	background: rgba(255, 255, 255, 0.38) !important;
+}
+
+/*
+.box table {
+	background-color: rgba(255, 255, 255, 0.85);
+} */
 
 .box.calendar-centered{
 	width: 100%;
@@ -1120,7 +1148,7 @@ ul.messages li .message {
 	z-index: 50;
   	margin-top: -1px;
 	padding: 10px;
-	background: #fff !important;
+	background: transparent;
 }
 .box-content.calendar-right{
 	width:50%;
@@ -2085,8 +2113,8 @@ fieldset[disabled] .btn-success:active {
 
 .btn-info:hover,
 .btn-info:active {
-  background-color: #578EBE;
-  border-color: #578EBE;
+  background-color: #080808;
+  border-color: #080808;
 }
 
 .btn-info.disabled:hover,
@@ -2848,7 +2876,7 @@ div.uploader{
 
 footer {
 	min-height: 24px;
-	background: #1C2B36;;
+	background: transparent;;
 	color: #fff !important;
 	-webkit-border-radius: 0px;
 	   -moz-border-radius: 0px;
@@ -2905,7 +2933,7 @@ footer {
 	position: relative;
 	background: #67C2EF;
 	width:100%;
-	min-width: 130px; 
+	min-width: 130px;
 	height: 160px;
 	padding-top: 40px;
 	margin-bottom: 28px;
@@ -3240,7 +3268,7 @@ ul.messagesList li span.date {
 
 .timeslot .task span {
 	/*border: 2px solid #67C2EF; /OR/ rgba(103, 194, 239, 1); */
-	background: rgba(109, 197, 223, 0.05);
+	background: rgba(182, 213, 222, 0.34);
 	padding: 5px;
 	display: block;
 	font-size: 11px;
@@ -3382,11 +3410,6 @@ ul.messagesList li span.date {
 	outline:none !important;
 }
 
-
-
-.nav>li>a:focus {
-	background-color: inherit !important;
-}
 
 #activity_select_chzn {
   width: 41.5% !important;
@@ -3615,7 +3638,7 @@ ul.messagesList li span.date {
 }
 
 
-.background-blurred{
+.non-auth-background-blurred{
 	position: fixed;
 	z-index: -1;
 	width: 100%;
@@ -3631,7 +3654,8 @@ ul.messagesList li span.date {
 	-ms-filter: blur(3px);
 	filter: blur(3spx);
 }
-.background-blurred-overlay {
+
+.non-authbackground-blurred-overlay {
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -3640,6 +3664,24 @@ ul.messagesList li span.date {
 	background-size: 27%, 27%;
 	background-repeat: no-repeat, no-repeat
 }
+
+.auth-background-blurred{
+	position: fixed;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	background-image: url('../img/auth-background-img.jpg');
+	background-position:  top center;
+	background-repeat: no-repeat;
+	background-size: cover;
+
+	-webkit-filter: blur(3px);
+	-moz-filter: blur(3px);
+	-o-filter: blur(3px);
+	-ms-filter: blur(3px);
+	filter: blur(3spx);
+}
+
 #carouselModal {
 	width: 56%;
 	margin-left: -360px;
@@ -3651,7 +3693,7 @@ ul.messagesList li span.date {
 }
 
 .analytics-filters-container {
-	background-color: rgb(247, 247, 247);
+	background-color: rgba(225, 233, 236, 0.35);;
 	box-shadow: -5px 5px 10px #888888;
 	padding:2%;
 	margin-bottom:2.5%
@@ -3674,13 +3716,13 @@ ul.messagesList li span.date {
 .analytics-banner {
 	margin-bottom:2%;
 	box-shadow: -1px 1px 10px #888888;
-	background-color:rgba(28, 43, 54, 0.95);
+	background-color:rgba(44, 99, 111, 0.95);
 	color:white;
 	float:right;
 }
 
 .analytics-banner div {
-	border-bottom:1px solid #6F6E6E;
+	border-bottom:1px solid rgba(255, 255, 255, 0.7);;
 	margin-top:10px;
 	padding:7px 0;
 }
@@ -3798,3 +3840,4 @@ form {
 #RoutineTable {
 	vertical-align: middle !important;
 }
+

@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^index/chartdatajson/$', views.chartdatajson, name='chartdatajson'),
     url(r'^index/displayperiod/$', views.displayperiod, name='displayPeriod'),
     url(r'^index/getgroupedactivities/$', views.getgroupedactivities, name='getgroupedactivities'),
+    url(r'^overview/$', views.overview, name='overview'),
     url(r'^settings/$', views.settings, name='settings'),
     url(r'^settings/places/$', views.places, name='places'),
     url(r'^settings/placestojson/$', views.placestojson, name='placestojson'),

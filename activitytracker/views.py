@@ -2677,3 +2677,13 @@ def updateallroutinecharts(request):
         json_list += json_entries
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+@login_required
+def overview(request):
+    return render(
+        request,
+        'activitytracker/overview.html',
+        {
+          'username': request.user.get_username()
+        }
+    )

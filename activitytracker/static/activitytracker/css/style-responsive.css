@@ -23,10 +23,11 @@
 	}
 		
 	#sidebar-left {
-		background: #1C2B36;
+		background: transparent;
 		margin-left: 0px !important;
 		position: absolute;
 		height: 100%;
+		border-right: 1px solid #38383D
 	}
 	
 	.sidebar-nav > ul{
@@ -74,10 +75,11 @@
 	
 	
 	#sidebar-left {
-		background: #1C2B36;
+		background: transparent;
 		margin-left: 0px !important;
 		position: absolute;
 		height: 100%;
+		border-right: 1px solid #38383D
 	}
 	
 	.sidebar-nav > ul{
@@ -191,11 +193,12 @@
 	}
 		
 	#sidebar-left {
-		background: #1C2B36;
+		background: transparent;
 		margin-left: 0px !important;
 		position: absolute;
 		height: 100%;
 		width: 8.334% !important;
+		border-right: 1px solid #38383D
 	}
 	
 	.sidebar-nav > ul{

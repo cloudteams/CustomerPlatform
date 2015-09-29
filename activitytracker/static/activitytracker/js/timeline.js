@@ -43,9 +43,8 @@ function createTimelineInstance(instance, align) {
                         var duration = jQuery.parseHTML("<span><i>Duration</i><span class='tl-display'>" + (instance.duration).replace(/([a-z])/g,'$1 ') + "</span></span>");
             			$(content).append(duration);
 
-                        var arrow = jQuery.parseHTML("<div class='arrow'></div>");
             			$(modal_a).append(content);
-                        $(container).append(modal_a, arrow);
+                        $(container).append(modal_a);
 
                         var map_marker = jQuery.parseHTML("<div class='icon " + instance.colour +"'><i class='activicon-" + instance.icon_classname + "'></i></div>");
                         var start_time = jQuery.parseHTML("<div class='time'>" + instance.start_date + "</div>");
