@@ -1507,6 +1507,7 @@ function widthFunctions(e) {
 		event.preventDefault();
 		var data = {username: document.forms["registerForm"]["username"].value,
 					password: document.forms["registerForm"]["password"].value,
+					password_repeat: document.forms["registerForm"]["password_repeat"].value,
 					firstname: document.forms["registerForm"]["firstname"].value,
 					lastname: document.forms["registerForm"]["lastname"].value,
 					birthday: document.forms["registerForm"]["birthday"].value,
@@ -1532,6 +1533,9 @@ function widthFunctions(e) {
 				else if (response == "EmailExists") {
 					$("#emailmessage").removeClass('hidden');
 				}
+				else if (response == "PasswordMismatch") {
+					$("#passwordmessage").removeClass('hidden');
+				}
 				else if (response == "BirthdayError") {
 					$("#birthdaymessage").removeClass('hidden');
 				}
@@ -1546,6 +1550,8 @@ function widthFunctions(e) {
 			}
 		});
 	});
+
+/******************************************************************************************/
 
 	$("#passwordResetForm").submit(function(event) {
 		event.preventDefault();
