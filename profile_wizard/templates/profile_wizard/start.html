@@ -1,0 +1,49 @@
+{% extends "profile_wizard/base.html" %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block extra_css %}
+    <link href="{% static 'profile_wizard/css/chosen.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'profile_wizard/css/bjqs.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'start-profile-wizard' %}">Customer profile wizard</a>
+        </li>
+    </ul>
+
+    <h1>Create your profile in CloudTeams in a few steps!</h1>
+
+    <form class="create-profile-form" action="." method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% with p=form.instance %}
+            <div class="page-container">
+                <ul class="bjqs">
+                    <li>
+                        <div class="step" id="basic-info-step">
+                            {% include "profile_wizard/steps/basic-info.html" %}
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="step" id="work-step">
+                            {% include "profile_wizard/steps/work.html" %}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        {% endwith %}
+        <!--<input type="submit" class="btn btn-primary" value="Save my profile" />-->
+    </form>
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'profile_wizard/js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'profile_wizard/js/start.js' %}"></script>
+    <script src="{% static 'profile_wizard/js/bjqs-1.3.min.js' %}"></script>
+{% endblock %}

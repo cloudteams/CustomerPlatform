@@ -1,0 +1,47 @@
+.chosen-container {
+    min-width: 300px !important;
+}
+
+/* Slider */
+
+.page-container {
+    background-color: #f7f7f7;
+}
+
+.bjqs-prev a, .bjqs-next a {
+    background-color: #777;
+    color: #fff;
+    padding: 10px;
+}
+
+/* Field layout */
+.page-container h2 {
+    font-size: 28px;
+    font-weight: 300;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.centered-fields {
+    width: 1000px;
+    margin-left: calc(50% - 500px);
+}
+
+.centered-fields  .field {
+    padding: 10px 0;
+}
+
+.centered-fields  .field label {
+    min-width: 400px;
+    display: inline-block;
+}
+
+/* Basic info */
+#avatar-container {
+    height: 300px;
+    border: 1px dotted #aaa;
+}
+
+#trigger-avatar-upload {
+    width: calc(100% - 26px);
+}

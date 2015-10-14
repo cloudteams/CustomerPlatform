@@ -1,6 +1,7 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from activitytracker.models import User
-from profile_wizard.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES_PLATFORMS
+from profile_wizard.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES_PLATFORMS, BRAND_OPINIONS
 from profile_wizard.multiple_choice_field import MultiSelectField
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
@@ -21,13 +22,15 @@ class UserProfile(models.Model):
     # Generic info
     first_name = models.CharField(max_length=255)
     last_name_initial = models.CharField(max_length=1)
-    # -- birthday is in main model
+    year_of_birth = models.IntegerField(blank=True, null=True, default=None, validators=[MinValueValidator(1930),
+                                                                                         MaxValueValidator(2010)])
     # -- location is in main model -> asume it to be home location
 
     # Business info
     business_sector = models.CharField(max_length=127, blank=True, default='', choices=BUSINESS_SECTORS)
     work_position = models.CharField(max_length=127, blank=True, default='', choices=WORK_POSITIONS)
     work_location = models.CharField(max_length=255, blank=True, default='')
+    years_experience = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     # Influences
     influences = MultiSelectField(max_length=2, blank=True, default='', choices=INFLUENCES)

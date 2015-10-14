@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <h2>Basic information</h2>
+
+    <div class="row-fluid">
+        <div class="hidden">
+            {{form.profile_picture}}
+        </div>
+
+        <div class="span3">
+            <div id="avatar-container">
+                {% if p.profile_picture %}<img src="{{p.profile_picture}}" width="100%" />{% endif %}
+            </div>
+            <div class="btn btn-primary" id="trigger-avatar-upload">Upload an avatar</div>
+        </div>
+
+        <div class="span6">
+            <div class="row-fluid">
+                <div class="span8">
+                    <label for="id_first_name">Your first name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="span4">
+                    <label for="id_last_name_initial">The initial of your last name</label>
+                    {{ form.last_name_initial }}
+                </div>
+            </div>
+            <div class="row-fluid">
+                <label for="id_year_of_birth">When were you born (year)?</label>
+                {{ form.year_of_birth }}
+            </div>
+        </div>
+    </div>
+</div>
