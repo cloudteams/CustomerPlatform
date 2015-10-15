@@ -14,6 +14,10 @@
     padding: 10px;
 }
 
+.bjqs-markers {
+    display: none;
+}
+
 /* Field layout */
 .page-container h2 {
     font-size: 28px;
@@ -34,6 +38,35 @@
 .centered-fields  .field label {
     min-width: 400px;
     display: inline-block;
+}
+
+.page-container .text-center {
+    text-align: center;
+    margin-top: 180px;
+}
+
+/* NiceOpt */
+.opt-container .option {
+    display: inline-block;
+    padding: 5px 10px;
+    height: 100px;
+    border-radius: 10px;
+    margin: 0 10px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.opt-container .option.option-active {
+    background: #1C2B36;
+    color: #fff;
+}
+
+.opt-container .option span {
+    display: block;
+    margin: 10px 0;
 }
 
 /* Basic info */

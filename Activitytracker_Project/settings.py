@@ -52,6 +52,9 @@ INSTALLED_APPS = (
 
     # Projects app - access to CloudTeams Projects & related functionality
     'ct_projects',
+
+    # Profile wizard app - allows customers to quickly setup their profile
+    'profile_wizard',
 )
 
 MIDDLEWARE_CLASSES = (

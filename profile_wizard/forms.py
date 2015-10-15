@@ -5,6 +5,8 @@ __author__ = 'dipap'
 
 
 class UserProfileForm(forms.ModelForm):
+    location = forms.CharField()
+
     class Meta:
         model = UserProfile
         exclude = ('user',)

@@ -5,3 +5,5 @@ python-social-auth==0.2.7
 requests==2.6.2
 requests_oauthlib
 django-contrib-comments
+pattern
+pillow

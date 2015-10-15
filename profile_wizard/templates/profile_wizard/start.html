@@ -24,6 +24,14 @@
             <div class="page-container">
                 <ul class="bjqs">
                     <li>
+                        <h2>Intoduction</h2>
+                        <div class="text-center">
+                            <p>In this wizard you can complete information about your relatioship with different technologies.</p>
+                            <p>Feel free leave empty any information you don't want to send us.</p>
+                            <p>Click next to go to the next page & start the wizard.</p>
+                        </div>
+                    </li>
+                    <li>
                         <div class="step" id="basic-info-step">
                             {% include "profile_wizard/steps/basic-info.html" %}
                         </div>
@@ -34,16 +42,30 @@
                             {% include "profile_wizard/steps/work.html" %}
                         </div>
                     </li>
+
+                    <li>
+                        <div class="step" id="devices-and-platforms-step">
+                            {% include "profile_wizard/steps/devices-and-platforms.html" %}
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="text-center">
+                            <p>Thank you very much & have a nice time in CloudTeams!</p>
+                            <input type="submit" class="btn btn-primary" value="Save my profile" />
+                        </div>
+                    </li>
                 </ul>
             </div>
         {% endwith %}
-        <!--<input type="submit" class="btn btn-primary" value="Save my profile" />-->
+        <!---->
     </form>
 
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'profile_wizard/js/chosen.jquery.min.js' %}"></script>
-    <script src="{% static 'profile_wizard/js/start.js' %}"></script>
     <script src="{% static 'profile_wizard/js/bjqs-1.3.min.js' %}"></script>
+    <script src="{% static 'profile_wizard/js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'profile_wizard/js/niceopts.js' %}"></script>
+    <script src="{% static 'profile_wizard/js/start.js' %}"></script>
 {% endblock %}

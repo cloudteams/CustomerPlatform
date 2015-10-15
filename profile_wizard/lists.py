@@ -206,23 +206,23 @@ INFLUENCES = (
     ('OT', 'Other'),
 )
 
-DEVICES_PLATFORMS = (
-    # devices
+DEVICES = (
     ('PC', 'PC'),
-    ('LT', 'Laptop computer'),
+    ('LT', 'Laptop'),
     ('TB', 'Tablet'),
+    ('MF', 'Mobile phone'),
+    ('WE', 'Wearable'),
+)
 
-    # mobile phones
-    ('IP', 'iPhone'),
-    ('AN', 'Android'),
-    ('WP', 'Windows Phone'),
+PLATFORMS = (
+    ('MSWIN', 'MS Windows'),
+    ('OSX', 'OS X'),
+    ('LINUX', 'Linux'),
+    ('IOS', 'iOS'),
+    ('ANDR', 'Android'),
+)
 
-    # operating systems
-    ('WI', 'Microsoft Windows'),
-    ('OX', 'OSX'),
-    ('LX', 'Linux'),
-
-    # browsers
+BROWSERS = (
     ('IE', 'Internet Explorer'),
     ('FF', 'Firefox'),
     ('CH', 'Chrome'),
