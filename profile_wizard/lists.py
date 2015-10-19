@@ -198,12 +198,13 @@ WORK_POSITIONS = (
 )
 
 INFLUENCES = (
-    ('FA', 'Family & relatives'),
-    ('FR', 'Friends & social circle'),
-    ('CW', 'Co-workers'),
-    ('AD', 'Advertisement'),
-    ('IE', 'Internet'),
-    ('OT', 'Other'),
+    ('FAMILY', 'Family & relatives'),
+    ('FRIENDS', 'Friends & social circle'),
+    ('COWORKERS', 'Co-workers'),
+    ('ADS', 'Advertisement'),
+    ('TV', 'TV & Media'),
+    ('BLOGS', 'Blogs'),
+    ('OTHER', 'Other'),
 )
 
 DEVICES = (
@@ -229,12 +230,18 @@ BROWSERS = (
     ('SF', 'Safari'),
 )
 
+TECH_LEVELS = (
+    ('BEG', 'Beginner'),
+    ('INT', 'Intermediate'),
+    ('EXP', 'Expert'),
+    ('GEEK', 'gEEk'),
+)
 DEFAULT_BRANDS = (
-    ('FB', 'Facebook'),
-    ('TW', 'Twitter'),
-    ('GO', 'Google'),
-    ('IG', 'Instagram'),
-    ('AP', 'Apple'),
+    ('FACEBOOK', 'Facebook'),
+    ('TWITTER', 'Twitter'),
+    ('GOOGLE', 'Google'),
+    ('INSTAGRAM', 'Instagram'),
+    ('APPLE', 'Apple'),
 )
 
 BRAND_OPINIONS = (

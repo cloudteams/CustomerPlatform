@@ -1,0 +1,18 @@
+<form method="POST" action="{% url 'opinion-about' %}">{% csrf_token %}
+    <input type="hidden" name="brand" value="{{brand}}"/>
+    <input type="hidden" name="opinion"value="-" />
+
+    <div class="row-fluid">
+        <span class="span4 opinion-col opinion-col-right">
+            <span class="send-opinion opinion-negative" data-value="N"><i class="fa fa-2x fa-times"></i></span>
+        </span>
+        <span class="span4 col-brand">
+            <img src="{{brand_icon}}" width="200" class="brand-icon" />
+            <span class="send-opinion" data-value="-">Skip <i class="fa fa-arrow-right"></i></span>
+        </span>
+        <span class="span4 opinion-col">
+            <span class="send-opinion opinion-positive" data-value="P"><i class="fa fa-2x fa-check"></i></span>
+        </span>
+    </div>
+
+</form>

@@ -1,14 +1,17 @@
 $(function() {
     //chosen
-    $('select:not(#id_platforms, #id_devices)').chosen();
+    $('select:not(#id_platforms, #id_devices, #id_influences, #id_tech_level)').chosen();
 
     //nice options
-    NiceOpts.init('#id_platforms, #id_devices');
+    NiceOpts.init('#id_platforms, #id_devices, #id_influences');
+    NiceOpts.init('#id_tech_level', {
+        style: 'numbers'
+    });
 
     //paginate
     $('.page-container').bjqs({
         animtype    : 'slide',
-        height      : 500,
+        height      : 600,
         width       : $('.create-profile-form').width(),
         responsive  : true,
         animspeed   : 999999
@@ -42,7 +45,7 @@ $(function() {
                 beforeSend: function(){
                     $('.city-select').empty();
                 },
-                success: function( data ) {
+                success: function(data) {
                     var options = data['_embedded']['city:search-results'];
                     /*for (var i=0; i < options.length; i++) {
                         console.log(options[i].matching_full_name)
@@ -61,5 +64,41 @@ $(function() {
                 }
             });
         }
-    }).autocomplete("widget").addClass("city-select");;
+    }).autocomplete("widget").addClass("city-select");
+
+    //opinions
+    $.ajax({
+        url: '/profile/get-brand-opinion',
+        success: function (data) {
+            $('#tech-opinion').html(data);
+        }
+    });
+
+    $('body').on('click', '.send-opinion', function() {
+        var brand = $(this).closest('form').find('input[name="brand"]').val();
+        var opinion = $(this).data('value');
+        var csrfmiddlewaretoken = $(this).closest('form').find('input[name="csrfmiddlewaretoken"]').val();
+
+        $('#tech-opinion').css('opacity', '0');
+
+        $.ajax({
+            url: '/profile/opinion-about',
+            method: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrfmiddlewaretoken,
+                brand: brand,
+                opinion: opinion
+            },
+            success: function() {
+                //get another opinion
+                $.ajax({
+                    url: '/profile/get-brand-opinion',
+                    success: function (data) {
+                        $('#tech-opinion').html(data);
+                        $('#tech-opinion').css('opacity', '1');
+                    }
+                });
+            }
+        })
+    });
 });

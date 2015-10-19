@@ -1,7 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from activitytracker.models import User
-from profile_wizard.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS
+from profile_wizard.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS, \
+    TECH_LEVELS
 from profile_wizard.multiple_choice_field import MultiSelectField
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
@@ -33,11 +34,14 @@ class UserProfile(models.Model):
     years_experience = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     # Influences
-    influences = MultiSelectField(max_length=2, blank=True, default='', choices=INFLUENCES)
+    influences = MultiSelectField(max_length=16, blank=True, default='', choices=INFLUENCES)
 
     # Devices & platforms
     devices = MultiSelectField(max_length=2, blank=True, default='', choices=DEVICES)
     platforms = MultiSelectField(max_length=8, blank=True, default='', choices=PLATFORMS)
+
+    # Tech level
+    tech_level = models.CharField(max_length=8, blank=True, default='', choices=TECH_LEVELS)
 
     def get_display_name(self):
         return '%s %s.' % (self.first_name, self.last_name_initial)
@@ -45,5 +49,5 @@ class UserProfile(models.Model):
 
 class UserBrandOpinion(models.Model):
     user = models.ForeignKey(User, related_name='brand_opinions')
-    brand = models.CharField(max_length=2)
+    brand = models.CharField(max_length=16)
     opinion = models.CharField(max_length=1, choices=BRAND_OPINIONS)

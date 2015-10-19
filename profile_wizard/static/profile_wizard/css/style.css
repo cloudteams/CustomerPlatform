@@ -27,8 +27,8 @@
 }
 
 .centered-fields {
-    width: 1000px;
-    margin-left: calc(50% - 500px);
+    width: 1200px;
+    margin-left: calc(50% - 600px);
 }
 
 .centered-fields  .field {
@@ -69,6 +69,16 @@
     margin: 10px 0;
 }
 
+.opt-container .number-icon {
+    font-style: normal;
+    display: block;
+    font-size: 26px;
+    margin: 0 20px 10px 20px;
+    padding: 20px 0;
+    background: #aaa;
+    border-radius: 50%;
+    color: #eee;
+}
 /* Basic info */
 #avatar-container {
     height: 300px;
@@ -77,4 +87,52 @@
 
 #trigger-avatar-upload {
     width: calc(100% - 26px);
+}
+
+/* Brand opinions */
+#tech-opinion {
+    -webkit-transition: opacity 0.3s ease-in-out;
+	-moz-transition: opacity 0.3s ease-in-out;
+	-o-transition: opacity 0.3s ease-in-out;
+	-ms-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.opinion-col {
+    margin-top: 100px;
+}
+
+.opinion-col-right {
+    text-align: right;
+}
+
+.col-brand {
+    text-align: center;
+}
+
+.col-brand .brand-icon {
+    border-radius: 50%;
+    display: block;
+    margin-left: 25%;
+}
+
+.send-opinion {
+    cursor: pointer;
+    -webkit-transition: color 0.3s ease-in-out;
+	-moz-transition: color 0.3s ease-in-out;
+	-o-transition: color 0.3s ease-in-out;
+	-ms-transition: color 0.3s ease-in-out;
+	transition: color 0.3s ease-in-out;
+}
+
+.send-opinion:hover {
+    color: #BFBFBF;
+}
+
+.send-opinion.opinion-positive:hover {
+    color: #26A65B;
+}
+
+.send-opinion.opinion-negative:hover {
+    color: #CF000F;
 }
