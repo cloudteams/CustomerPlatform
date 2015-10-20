@@ -10,8 +10,8 @@
 <div class=" modal-body row">
     {% for activity_performed in activity_list %}
     <div class="display-canvas col-xs-6 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if not activity_performed.performs_provider_instance %}
                     {{ activity_performed.instance.activity }}
             {% else %}<a href="{{ activity_performed.performs_provider_instance.provider_instance_url }}"
@@ -20,16 +20,16 @@
         </span>
     </div>
      <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">{{ activity_performed.start_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ activity_performed.start_time }}  (Started)</span>
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">{{ activity_performed.start_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ activity_performed.start_time }}  (Started)</span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-repeat show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">{{ activity_performed.end_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ activity_performed.end_time }}  (Ended)</span>
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-repeat show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">{{ activity_performed.end_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ activity_performed.end_time }}  (Ended)</span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-screenshot show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-screenshot show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if activity_performed.instance.goal %}
                 {{ activity_performed.instance.goal }}
             {% else %}
@@ -46,8 +46,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-flag show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-flag show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if instance.result %}
                 {{ activity_performed.instance.result}}
             {% else %}
@@ -56,8 +56,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-tags show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-tags show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if instance.friends %}
                 {{ activity_performed.instance.friends|addSpaceAfterComma }}
             {% else %}
@@ -66,8 +66,8 @@
         </span>
     </div>
 	<div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-wrench show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-wrench show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if activity_performed.tools %}
                 {{ activity_performed.tools }}
             {% else %}
@@ -76,8 +76,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-map-marker show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-map-marker show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if activity_performed.instance.location_address %}
                 {{ activity_performed.instance.location_address }}
             {% else %}
