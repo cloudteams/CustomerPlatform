@@ -23,3 +23,5 @@ class UserProfileForm(forms.ModelForm):
         if self.instance.user.date_of_birth:
             self.initial['year_of_birth'] = self.instance.user.date_of_birth.year
 
+        if self.instance.user.location:
+            self.initial['location'] = self.instance.user.location

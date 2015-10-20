@@ -19,11 +19,14 @@ def start_wizard(request):
         form = UserProfileForm(instance=profile)
     else:
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        import pdb;pdb.set_trace()
         if form.is_valid():
             # save the profile
             form.save()
+            # update user
+            profile.user.location = form.cleaned_data['location']
+            profile.user.save()
 
-            # TODO parse & save add brand opinions
             return redirect('/')
 
     params['form'] = form
