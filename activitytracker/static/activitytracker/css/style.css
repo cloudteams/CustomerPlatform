@@ -326,30 +326,7 @@ div#DataTables_Table_0_filter {
 /* END OF for goal status */
 /* showactivitymodal header classes */
 
-.showactivityheaderedit {
-	position:relative;
-	right:120px;
-	margin-right: 1em;
-	padding-left: 2px;
-	padding-bottom: 2px;
-}
-
-.showactivityheaderedit i{
-	position:relative;
-	top:7px;
-}
-
-.showactivityheaderdelete i{
-	position:relative;
-	top:7px;
-}
-
-.showactivityheaderdelete{
-
-	position:relative;
-	right:120px;
-	padding-left: 2px;
-	padding-bottom: 2px;
+.showactivityheaderdelete {
 	cursor: pointer;
 }
 

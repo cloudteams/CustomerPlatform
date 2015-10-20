@@ -86,6 +86,16 @@
 
 }
 
+@media (max-width: 531px) {
+    .col-xxs-12 {
+        width: 100% !important;
+        margin-left: -10% !important;
+        text-align: center
+    }
 
+    .glyphicon-star {
+        margin-left: 5% !important;
+    }
+}
 
 

@@ -85,7 +85,7 @@ def login(request):
 
     else:
         username = username_or_email
-        
+
     user = authenticate(username=username, password=password)
 
     if user is None:

@@ -9,8 +9,8 @@
 </div>
 <div class="modal-body row">
     <div class="display-canvas col-xs-6 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if not performs_provider_instance %}
                 {{ instance.activity }}
             {% else %}
@@ -19,16 +19,16 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">{{ start_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ start_t }}  (Started)</span>
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">{{ start_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ start_t }}  (Started)</span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-repeat show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">{{ end_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ end_t }}  (Ended)</span>
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-repeat show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">{{ end_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ end_t }}  (Ended)</span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-screenshot show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-screenshot show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if instance.goal %}
                 {{ instance.goal }}
             {% else %}
@@ -45,8 +45,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-flag show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-flag show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if instance.result %}
                 {{ instance.result}}
             {% else %}
@@ -55,8 +55,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-tags show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-tags show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if instance.friends %}
                 {{ instance.friends|addSpaceAfterComma }}
             {% else %}
@@ -65,8 +65,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-wrench show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-wrench show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if tools %}
                 {{ tools }}
             {% else %}
@@ -75,8 +75,8 @@
         </span>
     </div>
     <div class="display-canvas col-xs-8 col-xs-offset-3">
-        <span class="col-xs-2 glyphicon glyphicon-map-marker show-activity-glyphicon" aria-hidden="true"></span>
-        <span class="show-activity-text col-xs-8">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-map-marker show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
             {% if instance.location_address %}
                 {{ instance.location_address }}
             {% else %}
@@ -89,10 +89,10 @@
     {% endif %}
 </div>
 <div class="modal-footer">
-     <a  class="showactivityheaderedit" id="editactivity" href="{% url 'editactivity' instance.id %}"  data-dismiss='modal' data-toggle="modal" data-target="#editActivityModal">
+     <a  class="showactivityheaderedit col-xs-3 col-xs-offset-2" id="editactivity" href="{% url 'editactivity' instance.id %}"  data-dismiss='modal' data-toggle="modal" data-target="#editActivityModal">
         <i class="halflings-icon edit"></i> Edit Details
      </a>
-     <a class="showactivityheaderdelete" id="deleteactivity" onclick="handleActivityDelete('{% url 'deleteactivity' instance.id %}')">
+     <a class="showactivityheaderdelete col-xs-3" id="deleteactivity" onclick="handleActivityDelete('{% url 'deleteactivity' instance.id %}')">
         <i class="halflings-icon trash"></i> Delete Activity
      </a>
     <a href="#" class="btn btn-blueNavy" id='closeModal' data-dismiss="modal">Close</a>
