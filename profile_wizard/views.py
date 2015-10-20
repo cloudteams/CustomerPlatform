@@ -19,7 +19,6 @@ def start_wizard(request):
         form = UserProfileForm(instance=profile)
     else:
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
-        import pdb;pdb.set_trace()
         if form.is_valid():
             # save the profile
             form.save()
