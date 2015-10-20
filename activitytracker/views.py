@@ -59,7 +59,7 @@ def terms_and_conditions(request):
 def login(request):
 
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
-    INVALID_CREDENTIALS_MSG = 'Invalid Username or Password'
+    INVALID_CREDENTIALS_MSG = 'Invalid Username/Email or Password'
 
     if request.method != 'POST':
         if request.user.is_authenticated():
@@ -73,12 +73,19 @@ def login(request):
                        }
                       )
 
-    username = request.POST['username']
+    username_or_email = request.POST['username']
     password = request.POST['password']
 
-    if User.objects.filter(username=username).count() == 0:
-        return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
+    if User.objects.filter(username=username_or_email).count() == 0:
 
+        if User.objects.filter(email=username_or_email).count() == 0:
+            return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
+        else:
+            username = User.objects.get(email=username_or_email).username
+
+    else:
+        username = username_or_email
+        
     user = authenticate(username=username, password=password)
 
     if user is None:
