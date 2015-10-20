@@ -2362,7 +2362,7 @@ fieldset[disabled] .btn-link:focus {
 	/*margin: 8% auto;*/
 	margin-top: 8vh;
 	margin-bottom: 8vh;
-	padding: 3em 3em 0 3em;
+	padding: 3em;
 	background: rgba(25, 22, 22, 0.53);
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-8 */
@@ -4038,4 +4038,8 @@ select[name="gender"]:active{
 
 .header-font-white {
 	color: white;
+}
+
+.register-margin {
+	margin-bottom:20px;
 }

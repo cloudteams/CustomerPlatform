@@ -102,10 +102,8 @@ def logout(request):
 # Check and Register the User
 def register(request):
 
-    USERNAME_EXISTS_MSG = 'UsernameExists'
     EMAIL_EXISTS_MSG = 'EmailExists'
     EMPTY_FIELDS_MSG = 'EmptyFields'
-    BIRTHDAY_ERROR_MSG = 'BirthdayError!'
     PASSWORD_ERROR = 'PasswordMismatch'
     SUCCESS_MSG = 'Registration Successful! ' \
                   'We have sent you an e-mail with a validation link to follow'
@@ -113,17 +111,9 @@ def register(request):
     if request.method != 'POST':
         return render(request, 'activitytracker/register.html')
 
-    username = request.POST['username']
     email = request.POST['email']
     password = request.POST['password']
     repeated_password = request.POST['password_repeat']
-    firstname = request.POST['firstname']
-    lastname = request.POST['lastname']
-    gender = request.POST['gender']
-    birthday = request.POST['birthday']
-
-    if User.objects.filter(username__iexact=username).exists():
-        return HttpResponseBadRequest(USERNAME_EXISTS_MSG)
 
     if User.objects.filter(email__iexact=email).exists():
         return HttpResponseBadRequest(EMAIL_EXISTS_MSG)
@@ -131,22 +121,16 @@ def register(request):
     if password != repeated_password:
         return HttpResponseBadRequest(PASSWORD_ERROR)
 
-    if '' in (birthday, username, firstname, lastname, email, password):
+    if '' in (email, password, repeated_password):
         return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
 
-    datetime_birthday = datetime.strptime(request.POST['birthday'], "%m/%d/%Y").date()
+    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists else email
 
-    if datetime_birthday > datetime.now().date():
-        return HttpResponseBadRequest(BIRTHDAY_ERROR_MSG)
-
-    user = User.objects.create_user(username=username,
-                                    email=email,
-                                    password=password,
-                                    first_name=firstname,
-                                    last_name=lastname,
-                                    gender=gender,
-                                    date_of_birth=datetime_birthday
-                                    )
+    user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+    )
     user.is_active = False
     user.save()
 

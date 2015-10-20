@@ -19,13 +19,11 @@
         <form class="form-horizontal" action="{% url 'register' %}" method="post" name="registerForm" id="registerForm">
             {% csrf_token %}
             <fieldset>
-
-
                 <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Username" />
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    <input class="form-control input-lg" name="email" id="email" type="text" placeholder="Email Address"/>
                 </div>
-                <h3 class="hidden error-message text-center" id="usernamemessage" >Username already exists</h3>
+                <h3 class="hidden error-message text-center" id="emailmessage">This email is already in use</h3>
 
                 <div class="left-inner-addon">
                     <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
@@ -37,33 +35,6 @@
                     <input class="form-control input-lg" name="password_repeat" id="password_repeat" type="password" placeholder="Password Again"/>
                 </div>
                 <h3 class="hidden error-message text-center" id="passwordmessage" >Passwords don't match each other</h3>
-
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <input class="form-control input-lg" name="firstname" id="firstname" type="text" placeholder="First Name"/>
-                </div>
-
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <input class="form-control input-lg" name="lastname" id="lastname" type="text" placeholder="Last Name"/>
-                </div>
-
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                    <input class="form-control input-lg" name="email" id="email" type="text" placeholder="Email Address"/>
-                </div>
-                <h3 class="hidden error-message text-center" id="emailmessage">This email is already in use</h3>
-
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                    <input placeholder="Birthday" type="text" name="birthday" class="form-control input-lg datepicker" />
-                 </div>
-                <h3  class="hidden error-message text-center" style="color:red" id="birthdaymessage">Can't be born in the future, duh</h3>
-
-                <div class="col-xs-8 col-xs-offset-3">
-                    <label class="radio-inline radio-form"><input type="radio" class="radio" name="gender" value="M" checked/>Male</label>
-                    <label class="radio-inline radio-form"><input type="radio" class="radio" name="gender" value="F" />Female</label>
-                </div>
 
                 <div class="col-xs-12"><h3 class='success-message hidden'>Registration Successful! We have sent you an e-mail with a validation link to follow</h3></div>
 
