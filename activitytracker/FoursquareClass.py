@@ -93,10 +93,10 @@ class Foursquare(OAuth2Validation):
                                            )
                   }
 
-        if self.metadata.last_updated == DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['afterTimestamp'] = int(time.mktime(
                                            datetime.strptime(
-                                               EARLIEST_DATA_DATE + ' 00:00:00',
+                                                self.metadata.last_updated,
                                                '%Y-%m-%d %H:%M:%S'
                                                ).timetuple())
                                            )

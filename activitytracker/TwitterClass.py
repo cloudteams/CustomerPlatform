@@ -84,8 +84,8 @@ class Twitter(OAuth1Validation):
 
                 _max_id = tweet['id'] - 1
 
-            if tweet['id'] > self.provider_data['since_id']:
-                self.provider_data['since_id'] = tweet['id']
+            if tweet['id'] > self.metadata.since_id:
+                self.metadata.since_id = tweet['id']
 
             createActivityLinks(provider=self.PROVIDER.lower(),
                                 instance=performs_instance,
@@ -115,7 +115,7 @@ class Twitter(OAuth1Validation):
                   }
 
         if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
-            params['since_id'] = self.provider_data['since_id']
+            params['since_id'] = self.metadata.since_id
 
         self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
