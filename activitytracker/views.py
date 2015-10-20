@@ -59,7 +59,7 @@ def terms_and_conditions(request):
 def login(request):
 
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
-    INVALID_CREDENTIALS_MSG = 'Invalid Username and Password'
+    INVALID_CREDENTIALS_MSG = 'Invalid Username or Password'
 
     if request.method != 'POST':
         if request.user.is_authenticated():
@@ -106,6 +106,7 @@ def register(request):
     EMAIL_EXISTS_MSG = 'EmailExists'
     EMPTY_FIELDS_MSG = 'EmptyFields'
     BIRTHDAY_ERROR_MSG = 'BirthdayError!'
+    PASSWORD_ERROR = 'PasswordMismatch'
     SUCCESS_MSG = 'Registration Successful! ' \
                   'We have sent you an e-mail with a validation link to follow'
 
@@ -115,6 +116,7 @@ def register(request):
     username = request.POST['username']
     email = request.POST['email']
     password = request.POST['password']
+    repeated_password = request.POST['password_repeat']
     firstname = request.POST['firstname']
     lastname = request.POST['lastname']
     gender = request.POST['gender']
@@ -125,6 +127,9 @@ def register(request):
 
     if User.objects.filter(email__iexact=email).exists():
         return HttpResponseBadRequest(EMAIL_EXISTS_MSG)
+
+    if password != repeated_password:
+        return HttpResponseBadRequest(PASSWORD_ERROR)
 
     if '' in (birthday, username, firstname, lastname, email, password):
         return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
@@ -176,7 +181,7 @@ def passwordforget(request):
         return render(request, 'activitytracker/passforget.html')
 
     if User.objects.filter(username=request.POST['username']).count() == 0:
-        return HttpResponse(USER_NOT_EXISTS_MSG)
+        return HttpResponseBadRequest(USER_NOT_EXISTS_MSG)
 
     user = User.objects.get(username=request.POST['username'])
     characters = string.ascii_letters + string.digits
@@ -216,7 +221,11 @@ def password_reset(request, passwordreset_token):
         valid_token = False
 
     if request.method != "POST" or not valid_token:
-        return render(request,'activitytracker/password-reset.html',{'valid_token': valid_token})
+        return render(request,'activitytracker/password-reset.html',{
+            'valid_token': valid_token,
+            'token': passwordreset_token
+
+        })
 
     else:
         password = request.POST['password']
@@ -433,17 +442,13 @@ def placestojson(request):
 def index(request):
 
     user = request.user
-    object_list = [i.object_name for i in user.object_set.all()] #for form
-    friend_list = [i.friend_name for i in user.friend_set.all()] #for form
 
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
         activity_data[activity.get_category_display()].append(activity.activity_name)
 
     context = {
-               'list_of_objects': object_list,
                'username': user.get_username(),
-               'list_of_friends': friend_list,
                'activity_data': activity_data,
                'show_carousel_guide': False
     }
@@ -653,9 +658,9 @@ def showgroupactivity(request, group_identification):
                                   )
 
 # Deletes an activity
-def deleteactivity(request):
+def deleteactivity(request, performs_id):
 
-    activity = Performs.objects.get(id=request.POST['act_id'])
+    activity = Performs.objects.get(id=performs_id)
     activity.delete()
 
     return HttpResponse('Deleted')
@@ -686,37 +691,44 @@ def editactivity(request, performs_id):
     instance_object_list = [i.object_name for i in instance.using.all()]
     instance_friend_list = filter(None, instance.friends.split(","))
 
-    object_list = [i.object_name for i in user.object_set.all()] #for form
-    friend_list = [i.friend_name for i in user.friend_set.all()] #for form
-
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
         activity_data[activity.get_category_display()].append(activity.activity_name)
 
     context = {'instance': instance,
-               'instance_object_list': instance_object_list,
-               'instance_friend_list': instance_friend_list,
+               'instance_object_list': json.dumps(instance_object_list),
+               'instance_friend_list': json.dumps(instance_friend_list),
                'start_t': start_time,
                'end_t': end_time,
                'end_date': end_date,
                'start_date': start_date,
                'activity_data': activity_data,
-               'list_of_objects': object_list,
-               'list_of_friends': friend_list,
                'color': colourDict[instance.activity.category],
                }
 
     return SimpleTemplateResponse('activitytracker/edit-activity.html', context)
 
 
+def fetch_tokenfield_values(request):
+
+    user = request.user
+    object_values = [{'value': i.object_name, 'label': i.object_name} for i in user.object_set.all()] #for form
+    friend_values = [{'value': i.friend_name, 'label': i.friend_name} for i in user.friend_set.all()] #for form
+
+    json_list =[friend_values, object_values]
+    return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+
+
+
 #Gets called on update activity
-def updateactivity(request):
+def updateactivity(request, performs_id):
 
     DATE_ERROR_MSG = 'Activity cannot end sooner than it started'
     FIELD_ERROR_MSG = 'Please fill out all the fields correctly'
 
     user = request.user
-    instance = Performs.objects.get(id=int(request.POST['the_id']))
+    instance = Performs.objects.get(id=performs_id)
 
     try:
         start_date = '%s %s:00' % (request.POST['start_date'], request.POST['start_time'])
@@ -735,7 +747,7 @@ def updateactivity(request):
         location_lng = request.POST['lng']
         goal = request.POST['goal']
         result = request.POST['result']
-        goal_status = None if not instance.goal else request.POST['goalstatus']
+        goal_status = None if not goal else request.POST['goalstatus']
 
         instance.delete()
 
@@ -858,11 +870,11 @@ def displayperiod(request):
         month = request.POST['month']
 
         day_first_moment = datetime.strptime('%s-%s-%s 00:00:00' % (year, month, day),
-                                             "%Y-%b-%d %H:%M:%S"
+                                             "%Y-%B-%d %H:%M:%S"
                                              )
 
         day_last_moment = datetime.strptime('%s-%s-%s 23:59:59' % (year, month,day),
-                                            "%Y-%b-%d %H:%M:%S"
+                                            "%Y-%B-%d %H:%M:%S"
                                             )
 
         instances = user.performs_set.filter(start_date__lte=day_last_moment,

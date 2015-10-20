@@ -172,36 +172,40 @@ def assignDurationInterval(duration):
 
 def getAppManagementDomValues(status, provider):
     if status == "Not Connected":
-        return {     'buttonText': 'Connect App',
-                     'buttonClassColor': 'blueNavy',
-                     'statusText': 'App not Connected',
-                     'statusIcon': 'icon-remove-circle',
-                     'statusFontColor': 'red',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'circle-arrow-right',
+            'buttonText': 'Connect',
+            'statusText': 'App not Connected',
+            'statusIcon': 'icon-remove-circle',
+            'statusFontColor': 'red',
+            'providerIconName': provider
         }
     elif status == "Authentication Failed":
-        return {     'buttonText': 'Re-authorize',
-                     'buttonClassColor': 'orange',
-                     'statusText': 'App manually de-authorized or token expired',
-                     'statusIcon': 'icon-warning-sign',
-                     'statusFontColor': 'orange',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'repeat',
+            'buttonText': 'Re-Authorize',
+            'statusText': 'Expired or de-authorized',
+            'statusIcon': 'icon-warning-sign',
+            'statusFontColor': 'orangered',
+            'providerIconName': provider
         }
     elif status == "Cannot Process Request":
-        return {     'buttonText': 'Try again',
-                     'buttonClassColor': '#850521 ',
-                     'statusText': 'Too many requests sent. Try again later',
-                     'statusIcon': 'icon-warning-sign',
-                     'statusFontColor': 'red',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'repeat',
+            'buttonText': 'Retry',
+            'statusText': 'Too many requests sent. Try again later',
+            'statusIcon': 'icon-warning-sign',
+            'statusFontColor': 'red',
+            'providerIconName': provider
         }
     else:
-        return {     'buttonText': 'Disconnect',
-                     'buttonClassColor': 'red',
-                     'statusText': 'App connected',
-                     'statusIcon': 'icon-ok-circle',
-                     'statusFontColor': 'green',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'trash',
+            'buttonText': 'De-Authorize',
+            'statusText': 'App connected',
+            'statusIcon': 'icon-ok-circle',
+            'statusFontColor': 'green',
+            'providerIconName': provider
         }
 
 

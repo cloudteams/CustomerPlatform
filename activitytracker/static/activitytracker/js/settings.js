@@ -115,7 +115,7 @@
 	});
 
 	function synchronizeProvider(provider){
-			LoadingWithBackdrop();
+			Loading();
 			$.ajax({
 				type: "post",
 				data: {csrfmiddlewaretoken: getCookie('csrftoken')},
@@ -124,10 +124,10 @@
 				dataType: "text",
 				error: function (xhr, status, error) {
 					alert(xhr.responseText);
-					DoneWithBackdrop();
+					Done();
 				},
 				success: function (response) {
-					DoneWithBackdrop();
+					Done();
 					alert(response);
 
 				}
@@ -333,93 +333,80 @@
             marker.setMap(null);
         });
 
-        var table = $('#PlacesTable').DataTable( {
-					"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span12'i><'span12 center'p>>",
-					"sPaginationType": "bootstrap",
-        			"autoWidth": false,
-					"oLanguage": {
-						"sLengthMenu": "_MENU_  Records per page"
-					},
-					"ajax": BASE_URL + "settings/placestojson/",
-					"columns":  [
-						{ "data": "place_name" },
-						{ "data": "place_address" },
-						{ "data": "lat" },
-                        { "data": "lng" },
-                        { "data": "id"}
-					],
-					"columnDefs": [{
-                    "targets": [2],
-                    "visible": false
-                    },
-                    {
-                    "targets": [3],
-                    "visible": false
-                    },
-                    {
-					"targets": 4,
-					"createdCell": function (td, cellData, rowData, row, col) {
+        var table = $('#PlacesTable').dataTable( {
+			"bLengthChange": false,
+			"info":     false,
+			"bFilter": false,
+			"responsive": true,
+			"ajax": BASE_URL + "settings/placestojson/",
+			"columns":  [
+				{ "data": "place_name" },
+				{ "data": "place_address" },
+				{ "data": "lat", "visible": false },
+				{ "data": "lng", "visible": false  },
+				{ "data": "id"}
+			],
+			"columnDefs": [{
+			"targets": 4,
+			"createdCell": function (td, cellData, rowData, row, col) {
 
-						// Add edit button with modal trigger
-						$(td).empty();
-						$(td).className = "center";
-						var buttonEdit = document.createElement('a');
-						buttonEdit.className = "btn btn-info btn-setting";
-						buttonEdit.href = "#";
-						$(buttonEdit).attr("data-target", "#editPlaceModal");
-						$(buttonEdit).attr("data-toggle", "modal");
-						var iconEdit = document.createElement('i');
-						iconEdit.className = "halflings-icon edit white";
-						buttonEdit.appendChild(iconEdit);
-                        if ($(window).width() >= 533) {
-                            $(buttonEdit).css('margin-right', '0.2em');
-                        }
-						$(td).append(buttonEdit);
-						$(buttonEdit).on('click', function(){
-                            marker2.setMap(null);
-    						marker2.setPosition({lat:rowData.lat, lng:rowData.lng});
-                            marker2.setMap(map2);
-                            map2.setCenter({lat:rowData.lat,lng:rowData.lng});
-                            map2.setZoom(16);
-                            $('#places-input-2').val(rowData.place_address);
-                            document.forms["editPlaceForm"]["placename"].value = rowData.place_name;
-                            // Disable all other instances, and apply function only for the currently shown modal
-							$('#editPlaceModalConfirm').off().on('click', function() {
-								updatePlaceAndReload(rowData.id);
-							});
-						});
+				// Add edit button with modal trigger
+				$(td).empty();
+				$(td).className = "center";
+				var buttonEdit = document.createElement('a');
+				buttonEdit.className = "btn btn-blueNavy user-places-options";
+				buttonEdit.href = "#";
+				$(buttonEdit).attr("data-target", "#editPlaceModal");
+				$(buttonEdit).attr("data-toggle", "modal");
+				var iconEdit = document.createElement('i');
+				iconEdit.className = "halflings-icon edit white";
+				buttonEdit.appendChild(iconEdit);
+				$(td).append(buttonEdit);
+				$(buttonEdit).on('click', function(){
+					marker2.setMap(null);
+					marker2.setPosition({lat:rowData.lat, lng:rowData.lng});
+					marker2.setMap(map2);
+					map2.setCenter({lat:rowData.lat,lng:rowData.lng});
+					map2.setZoom(16);
+					$('#places-input-2').val(rowData.place_address);
+					document.forms["editPlaceForm"]["placename"].value = rowData.place_name;
+					// Disable all other instances, and apply function only for the currently shown modal
+					$('#editPlaceModalConfirm').off().on('click', function() {
+						updatePlaceAndReload(rowData.id);
+					});
+				});
 
-                        $(window).on('resize',function(){
-							if ($(this).width() <533 ) {
-								$(buttonEdit).css('margin-right','0');
-							}
-							else {
-								$(buttonEdit).css('margin-right','0.2em');
-							}
-						});
-
-						//Add Delete Button with modal trigger
-						var buttonDelete = document.createElement('a');
-						buttonDelete.className = "btn btn-danger btn-setting";
-						buttonDelete.href = "#";
-						$(buttonDelete).attr("data-target", "#deletePlaceModal");
-						$(buttonDelete).attr("data-toggle", "modal");
-						var iconTrash = document.createElement('i');
-						iconTrash.className = "halflings-icon trash white";
-						buttonDelete.appendChild(iconTrash);
-						$(td).append(buttonDelete);
-						$(buttonDelete).on('click', function(){
-							// Dynamically change the 'deleteModal Content'
-							$('#deletePlaceModal .modal-body p').text('Are you sure you want to delete place: ' +
-								'"' + rowData.place_name + '" ?');
-							//So that only the LAST goal clicked will be deleted
-                            // Disable all other instances, and apply function only for the currently shown modal
-							$('#deletePlaceModalConfirm').off().on('click', function() {
-								deletePlaceAndReload(rowData.id);
-							});
-						})
+				$(window).on('resize',function(){
+					if ($(this).width() <533 ) {
+						$(buttonEdit).css('margin-right','0');
 					}
-					}]
+					else {
+						$(buttonEdit).css('margin-right','0.2em');
+					}
+				});
+
+				//Add Delete Button with modal trigger
+				var buttonDelete = document.createElement('a');
+				buttonDelete.className = "btn btn-blueNavy user-places-options";
+				buttonDelete.href = "#";
+				$(buttonDelete).attr("data-target", "#deletePlaceModal");
+				$(buttonDelete).attr("data-toggle", "modal");
+				var iconTrash = document.createElement('i');
+				iconTrash.className = "halflings-icon trash white";
+				buttonDelete.appendChild(iconTrash);
+				$(td).append(buttonDelete);
+				$(buttonDelete).on('click', function(){
+					// Dynamically change the 'deleteModal Content'
+					$('#deletePlaceModal .modal-body p').text('Are you sure you want to delete place: ' +
+						'"' + rowData.place_name + '" ?');
+					//So that only the LAST goal clicked will be deleted
+					// Disable all other instances, and apply function only for the currently shown modal
+					$('#deletePlaceModalConfirm').off().on('click', function() {
+						deletePlaceAndReload(rowData.id);
+					});
+				})
+			}
+			}]
 		});
 
         function deletePlaceAndReload(place_id) {
@@ -499,9 +486,7 @@
 		}
 
 
-		$('.tokenize').tokenize({
-			placeholder: "Select Time Frames"
-		});
+
 
 		$('.datepicker').datepicker( {
 			changeMonth: true,
@@ -749,7 +734,7 @@ function initializeEditRoutineModal(element_clicked) {
 	//fill weekday values
 	if (weekday_times != ' - ') {
 		$.each(weekday_times, function (i, range) {
-			$('#weekday-times').tokenize().tokenAdd(range, range);
+			$('#weekday-times').tokenfield('createToken', range);
 		});
 	}
 
@@ -757,10 +742,17 @@ function initializeEditRoutineModal(element_clicked) {
 	if (weekend_times != ' - ') {
 		$('#weekend').trigger('click');
 		$.each(weekend_times, function (i, range) {
-			$('#weekend-times').tokenize().tokenAdd(range, range);
+			$('#weekend-times').tokenfield('createToken', range);
 		});
 	}
 
 	$('#submitRoutine').prop('value', 'edit')
 }
 /* modify routine javascript END */
+$('.tokenfield').tokenfield().on('tokenfield:createtoken', function (event) {
+	var existingTokens = $(this).tokenfield('getTokens');
+	$.each(existingTokens, function(index, token) {
+		if (token.value === event.attrs.value)
+			event.preventDefault();
+	});
+});

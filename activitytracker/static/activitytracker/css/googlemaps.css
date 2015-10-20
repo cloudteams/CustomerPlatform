@@ -1,10 +1,8 @@
 .map-canvas {
     align: center;
-    width: 500px;
+    width: 100%;
     height: 220px;
-    position:relative;
-    margin-left:auto;
-    margin-right:auto;
+    margin-bottom: 1em;
 }
 
 .map-canvas img{
@@ -33,7 +31,7 @@
 
 .places-input {
     background-color: #fff;
-    font-family: Roboto;
+    font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     font-weight: 300;
     margin-left: 12px;

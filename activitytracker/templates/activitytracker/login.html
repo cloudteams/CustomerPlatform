@@ -2,47 +2,44 @@
 {% load staticfiles %}
 {% load custom_templates %}
 {% block content %}
-    <div class="row">
-        <div class="login-box col-md-offset-4 col-md-4">
+    <div class="login-box col-md-offset-4 col-md-4">
 
-            <div class="row">
-                <div class="col-xs-offset-3 col-xs-6">
-                    <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-6">
+                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+            </div>
+        </div>
+        <form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
+            {% csrf_token %}
+            <fieldset>
+
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Username" />
                 </div>
-            </div>
-            <form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
-                {% csrf_token %}
-                <fieldset>
 
-                    <div class="left-inner-addon">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Username" />
-                    </div>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    <input name="password" id="password" type="password" class="form-control input-lg" placeholder="Password" />
+                </div>
 
-                    <div class="left-inner-addon">
-                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                        <input name="password" id="password" type="text" class="form-control input-lg" placeholder="Password" />
-                    </div>
+                <h3 id="messageParagraph" class="text-center"></h3>
 
-                    <h3 id="messageParagraph" class="text-center"></h3>
+                <div class="text-center login-margin">
+                    <button type="submit" class="btn btn-large btn-blueNavy">Login</button>
+                </div>
+            </fieldset>
+        </form>
+        <div class="social-login text-center">
+            <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
+            <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
+        </div>
+        <div class="container-fluid">
+            <h3 class="row">
+                <a class="col-sm-4 col-xs-12 register-margin" href="{% url 'register' %}">Register</a>
+                <a class="col-sm-offset-4 col-sm-4 col-xs-12" href="{% url 'passwordforget' %}">Forgot Password</a>
+            </h3>
+        </div>
 
-                    <div class="text-center login-margin">
-                        <button  type="submit" class="btn btn-large btn-primary">Login</button>
-                    </div>
-
-                </fieldset>
-            </form>
-            <div class="social-login text-center">
-                <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
-                <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
-            </div>
-            <div class="container-fluid">
-                <h3 class="row">
-                    <a class="col-sm-4 col-xs-12 register-margin" href="{% url 'register' %}">Register</a>
-                    <a class="col-sm-offset-4 col-sm-4 col-xs-12" href="{% url 'passwordforget' %}">Forgot Password</a>
-                </h3>
-            </div>
-
-        </div><!--/span-->
-    </div>
+    </div><!--/span-->
 {% endblock %}

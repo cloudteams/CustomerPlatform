@@ -4,59 +4,61 @@
 
         $('.clockpicker').clockpicker();
 
-        $('#friends').tokenize({
-                placeholder: "With whom were you with?"
-            });
-
-        $('#tools').tokenize({
-                placeholder: "What did you use?"
-            });
-
-        $('#showActivityModal').on("hidden", function (e) {
-            $(e.target).removeData("modal").find(".modal-body").empty();
+        $.ajax({
+            type: "get",
+            cache: false,
+            url: BASE_URL + 'index/fetch_tokenfield_values/',
+            dataType: "json",
+            error: function (xhr, status, error) {
+            },
+            success: function (response) {
+                $('#friends').tokenfield({
+                    autocomplete: {
+                        source: response[0]
+                    }
+                });
+                $('#tools').tokenfield({
+                    autocomplete: {
+                        source: response[1],
+                        delay: 100
+                    }
+                });
+                $('.tokenfield').on('tokenfield:createtoken', function (event) {
+                    var existingTokens = $(this).tokenfield('getTokens');
+                    $.each(existingTokens, function(index, token) {
+                        if (token.value === event.attrs.value)
+                            event.preventDefault();
+                    });
+                });
+            }
         });
-        $('#showActivityModal').on("shown", function (e) {
+
+
+        $('#showActivityModal')
+        .on("shown.bs.modal", function (e) {
             try {
                 initializeShowMap()
             }
             catch (err) {}
         });
-        $('#showGroupActivityModal').on("shown", function (e) {
+        $('#showGroupActivityModal').on("shown.bs.modal", function (e) {
             try {
                 initializeGroupShowMaps()
             }
             catch (err) {}
         });
-        $('#editActivityModal').on("shown", function (e) {
-            try {
-                initializeEditMap()
-            }
-            catch (err) {}
-        });
-        $('#editActivityModal').on("hidden", function (e) {
-            $(e.target).removeData("modal").find(".modal-body").empty();
-        });
+        $('#editActivityModal')
+            .on("shown.bs.modal", function (e) {
+                try {
+                    $('body').addClass('modal-open');
+                    initializeEditMap()
+                }
+                catch (err) {}
+            });
 
-        $('#showGroupActivityModal').on("hidden", function (e) {
-            $(e.target).removeData("modal").find(".modal-body").empty();
-        });
-        $('#addActivityModal').on("hidden", function (e) {
-            map.setCenter({ lat: 37.9908372, lng: 23.7383394});
-            map.setZoom(9);
-            marker.setMap(null);
-	    marker.setPosition(null);
-        });
 
         $(document).ready(function () {
             // executes when DOM is loaded and ready
-            $("span.fc-button-prev").html("<span class='fc-button-inner'><span class='fc-button-content'>&nbsp;◄&nbsp;</span></span>");
-            $("span.fc-button-next").html("<span class='fc-button-inner'><span class='fc-button-content'>&nbsp;►&nbsp;</span>");
-            $("span.fc-button-today").html("<span class='fc-button-inner'><span class='fc-button-content'>today</span></span>");
-            $("span.fc-button-month").html("<span class='fc-button-inner'><span class='fc-button-content'>month</span></span>");
-            $("span.fc-button-agendaWeek").html("<span class='fc-button-inner'><span class='fc-button-content'>week</span></span>");
-            $("span.fc-button-agendaDay").html("<span class='fc-button-inner'><span class='fc-button-content'>day</span></span>");
-            $('.fc-header-right').append(jQuery.parseHTML("<a href='#' data-toggle='modal' data-target='#addActivityModal' onclick='clearFields()'> " +
-            "<i class='icon-plus'></i>&nbsp&nbspadd another</a> "));
             if (show_carousel_guide == "True") {
                 $('#carouselModal').modal('show');
             }
@@ -91,13 +93,12 @@
                     $('#main_calendar').fullCalendar('refetchEvents'); // re-render events
                     var viewInstance = $('#main_calendar').fullCalendar('getView');
                     RenderViewActivities(viewInstance); // redraws activities based on view
-                    $('#addActivityModal .modal-body').scrollTop(0);
                     $('#addActivityModal').modal('hide');
                     Done();
                     document.getElementById("addForm").reset();
                     $('#name_of_activity').val('').trigger('liszt:updated');
-                    $('#friends').data('tokenize').clear();
-                    $('#tools').data('tokenize').clear();
+                    //$('#friends').data('tokenize').clear();
+                    //$('#tools').data('tokenize').clear();
                     $('#goalstatus').addClass('hidden');
                     marker.setPosition(null);
 
@@ -105,25 +106,15 @@
             });
         });
 
-        /* show activity fields */
-        $('#showActivityModal').on("shown", function (e){
-            var id_clicked = $('.modal-body-replacement').attr('id');
-            var url_edit = BASE_URL + "activity/edit-activity/" + id_clicked;
-            var url_json_activity = BASE_URL + "activity/" + id_clicked;
-            $("#editactivity").attr("href", url_edit);
-            $("#showActivityModal h2 a").attr("href", url_json_activity);
-        });
 
         /* Delete Activity */
-        $('a[href="/activitytracker/activity/delete-activity/"]').on("click", function(event){
-            event.preventDefault();
-            var id_clicked = $('.modal-body-replacement').attr('id');
+        function handleActivityDelete(delete_url) {
             Loading();
             $.ajax({
                 type: "post",
-                data: {act_id: id_clicked, csrfmiddlewaretoken: getCookie('csrftoken')},
+                data: { csrfmiddlewaretoken: getCookie('csrftoken')},
                 cache: false,
-                url: BASE_URL + "activity/delete-activity/",
+                url: delete_url,
                 dataType: "text",
                 error: function (xhr, status, error) {
                     DoneWithBackdrop();
@@ -139,22 +130,19 @@
                 }
             });
 
-        });
+        }
 
         /* Update Activity */
-        $("#editActivityModalSubmit").click( function(event){
-            event.preventDefault();
-            var id_clicked = $('.modal-body-replacement').attr('id');
+        function handleActivityUpdate(update_url) {
             var data = submitFields('editForm', getCookie('csrftoken'));
             data.lat = markerEdit.getPosition().lat();
             data.lng = markerEdit.getPosition().lng();
-            data.the_id = id_clicked;
             Loading();
             $.ajax({
                 type: "post",
                 data: data,
                 cache: false,
-                url: BASE_URL + "activity/update-activity/",
+                url: update_url,
                 dataType: "text",
                 error: function (xhr, status, error) {
                     Done();
@@ -169,7 +157,7 @@
                 }
             });
 
-        });
+        }
 
         /* Group - Ungroup Activities */
         function GroupUngroupSort(){
@@ -178,14 +166,6 @@
             DrawGroupUngroupSort(ids);
             DoneWithBackdrop();
         }
-
-
-
-        function ListTheActivities(){
-            window.open(BASE_URL + "activity/listallactivities/", 'newwindow', 'width=300, height=300');
-            return false;
-        }
-
 
 
         $('#goalinput').on('keyup change',function() {
@@ -277,14 +257,23 @@
     }
     google.maps.event.addDomListener(window, 'load', initialize);
 
-    $('#addActivityModal').on('shown', function () {
-        google.maps.event.trigger(map, "resize");
-        map.setCenter({ lat: 37.9908372, lng: 23.7383394});
-        map.setZoom(9);
+    $('#addActivityModal')
+        .on('shown.bs.modal', function () {
+            google.maps.event.trigger(map, "resize");
+            map.setCenter({ lat: 37.9908372, lng: 23.7383394});
+            map.setZoom(9);
+        })
+        .on("hidden.bs.modal", function (e) {
+            map.setCenter({ lat: 37.9908372, lng: 23.7383394});
+            map.setZoom(9);
+            marker.setMap(null);
+	        marker.setPosition(null);
+        });
 
-    });
-
-
+    $('.datepicker').datepicker({
+		autoclose: true,
+		container: '#addActivityModal'
+	});
 
 
 

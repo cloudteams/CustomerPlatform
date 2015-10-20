@@ -6,12 +6,12 @@
     margin-bottom: 2em;
 }
 .left-inner-addon input {
-    padding-left: 30px;
+    padding-left: 40px;
 }
-.left-inner-addon span {
-    color: brown;
+.left-inner-addon .glyphicon {
+    color: #6C564B;
     position: absolute;
-    padding: 15px 12px;
+    padding: 14px 12px;
     pointer-events: none;
 }
 
@@ -19,7 +19,7 @@
     margin-top: 10px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .login-box,
     .accountOptions-box {
         margin: 0;
@@ -38,3 +38,57 @@
         margin-bottom: 10px;
     }
 }
+
+@media (max-width: 767px) {
+    #sidebar-left{
+        padding-right:0;
+    }
+
+    .quick-button.metro.activity-flag {
+        width: 100%
+    }
+    .grid-options {
+        padding: 11px 122px;
+    }
+
+    #content-rest .row {
+        padding: 0 15px;
+    }
+
+    .timeslot-title span:nth-child(2) {
+        direction: ltr;
+    }
+}
+
+@media (min-width: 767px) {
+    .collapse{
+        display:block;
+    }
+
+    #content {
+        border-left: 1px solid #38383D;
+        padding-top: 5px;
+    }
+}
+
+@media (min-width: 1200px) {
+    #content-rest .activity-flag {
+        width: 14.2%
+    }
+}
+
+@media (max-width: 1200px) {
+    #content-rest .activity-flag:not(:nth-child(3)) {
+        margin-right: 4.8% !important;
+    }
+
+    #content-rest .row .activity-flag:nth-child(3),
+    #content-rest .row .activity-flag:nth-child(6) {
+        margin-right: 0 !important;
+    }
+
+}
+
+
+
+

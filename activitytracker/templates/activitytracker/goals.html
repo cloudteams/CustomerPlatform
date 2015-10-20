@@ -1,25 +1,22 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load custom_templates %}
+
+{% block css %}
+    <link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
             <a href="{% url 'index' %}">Home</a>
-            <i class="icon-angle-right"></i>
         </li>
         <li><a href="#">Goals</a></li>
     </ul>
 
-    <div class="row-fluid">
-        <div class="box span12 blue-black">
-            <div class="box-header blue-black" data-original-title>
-                <h2 id="GoalsTitle"><i class="icon-trophy white"></i><span class="break"></span>Goals ({{ total_number }})</h2>
-                <div class="box-icon">
-                    <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-                    <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-                </div>
-            </div>
+        <div class="box col-xs-12 box-transparent">
             <div class="box-content" id="GoalTableBox">
                 <table id="GoalTable" class="table table-striped table-bordered bootstrap-datatable">
                       <thead class="goal-header">
@@ -37,42 +34,45 @@
                 </table>
             </div>
         </div>
-    </div><!--/row-->
 
-    <div class="modal hide fade" id="deleteGoalModal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3>Delete Goal</h3>
-        </div>
-        <div class="modal-body">
-            <p>This Text Will be Replaced depending on Goal by jQuery</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn btn-info" data-dismiss="modal">Cancel</a>
-            <a href="#" class="btn btn-danger" id="deleteGoalModalConfirm">Confirm</a>
+{% endblock %}
+
+{% block modals %}
+
+    <div class="modal fade" id="deleteGoalModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header box-header blueNavy">
+                    <h2><i class="halflings-icon trash white"></i><span class="break" ></span>New activity details</h2>
+                </div>
+                <div class="modal-body">
+                    <p>This Text Will be Replaced depending on Goal by jQuery</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-danger" id="deleteGoalModalConfirm">Confirm</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="modal hide fade " id="showActivityGoalModal">
-        <div class="modal-content">
-            <div class="modal-header box-header blueNavy ">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h2><i class="halflings-icon list-alt white"></i>
-                    <span class="break" ></span>
-                    <a style="color:white" href="the json display jQuery modified">Details of selected Activity</a>
-                </h2>
-            </div>
-            <div class="modal-body no-padding">
-                <!-- data from activitytracker/display-activity.html -->
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-danger" id='closeModal' data-dismiss="modal">Close</a>
+    <div class="modal fade" id="showActivityModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
             </div>
         </div>
     </div>
+
 
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'bower_components/datatables/media/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'bower_components/datatables/media/js/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="{% static 'activitytracker/js/custom.js' %}"></script>
 	<script src="{% static 'activitytracker/js/goals.js' %}"></script>
 {% endblock %}
+
+

@@ -58,6 +58,16 @@ More detail and specific examples can be found in the included HTML file.
 
 */
 
+jQuery.browser = {};
+(function () {
+    jQuery.browser.msie = false;
+    jQuery.browser.version = 0;
+    if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+        jQuery.browser.msie = true;
+        jQuery.browser.version = RegExp.$1;
+    }
+})();
+
 (function ($) 
 {
 	function init(plot) // this is the "body" of the plugin
