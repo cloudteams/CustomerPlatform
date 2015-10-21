@@ -1037,6 +1037,30 @@ def timeline_events_json(request):
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
+@login_required
+def analytics_configuration(request):
+    user = request.user
+
+    routine_activities = getFormattedRoutines(user, basic_routine_activities, day_types)
+    routine_extra_activities = list()
+    for activity in Activity.objects.all().order_by('activity_name'):
+        if activity.activity_name not in basic_routine_activities:
+            routine_extra_activities.append({
+                'activity': activity.activity_name,
+                'color': activity.category,
+                'icon_classname': activity.icon_classname,
+            })
+
+    return render(
+        request,
+        'activitytracker/analytics-configuration.html', {
+            'username': user.get_username(),
+            'routineActivities': routine_activities,
+            'routineExtraActivities': routine_extra_activities
+        }
+    )
+
+
 
 @login_required
 def analytics_activities(request):

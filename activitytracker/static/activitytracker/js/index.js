@@ -188,7 +188,8 @@
 
         var mapOptions = {
             center: {lat: 37.9908372, lng: 23.7383394},
-            zoom: 9
+            zoom: 9,
+            mapTypeControl : false
         };
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
         google.maps.event.addListener(marker, 'dragend', function (event) {

@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^goals/goalhandler/$', views.goalhandler, name='goalhandler'),
     url(r'^timeline/$', views.timeline, name='timeline'),
     url(r'^timelinejson/$', views.timeline_events_json, name='timelineEventsJson'),
+    url(r'^analytics/configuration/$', views.analytics_configuration, name='analytics-configuration'),
     url(r'^analytics/activities/$', views.analytics_activities, name='analytics-activities'),
     url(r'^analytics/friends/$', views.analytics_friends, name='analytics-friends'),
     url(r'^analytics/goals/$', views.analytics_goals, name='analytics-goals'),

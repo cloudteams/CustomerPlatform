@@ -663,8 +663,7 @@ a.brand span {
 .nav-tabs.nav-stacked  > li > ul > li.active > a:hover {
   	background: #080808;
 	color: #fff;
-	border: none;
-	border-bottom: 1px solid #080808;
+	border: 1px solid transparent !important;
 }
 
 /*
@@ -3589,9 +3588,7 @@ ul.messagesList li span.date {
 	margin: 0 !important;
 }
 
-#routine-activity-list .quick-button.metro.circle {
-	margin-top: 0 !important;
-}
+
 
 #range-slider {
 	width:34% !important;
@@ -3602,10 +3599,6 @@ ul.messagesList li span.date {
 	top: 15px;
 }
 
-#RoutineTable .quick-button {
-	margin: 0 auto !important;
-	position:relative;
-}
 
 #RoutineTable label {
 	margin-top: 10px;
@@ -3626,33 +3619,12 @@ input[name='range-logger'] {
 
 .routine-controls {
 	margin: 30px 0;
-	border-top: 2px solid darkblue;
-}
-
-.routine-canvas,
-.span5.routine-canvas{
-	display:flex;
-	margin: 0px 27px;
+	border-top: 2px solid rgba(220, 232, 232, 0.73);
 }
 
 .routine-canvas.hidden {
 	display:none;
 	visibility: hidden;
-
-}
-
-.routine-canvas .routine-container{
-	width: 60px;
-	margin-right: 4.8%;
-
-}
-
-.routine-canvas .routine-container .radio {
-	margin-top: 8px !important;
-}
-
-.routine-canvas .routine-container input[type='radio'] {
-	margin-left: 0 !important;
 
 }
 
@@ -4014,9 +3986,76 @@ select[name="gender"]:active{
 }
 
 .header-font-white {
-	color: white;
+	color: white
+}
+
+.header-font-white:hover,
+.header-font-white:active,
+.header-font-white:active {
+	color: #d5d5d5;
+	text-decoration: none;
 }
 
 .register-margin {
 	margin-bottom:20px;
+}
+
+.routine-quick-icon {
+	display: block;
+	border: 1px solid #000;
+	position: relative;
+	padding: 30px 10px 0px 10px;
+	margin: 10px 0 !important;
+	height: 45px;
+	width:45px;
+	color: #fff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .25);
+	filter: none;
+	-webkit-box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
+	   -moz-box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
+			box-shadow: 0 1px 0px rgba(255, 255, 255, .8);
+  	-webkit-border-radius: 30px;
+       -moz-border-radius: 30px;
+          	border-radius: 30px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.routine-quick-icon i {
+	font-size: 30px;
+    position: relative;
+    top: -23px;
+    left: -15%;
+}
+
+.routine-quick-icon:hover,
+.routine-quick-icon i:hover{
+	text-decoration: none;
+}
+
+#RoutineTable>tbody>tr>td:nth-child(2),
+#RoutineTable>tbody>tr>td:nth-child(3),
+#RoutineTable>tbody>tr>td:nth-child(4) {
+	border-bottom: 1px solid rgba(193, 200, 202, 0.38);
+}
+
+#RoutineTable>tbody>tr>td:nth-child(3),
+#RoutineTable>tbody>tr>td:nth-child(4) {
+	position:relative;
+	top: 5px;
+}
+
+#weekday-slider,
+#weekend-slider {
+	width: 50% !important;
+	margin-bottom: 10px
+}
+
+.center {
+	margin-left:auto !important;
+	margin-right:auto !important;
+	position:relative;
 }

@@ -149,7 +149,7 @@
             position: {lat:lat, lng:lng}
         });
 
-        mapEdit = new google.maps.Map(document.getElementById('map-canvas-edit'), {});
+        mapEdit = new google.maps.Map(document.getElementById('map-canvas-edit'), {mapTypeControl : false});
         markerEdit.setMap(mapEdit);
         google.maps.event.addListener(markerEdit, 'dragend', function (event) {
 

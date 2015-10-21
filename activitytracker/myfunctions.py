@@ -237,12 +237,13 @@ def getFormattedRoutines(user, shared_routine_list, day_types):
 
             if day_type not in basicRoutineActivities[activity.activity_name]:
                 basicRoutineActivities[activity.activity_name][day_type] = list()
-                basicRoutineActivities[activity.activity_name][day_type + '_seasonality'] = list()
 
             routine_data_logs = user.routine_set.filter(activity=activity, day_type=day_type)
             if not routine_data_logs:
-                (basicRoutineActivities[activity.activity_name][day_type]).append(' - ')
-                (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append(' - ')
+                (basicRoutineActivities[activity.activity_name][day_type]).append({
+                    'time': ' - ',
+                    'season': ''
+                })
                 continue
 
             for routine_data_log in routine_data_logs:
@@ -253,15 +254,15 @@ def getFormattedRoutines(user, shared_routine_list, day_types):
                 seasonality_start = '' if not routine_data_log.seasonal_start else routine_data_log.seasonal_start.strftime('%m/%d')
                 seasonality_end = '' if not routine_data_log.seasonal_end else routine_data_log.seasonal_end.strftime('%m/%d')
 
-                (basicRoutineActivities[activity.activity_name][day_type]).append(
-                    '%s - %s' % (start_time, end_time)
-                )
-
                 if not seasonality_start:
-                    (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append('All Year')
+                    (basicRoutineActivities[activity.activity_name][day_type]).append({
+                        'time': '%s - %s' % (start_time, end_time),
+                        'season': 'All Year'
+                    })
                 else:
-                    (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append(
-                        '%s - %s' % (seasonality_start, seasonality_end)
-                    )
-
+                    (basicRoutineActivities[activity.activity_name][day_type]).append({
+                        'time': '%s - %s' % (start_time, end_time),
+                        'season': '%s - %s' % (seasonality_start, seasonality_end)
+                    })
+    print basicRoutineActivities
     return basicRoutineActivities
