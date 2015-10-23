@@ -6,6 +6,7 @@ from requests_oauthlib import OAuth1
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta
+import time
 from config import *
 from django.db import transaction
 from AuthorizationChecks import *
@@ -171,46 +172,58 @@ def assignDurationInterval(duration):
 
 def getAppManagementDomValues(status, provider):
     if status == "Not Connected":
-        return {     'buttonText': 'Connect App',
-                     'buttonClassColor': 'blueNavy',
-                     'statusText': 'App not Connected',
-                     'statusIcon': 'icon-remove-circle',
-                     'statusFontColor': 'red',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'circle-arrow-right',
+            'buttonText': 'Connect',
+            'statusText': 'App not Connected',
+            'statusIcon': 'icon-remove-circle',
+            'statusFontColor': 'red',
+            'providerIconName': provider
         }
     elif status == "Authentication Failed":
-        return {     'buttonText': 'Re-authorize',
-                     'buttonClassColor': 'orange',
-                     'statusText': 'App manually de-authorized or token expired',
-                     'statusIcon': 'icon-warning-sign',
-                     'statusFontColor': 'orange',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'repeat',
+            'buttonText': 'Re-Authorize',
+            'statusText': 'Expired or de-authorized',
+            'statusIcon': 'icon-warning-sign',
+            'statusFontColor': 'orangered',
+            'providerIconName': provider
         }
     elif status == "Cannot Process Request":
-        return {     'buttonText': 'Try again',
-                     'buttonClassColor': '#850521 ',
-                     'statusText': 'Too many requests sent. Try again later',
-                     'statusIcon': 'icon-warning-sign',
-                     'statusFontColor': 'red',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'repeat',
+            'buttonText': 'Retry',
+            'statusText': 'Too many requests sent. Try again later',
+            'statusIcon': 'icon-warning-sign',
+            'statusFontColor': 'red',
+            'providerIconName': provider
         }
     else:
-        return {     'buttonText': 'Disconnect',
-                     'buttonClassColor': 'red',
-                     'statusText': 'App connected',
-                     'statusIcon': 'icon-ok-circle',
-                     'statusFontColor': 'green',
-                     'providerIconName': provider
+        return {
+            'buttonIcon': 'trash',
+            'buttonText': 'De-Authorize',
+            'statusText': 'App connected',
+            'statusIcon': 'icon-ok-circle',
+            'statusFontColor': 'green',
+            'providerIconName': provider
         }
 
-# Returns the data of the routines in a formatted way, to present them in settings
-def getFormattedRoutines(user, routine_list, day_types):
+
+# Returns a list of the names of the user's personal routine activities
+def getRoutineList(user, shared_routine_list):
 
     user_extra_routines = user.routine_set.exclude(
-        activity__activity_name__in=routine_list
+        activity__activity_name__in=shared_routine_list
     ).values_list('activity__activity_name', flat=True)
 
-    user_routines_all = routine_list + list(user_extra_routines)
+    return shared_routine_list + list(user_extra_routines)
+
+
+# Returns the data of the routines in a formatted way, to present them in settings
+def getFormattedRoutines(user, shared_routine_list, day_types):
+
+    user_routines_all = getRoutineList(user, shared_routine_list)
+
     basicRoutineActivities = dict()
     for activity_name in user_routines_all:
 
@@ -224,12 +237,13 @@ def getFormattedRoutines(user, routine_list, day_types):
 
             if day_type not in basicRoutineActivities[activity.activity_name]:
                 basicRoutineActivities[activity.activity_name][day_type] = list()
-                basicRoutineActivities[activity.activity_name][day_type + '_seasonality'] = list()
 
             routine_data_logs = user.routine_set.filter(activity=activity, day_type=day_type)
             if not routine_data_logs:
-                (basicRoutineActivities[activity.activity_name][day_type]).append(' - ')
-                (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append(' - ')
+                (basicRoutineActivities[activity.activity_name][day_type]).append({
+                    'time': ' - ',
+                    'season': ''
+                })
                 continue
 
             for routine_data_log in routine_data_logs:
@@ -240,15 +254,15 @@ def getFormattedRoutines(user, routine_list, day_types):
                 seasonality_start = '' if not routine_data_log.seasonal_start else routine_data_log.seasonal_start.strftime('%m/%d')
                 seasonality_end = '' if not routine_data_log.seasonal_end else routine_data_log.seasonal_end.strftime('%m/%d')
 
-                (basicRoutineActivities[activity.activity_name][day_type]).append(
-                    '%s - %s' % (start_time, end_time)
-                )
-
                 if not seasonality_start:
-                    (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append('All Year')
+                    (basicRoutineActivities[activity.activity_name][day_type]).append({
+                        'time': '%s - %s' % (start_time, end_time),
+                        'season': 'All Year'
+                    })
                 else:
-                    (basicRoutineActivities[activity.activity_name][day_type + '_seasonality']).append(
-                        '%s - %s' % (seasonality_start, seasonality_end)
-                    )
-
+                    (basicRoutineActivities[activity.activity_name][day_type]).append({
+                        'time': '%s - %s' % (start_time, end_time),
+                        'season': '%s - %s' % (seasonality_start, seasonality_end)
+                    })
+    print basicRoutineActivities
     return basicRoutineActivities

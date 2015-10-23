@@ -6,7 +6,7 @@ from config import *
 from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
 
-EARLIEST_DATA_DATE = '2015-05-01'
+EARLIEST_DATA_DATE = '2015-09-01'
 
 ERROR_MESSAGE = 'An Error has occurred. Please refresh the page and try again'
 

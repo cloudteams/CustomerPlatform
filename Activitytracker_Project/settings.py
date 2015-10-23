@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'requests_oauthlib',
     'oauth2',
     'social.apps.django_app.default',
+    'djangobower',
+    'compressor',
 
     # comments app
     'django.contrib.sites',
@@ -66,7 +68,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'activitytracker.middleware.SocialAuthExceptionMiddleware'
+    'activitytracker.middleware.SocialAuthExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'Activitytracker_Project.urls'
@@ -115,11 +117,59 @@ PROJECT_REFRESH_PERIOD_MINUTES = 10
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'activitytracker/static'
 #STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,  'static'),
+
+# django-bower. Bower components dir
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/')
+
+INSTALLED_FINDERS = {
+    'djangobower.finders.BowerFinder'
+}
+
+# django-bower. Installed js-css.
+BOWER_INSTALLED_APPS = (
+    'jquery#2.1.4',
+    'bootstrap#3.3',
+    'jquery-tokenize#2.5.1',
+    'datatables#1.10',
+    'jquery-ui#1.11.4',
+    'jqueryui-touch-punch',
+    'clockpicker#0.0.7',
+    'moment',
+    'fullcalendar',
+    'chosen',
+    'bootstrap-chosen',
+    'bootstrap-datepicker',
+    'bootstrap-tokenfield',
+    'datatables-responsive'
+
 )
+
+STATICFILES_FINDERS = (
+    # Bower
+    'djangobower.finders.BowerFinder',
+    # static
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Compress and minify
+COMPRESS_ENABLED = False
+# COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter',  'compressor.filters.cssmin.CSSMinFilter']
+#COMPRESS_CSS_FILTERS = ['compressor.filters.yuglify.YUglifyCSSFilter']
+#COMPRESS_JS_FILTERS = ['compressor.filters.yuglify.YUglifyJSFilter']
+# COMPRESS_OFFLINE = True
+COMPRESS_ROOT = 'static'
+
+
 
 AUTH_USER_MODEL = 'activitytracker.User'
 

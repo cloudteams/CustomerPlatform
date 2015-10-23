@@ -4,32 +4,33 @@
 {% load custom_templates %}
 
 {% block content %}
-				<div class="accountOptions-box">
+    <div class="accountOptions-box col-md-offset-4 col-md-4">
 
-					<h2 align="center">Please enter your username</h2>
-					<form class="form-horizontal" action="#" method="post" name="forgetForm" id="forgetForm">
-						{% csrf_token %}
-                        <fieldset>
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-6">
+                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+            </div>
+            <h1 class="text-center col-xs-12">Password Reset</h1>
+        </div>
+        <hr>
+        <form class="form-horizontal" action="{% url 'passwordforget' %}" method="post" name="forgetForm" id="forgetForm">
+            {% csrf_token %}
+            <fieldset>
 
-							<div class="input-prepend" title="Username">
-								<span class="add-on"><i class="halflings-icon user"></i></span>
-								<input class="input-large span10" name="username" id="username" type="text" placeholder="type username"/>
-							</div>
-							<div class="clearfix"></div>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Please enter your username" />
+                </div>
 
-                            <p align="center" id="usercheckmessage"></p>
+                <div class="col-xs-12"><h3 class="hidden error-message text-center">No such Username exists</h3></div>
+                <div class="col-xs-12"><h3 class="hidden success-message text-center">We have sent you an email with instructions on how to reset your password</h3></div>
 
-							<div align="center" class="button-accountOptions">
-								<button  type="submit" class="btn btn-primary">Continue</button>
-							</div>
-                            <div id="overlay">
-								<img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-							</div>
-							<div class="clearfix"></div>
-                        </fieldset>
-					</form>
-					<p align="center">
-						Back to <a href="{% url 'login' %}">Login page</a>.
-					</p>
-				</div><!--/span-->
+                <div class="col-xs-4 col-xs-offset-4 account-btn">
+                    <button  type="submit" class="btn btn-blueNavy col-xs-12">Continue</button>
+                </div>
+
+            </fieldset>
+        </form>
+        <div class="row"><h3 class="text-center">Back to <a href="{% url 'login' %}">Login Page</a></h3></div>
+    </div><!--/span-->
 {% endblock %}

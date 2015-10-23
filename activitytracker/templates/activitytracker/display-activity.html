@@ -1,130 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-	{% load staticfiles %}
-	{% load custom_templates %}
+<html>
+{% load staticfiles %}
+{% load custom_templates %}
 
     <!-- Modal detailing the activity -->
-    <div id = "{{ instance.id }}" class="modal-body-replacement">
-        <div class="control-group">
-            <div class="controls activity-output">
-                <i class="glyphicons-icon star modal-icon"></i>
-                {% if not performs_provider_instance %}
-                    <p>{{ instance.activity }}</p>
-                {% else %}
-                    <p><a href="{{ performs_provider_instance.provider_instance_url }}"
-                          target="_blank">{{ instance.activity }}</a></p>
-                {% endif %}
-            </div>
-        </div>
-        <div class="control-group">
-			  <div class="controls activity-output">
-				<i class="glyphicons-icon calendar modal-icon"></i>
-				<p>{{ start_date }}  (Started)</p>
-			  </div>
-		</div>
-		<div class="control-group">
-			  <div class="controls activity-output">
-				<i class="glyphicons-icon calendar modal-icon"></i>
-				<p>{{ end_date }}  (Finished)</p>
-			  </div>
-		</div>
-		<div class="control-group">
-			<div class="controls activity-output">
-				  <i class="glyphicons-icon clock modal-icon"></i>
-				  <p>{{ start_t }}  (Started)</p>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls activity-output">
-				  <i class="glyphicons-icon history modal-icon"></i>
-				  <p>{{ end_t }}  (Finished)</p>
-			</div>
-		</div>
-    	<div class="control-group">
-			<div class="controls activity-output">
-				<i class="glyphicons-icon cup modal-icon"></i>
-				<p>
-                    {% if instance.goal %}
-                   		{{ instance.goal }}
-                    {% else %}
-                		n/a
-                	{% endif %}
-                    &nbsp&nbsp
-                    {% if instance.goal_status == 'Reached'  %}
-                    	<i class="icon-ok"></i>
-                    {% elif instance.goal_status == 'Failed' %}
-                    	<i class="icon-remove"></i>
-                    {% elif instance.goal_status == 'InProgress' %}
-                    	<i class="icon-road"></i>
-                    {% endif %}
-                </p>
-			</div>
-		</div>
-    	<div class="control-group">
-			<div class="controls activity-output">
-				<i class="glyphicons-icon ok modal-icon"></i>
-                {% if instance.result %}
-					<p>{{ instance.result}}</p>
-                {% else %}
-                	<p>n/a</p>
-                {% endif %}
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls activity-output">
-				<i class="glyphicons-icon group modal-icon"></i>
-                {% if instance.friends %}
-					<p>{{ instance.friends|addSpaceAfterComma }}</p>
-                {% else %}
-                	<p>n/a</p>
-                {% endif %}
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls activity-output">
-				<i class="glyphicons-icon claw_hammer modal-icon"></i>
-				{% if tools %}
-					<p>{{ tools }}</p>
-                {% else %}
-                	<p>n/a</p>
-                {% endif %}
-			</div>
-		</div>
-    	<div class="control-group">
-			<div class="controls activity-output">
-				<i class="glyphicons-icon google_maps modal-icon"></i>
-                {% if instance.location_address %}
-					<p>{{ instance.location_address }}</p>
-                {% else %}
-                	<p>n/a</p>
-                {% endif %}
-			</div>
-		</div>
-    	{% if instance.location_address %}
-			<div id="map-canvas-show" class="map-canvas"></div>
-        {% endif %}
-	</div>
 
-    	<script>
-        var mapShow;
-		$('[id^=showActivity] .modal-header').attr('style','border-bottom:6px solid {{ color }} !important');
-		function initializeShowMap() {
-			var mapCanvas = document.getElementById('map-canvas-show');
-			var marker = new google.maps.Marker({});
-			var lat = {{ instance.location_lat }};
-			var lng = {{ instance.location_lng }};
-			marker.setPosition({lat:lat, lng:lng});
-			var mapOptions = {
-			  center: {lat:lat, lng:lng},
-			  zoom: 16
-			};
-			mapShow = new google.maps.Map(mapCanvas, mapOptions);
-			marker.setMap(mapShow);
-		}
-		</script>
+<div class="modal-header box-header blueNavy" style='border-bottom:6px solid {{ color }} !important'>
+    <h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>{{ instance.activity }} Details</h2>
+</div>
+<div class="modal-body row">
+    <div class="display-canvas col-xs-6 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
+            {% if not performs_provider_instance %}
+                {{ instance.activity }}
+            {% else %}
+                <a href="{{ performs_provider_instance.provider_instance_url }}" target="_blank">{{ instance.activity }}</a>
+            {% endif %}
+        </span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">{{ start_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ start_t }}  (Started)</span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-repeat show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">{{ end_date }} &nbsp;&nbsp; - &nbsp;&nbsp; {{ end_t }}  (Ended)</span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-screenshot show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
+            {% if instance.goal %}
+                {{ instance.goal }}
+            {% else %}
+                n/a
+            {% endif %}
+            &nbsp&nbsp
+            {% if instance.goal_status == 'Reached'  %}
+                <i class="icon-ok"></i>
+            {% elif instance.goal_status == 'Failed' %}
+                <i class="icon-remove"></i>
+            {% elif instance.goal_status == 'InProgress' %}
+                <i class="icon-road"></i>
+            {% endif %}
+        </span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-flag show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
+            {% if instance.result %}
+                {{ instance.result}}
+            {% else %}
+                n/a
+            {% endif %}
+        </span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-tags show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
+            {% if instance.friends %}
+                {{ instance.friends|addSpaceAfterComma }}
+            {% else %}
+                n/a
+            {% endif %}
+        </span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-wrench show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
+            {% if tools %}
+                {{ tools }}
+            {% else %}
+                n/a
+            {% endif %}
+        </span>
+    </div>
+    <div class="display-canvas col-xs-8 col-xs-offset-3">
+        <span class="col-xs-2 col-xxs-12 glyphicon glyphicon-map-marker show-activity-glyphicon" aria-hidden="true"></span>
+        <span class="show-activity-text col-xs-8 col-xxs-12">
+            {% if instance.location_address %}
+                {{ instance.location_address }}
+            {% else %}
+                n/a
+            {% endif %}
+        </span>
+    </div>
+    {% if instance.location_address %}
+        <div id="map-canvas-show" class="col-xs-offset-1 col-xs-10 map-canvas"></div>
+    {% endif %}
+</div>
+<div class="modal-footer">
+     <a  class="showactivityheaderedit col-xs-3 col-xs-offset-2" id="editactivity" href="{% url 'editactivity' instance.id %}"  data-dismiss='modal' data-toggle="modal" data-target="#editActivityModal">
+        <i class="halflings-icon edit"></i> Edit Details
+     </a>
+     <a class="showactivityheaderdelete col-xs-3" id="deleteactivity" onclick="handleActivityDelete('{% url 'deleteactivity' instance.id %}')">
+        <i class="halflings-icon trash"></i> Delete Activity
+     </a>
+    <a href="#" class="btn btn-blueNavy" id='closeModal' data-dismiss="modal">Close</a>
+</div>
 
 
+<script>
+    var mapShow;
+    function initializeShowMap() {
+        var mapCanvas = document.getElementById('map-canvas-show');
+        var marker = new google.maps.Marker({});
+        var lat = {{ instance.location_lat }};
+        var lng = {{ instance.location_lng }};
+        marker.setPosition({lat:lat, lng:lng});
+        var mapOptions = {
+          center: {lat:lat, lng:lng},
+          zoom: 16
+        };
+        mapShow = new google.maps.Map(mapCanvas, mapOptions);
+        marker.setMap(mapShow);
+    }
+</script>
 
-</body>
 </html>

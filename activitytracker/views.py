@@ -28,6 +28,7 @@ from FitbitClass import Fitbit
 from FoursquareClass import Foursquare
 from FacebookActivityClass import FacebookActivity
 from datetime import datetime
+from django.db.models import Q
 
 colourDict = {'black': "rgba(1, 1, 1, 0.8)",
               'blue': "#578EBE",
@@ -58,8 +59,7 @@ def terms_and_conditions(request):
 def login(request):
 
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
-    INVALID_USER_MSG = 'No such User exists'
-    WRONG_CREDENTIALS_MSG = 'Wrong Combination of Username and Password'
+    INVALID_CREDENTIALS_MSG = 'Invalid Username/Email or Password'
 
     if request.method != 'POST':
         if request.user.is_authenticated():
@@ -73,16 +73,23 @@ def login(request):
                        }
                       )
 
-    username = request.POST['username']
+    username_or_email = request.POST['username']
     password = request.POST['password']
 
-    if User.objects.filter(username=username).count() == 0:
-        return HttpResponseBadRequest(INVALID_USER_MSG)
+    if User.objects.filter(username=username_or_email).count() == 0:
+
+        if User.objects.filter(email=username_or_email).count() == 0:
+            return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
+        else:
+            username = User.objects.get(email=username_or_email).username
+
+    else:
+        username = username_or_email
 
     user = authenticate(username=username, password=password)
 
     if user is None:
-        return HttpResponseBadRequest(WRONG_CREDENTIALS_MSG)
+        return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
 
     if not user.is_active:
         return HttpResponseBadRequest(EMAIL_VERIFICATION_MSG)
@@ -102,52 +109,41 @@ def logout(request):
 # Check and Register the User
 def register(request):
 
-    USERNAME_EXISTS_MSG = 'UsernameExists'
     EMAIL_EXISTS_MSG = 'EmailExists'
     EMPTY_FIELDS_MSG = 'EmptyFields'
-    BIRTHDAY_ERROR_MSG = 'BirthdayError!'
+    PASSWORD_ERROR = 'PasswordMismatch'
     SUCCESS_MSG = 'Registration Successful! ' \
                   'We have sent you an e-mail with a validation link to follow'
 
     if request.method != 'POST':
         return render(request, 'activitytracker/register.html')
 
-    username = request.POST['username']
     email = request.POST['email']
     password = request.POST['password']
-    firstname = request.POST['firstname']
-    lastname = request.POST['lastname']
-    gender = request.POST['gender']
-    birthday = request.POST['birthday']
-
-    if User.objects.filter(username__iexact=username).exists():
-        return HttpResponseBadRequest(USERNAME_EXISTS_MSG)
+    repeated_password = request.POST['password_repeat']
 
     if User.objects.filter(email__iexact=email).exists():
         return HttpResponseBadRequest(EMAIL_EXISTS_MSG)
 
-    if '' in (birthday, username, firstname, lastname, email, password):
+    if password != repeated_password:
+        return HttpResponseBadRequest(PASSWORD_ERROR)
+
+    if '' in (email, password, repeated_password):
         return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
 
-    datetime_birthday = datetime.strptime(request.POST['birthday'], "%m/%d/%Y").date()
+    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists else email
 
-    if datetime_birthday > datetime.now().date():
-        return HttpResponseBadRequest(BIRTHDAY_ERROR_MSG)
-
-    user = User.objects.create_user(username=username,
-                                    email=email,
-                                    password=password,
-                                    first_name=firstname,
-                                    last_name=lastname,
-                                    gender=gender,
-                                    date_of_birth=datetime_birthday
-                                    )
+    user = User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+    )
     user.is_active = False
     user.save()
 
     characters = string.ascii_letters + string.digits
     verification_token = ''.join(random.choice(characters) for _ in range(20))
-    verification_url = '%s/activitytracker/account/verification/%s' % (SERVER_URL, verification_token)
+    verification_url = '%s/activitytracker/account/verification/%s' % (request.get_host(), verification_token)
     verification_instance = UserUniqueTokens(
         user=user,
         token=verification_token,
@@ -176,7 +172,7 @@ def passwordforget(request):
         return render(request, 'activitytracker/passforget.html')
 
     if User.objects.filter(username=request.POST['username']).count() == 0:
-        return HttpResponse(USER_NOT_EXISTS_MSG)
+        return HttpResponseBadRequest(USER_NOT_EXISTS_MSG)
 
     user = User.objects.get(username=request.POST['username'])
     characters = string.ascii_letters + string.digits
@@ -216,7 +212,11 @@ def password_reset(request, passwordreset_token):
         valid_token = False
 
     if request.method != "POST" or not valid_token:
-        return render(request,'activitytracker/password-reset.html',{'valid_token': valid_token})
+        return render(request,'activitytracker/password-reset.html',{
+            'valid_token': valid_token,
+            'token': passwordreset_token
+
+        })
 
     else:
         password = request.POST['password']
@@ -433,17 +433,13 @@ def placestojson(request):
 def index(request):
 
     user = request.user
-    object_list = [i.object_name for i in user.object_set.all()] #for form
-    friend_list = [i.friend_name for i in user.friend_set.all()] #for form
 
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
         activity_data[activity.get_category_display()].append(activity.activity_name)
 
     context = {
-               'list_of_objects': object_list,
                'username': user.get_username(),
-               'list_of_friends': friend_list,
                'activity_data': activity_data,
                'show_carousel_guide': False
     }
@@ -653,9 +649,9 @@ def showgroupactivity(request, group_identification):
                                   )
 
 # Deletes an activity
-def deleteactivity(request):
+def deleteactivity(request, performs_id):
 
-    activity = Performs.objects.get(id=request.POST['act_id'])
+    activity = Performs.objects.get(id=performs_id)
     activity.delete()
 
     return HttpResponse('Deleted')
@@ -686,37 +682,44 @@ def editactivity(request, performs_id):
     instance_object_list = [i.object_name for i in instance.using.all()]
     instance_friend_list = filter(None, instance.friends.split(","))
 
-    object_list = [i.object_name for i in user.object_set.all()] #for form
-    friend_list = [i.friend_name for i in user.friend_set.all()] #for form
-
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
         activity_data[activity.get_category_display()].append(activity.activity_name)
 
     context = {'instance': instance,
-               'instance_object_list': instance_object_list,
-               'instance_friend_list': instance_friend_list,
+               'instance_object_list': json.dumps(instance_object_list),
+               'instance_friend_list': json.dumps(instance_friend_list),
                'start_t': start_time,
                'end_t': end_time,
                'end_date': end_date,
                'start_date': start_date,
                'activity_data': activity_data,
-               'list_of_objects': object_list,
-               'list_of_friends': friend_list,
                'color': colourDict[instance.activity.category],
                }
 
     return SimpleTemplateResponse('activitytracker/edit-activity.html', context)
 
 
+def fetch_tokenfield_values(request):
+
+    user = request.user
+    object_values = [{'value': i.object_name, 'label': i.object_name} for i in user.object_set.all()] #for form
+    friend_values = [{'value': i.friend_name, 'label': i.friend_name} for i in user.friend_set.all()] #for form
+
+    json_list =[friend_values, object_values]
+    return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+
+
+
 #Gets called on update activity
-def updateactivity(request):
+def updateactivity(request, performs_id):
 
     DATE_ERROR_MSG = 'Activity cannot end sooner than it started'
     FIELD_ERROR_MSG = 'Please fill out all the fields correctly'
 
     user = request.user
-    instance = Performs.objects.get(id=int(request.POST['the_id']))
+    instance = Performs.objects.get(id=performs_id)
 
     try:
         start_date = '%s %s:00' % (request.POST['start_date'], request.POST['start_time'])
@@ -735,7 +738,7 @@ def updateactivity(request):
         location_lng = request.POST['lng']
         goal = request.POST['goal']
         result = request.POST['result']
-        goal_status = None if not instance.goal else request.POST['goalstatus']
+        goal_status = None if not goal else request.POST['goalstatus']
 
         instance.delete()
 
@@ -858,11 +861,11 @@ def displayperiod(request):
         month = request.POST['month']
 
         day_first_moment = datetime.strptime('%s-%s-%s 00:00:00' % (year, month, day),
-                                             "%Y-%b-%d %H:%M:%S"
+                                             "%Y-%B-%d %H:%M:%S"
                                              )
 
         day_last_moment = datetime.strptime('%s-%s-%s 23:59:59' % (year, month,day),
-                                            "%Y-%b-%d %H:%M:%S"
+                                            "%Y-%B-%d %H:%M:%S"
                                             )
 
         instances = user.performs_set.filter(start_date__lte=day_last_moment,
@@ -1034,6 +1037,30 @@ def timeline_events_json(request):
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
+@login_required
+def analytics_configuration(request):
+    user = request.user
+
+    routine_activities = getFormattedRoutines(user, basic_routine_activities, day_types)
+    routine_extra_activities = list()
+    for activity in Activity.objects.all().order_by('activity_name'):
+        if activity.activity_name not in basic_routine_activities:
+            routine_extra_activities.append({
+                'activity': activity.activity_name,
+                'color': activity.category,
+                'icon_classname': activity.icon_classname,
+            })
+
+    return render(
+        request,
+        'activitytracker/analytics-configuration.html', {
+            'username': user.get_username(),
+            'routineActivities': routine_activities,
+            'routineExtraActivities': routine_extra_activities
+        }
+    )
+
+
 
 @login_required
 def analytics_activities(request):
@@ -1067,27 +1094,21 @@ def analytics_activities(request):
 def analytics_routine(request):
 
     user = request.user
-    colourdict = {'black': 0, 'blue': 1, 'greenLight': 2,
-                  'orange': 3, 'redDark': 4, 'purple': 5 }
-    act_name_list = user.performs_set.values('activity__activity_name',
-                                             'activity__category').order_by('activity__activity_name').distinct()
-    activity_context_list = [[],[],[],[],[],[]]
-    for activity in act_name_list:
-        list_to_append = activity_context_list[colourdict[activity['activity__category']]]
-        list_to_append.append(activity['activity__activity_name'])
+    personal_routine_list = getRoutineList(user, basic_routine_activities)
 
-    context_data = {
-                    "Selfcare/Everyday Needs": activity_context_list[0],
-                    "Communication/Socializing": activity_context_list[1],
-                    "Sports/Fitness": activity_context_list[2],
-                    "Fun/Leisure/Hobbies": activity_context_list[3],
-                    "Responsibilities": activity_context_list[4],
-                    "Transportation": activity_context_list[5],
-                   }
+    routine_activities = dict()
+    for activity_name in personal_routine_list:
+
+        activity = Activity.objects.get(activity_name=activity_name)
+        routine_activities[activity.activity_name] = {
+            'color': activity.category,
+            'icon_classname': activity.icon_classname,
+        }
+    print routine_activities
     return render(request, 'activitytracker/analytics-routine.html',
                   {
                    'username': user.get_username(),
-                   'activity_data': context_data,
+                   'routineActivities': routine_activities,
                   }
     )
 
@@ -2563,81 +2584,97 @@ def routineSettings(request, setting='show'):
 
 def updateallroutinecharts(request):
 
+
+    # This is a very slow function. The only way to increase speed is by integrating django 1.9 or reforming the database.
+    # In this reform we have 2 options. Either split datetime into date & time fields (requires recoding the views.py)
+    # , or add duplicate data on each save that will help isolate the query components better (but DUPLICATE THINGS WILL EXIST)
+
     user = request.user
     day_type_requested = request.POST['day_type']
     datestart = (request.POST['range']).split('-')[0]
     dateend = (request.POST['range']).split('-')[1]
-    range_left = chosen_start = datetime.strptime(datestart, "%m/%d/%Y ")
-    range_right = chosen_end = datetime.strptime(dateend, " %m/%d/%Y")
-    routine = request.POST['routine'].replace('-',' ')
+    range_left = chosen_start = datetime.strptime(datestart, "%m/%d/%Y ").date()
+    range_right = chosen_end = datetime.strptime(dateend, " %m/%d/%Y").date()
+    routine = request.POST['routine'].replace('-', ' ')
     routine_activity = Activity.objects.get(activity_name=routine)
     chart_data = collections.OrderedDict()
-    print routine
+    routine_instances = dict()
+    routine_instances['Weekdays'] = user.routine_set.filter(activity=routine_activity, day_type="Weekdays")
+    routine_instances['Weekend'] = user.routine_set.filter(activity=routine_activity, day_type="Weekend")
+
     while True:
 
+        # If we finished with all the days then break
         if range_left > range_right:
             break
 
+        # Find out what type of day is the current day
         day_type = "Weekdays" if range_left.weekday() <= 4 else "Weekend"
 
-        if day_type_requested in ("Weekdays", "Weekend"):
-            if day_type_requested != day_type:
+        # If the day requested by the user is either "Weekend" or "Weekdays" (thus NOT full week), then if the current
+        # day doesnt match the user's request, move to the next day
+        if day_type_requested in ("Weekdays", "Weekend") and day_type_requested != day_type:
                 range_left += timedelta(days=1)
                 continue
 
-        try:
-            routine_range = user.routine_set.get(
-                activity=routine_activity,
-                day_type=day_type
+        # If the current day_type doesnt hold any routine activities, move to the next day. Should break if both day
+        # types were empty but the overhead is little at the moment
+        if not routine_instances[day_type]:
+            range_left += timedelta(days=1)
+            continue
+
+        background_actions = []
+        # For each of the found routine instances (= different hours/seasonalities)
+        for routine_instance in routine_instances[day_type]:
+
+            # Check for assigned seasonality. If there is one, check if the current day belongs in this season. If not
+            # then simply continue to the next day
+            if (routine_instance.seasonal_start and routine_instance.seasonal_end) is not None:
+                if not (routine_instance.seasonal_start < range_left < routine_instance.seasonal_end):
+                    continue
+
+            # Produce a datetime object (needed for 1.8 django) combining the current day and the times of the routine
+            routine_start = datetime.combine(range_left, routine_instance.start_time)
+            routine_end = datetime.combine(range_left, routine_instance.end_time)
+
+            # Find the background activities that fall underneath the time span of the routine
+            background_actions = user.performs_set.filter(
+                start_date__lte=routine_end,
+                end_date__gte=routine_start
             )
-        except ObjectDoesNotExist:
-            range_left += timedelta(days=1)
-            continue
 
-        try:
-            routine_start = datetime.combine(range_left, routine_range.start_time)
-            routine_end = datetime.combine(range_left, routine_range.end_time)
-        except:
-            range_left += timedelta(days=1)
-            continue
+            for action in background_actions:
 
-        background_actions = user.performs_set.filter(
-            start_date__lte=routine_end,
-            end_date__gte=routine_start
-        )
+                action_start = action.start_date
+                action_end = action.end_date
 
-        for action in background_actions:
-
-            action_start = action.start_date
-            action_end = action.end_date
-
-            if (routine_start < action_start) and (routine_end > action_end) :
-                intersection_time = action_end - action_start
-                rest_time = action_end - action_end         # It is 0 of course
+                if (routine_start < action_start) and (routine_end > action_end) :
+                    intersection_time = action_end - action_start
+                    rest_time = action_end - action_end         # It is 0 of course
 
 
-            elif (routine_start < action_start) and (routine_end <= action_end):
-                intersection_time = routine_end - action_start
-                rest_time = action_start - routine_start + action_end - routine_end
+                elif (routine_start < action_start) and (routine_end <= action_end):
+                    intersection_time = routine_end - action_start
+                    rest_time = action_start - routine_start + action_end - routine_end
 
-            elif (routine_start >= action_start) and (routine_end > action_end):
-                intersection_time = action_end - routine_start
-                rest_time = routine_start - action_start + routine_end - action_end
+                elif (routine_start >= action_start) and (routine_end > action_end):
+                    intersection_time = action_end - routine_start
+                    rest_time = routine_start - action_start + routine_end - action_end
 
-            else:
-                intersection_time  = routine_end - routine_start
-                rest_time = routine_start - action_start + action_end - routine_end
+                else:
+                    intersection_time  = routine_end - routine_start
+                    rest_time = routine_start - action_start + action_end - routine_end
 
-            try:
-                chart_data[action.activity.activity_name]['count'] += 1
-                chart_data[action.activity.activity_name]['intersection_time'] += intersection_time
-                chart_data[action.activity.activity_name]['rest_time'] += rest_time
+                try:
+                    chart_data[action.activity.activity_name]['count'] += 1
+                    chart_data[action.activity.activity_name]['intersection_time'] += intersection_time
+                    chart_data[action.activity.activity_name]['rest_time'] += rest_time
 
-            except KeyError:
-                chart_data[action.activity.activity_name] = {}
-                chart_data[action.activity.activity_name]['count'] = 1
-                chart_data[action.activity.activity_name]['intersection_time'] = intersection_time
-                chart_data[action.activity.activity_name]['rest_time'] = rest_time
+                except KeyError:
+                    chart_data[action.activity.activity_name] = {}
+                    chart_data[action.activity.activity_name]['count'] = 1
+                    chart_data[action.activity.activity_name]['intersection_time'] = intersection_time
+                    chart_data[action.activity.activity_name]['rest_time'] = rest_time
 
         range_left += timedelta(days=1)
 
@@ -2663,10 +2700,17 @@ def updateallroutinecharts(request):
             'OrderByTime': round(value['intersection_time'].seconds/float(3600) + value['intersection_time'].days*float(24), 2),
             'OrderByInstances': str(value['count']),
             },
-
-
         ]
         json_list += json_entries
 
-    print json.dumps(json_list)
     return HttpResponse(json.dumps(json_list), content_type='application/json')
+
+@login_required
+def overview(request):
+    return render(
+        request,
+        'activitytracker/overview.html',
+        {
+          'username': request.user.get_username()
+        }
+    )

@@ -1,75 +1,53 @@
 {% extends "base_non_authenticated.html" %}
 {% load staticfiles %}
+{% load custom_templates %}
+
+{% block css %}
+    <link href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-				<div class="login-box">
-				
-					<h2 align="center">Register Below</h2>
-					<form class="form-horizontal" action="{% url 'register' %}" method="post" name="registerForm" id="registerForm">
-						{% csrf_token %}
-                        <fieldset>
-							
-							<div class="input-prepend" title="Username">
-								<span class="add-on"><i class="halflings-icon user"></i></span>
-								<input class="input-large span10" name="username" id="username" type="text" placeholder="Username"/>
-							</div>
-                            <p align="center" class="hidden" id="usernamemessage" style="color:red" >Username already exists</p>
-							<div class="clearfix"></div>
+    <div class="accountOptions-box col-md-offset-4 col-md-4">
 
-							<div class="input-prepend" title="Password">
-								<span class="add-on"><i class="halflings-icon lock"></i></span>
-								<input class="input-large span10" name="password" id="password" type="password" placeholder="Password"/>
-							</div>
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-6">
+                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+            </div>
+            <h1 class="text-center col-xs-12">Register Below</h1>
+        </div>
+        <hr>
+        <form class="form-horizontal" action="{% url 'register' %}" method="post" name="registerForm" id="registerForm">
+            {% csrf_token %}
+            <fieldset>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    <input class="form-control input-lg" name="email" id="email" type="text" placeholder="Email Address"/>
+                </div>
+                <h3 class="hidden error-message text-center" id="emailmessage">This email is already in use</h3>
 
-                            <div class="input-prepend" title="Firstname">
-								<span class="add-on"><i class="halflings-icon user"></i></span>
-								<input class="input-large span10" name="firstname" id="firstname" type="text" placeholder="First Name"/>
-							</div>
-							<div class="clearfix"></div>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    <input class="form-control input-lg" name="password" id="password" type="password" placeholder="Password"/>
+                </div>
 
-                            <div class="input-prepend" title="Lastname">
-								<span class="add-on"><i class="halflings-icon user"></i></span>
-								<input class="input-large span10" name="lastname" id="lastname" type="text" placeholder="Last Name"/>
-							</div>
-							<div class="clearfix"></div>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    <input class="form-control input-lg" name="password_repeat" id="password_repeat" type="password" placeholder="Password Again"/>
+                </div>
+                <h3 class="hidden error-message text-center" id="passwordmessage" >Passwords don't match each other</h3>
 
-                            <div class="input-prepend" title="Email">
-								<span class="add-on"><i class="icon-envelope-alt"></i></span>
-								<input class="input-large span10" name="email" id="email" type="text" placeholder="E-Mail Address"/>
-							</div>
-                            <p align="center" class="hidden" id="emailmessage" style="color:red">This e-mail is already in use</p>
-							<div class="clearfix"></div>
+                <div class="col-xs-12"><h3 class='success-message hidden'>Registration Successful! We have sent you an e-mail with a validation link to follow</h3></div>
 
-                            <div class="input-prepend row-fluid" title="UserBirthday">
-                                <span class="add-on"><i class="icon-calendar"></i></span>
-                                <input placeholder="Birthday" type="text" name="birthday" class="datepicker span10" />
-                             </div>
-                            <p align="center" class="hidden" style="color:red" id="birthdaymessage">Can't be born in the future, duh</p>
-                            <div class="clearfix"></div>
+                <div class="col-xs-4 col-xs-offset-4 account-btn">
+                    <button  type="submit" class="btn btn-blueNavy col-xs-12">Register</button>
+                </div>
+            </fieldset>
+        </form>
 
-                            <div align="center">
-                                <select name="gender" class="input-small">
-                                    <option value="M" selected >Male</option>
-                                    <option value="F">Female</option>
-                                </select>
-                            </div>
-							<div class="clearfix"></div>
+        <div class="row"><h3 class="text-center">Back to <a href="{% url 'login' %}">Login page</a></h3></div>
+    </div><!--/span-->
+{% endblock %}
 
-                            <p align="center" style="color:green" id="registermessage"></p>
-
-							<div align="center" class="button-login">	
-								<button  type="submit" class="btn btn-primary">Register</button>
-							</div>
-							<div class="clearfix"></div>
-                        </fieldset>
-					</form>
-					<hr>
-
-                    <div id="overlay">
-                        <img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-                    </div>
-					<p align="center">
-						Back to <a href="{% url 'login' %}">Login page</a>.
-					</p>	
-				</div><!--/span-->
+{% block js %}
+    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
 {% endblock %}

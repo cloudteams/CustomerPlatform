@@ -2,30 +2,15 @@
 ====================================================================== */
 @media (min-width: 1200px) {
 	
-	.container-fluid-full {
+	.container {
 		overflow: hidden;
 		position: relative;
 		height: 100%;
 	}
-	
-	#content {
-		width: 85.578%;
-		padding: 28px;
-		margin: 0px 0px;
-		margin-left: 14.422% !important;
-	}
 
-	#content-rest {
-		width: 85.578%;
-		padding: 28px;
-		margin: 0px 0px;
-		margin-left: 14.422% !important;
-	}
-		
 	#sidebar-left {
-		background: #1C2B36;
-		margin-left: 0px !important;
-		position: absolute;
+		background: transparent;
+		position: relative;
 		height: 100%;
 	}
 	
@@ -44,25 +29,12 @@
 ====================================================================== */
 @media only screen and (min-width: 980px) and (max-width: 1199px){
 	
-	.container-fluid-full {
+	.container {
 		overflow: hidden;
 		position: relative;
 		height: 100%;
 	}
-	
-	#content {
-		width: 85.578%;
-		padding: 20px;
-		margin: 0px;
-		margin-left: 14.422% !important;
-	}
 
-	#content-rest {
-		width: 85.578%;
-		padding: 20px;
-		margin: 0px;
-		margin-left: 14.422% !important;
-	}
 	
 	.dark {
 		padding: 20px;
@@ -74,9 +46,8 @@
 	
 	
 	#sidebar-left {
-		background: #1C2B36;
-		margin-left: 0px !important;
-		position: absolute;
+		background: transparent;
+		position: relative;
 		height: 100%;
 	}
 	
@@ -99,10 +70,7 @@
 		font-weight: 700; 
 		padding:0 0px; 
 	}
-	
-	.breadcrumb {
-		margin: -20px -20px 20px -20px;	
-	}
+
 	
 	.statbox,
 	.widget,
@@ -151,25 +119,13 @@
 ====================================================================== */
 @media only screen and (min-width: 768px) and (max-width: 979px) {
 	
-	.container-fluid-full {
+	.container {
 		overflow: hidden;
 		position: relative;
 		height: 100%;
 	}
 	
-	#content {
-		width: 91.666%;
-		padding: 22px;
-		margin: 0px 0px;
-		margin-left: 8.334% !important;
-	}
 
-	#content-rest {
-		width: 91.666%;
-		padding: 22px;
-		margin: 0px 0px;
-		margin-left: 8.334% !important;
-	}
 	
 	.dark {
 		padding: 20px;
@@ -178,10 +134,7 @@
 		margin-bottom: -56px;
 		margin-right: -30px;
 	}
-	
-	.breadcrumb {
-		margin: -22px -22px 22px -22px;	
-	}
+
 	
 	.statbox,
 	.widget,
@@ -191,11 +144,10 @@
 	}
 		
 	#sidebar-left {
-		background: #1C2B36;
-		margin-left: 0px !important;
-		position: absolute;
+		background: transparent;
+		position: relative;
 		height: 100%;
-		width: 8.334% !important;
+
 	}
 	
 	.sidebar-nav > ul{
@@ -354,9 +306,7 @@
 		margin: -10px 0px 0px 0px;
 	}
 	
-	.breadcrumb {
-		margin: -5px -5px 5px -5px;
-	}
+
 	
 	.nav-tabs.nav-stacked > li > a,
 	.nav-tabs.nav-stacked > li > ul > li > a {

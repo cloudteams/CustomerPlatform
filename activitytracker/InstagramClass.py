@@ -21,7 +21,7 @@ class Instagram(OAuth2Validation):
             if time_posted < _time_barrier:
                 return _max_id, 'Reached Barrier'
 
-            if type == "video":
+            if media['type'] == "video":
                 activity_performed = Activity.objects.get(activity_name="Video Upload")
             else:
                 activity_performed = Activity.objects.get(activity_name="Image Upload")
@@ -64,8 +64,8 @@ class Instagram(OAuth2Validation):
                                                         objects=object_used
                                                         )
 
-            if feed[0]['id'] > self.provider_data['since_id']:
-                self.provider_data['since_id'] = str(int(feed[0]['id'].split('_')[0]) + 1) \
+            if feed[0]['id'] > self.metadata.since_id:
+                self.metadata.since_id = str(int(feed[0]['id'].split('_')[0]) + 1) \
                                                  + '_' + feed[0]['id'].split('_')[1]
 
             if (_max_id > feed[-1]['id']) or (_max_id == 0):
@@ -87,7 +87,7 @@ class Instagram(OAuth2Validation):
         params = {'access_token': self.provider_data['access_token']}
 
         if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
-            params['min_id'] = self.provider_data['since_id']
+            params['min_id'] = self.metadata.since_id
 
         self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 

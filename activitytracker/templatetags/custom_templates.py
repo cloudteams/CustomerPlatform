@@ -99,4 +99,6 @@ def removeDashes(value):
 def addDashes(value):
     return value.replace(' ', '-')
 
-
+@register.filter(name='zip')
+def zip_lists(a, b):
+    return zip(a, b)

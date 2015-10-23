@@ -1,5 +1,16 @@
 django==1.8
-pygeocoder==1.2.5
+
+
+# Apps
+
+# Bower, minification & concatenation
+django_compressor~=1.5
+django-bower~=5.0.4
+
+# Requests
+requests==2.6.2
+
+# Oauth
 python-oauth2==0.7.0
 python-social-auth==0.2.7
 requests==2.6.2
@@ -7,3 +18,9 @@ requests_oauthlib
 django-contrib-comments
 pattern
 pillow
+
+# Google Geocoding
+pygeocoder==1.2.5
+
+# Deployment
+#django-jenkins~=0.17.0

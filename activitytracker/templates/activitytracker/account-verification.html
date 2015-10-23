@@ -3,13 +3,33 @@
 {% load custom_templates %}
 
 {% block content %}
-				<div class="accountOptions-box" align="center">
-                        {% if verification_successful %}
-                        <p style="color:green">You have successfully verified your e-mail address! You will be redirected in a jiffy</p>
-                        <script>setTimeout(function(){ window.location = '{% url 'login' %}'; }, 4000);</script>
-                        {% else %}
-                        <p style="color:red">Verification failed. Make sure you have visited the correct URL.</p>
-                        {% endif %}
-                        <p>Back to <a href="{% url 'login' %}">Login page</a></p>
-				</div><!--/span-->
+
+    <div class="login-box col-md-offset-4 col-md-4">
+
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-6">
+                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+            </div>
+
+            <h1 class="text-center col-xs-12">
+                Verification
+                {% if verification_successful %}
+                    Successful
+                {% else %}
+                    Failed
+                {% endif %}
+            </h1>
+        </div>
+        <hr>
+        <div class="row">
+            {% if verification_successful %}
+                <h3 class="success-message">You have successfully verified your e-mail address! You will be redirected in a jiffy</h3>
+                <script>setTimeout(function(){ window.location = '{% url 'login' %}'; }, 4000);</script>
+            {% else %}
+                <h3 class="error-message">Verification failed. Make sure you have visited the correct URL.</h3>
+            {% endif %}
+        </div>
+        <div class="row"><h3 class="text-center">Back to <a href="{% url 'login' %}">Login page</a></h3></div>
+    </div>
+
 {% endblock %}

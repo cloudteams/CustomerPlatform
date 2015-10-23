@@ -18,21 +18,31 @@
 	<!-- start: CSS -->
     {% load staticfiles %}
     {% load custom_templates %}
-    <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
-	<link id="bootstrap-style" href="{% static 'activitytracker/css/bootstrap.min.css' %}" rel="stylesheet">
-	<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-	<link href="{% static 'activitytracker/css/bootstrap-responsive.min.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/bootstrap-tokenfield.css' %}" rel="stylesheet">
-	<link id="base-style" href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
-	<link id="base-style-responsive" href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/bootstrap-clockpicker.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/jquery.tokenize-2.5.1.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/style-font.css' %}" rel="stylesheet">
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
-	{% block css %}
-    {% endblock %}
+    {% load compress %}
+
+    {% compress css %}
+        <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
+	    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'bower_components/clockpicker/dist/bootstrap-clockpicker.min.css' %}" rel="stylesheet">
+        <link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}" rel="stylesheet">
+        <link href="{% static 'bower_components/chosen/chosen.min.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
+        <link href="{% static 'activitytracker/css/style-font.css' %}" rel="stylesheet">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+    {% endcompress %}
+
+    {% compress css %}
+        {% block css %}
+        {% endblock %}
+    {% endcompress %}
+
+
     <!-- end: CSS -->
 	
 
@@ -47,135 +57,112 @@
 	<![endif]-->
 		
 	<!-- start: Favicon -->
-	<link rel="shortcut icon" type="image/icon" href="/static/activitytracker/img/favicon.ico"/>
+	<link rel="shortcut icon" type="image/icon" href="/static/favicon.ico"/>
 	<!-- end: Favicon -->
 		
 </head>
 
 <body>
-		<!-- start: Header -->
-	<div class="navbar">
-		<div class="navbar-inner">
-			<div class="container-fluid">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="{% url 'index' %}"><span>CloudTeams Community</span></a>
+    <div class="page-container">
+        <div class="auth-background-blurred">
 
-				<ul class="nav">
-					<li><a href="{% url 'index' %}">Activities</a></li>
-					<li><a href="{% url 'start-profile-wizard' %}">My profile</a></li>
-					<li><a href="{% url 'all-projects' %}">CloudTeams projects</a></li>
-				</ul>
-				<!-- start: Header Menu -->
-				<div class="nav-no-collapse header-nav">
-					<ul class="nav pull-right">
-						<!-- start: User Dropdown -->
-						<li class="dropdown">
-							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> {{ request.user.username }}
-								<span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li class="dropdown-menu-title">
- 									<span>Account Options</span>
-								</li>
-								<li>
-                                    <a href="{% url 'settings' %}"><i class="halflings-icon user"></i> Profile</a>
-							    </li>
-								<li>
-                                    <a href="{% url 'logout' %}"><i class="halflings-icon off"></i> Logout</a>
-                                </li>
-							</ul>
-						</li>
-						<!-- end: User Dropdown -->
-					</ul>
-				</div>
-				<!-- end: Header Menu -->
-				
-			</div>
-		</div>
-	</div>
-	<!-- start: Header -->
+        </div>
+        <!-- start: Header -->
+        <div class="navbar">
+            <div class="navbar-inner">
+{#              <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive">#}
+                <span class="navbar-header-title">CloudTeams</span>
 
-	<div class="container-fluid-full">
-		<div class="row-fluid">
-			<!-- start: Main Menu -->
-			<div id="sidebar-left" class="span2">
-                {% block menu %}{% endblock %}
-			</div>
-			<!-- end: Main Menu -->
-			
-			<noscript>
-				<div class="alert alert-block span10">
-					<h4 class="alert-heading">Warning!</h4>
-					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
-				</div>
-			</noscript>
-
-            <!-- start: Content -->
-    	    <div id="content" class="span10" style="padding-bottom:0">
-                {% block content %}
-                {% endblock %}
+                <!-- start: Header Menu -->
+                <a class="btn btn-default navbar-btn collapse-btn visible-xs" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="nav navbar-menu pull-right">
+                        <!-- start: User Dropdown -->
+                    <a class=' link-petrol' href="{% url 'index' %}">Activities</a> |
+                    <a class=' link-petrol' href="{% url 'all-projects' %}">Projects</a> |
+                    <span class="dropdown">
+                    <a id="dropdownMenu1" class="dropdown-toggle" data-toggle="dropdown" href="#" data-target="#" aria-haspopup="true" aria-expanded="true">
+                         {{ request.user.username }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li>
+                            <a href=""><i class="halflings-icon user"></i> Profile</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'settings' %}"><i class="halflings-icon cog"></i> Settings</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'logout' %}"><i class="halflings-icon off"></i> Logout</a>
+                        </li>
+                    </ul>
+                    </span>    <!-- end: User Dropdown -->
+                </div>
+                    <!-- end: Header Menu -->
             </div>
+            <!-- end: Navbar -->
+        </div>
+        <!-- start: Header -->
 
-            	<footer>
+        <div class="container col-xs-12">
+                <!-- start: Main Menu -->
+                <div id="sidebar-left" class="col-sm-2 no-padding-left">
+                    {% block menu %}{% endblock %}
+                </div>
+                <!-- end: Main Menu -->
 
-		<p>
-			<span style="text-align:left;float:left">&copy; 2015 <a href="https://www.facebook.com/aggelos.arvanitakis" alt="Bootstrap_Metro_Dashboard">Arvanitakis Labs</a></span>
+                <noscript>
+                    <div class="alert alert-block span10">
+                        <h4 class="alert-heading">Warning!</h4>
+                        <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+                    </div>
+                </noscript>
 
-		</p>
+                <!-- start: Content -->
+                <div id="content" class="col-sm-10">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <!-- Loading .gif -->
+                <div id="overlay"><img src="{% static 'activitytracker/img/ajax-loader.gif' %}" alt="Loading" /></div>
+                <div class="clearfix"></div>
+                <!-- end: Loading .fig -->
+        </div>
+        <!-- end: container -->
 
-	</footer>
+        <footer>
+            <p style="float:left">&copy; 2015 <a href="https://academics.epu.ntua.gr" target="_blank">Decision Support Systems Lab</a></p>
+        </footer>
 
-	<!-- start: JavaScript-->
+    </div>
 
-		<script src="{% static 'activitytracker/js/jquery-1.9.1.min.js' %}"></script>
+        {% block modals %}
 
-		<script src="{% static 'activitytracker/js/jquery-ui-1.10.0.custom.min.js' %}"></script>
 
-		<script src="{% static 'activitytracker/js/jquery.ui.touch-punch.js' %}"></script>
-
-        <script src="{% static 'activitytracker/js/jquery-migrate-1.0.0.min.js' %}"></script>
-
-        <script src="{% static 'activitytracker/js/bootstrap.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/modernizr.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.cookie.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/fullcalendar.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.dataTables.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/excanvas.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.pie.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
-		<script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.chosen.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.uniform.min.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/jquery.iphone.toggle.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/counter.js' %}"></script>
-
-		<script src="{% static 'activitytracker/js/custom.js' %}"></script>
-
-        <script src="{% static 'activitytracker/js/bootstrap-clockpicker.min.js' %}"></script>
-
-        <script src="{% static 'activitytracker/js/jquery.tokenize-2.5.1.js' %}"></script>
-
-        <script type="text/javascript"
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
-		</script>
-
-		<!-- end: JavaScript-->
-        {% block js %}
         {% endblock %}
+
+        <!-- start: JavaScript-->
+        {% compress js %}
+            <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+            <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+            <script src="{% static 'bower_components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js' %}"></script>
+            <script src="{% static 'bower_components/chosen/chosen.jquery.min.js' %}"></script>
+            <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+            <script src="{% static 'bower_components/clockpicker/dist/bootstrap-clockpicker.min.js' %}"></script>
+            <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+            <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
+            </script>
+        {% endcompress %}
+
+        {% compress js %}
+            {% block js %}
+            {% endblock %}
+        {% endcompress %}
+        <!-- end: JavaScript-->
 </body>
 </html>

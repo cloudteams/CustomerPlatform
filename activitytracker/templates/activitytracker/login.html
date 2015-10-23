@@ -2,54 +2,44 @@
 {% load staticfiles %}
 {% load custom_templates %}
 {% block content %}
-				<div class="login-box">
-				
-					<h2 align="center">Login to your account</h2>
-					<form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
-						{% csrf_token %}
-                        <fieldset>
-							
-							<div class="input-prepend" title="Username">
-								<span class="add-on"><i class="halflings-icon user"></i></span>
-								<input class="input-large span10" name="username" id="username" type="text" placeholder="type username"/>
-							</div>
-							<div class="clearfix"></div>
+    <div class="login-box col-md-offset-4 col-md-4">
 
-							<div class="input-prepend" title="Password">
-								<span class="add-on"><i class="halflings-icon lock"></i></span>
-								<input class="input-large span10" name="password" id="password" type="password" placeholder="type password"/>
-							</div>
-							<div class="clearfix"></div>
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-6">
+                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
+            </div>
+        </div>
+        <form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
+            {% csrf_token %}
+            <fieldset>
 
-                            <p id="messageParagraph" align="center"></p>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Username or Email" />
+                </div>
 
-							<div align="center" class="button-login">	
-								<button  type="submit" class="btn btn-primary">Login</button>
-							</div>
-							<div class="clearfix"></div>
-                        </fieldset>
-					</form>
-                    <div id="overlay">
-                        <img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-					</div>
-                    <div class="social-login" align="center">
-						<p style='color:rgb(104, 100, 100)'><b>or</b></p>
-						<div>
-							<a href="#" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')" class="btn blueDark" style="color:white">
-								<i class="icon-facebook" style="margin-right:10px"></i>
-								Login with Facebook
-							</a>
-						</div>
-						<div>
-							<a href="#" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')" class="btn red" style="color:white">
-								<i class="icon-google-plus" style="margin-right:10px"></i>
-								Login with Google&nbsp;
-							</a>
-						</div>
-					</div>
-					<h3 align="center"><a href="{% url 'passwordforget' %}">Forgot Password</a></h3>
-					<h3 align="center"><a href="{% url 'register' %}">Register here</a></h3>
+                <div class="left-inner-addon">
+                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    <input name="password" id="password" type="password" class="form-control input-lg" placeholder="Password" />
+                </div>
 
-				</div><!--/span-->
-			
+                <h3 id="messageParagraph" class="text-center"></h3>
+
+                <div class="text-center login-margin">
+                    <button type="submit" class="btn btn-large btn-blueNavy">Login</button>
+                </div>
+            </fieldset>
+        </form>
+        <div class="social-login text-center">
+            <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
+            <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
+        </div>
+        <div class="container-fluid">
+            <h3 class="row">
+                <a class="col-xs-12 text-center register-margin" href="{% url 'register' %}">Register</a>
+                <a class="col-xs-12 text-center" href="{% url 'passwordforget' %}">Forgot Password</a>
+            </h3>
+        </div>
+
+    </div><!--/span-->
 {% endblock %}

@@ -6,7 +6,7 @@ class FacebookActivity(OAuth2Validation):
 
     def __init__(self, user_social_instance):
         super(FacebookActivity, self).__init__(user_social_instance)
-        self.api_user_timeline_url = 'https://api.instagram.com/v1/users/self/media/recent/'
+        self.api_user_timeline_url = 'https://graph.facebook.com/v2.4/me/posts'
 
     @transaction.atomic()
     def _insertMedia(self, feed):
@@ -16,40 +16,69 @@ class FacebookActivity(OAuth2Validation):
 
         for media in feed:
 
-            time_posted = datetime.utcfromtimestamp(float(media['created_time']))
+            time_posted = datetime.strptime(media['created_time'], '%Y-%m-%dT%H:%M:%S+0000')
 
             if time_posted < _time_barrier:
                 return _max_id, 'Reached Barrier'
 
-            if type == "video":
-                activity_performed = Activity.objects.get(activity_name="Video Upload")
-            else:
+            if media['type'] == "status":
+                activity_performed = Activity.objects.get(activity_name="Status Update")
+
+            elif media['type'] == "photo" and media['status_type'] == 'added_photo':
                 activity_performed = Activity.objects.get(activity_name="Image Upload")
 
-            result = 'Your post has been liked by %s and commented by %s people' \
-                     % (media['likes']['count'], media['comments']['count'])
-
-            if media['location'] is not None:
-
-                location_address = media['location']['name']
-                location_lat = media['location']['latitude']
-                location_lng = media['location']['longitude']
+            elif media['type'] == "video" and media['status_type'] == 'added_video':
+                activity_performed = Activity.objects.get(activity_name="Video Upload")
 
             else:
+                activity_performed = Activity.objects.get(activity_name="Share / Retweet")
 
+            # IMPORTANT: Only counting comments on the original post.
+            # Not comment-replies to other comments of the post
+            result = 'Your post has been liked by %s and commented by %s people' % (
+                media['likes']['summary']['total_count'],
+                media['comments']['summary']['total_count']
+            )
+
+            if 'place' in media:
+                if 'location' in media['place']:
+                    location_address = media['place']['location']['street']
+                    location_lat = media['place']['location']['latitude']
+                    location_lng = media['place']['location']['longitude']
+                else:
+                    location = Geocoder.geocode(media['place']['name'])
+                    location_address = media['place']['name']
+                    location_lat = location.latitude
+                    location_lng = location.longitude
+            else:
                 location_lat, location_lng, location_address = None, None, ''
 
-            object_used = "Instagram"
+            object_used = 'Facebook'
+            object_used += ',Smartphone' if media['status_type'] == 'mobile_status_update' else ''
 
             goal = ''
             goal_status = None
 
-            start_date = time_posted - timedelta(seconds=120)
+            start_date = time_posted - timedelta(seconds=60)
             end_date = time_posted
 
-            friends_list = [user_mention['user']['full_name'] for user_mention in media['users_in_photo']]
-            friends_list.remove(media['user']['full_name'] ) if media['user']['full_name'] in friends_list else True
-            friends = ','.join(friends_list)
+            tags = list()
+
+            if 'story_tags' in media:
+                for key, tag_list in media['story_tags'].iteritems():
+                    for tag in tag_list:
+                        tags.append(tag['name'])
+
+            if 'with_tags' in media:
+                for key, tag_list in media['with_tags'].iteritems():
+                    for tag in tag_list:
+                        tags.append(tag['name'])
+
+            tags = list(set(tags))
+            tags.remove('') if '' in tags else True
+            #tags.remove('username')
+
+            friends = ','.join(tags)
 
             performs_instance = addActivityFromProvider(user=self.user,
                                                         activity=activity_performed,
@@ -63,18 +92,19 @@ class FacebookActivity(OAuth2Validation):
                                                         result=result,
                                                         objects=object_used
                                                         )
+            # To be confirmed
+            if media['id'] > self.metadata['since_id']:
+                self.metadata['since_id'] = media['id']
 
-            if feed[0]['id'] > self.provider_data['since_id']:
-                self.provider_data['since_id'] = str(int(feed[0]['id'].split('_')[0]) + 1) \
-                                                 + '_' + feed[0]['id'].split('_')[1]
+            # To be fixed
+            if (_max_id > media['id']) or (_max_id == 0):
+                _max_id = media['id']
 
-            if (_max_id > feed[-1]['id']) or (_max_id == 0):
-                _max_id = feed[-1]['id']
-
+            media_url = 'https://www.facebook.com/' + media['id']
             createActivityLinks(provider=self.PROVIDER.lower(),
                                 instance=performs_instance,
                                 provider_instance_id=str(media['id']),
-                                url=media['link']
+                                url=media_url
                                 )
 
         return _max_id, 'Ok'
@@ -84,34 +114,39 @@ class FacebookActivity(OAuth2Validation):
         if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        params = {'access_token': self.provider_data['access_token'], 'fields': 'location,birthday'}
+        params = {'access_token': self.provider_data['access_token'],
+                  'fields': 'created_time,type,status_type,place,likes.summary(true),comments.summary(true),story_tags,with_tags'
+        }
 
-        """
-        if self.provider_data['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
-            params['min_id'] = self.provider_data['since_id']
+        if self.metadata['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
+            params['since'] = time.mktime(datetime.strptime(
+                                self.metadata['last_updated'],
+                                "%Y-%m-%d %H:%M:%S"
+                              ).timetuple())
 
-        self.provider_data['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.metadata['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+
+        response = requests.get(url=self.api_user_timeline_url, params=params).json()
 
         while True:
-
-            response = requests.get(url=self.api_user_timeline_url, params=params).json()
 
             feed = response['data']
 
             if not feed:
                 break
 
-            if 'error_type' in response['meta']:
+            if 'error' in response:
                 return HttpResponse(ERROR_MESSAGE)
 
-            params['max_id'], status = self._insertMedia(feed)
+            _ , status = self._insertMedia(feed)
 
             if status == "Barrier Reached":
                 break
 
+            response = requests.get(url=response['paging']['next']).json()
+            print response
         self.user_social_instance.save()
-        """
-        print params
-        response = requests.get(url='https://graph.facebook.com/v2.4/me', params=params).json()
-        print response
+
+        # I still need to get the checkins, both personal and from other people. Also need access to posts of photos
+        # or videos by others that i have been tagged in.
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

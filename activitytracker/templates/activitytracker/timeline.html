@@ -1,79 +1,60 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load custom_templates %}
+
+{% block css %}
+    <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/tokenfield-typeahead.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-				<ul class="breadcrumb">
-					<li>
-						<i class="icon-home"></i>
-						<a href="{% url 'index' %}">Home</a>
-						<i class="icon-angle-right"></i>
-					</li>
-					<li><a href="#">Timeline</a></li>
-				</ul>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="{% url 'index' %}">Home</a>
+        </li>
+        <li>
+            <a href="#">Timeline</a>
+        </li>
+    </ul>
 
-				<div class="row-fluid ">
-					<div class="span5 noMarginLeft">
-						<div class="dark">
-							<h1 align="center">Activity Timeline</h1>
-							<div class=" timeline">
-								<!-- Content from Ajax -->
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div><!--/.fluid-container-->
-		</div><!--/#content.span10-->
-	</div><!--/fluid-row-->
-		
-	<div class="modal hide fade " id="showActivityTimelineModal">
-        <div class="modal-content">
-					<div class="modal-header box-header blueNavy ">
-                        <button type="button" class="close" data-dismiss="modal" style="color:white">×</button>
-						<h2><i class="halflings-icon list-alt white"></i>
-                            <span class="break" ></span>
-                            <a style="color:white" href="the json display (jQuery modified href)">Details of selected Activity</a>
-                        </h2>
-					</div>
-					<div class="modal-body no-padding">
-						<!-- data from activitytracker/display-activity.html -->
-					</div>
-					<div class="modal-footer">
-                         <a  class="showactivityheaderedit" id="editactivityTimeline" href="dynamically modified by jQuery" data-dismiss="modal" data-toggle="modal" data-target="#editActivityTimelineModal">
-                        	<i class="halflings-icon edit"></i> Edit Details
-						 </a>
-						 <a class="showactivityheaderdelete" id="deleteactivityTimeline" href="{% url 'deleteactivity' %}">
-                         	<i class="halflings-icon trash"></i> Delete Activity
-						 </a>
-						<a href="#" class="btn btn-danger" id='closeModal' data-dismiss="modal">Close</a>
-					</div>
+    <div class="col-xs-12 no-padding">
+        <div class="dark">
+            <h1 align="center">Activity Timeline</h1>
+            <div class=" timeline">
+                <!-- Content from Timeline.js -->
             </div>
+        </div>
     </div>
 
-    <div class="modal hide fade" id="editActivityTimelineModal">
-		<form action="{% url 'updateactivity' %}" method="post" name="editForm" id="editForm" style="margin-bottom:0;">
-            {% csrf_token %}
-					<div class="modal-header box-header blueNavy">
-						<button type="button" class="close" data-dismiss="modal">×</button>
-						<h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>Edit Activity Details</h2>
-					</div>
-					<div class="modal-body no-padding">
-						<!-- Content from edit-activity.html -->
-					</div>
-					<div class="modal-footer">
-						<a href="#" class="btn btn-danger" data-dismiss="modal">Cancel</a>
-						<input type="button" class="btn btn-info" value="Update" id="editFormSubmit"/>
-					</div>
-		</form>
+{% endblock %}
+
+{% block modals %}
+
+    <div class="modal fade " id="showActivityModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
     </div>
-	
-	<div class="clearfix"></div>
-	<div id="overlay">
-		<img src="{% static 'activitytracker/img/spinner-mini.gif' %}" alt="Loading" />
-	</div>
+
+    <div class="modal fade" id="editActivityModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 	
 {% block js %}
+    <script src="{% static 'bower_components/jquery-ui/ui/autocomplete.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-tokenfield/dist/bootstrap-tokenfield.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/custom.js' %}"></script>
 	<script src="{% static 'activitytracker/js/timeline.js' %}"></script>
 {% endblock %}
 
