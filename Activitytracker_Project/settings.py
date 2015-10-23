@@ -131,7 +131,7 @@ INSTALLED_FINDERS = {
 # django-bower. Installed js-css.
 BOWER_INSTALLED_APPS = (
     'jquery#2.1.4',
-    'bootstrap#3.3',
+    'bootstrap#3',
     'jquery-tokenize#2.5.1',
     'datatables#1.10',
     'jquery-ui#1.11.4',
