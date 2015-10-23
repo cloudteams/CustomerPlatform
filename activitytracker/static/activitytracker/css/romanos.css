@@ -96,6 +96,10 @@
     .glyphicon-star {
         margin-left: 5% !important;
     }
+
+    .circleStatsContainer {
+        width: 100% !important;
+    }
 }
 
 

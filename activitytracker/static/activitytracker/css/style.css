@@ -2765,23 +2765,23 @@ footer {
 /* Circle stats
 =================================================================== */
 
-.circleStats {text-align: center; position: relative;}
 
 .circleStatsItemBox {
 	position: relative;
 	background: #67C2EF;
 	width:100%;
 	min-width: 130px;
-	height: 160px;
+	height: 200px;
 	padding-top: 40px;
 	margin-bottom: 28px;
+	border-radius: 8px !important;
 }
 
 .circleStatsItemBox .header {
 	background: rgba(255,255,255,0.2);
 	color: rgba(255,255,255,0.9);
 	width: 100%; 
-	height: 20px;
+	height: 30px;
 	padding: 5px 0px;
 	position: absolute;
 	top: 0px;
@@ -2791,10 +2791,10 @@ footer {
 	background: rgba(0,0,0,0.1);
 	color: rgba(255,255,255,0.9);
 	width: 100%; 
-	height: 20px;
+	height: 30px;
 	padding: 5px 0px;
 	position: absolute;
-	bottom: 0px;
+	bottom: 0;
 }
 
 .circleStatsItemBox .footer .count{
@@ -3525,15 +3525,6 @@ ul.messagesList li span.date {
 	filter: blur(3spx);
 }
 
-#carouselModal {
-	width: 56%;
-	margin-left: -360px;
-}
-
-#carouselModal .modal-body {
-	max-height:475px;
-	height: 475px;
-}
 
 .analytics-filters-container {
 	background-color: rgba(225, 233, 236, 0.35);;
@@ -4071,4 +4062,16 @@ select[name="gender"]:active{
 
 .routine-season {
 	font-style: italic;
+}
+
+.dashboardWrapper {
+	background: white;
+	border-radius: 8px;
+}
+
+.dashboardTitle {
+	font-weight: 600;
+	color: #235965;
+	margin-top: 10px;
+	margin-bottom: 20px;
 }

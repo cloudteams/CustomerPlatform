@@ -93,8 +93,8 @@ class FacebookActivity(OAuth2Validation):
                                                         objects=object_used
                                                         )
             # To be confirmed
-            if media['id'] > self.metadata['since_id']:
-                self.metadata['since_id'] = media['id']
+            if media['id'] > self.metadata.since_id:
+                self.metadata.since_id = media['id']
 
             # To be fixed
             if (_max_id > media['id']) or (_max_id == 0):
@@ -118,13 +118,13 @@ class FacebookActivity(OAuth2Validation):
                   'fields': 'created_time,type,status_type,place,likes.summary(true),comments.summary(true),story_tags,with_tags'
         }
 
-        if self.metadata['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['since'] = time.mktime(datetime.strptime(
-                                self.metadata['last_updated'],
+                                self.metadata.last_updated,
                                 "%Y-%m-%d %H:%M:%S"
                               ).timetuple())
 
-        self.metadata['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         response = requests.get(url=self.api_user_timeline_url, params=params).json()
 
@@ -145,7 +145,8 @@ class FacebookActivity(OAuth2Validation):
 
             response = requests.get(url=response['paging']['next']).json()
             print response
-        self.user_social_instance.save()
+
+        self.metadata.save()
 
         # I still need to get the checkins, both personal and from other people. Also need access to posts of photos
         # or videos by others that i have been tagged in.

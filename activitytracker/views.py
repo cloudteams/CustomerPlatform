@@ -76,12 +76,12 @@ def login(request):
     username_or_email = request.POST['username']
     password = request.POST['password']
 
-    if User.objects.filter(username=username_or_email).count() == 0:
+    if User.objects.filter(username__iexact=username_or_email).count() == 0:
 
-        if User.objects.filter(email=username_or_email).count() == 0:
+        if User.objects.filter(email__iexact=username_or_email).count() == 0:
             return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
         else:
-            username = User.objects.get(email=username_or_email).username
+            username = User.objects.get(email__iexact=username_or_email).username
 
     else:
         username = username_or_email
@@ -430,9 +430,11 @@ def placestojson(request):
 
 # Basic View, Gets called on "History" page load
 @login_required
-def index(request):
+def index(request, new_user=False):
 
     user = request.user
+
+    new_user = True if new_user == "NewUser" else False
 
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
@@ -441,7 +443,7 @@ def index(request):
     context = {
                'username': user.get_username(),
                'activity_data': activity_data,
-               'show_carousel_guide': False
+               'show_carousel_guide': new_user
     }
 
     if not user.logged_in_before:
@@ -1063,10 +1065,43 @@ def configuration(request):
 @login_required
 def dashboard(request):
 
-    user=request.user
+    user = request.user
 
+    current_week_category_data = previous_week_category_data =  dict([
+        (category, {
+            'count': 0,
+            'percentage': 0,
+            'color': color,
+        })
+        for (color, category) in Activity.CATEGORY_CHOICES])
+
+    current_day = datetime.now().date()
+    start_of_current_week = current_day - timedelta(days=current_day.weekday())
+
+    start_of_previous_week = current_day - timedelta(days=current_day.weekday(), weeks=1)
+    end_of_previous_week = start_of_current_week - timedelta(days=1)
+
+    current_week_total_activities = user.performs_set.filter(
+        start_date__lte=current_day,
+        end_date__gte=start_of_current_week
+    ).count()
+
+    for user_instance in user.performs_set.filter(
+            start_date__lte=current_day,
+            end_date__gte=start_of_current_week
+    ):
+        current_week_category_data[user_instance.activity.get_category_display()]['count'] += 1
+
+    for _ , category_data in current_week_category_data.iteritems():
+        try:
+            category_data['percentage'] = round(category_data['count']/float(current_week_total_activities), 3)*100
+        except ZeroDivisionError:
+            category_data['percentage'] = 0
+    print current_week_category_data
     return render(request, 'activitytracker/dashboard.html', {
         'username': user.get_username(),
+        'current_week_category_data': current_week_category_data,
+        'current_week_total_activities': current_week_total_activities
         }
     )
 
@@ -2712,13 +2747,3 @@ def updateallroutinecharts(request):
         json_list += json_entries
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
-
-@login_required
-def overview(request):
-    return render(
-        request,
-        'activitytracker/overview.html',
-        {
-          'username': request.user.get_username()
-        }
-    )

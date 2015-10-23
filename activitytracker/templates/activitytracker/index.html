@@ -174,71 +174,73 @@
     </div>
 
     <div class="modal fade" id="carouselModal">
-		<div class="modal-content">
-            <div class="modal-body">
-                <div id="myCarousel" class="carousel slide">
-                      <ol class="carousel-indicators">
-                          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                          <li data-target="#myCarousel" data-slide-to="1"></li>
-                          <li data-target="#myCarousel" data-slide-to="2"></li>
-                          <li data-target="#myCarousel" data-slide-to="3"></li>
-                          <li data-target="#myCarousel" data-slide-to="4"></li>
-                          <li data-target="#myCarousel" data-slide-to="5"></li>
-                          <li data-target="#myCarousel" data-slide-to="6"></li>
-                      </ol>
-                      <!-- Carousel items -->
-                      <div class="carousel-inner">
-                          <div class="active item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide1.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>Easily add an activity using the button or a calendar cell. Inspect them by clicking on them.</p>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="myCarousel" class="carousel slide">
+                          <ol class="carousel-indicators">
+                              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                              <li data-target="#myCarousel" data-slide-to="1"></li>
+                              <li data-target="#myCarousel" data-slide-to="2"></li>
+                              <li data-target="#myCarousel" data-slide-to="3"></li>
+                              <li data-target="#myCarousel" data-slide-to="4"></li>
+                              <li data-target="#myCarousel" data-slide-to="5"></li>
+                              <li data-target="#myCarousel" data-slide-to="6"></li>
+                          </ol>
+                          <!-- Carousel items -->
+                          <div class="carousel-inner">
+                              <div class="active item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide1.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>Easily add an activity using the button or a calendar cell. Inspect them by clicking on them.</p>
+                                  </div>
+                              </div>
+                              <div class="item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide2.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>Group & Sort could never be easier. Change the date range of the calendar to display the corresponding activities</p>
+                                  </div>
+                              </div>
+                              <div class="item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>Inspect, Edit & Delete an activity easily by clicking on any representation of them inside the App.</p>
+                                  </div>
+                              </div>
+                              <div class="item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide3.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>See a Timeline of the activities you performed. Modify and access them with 1 click.</p>
+                                  </div>
+                              </div>
+                              <div class="item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide4.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>Get a glimpse of the goals you have set over the activities you have performed. Easily inspect the activity and update the Goal & status.</p>
+                                  </div>
+                              </div>
+                              <div class="item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide5.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>See Analytics for all focus points of Activity Tracker. Change the filters and see new charts rising to meet the needs of your selections</p>
+                                  </div>
+                              </div>
+                              <div class="item" style="min-height:460px">
+                                  <img src='{% static 'activitytracker/img/guide6.png' %}'/>
+                                  <div class="carousel-caption">
+                                      <p>Easily modify your personal info and connect with providers to sync activities with external Apps. By adding your own
+                                      places you can monitor the activities done near them in Analytics </p>
+                                  </div>
                               </div>
                           </div>
-                          <div class="item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide2.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>Group & Sort could never be easier. Change the date range of the calendar to display the corresponding activities</p>
-                              </div>
-                          </div>
-                          <div class="item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>Inspect, Edit & Delete an activity easily by clicking on any representation of them inside the App.</p>
-                              </div>
-                          </div>
-                          <div class="item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide3.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>See a Timeline of the activities you performed. Modify and access them with 1 click.</p>
-                              </div>
-                          </div>
-                          <div class="item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide4.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>Get a glimpse of the goals you have set over the activities you have performed. Easily inspect the activity and update the Goal & status.</p>
-                              </div>
-                          </div>
-                          <div class="item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide5.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>See Analytics for all focus points of Activity Tracker. Change the filters and see new charts rising to meet the needs of your selections</p>
-                              </div>
-                          </div>
-                          <div class="item" style="min-height:460px">
-                              <img src='{% static 'activitytracker/img/guide6.png' %}'/>
-                              <div class="carousel-caption">
-                                  <p>Easily modify your personal info and connect with providers to sync activities with external Apps. By adding your own
-                                  places you can monitor the activities done near them in Analytics </p>
-                              </div>
-                          </div>
-                      </div>
-                      <!-- Carousel nav -->
-                      <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-                      <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                          <!-- Carousel nav -->
+                          <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                          <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                    </div>
                 </div>
-            </div>
-            <div align="center" style="margin-bottom:15px">
-                <a href="#" class="btn blueNavy" data-dismiss="modal">Got it!</a>
+                <div align="center" style="margin-bottom:15px">
+                    <a href="#" class="btn blueNavy" data-dismiss="modal">Got it!</a>
+                </div>
             </div>
         </div>
     </div>
@@ -254,7 +256,6 @@
     <script src="{% static 'activitytracker/js/jquery.flot.pie.js' %}"></script>
     <script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
     <script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
-    <script src="{% static 'activitytracker/js/jquery.knob.modified.js' %}"></script>
     <script src="{% static 'activitytracker/js/custom.js' %}"></script>
     <script src="{% static 'activitytracker/js/index.js' %}"></script>
 	<script>var show_carousel_guide = '{{ show_carousel_guide }}';</script>

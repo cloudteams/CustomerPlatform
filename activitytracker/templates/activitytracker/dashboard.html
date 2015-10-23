@@ -2,8 +2,7 @@
 {% load staticfiles %}
 {% load custom_templates %}
 {% block css %}
-    <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/tokenfield-typeahead.min.css' %}" rel="stylesheet">
-    <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/analytics-extra.css' %}" rel="stylesheet">
     <link href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
 {% endblock %}
 
@@ -18,137 +17,142 @@
         </li>
     </ul>
 
+    <div class="col-md-6 text-center dashboardWrapper">
 
 
-    <div class="row-fluid hideInIE8 circleStats">
+        <div class="dashboardTitle">Weekly Breakdown of Activity Categories</div>
 
-				<div class="span2" onTablet="span4" onDesktop="span2">
-                	<div class="circleStatsItemBox yellow">
-						<div class="header">Disk Space Usage</div>
-						<span class="percent">percent</span>
-						<div class="circleStat">
-                    		<input type="text" value="58" class="whiteCircle" />
-						</div>
-						<div class="footer">
-							<span class="count">
-								<span class="number">20000</span>
-								<span class="unit">MB</span>
-							</span>
-							<span class="sep"> / </span>
-							<span class="value">
-								<span class="number">50000</span>
-								<span class="unit">MB</span>
-							</span>
-						</div>
-                	</div>
-				</div>
+        {% for category, category_data in current_week_category_data.items %}
+            <div class="col-md-4 col-xs-4 circleStatsContainer ">
+                <div class="circleStatsItemBox {{ category_data.color }}">
+                    <div class="header">{{ category }}</div>
+                    <span class="percent">percent</span>
+                    <div class="circleStat">
+                        <input type="text" value="{{ category_data.percentage }}" class="whiteCircle" />
+                    </div>
+                    <div class="footer">
+                        <span class="count">
+                            <span class="number">{{ category_data.count }}</span>
+                            <span class="unit">Activities</span>
+                        </span>
+                        <span class="sep"> / </span>
+                        <span class="value">
+                            <span class="number">{{ current_week_total_activities }}</span>
+                            <span class="unit">Activities</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
 
-				<div class="span2" onTablet="span4" onDesktop="span2">
-                	<div class="circleStatsItemBox green">
-						<div class="header">Bandwidth</div>
-						<span class="percent">percent</span>
-						<div class="circleStat">
-                    		<input type="text" value="78" class="whiteCircle" />
-						</div>
-						<div class="footer">
-							<span class="count">
-								<span class="number">5000</span>
-								<span class="unit">GB</span>
-							</span>
-							<span class="sep"> / </span>
-							<span class="value">
-								<span class="number">5000</span>
-								<span class="unit">GB</span>
-							</span>
-						</div>
-                	</div>
-				</div>
+{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
+{#            <div class="circleStatsItemBox pink">#}
+{#                <div class="header">CPU</div>#}
+{#                <span class="percent">percent</span>#}
+{#                <div class="circleStat">#}
+{#                    <input type="text" value="83" class="whiteCircle" />#}
+{#                </div>#}
+{#                <div class="footer">#}
+{#                    <span class="count">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GHz</span>#}
+{#                    </span>#}
+{#                    <span class="sep"> / </span>#}
+{#                    <span class="value">#}
+{#                        <span class="number">3.2</span>#}
+{#                        <span class="unit">GHz</span>#}
+{#                    </span>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
+{#            <div class="circleStatsItemBox pink">#}
+{#                <div class="header">CPU</div>#}
+{#                <span class="percent">percent</span>#}
+{#                <div class="circleStat">#}
+{#                    <input type="text" value="83" class="whiteCircle" />#}
+{#                </div>#}
+{#                <div class="footer">#}
+{#                    <span class="count">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GHz</span>#}
+{#                    </span>#}
+{#                    <span class="sep"> / </span>#}
+{#                    <span class="value">#}
+{#                        <span class="number">3.2</span>#}
+{#                        <span class="unit">GHz</span>#}
+{#                    </span>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
+{#            <div class="circleStatsItemBox pink">#}
+{#                <div class="header">CPU</div>#}
+{#                <span class="percent">percent</span>#}
+{#                <div class="circleStat">#}
+{#                    <input type="text" value="83" class="whiteCircle" />#}
+{#                </div>#}
+{#                <div class="footer">#}
+{#                    <span class="count">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GHz</span>#}
+{#                    </span>#}
+{#                    <span class="sep"> / </span>#}
+{#                    <span class="value">#}
+{#                        <span class="number">3.2</span>#}
+{#                        <span class="unit">GHz</span>#}
+{#                    </span>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
+{#            <div class="circleStatsItemBox blue">#}
+{#                <div class="header">Memory</div>#}
+{#                <span class="percent">percent</span>#}
+{#                <div class="circleStat">#}
+{#                    <input type="text" value="100" class="whiteCircle" />#}
+{#                </div>#}
+{#                <div class="footer">#}
+{#                    <span class="count">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GB</span>#}
+{#                    </span>#}
+{#                    <span class="sep"> / </span>#}
+{#                    <span class="value">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GB</span>#}
+{#                    </span>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
+{#            <div class="circleStatsItemBox green">#}
+{#                <div class="header">Memory</div>#}
+{#                <span class="percent">percent</span>#}
+{#                <div class="circleStat">#}
+{#                    <input type="text" value="100" class="whiteCircle" />#}
+{#                </div>#}
+{#                <div class="footer">#}
+{#                    <span class="count">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GB</span>#}
+{#                    </span>#}
+{#                    <span class="sep"> / </span>#}
+{#                    <span class="value">#}
+{#                        <span class="number">64</span>#}
+{#                        <span class="unit">GB</span>#}
+{#                    </span>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+    </div>
+    <div class="col-md-6">
+        <div class="dashboardTitle">Weekly Activity Comparison</div>
+        <div id="ActivitiesChart"></div>
 
-				<div class="span2" onTablet="span4" onDesktop="span2">
-                	<div class="circleStatsItemBox red">
-						<div class="header">Memory</div>
-						<span class="percent">percent</span>
-                    	<div class="circleStat">
-                    		<input type="text" value="100" class="whiteCircle" />
-						</div>
-						<div class="footer">
-							<span class="count">
-								<span class="number">64</span>
-								<span class="unit">GB</span>
-							</span>
-							<span class="sep"> / </span>
-							<span class="value">
-								<span class="number">64</span>
-								<span class="unit">GB</span>
-							</span>
-						</div>
-                	</div>
-				</div>
-
-				<div class="span2 noMargin" onTablet="span4" onDesktop="span2">
-                	<div class="circleStatsItemBox pink">
-						<div class="header">CPU</div>
-						<span class="percent">percent</span>
-                    	<div class="circleStat">
-                    		<input type="text" value="83" class="whiteCircle" />
-						</div>
-						<div class="footer">
-							<span class="count">
-								<span class="number">64</span>
-								<span class="unit">GHz</span>
-							</span>
-							<span class="sep"> / </span>
-							<span class="value">
-								<span class="number">3.2</span>
-								<span class="unit">GHz</span>
-							</span>
-						</div>
-                	</div>
-				</div>
-
-				<div class="span2" onTablet="span4" onDesktop="span2">
-                	<div class="circleStatsItemBox blue">
-						<div class="header">Memory</div>
-						<span class="percent">percent</span>
-                    	<div class="circleStat">
-                    		<input type="text" value="100" class="whiteCircle" />
-						</div>
-						<div class="footer">
-							<span class="count">
-								<span class="number">64</span>
-								<span class="unit">GB</span>
-							</span>
-							<span class="sep"> / </span>
-							<span class="value">
-								<span class="number">64</span>
-								<span class="unit">GB</span>
-							</span>
-						</div>
-                	</div>
-				</div>
-
-				<div class="span2" onTablet="span4" onDesktop="span2">
-                	<div class="circleStatsItemBox green">
-						<div class="header">Memory</div>
-						<span class="percent">percent</span>
-                    	<div class="circleStat">
-                    		<input type="text" value="100" class="whiteCircle" />
-						</div>
-						<div class="footer">
-							<span class="count">
-								<span class="number">64</span>
-								<span class="unit">GB</span>
-							</span>
-							<span class="sep"> / </span>
-							<span class="value">
-								<span class="number">64</span>
-								<span class="unit">GB</span>
-							</span>
-						</div>
-                	</div>
-				</div>
-
-			</div>
+    </div>
 
 
 
@@ -158,10 +162,10 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'activitytracker/js/jquery.flot.js' %}"></script>
-    <script src="{% static 'activitytracker/js/jquery.flot.pie.js' %}"></script>
-    <script src="{% static 'activitytracker/js/jquery.flot.stack.js' %}"></script>
-    <script src="{% static 'activitytracker/js/jquery.flot.resize.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/counter.js' %}"></script>
+    <script src="{% static 'activitytracker/js/jquery.knob.modified.js' %}"></script>
     <script src="{% static 'activitytracker/js/custom.js' %}"></script>
     <script src="{% static 'activitytracker/js/dashboard.js' %}"></script>
+    <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
+ 	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
 {% endblock %}
