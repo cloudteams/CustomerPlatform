@@ -12,3 +12,10 @@ polyline{
 svg {
     overflow: visible !important;
 }
+
+.dropdown-menu.daterangepicker .ranges li {
+    border: 1px solid #f5f5f5 !important;
+    margin-bottom: 8px !important;
+    padding: 3px 12px !important;
+
+}

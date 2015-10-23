@@ -134,7 +134,8 @@ BOWER_INSTALLED_APPS = (
     'bootstrap-chosen',
     'bootstrap-datepicker',
     'bootstrap-tokenfield',
-    'datatables-responsive'
+    'datatables-responsive',
+    'bootstrap-daterangepicker'
 
 )
 

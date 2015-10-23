@@ -3422,7 +3422,11 @@ ul.messagesList li span.date {
 
 
 .user-places-options {
-	margin: 0.3em 0.3em 0 0.3em
+	margin: 0.35em 0.3em 0 0.3em
+}
+
+.user-routine-options {
+	margin: 0.25em 0.2em 0 0.2em;
 }
 
 .connected-app > td:nth-child(2){
@@ -3604,21 +3608,17 @@ ul.messagesList li span.date {
 	margin-top: 10px;
 }
 
-.range-picker {
-	margin-top:10px;
-	width: 340px !important;
-}
-
 input[name='range-logger'] {
 	margin-top:10px;
 }
 
 #seasonality-controls div{
-	margin: 30px 0;
+	margin: 15px 0;
 }
 
 .routine-controls {
-	margin: 30px 0;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	border-top: 2px solid rgba(220, 232, 232, 0.73);
 }
 
@@ -4058,4 +4058,17 @@ select[name="gender"]:active{
 	margin-left:auto !important;
 	margin-right:auto !important;
 	position:relative;
+}
+
+.controls-title {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.token-label {
+	max-width: 100% !important;
+}
+
+.routine-season {
+	font-style: italic;
 }

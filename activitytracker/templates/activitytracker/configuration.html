@@ -22,7 +22,6 @@
             <i class="icon-home"></i>
             <a href="{% url 'index' %}">Home</a>
         </li>
-        <li><a href="{% url 'index' %}">Analytics</a></li>
         <li><a href="#">Configuration</a></li>
     </ul>
 
@@ -88,10 +87,10 @@
 
                                 <td>
                                     {% for log in activity_data.Weekdays %}
-                                        {{ log.time }}
+                                        <span class='routine-time'>{{ log.time }}</span>
                                         {% if log.time != ' - '%}
                                             <br/>
-                                            ( {{ log.season }} )
+                                            ( <span class='routine-season'>{{ log.season }}</span> )
                                         {% endif %}
                                         <br/><br/>
                                     {% endfor %}
@@ -99,20 +98,20 @@
 
                                 <td>
                                     {% for log in activity_data.Weekend %}
-                                        {{ log.time }}
-                                        {% if log.time != ' - ' %}
+                                        <span class='routine-time'>{{ log.time }}</span>
+                                        {% if log.time != ' - '%}
                                             <br/>
-                                            ( {{ log.season }} )
+                                            ( <span class='routine-season'>{{ log.season }}</span> )
                                         {% endif %}
                                         <br/><br/>
                                     {% endfor %}
                                 </td>
 
                                 <td class="text-center">
-                                    <a class="btn btn-info" href="#" onclick="initializeEditRoutineModal(this)">
+                                    <a class="btn btn-blueNavy user-routine-options" href="#" onclick="initializeEditRoutineModal(this)">
                                         <i class="halflings-icon edit white"></i>
                                     </a>
-                                    <a class="btn btn-info" href="#" onclick="deleteRoutine(this)">
+                                    <a class="btn btn-blueNavy user-routine-options" href="#" onclick="deleteRoutine(this)">
                                         <i class="halflings-icon trash white"></i>
                                     </a>
                                 </td>
@@ -235,7 +234,7 @@
                                     <a title="{{ activity }}" class="routine-quick-icon routine-activity {{ activity_data.color }}">
                                         <i class="activicon-{{ activity_data.icon_classname }}"></i>
                                     </a>
-                                    <input name="routine-radiobutton" type="radio" class="radio center" value="{{ activity }}"/>
+                                    <input name="routine-radiobutton" id="{{ activity }}-radio" type="radio" class="radio center" value="{{ activity }}"/>
                                 </div>
 
                             {% endfor %}
@@ -251,7 +250,7 @@
                                     <a title="{{ extra_activity.activity }}" class="routine-quick-icon {{ extra_activity.color }}">
                                         <i class="activicon-{{ extra_activity.icon_classname }}"></i>
                                     </a>
-                                    <input name="routine-radiobutton" type="radio" class="radio center" value="{{ extra_activity.activity }}"/>
+                                    <input name="routine-radiobutton" id="{{ activity }}-radio" type="radio" class="radio center" value="{{ extra_activity.activity }}"/>
                                 </div>
                             {% if forloop.counter|divisibleby:5 %} </div> {% endif %}
 
@@ -273,46 +272,58 @@
                         <div class="col-xs-12 text-center">
                             <input type="button" id="log-weekday-time" value="Log time" class="btn btn-blueNavy"/>
                         </div>
-                        <div id='weekend-controls' class="routine-controls text-center col-xs-8 col-xs-offset-2">
-                            <div style="margin: 30px 0">
+                        <div id='weekend-controls' class="routine-controls col-xs-12">
+                            <div class="controls-title text-center col-xs-12">
                                 <label for="weekend">Weekends</label>
                                 <a href="#"><i id='weekend' class="icon-chevron-down"></i></a>
                             </div>
-                            <div class="controls hidden weekend-input">
-                                <i class="glyphicons-icon clock modal-icon"></i>
-                                <select id="weekend-times" multiple="multiple" placeholder="Enter weekend times" class="input-modal tokenfield" name="weekend-times"></select>
-                                <div class='range-picker'>
+                            <div class="controls hidden weekend-input row" style="margin-top:35px">
+                                <div class="left-inner-addon col-xs-8 col-xs-offset-2">
+                                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                    <input id="weekend-times"  placeholder="Slide & Log Times" class="input-lg form-control tokenfield" name="weekend-times"/>
+                                </div>
+                                <div class='text-center col-xs-12'>
                                     <span id="weekend-range-from">08:00</span>
                                     &nbsp;&nbsp;&nbsp;
                                     <input id="weekend-range-select" data-slider-id="weekend-slider" type="text">
                                     &nbsp;&nbsp;&nbsp;
                                     <span id="weekend-range-to">17:15</span>
                                 </div>
-                                <input type="button" id="log-weekend-time" name='range-logger' value="Log time" class="btn btn-info"/>
+                                <div class="col-xs-12 text-center">
+                                    <input type="button" id="log-weekend-time" name='range-logger' value="Log time" class="btn btn-blueNavy"/>
+                                </div>
                             </div>
                         </div>
-                        <div id='seasonality-controls' class="routine-controls text-center col-xs-8 col-xs-offset-2">
-                            <div>
+                        <div id='seasonality-controls' class="routine-controls col-xs-12">
+                            <div class="text-center col-xs-12">
                                 <label for="seasonality">Seasonalities</label>
                                 <a href="#"><i id='seasonality' class="icon-chevron-down"></i></a>
                             </div>
-                            <div class="controls seasonality-input hidden diversification-border">
-                                <i class="glyphicons-icon calendar modal-icon"></i>
-                                <input placeholder="Weekday season start..." type="text" name="weekday_seasonality_start" class="datepicker">
-                                <i class="glyphicons-icon calendar modal-icon"></i>
-                                <input placeholder="Weekday season end..." type="text" name="weekday_seasonality_end" class="datepicker">
+                            <div class="controls seasonality-input hidden diversification-border row">
+                                <div class="left-inner-addon col-xs-6">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    <input placeholder="Weekday season start..." type="text" name="weekday_seasonality_start" class="datepicker form-control input-lg">
+                                </div>
+                                <div class="left-inner-addon col-xs-6">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    <input placeholder="Weekday season end..." type="text" name="weekday_seasonality_end" class="datepicker form-control input-lg">
+                                </div>
                             </div>
-                            <div class="controls seasonality-input hidden">
-                                <i class="glyphicons-icon calendar modal-icon"></i>
-                                <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_start" class="datepicker">
-                                <i class="glyphicons-icon calendar modal-icon"></i>
-                                <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_end" class="datepicker">
+                            <div class="controls seasonality-input hidden row">
+                                <div class="left-inner-addon col-xs-6">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    <input placeholder="Weekend season start..." type="text" name="weekend_seasonality_start" class="datepicker form-control input-lg">
+                                </div>
+                                <div class="left-inner-addon col-xs-6">
+                                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    <input placeholder="Weekend season end..." type="text" name="weekend_seasonality_end" class="datepicker form-control input-lg">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                            <a href="#" class="btn btn-edit" data-dismiss="modal">Cancel</a>
-                            <button type="submit" class="btn btn-info" id="submitRoutine" value="add">Save</button>
+                            <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-blueNavy" id="submitRoutine" value="add">Save</button>
                     </div>
                 </form>
             </div>

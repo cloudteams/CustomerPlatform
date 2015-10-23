@@ -3,7 +3,7 @@
 {% load custom_templates %}
 {% block css %}
     <link href="{% static 'activitytracker/css/analytics-extra.css' %}" rel="stylesheet">
-    <link href="{% static 'activitytracker/css/daterangepicker-bs2.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/daterangepicker.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -11,21 +11,20 @@
                     <li>
                         <i class="icon-home"></i>
                         <a href="{% url 'index' %}">Home</a>
-                        <i class="icon-angle-right"></i>
                     </li>
                     <li><a href="#">Analytics</a></li>
-                    <li><i class="icon-angle-right"></i><a href="#">Friends</a></li>
+                    <li><a href="#">Friends</a></li>
                 </ul>
                 <!-- content -->
-                <div class="span7 analytics-filters-container">
+                <div class="col-sm-6 text-center analytics-filters-container">
                     <h1>Social Analytics Filters</h1>
-					<div class="span5" style="margin-bottom:1%;">
+					<div class="col-sm-10 col-sm-offset-1">
 						Pick a date range:
-						<input type='text' id="dateRange" value="" name="dateRange" />
+						<input type='text' id="dateRange" value="" name="dateRange" class="daterange form-control input-md"/>
 					</div>
-					<div class="span5" style="margin-bottom:2%;">
+					<div class="col-sm-10 col-sm-offset-1">
 						Select an Activity:
-						<select data-placeholder="Filter by Activity" data-rel="chosen" id="activity-select" name="activity-select" class="analytics-filter">
+						<select data-placeholder="Filter by Activity" data-rel="chosen" id="activity-select" name="activity-select" class="analytics-filter form-group col-sm-8">
                             {% for category,list in activity_data.items %}
                             <optgroup label="{{ category }}">
                                 {% for name in list %}
@@ -56,7 +55,7 @@
 						</select>
 					</div>
                 </div>
-                <div class="span4 analytics-banner" id="total-analytics">
+                <div class="col-sm-5 analytics-banner" id="total-analytics">
                     <div style="padding:5%;">
 						<p align="center" id="date-range-total-analytics"></p>
                         <div class="row-fluid">
@@ -93,8 +92,8 @@
                         </div>
 					</div>
                 </div>
-            	<div class="span7 analytics-topChart "><h1 style="margin-left:25%"></h1></div>
-				<div class="span7 analytics-bottomChart "><h1 style="margin-left:20%"></h1></div>
+            	<div class="col-sm-12 text-center analytics-topChart "><h1></h1></div>
+				<div class="col-sm-12 text-center analytics-bottomChart "><h1></h1></div>
 {% endblock %}
 
 {% block js %}
@@ -102,5 +101,6 @@
 	<script src="{% static 'activitytracker/js/daterangepicker.js' %}"></script>
     <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
  	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/custom.js' %}"></script>
     <script src="{% static 'activitytracker/js/analytics-friends.js' %}"></script>
 {% endblock %}
