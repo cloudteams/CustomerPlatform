@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from profile_wizard import views
+from profile import views
 
 __author__ = 'dipap'
 

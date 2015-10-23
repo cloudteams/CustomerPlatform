@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^projects/', include('ct_projects.urls')),
 
     # user profile wizard
-    url(r'^profile/', include('profile_wizard.urls')),
+    url(r'^profile/', include('profile.urls')),
 
     # home page redirect
     url(r'^$', RedirectView.as_view(url='activitytracker/', permanent=True)),

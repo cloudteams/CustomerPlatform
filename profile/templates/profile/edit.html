@@ -1,10 +1,10 @@
-{% extends "profile_wizard/base.html" %}
+{% extends "profile/base.html" %}
 {% load url from future %}
 {% load staticfiles %}
 
 {% block extra_css %}
-    <link href="{% static 'profile_wizard/css/chosen.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'profile_wizard/css/bjqs.css' %}" rel="stylesheet" />
+    <link href="{% static 'profile/css/chosen.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'profile/css/bjqs.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
@@ -33,31 +33,31 @@
                     </li>
                     <li>
                         <div class="step" id="basic-info-step">
-                            {% include "profile_wizard/steps/basic-info.html" %}
+                            {% include "profile/steps/basic-info.html" %}
                         </div>
                     </li>
 
                     <li>
                         <div class="step" id="work-step">
-                            {% include "profile_wizard/steps/work.html" %}
+                            {% include "profile/steps/work.html" %}
                         </div>
                     </li>
 
                     <li>
                         <div class="step" id="influences">
-                            {% include "profile_wizard/steps/influences.html" %}
+                            {% include "profile/steps/influences.html" %}
                         </div>
                     </li>
 
                     <li>
                         <div class="step" id="devices-and-platforms-step">
-                            {% include "profile_wizard/steps/devices-and-platforms.html" %}
+                            {% include "profile/steps/devices-and-platforms.html" %}
                         </div>
                     </li>
 
                     <li>
                         <div class="step" id="you-and-tech">
-                            {% include "profile_wizard/steps/you-and-tech.html" %}
+                            {% include "profile/steps/you-and-tech.html" %}
                         </div>
                     </li>
 
@@ -76,8 +76,8 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'profile_wizard/js/bjqs-1.3.min.js' %}"></script>
-    <script src="{% static 'profile_wizard/js/chosen.jquery.min.js' %}"></script>
-    <script src="{% static 'profile_wizard/js/niceopts.js' %}"></script>
-    <script src="{% static 'profile_wizard/js/start.js' %}"></script>
+    <script src="{% static 'profile/js/bjqs-1.3.min.js' %}"></script>
+    <script src="{% static 'profile/js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'profile/js/niceopts.js' %}"></script>
+    <script src="{% static 'profile/js/start.js' %}"></script>
 {% endblock %}

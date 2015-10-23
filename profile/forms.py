@@ -1,5 +1,5 @@
 from django import forms
-from profile_wizard.models import UserProfile
+from profile.models import UserProfile
 
 __author__ = 'dipap'
 

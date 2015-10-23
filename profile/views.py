@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.templatetags.static import static
-from profile_wizard.forms import UserProfileForm
-from profile_wizard.lists import DEFAULT_BRANDS, BRAND_OPINIONS
-from profile_wizard.models import UserBrandOpinion
+from profile.forms import UserProfileForm
+from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
+from profile.models import UserBrandOpinion
 
 
 @login_required
@@ -29,11 +29,11 @@ def start_wizard(request):
             return redirect('/')
 
     params['form'] = form
-    return render(request, 'profile_wizard/start.html', params)
+    return render(request, 'profile/edit.html', params)
 
 
 def get_brand_icon(brand):
-    return static('profile_wizard/img/brands/%s.png' % brand.lower())
+    return static('profile/img/brands/%s.png' % brand.lower())
 
 
 @login_required
@@ -48,7 +48,7 @@ def get_brand_opinion(request):
     if not brand:
         return HttpResponse('')
     else:
-        return render(request, 'profile_wizard/brand-opinion/form.html', {
+        return render(request, 'profile/brand-opinion/form.html', {
             'brand': brand,
             'brand_icon': get_brand_icon(brand),
         })

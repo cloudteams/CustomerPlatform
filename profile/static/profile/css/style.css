@@ -8,14 +8,38 @@
     background-color: #f7f7f7;
 }
 
+.bjqs-prev {
+    display: none;
+}
 .bjqs-prev a, .bjqs-next a {
     background-color: #777;
     color: #fff;
     padding: 10px;
 }
 
-.bjqs-markers {
-    display: none;
+ol.bjqs-markers {
+    background: #fcfcfc;
+}
+
+ol.bjqs-markers li {
+    display: inline-block !important;
+    padding: 10px 20px;
+}
+
+ol.bjqs-markers li.active-marker {
+    background: #f7f7f7;
+}
+
+ul.bjqs-controls.v-centered li.bjqs-next a {
+    top: 70% !important;
+}
+
+ol.bjqs-markers li {
+    -webkit-transition: background 0.3s ease-in-out;
+	-moz-transition: background 0.3s ease-in-out;
+	-o-transition: background 0.3s ease-in-out;
+	-ms-transition: background 0.3s ease-in-out;
+	transition: background 0.3s ease-in-out;
 }
 
 /* Field layout */

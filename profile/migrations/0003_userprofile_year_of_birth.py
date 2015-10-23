@@ -8,7 +8,7 @@ import django.core.validators
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('profile_wizard', '0002_userprofile_years_experience'),
+        ('profile', '0002_userprofile_years_experience'),
     ]
 
     operations = [

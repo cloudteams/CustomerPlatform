@@ -54,7 +54,7 @@ INSTALLED_APPS = (
     'ct_projects',
 
     # Profile wizard app - allows customers to quickly setup their profile
-    'profile_wizard',
+    'profile',
 )
 
 MIDDLEWARE_CLASSES = (

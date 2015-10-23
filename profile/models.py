@@ -1,9 +1,9 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from activitytracker.models import User
-from profile_wizard.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS, \
+from profile.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS, \
     TECH_LEVELS
-from profile_wizard.multiple_choice_field import MultiSelectField
+from profile.multiple_choice_field import MultiSelectField
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
