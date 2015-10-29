@@ -14,7 +14,7 @@ class Runkeeper(OAuth2Validation):
         _time_barrier = datetime.strptime(EARLIEST_DATA_DATE + ' 00:00:00', "%Y-%m-%d %H:%M:%S")
 
         for item_ in feed:
-
+            print item_
             if PerformsProviderInfo.objects.filter(provider='runkeeper',
                                                    provider_instance_id=item_['uri']
                                                    ).count() > 0:
@@ -23,7 +23,8 @@ class Runkeeper(OAuth2Validation):
             activity = requests.get(url=self.api_base_url + item_['uri'],
                                     params={'access_token': self.provider_data['access_token']}
                                     ).json()
-
+            print 1
+            print activity
             time_monitored = datetime.strptime(activity['start_time'], '%a, %d %b %Y %H:%M:%S')
 
             if time_monitored < _time_barrier:
@@ -39,7 +40,7 @@ class Runkeeper(OAuth2Validation):
             if 'total_calories' in activity:
                 result += 'Burned %s calories.' % str(int(round(activity['total_calories'])))
 
-            if 'path' in activity:
+            if 'path' in activity and activity['path']:
 
                 location_lat = float(activity['path'][0]['latitude'])
                 location_lng = float(activity['path'][0]['longitude'])
@@ -73,9 +74,11 @@ class Runkeeper(OAuth2Validation):
                                                         objects=object_used
                                                         )
 
+            provider_instance_id = activity['uri'].split('/fitnessActivities/')[1]
+
             createActivityLinks(provider=self.PROVIDER.lower(),
                                 instance=performs_instance,
-                                provider_instance_id=activity['uri'],
+                                provider_instance_id=provider_instance_id,
                                 url=activity['activity']
                                 )
 

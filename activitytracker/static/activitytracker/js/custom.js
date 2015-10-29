@@ -885,18 +885,12 @@ function charts() {
 	$("#registerForm").submit(function(event) {
 		Loading();
 		event.preventDefault();
-		var data = {username: document.forms["registerForm"]["username"].value,
+		var data = {
 					password: document.forms["registerForm"]["password"].value,
 					password_repeat: document.forms["registerForm"]["password_repeat"].value,
-					firstname: document.forms["registerForm"]["firstname"].value,
-					lastname: document.forms["registerForm"]["lastname"].value,
-					birthday: document.forms["registerForm"]["birthday"].value,
-					gender: document.forms["registerForm"]["gender"].value,
 					email: document.forms["registerForm"]["email"].value,
 					csrfmiddlewaretoken: getCookie('csrftoken')
 		};
-		$( "#usernamemessage").addClass('hidden');
-		$( "#birthdaymessage").addClass('hidden');
 		$( "#emailmessage").addClass('hidden');
 		$("#passwordmessage").addClass('hidden');
 		$.ajax({
@@ -908,17 +902,11 @@ function charts() {
 			error: function (xhr, status, error) {
 				Done();
 				var response = xhr.responseText;
-				if (response == "UsernameExists") {
-					$("#usernamemessage").removeClass('hidden');
-				}
-				else if (response == "EmailExists") {
+				if (response == "EmailExists") {
 					$("#emailmessage").removeClass('hidden');
 				}
 				else if (response == "PasswordMismatch") {
 					$("#passwordmessage").removeClass('hidden');
-				}
-				else if (response == "BirthdayError") {
-					$("#birthdaymessage").removeClass('hidden');
 				}
 				else {
 					alert('Some fields have not been filled')

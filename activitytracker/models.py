@@ -54,6 +54,15 @@ class Activity(models.Model):
         (RESPONSIBILITIES, 'Responsibilities'),
         (TRANSPORTATION, 'Transportation'),
     )
+
+    CATEGORY_ICONS = (
+        ('sleeping', 'Self-care/Everyday Needs'),
+        ('talking', 'Communication/Socializing'),
+        ('running', 'Sports/Fitness'),
+        ('coffee', 'Fun/Leisure/Hobbies'),
+        ('teaching', 'Responsibilities'),
+        ('public-transport', 'Transportation'),
+    )
     category = models.CharField(max_length=20,
                                 choices=CATEGORY_CHOICES,
                                 null=True)

@@ -16,156 +16,217 @@
             <a href="#">Dashboard</a>
         </li>
     </ul>
+    <div class="col-xs-12 dashboardWrapper">
+        <div id="carousel-categories" class="carousel carousel-dashboard slide" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
 
-    <div class="col-md-6 text-center dashboardWrapper">
+                    <div class="col-md-6 text-center" id="CategoryKnobs">
+                        <div class="dashboardTitle">
+                            <span class="show-activity-glyphicon">{{ period_total_activities|floatformat }} </span>
+                            <span class="glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
+                        </div>
 
-
-        <div class="dashboardTitle">Weekly Breakdown of Activity Categories</div>
-
-        {% for category, category_data in current_week_category_data.items %}
-            <div class="col-md-4 col-xs-4 circleStatsContainer ">
-                <div class="circleStatsItemBox {{ category_data.color }}">
-                    <div class="header">{{ category }}</div>
-                    <span class="percent">percent</span>
-                    <div class="circleStat">
-                        <input type="text" value="{{ category_data.percentage }}" class="whiteCircle" />
+                        {% for category, category_data in period_category_data.items %}
+                        <div class=" col-sm-4 circleStatsContainer ">
+                            <a href="{% url 'analytics-activities' %}">
+                                <div class="circleStatsItemBox {{ category_data.color }}">
+                                    <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
+                                    <span class="percent">percent</span>
+                                    <div class="circleStat">
+                                        <input type="text" value="{{ category_data.instance_percentage }}" class="whiteCircle" />
+                                    </div>
+                                    <div class="footer">
+                                        <span class="count">
+                                            <span class="number">{{ category_data.count }}</span>
+                                            <span class="unit"></span>
+                                        </span>
+                                        <span class="sep"> / </span>
+                                        <span class="value">
+                                            <span class="number">{{ period_total_activities }}</span>
+                                            <span class="unit">Activities</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
                     </div>
-                    <div class="footer">
-                        <span class="count">
-                            <span class="number">{{ category_data.count }}</span>
-                            <span class="unit">Activities</span>
-                        </span>
-                        <span class="sep"> / </span>
-                        <span class="value">
-                            <span class="number">{{ current_week_total_activities }}</span>
-                            <span class="unit">Activities</span>
-                        </span>
+                    <div class="col-md-6">
+                        <div class="dashboardTitle text-center">Activities Comparison (by Instance)</div>
+                        <div id="ActivitiesInstanceChart" class="bs-height-config"></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="col-md-6 text-center" id="CategoryKnobs">
+                        <div class="dashboardTitle">
+                            <span class="show-activity-glyphicon">{{ period_total_minutes|floatformat }} min </span>
+                            <span class="glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
+                        </div>
+                        {% for category, category_data in period_category_data.items %}
+                        <div class=" col-sm-4 circleStatsContainer ">
+                            <a href="{% url 'analytics-activities' %}">
+                                <div class="circleStatsItemBox {{ category_data.color }}">
+                                    <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
+                                    <span class="percent">percent</span>
+                                    <div class="circleStat">
+                                        <input type="text" value="{{ category_data.time_percentage }}" class="whiteCircle" />
+                                    </div>
+                                    <div class="footer">
+                                        <span class="count">
+                                            <span class="number">{{ category_data.minutes|floatformat }}</span>
+                                            <span class="unit"></span>
+                                        </span>
+                                        <span class="sep"> / </span>
+                                        <span class="value">
+                                            <span class="number">{{ period_total_minutes|floatformat }}</span>
+                                            <span class="unit">Minutes</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="dashboardTitle text-center">Activity Comparison (by Duration)</div>
+                        <div id="ActivitiesMinuteChart" class="bs-height-config"></div>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-
-{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
-{#            <div class="circleStatsItemBox pink">#}
-{#                <div class="header">CPU</div>#}
-{#                <span class="percent">percent</span>#}
-{#                <div class="circleStat">#}
-{#                    <input type="text" value="83" class="whiteCircle" />#}
-{#                </div>#}
-{#                <div class="footer">#}
-{#                    <span class="count">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GHz</span>#}
-{#                    </span>#}
-{#                    <span class="sep"> / </span>#}
-{#                    <span class="value">#}
-{#                        <span class="number">3.2</span>#}
-{#                        <span class="unit">GHz</span>#}
-{#                    </span>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
-{#            <div class="circleStatsItemBox pink">#}
-{#                <div class="header">CPU</div>#}
-{#                <span class="percent">percent</span>#}
-{#                <div class="circleStat">#}
-{#                    <input type="text" value="83" class="whiteCircle" />#}
-{#                </div>#}
-{#                <div class="footer">#}
-{#                    <span class="count">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GHz</span>#}
-{#                    </span>#}
-{#                    <span class="sep"> / </span>#}
-{#                    <span class="value">#}
-{#                        <span class="number">3.2</span>#}
-{#                        <span class="unit">GHz</span>#}
-{#                    </span>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
-{#            <div class="circleStatsItemBox pink">#}
-{#                <div class="header">CPU</div>#}
-{#                <span class="percent">percent</span>#}
-{#                <div class="circleStat">#}
-{#                    <input type="text" value="83" class="whiteCircle" />#}
-{#                </div>#}
-{#                <div class="footer">#}
-{#                    <span class="count">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GHz</span>#}
-{#                    </span>#}
-{#                    <span class="sep"> / </span>#}
-{#                    <span class="value">#}
-{#                        <span class="number">3.2</span>#}
-{#                        <span class="unit">GHz</span>#}
-{#                    </span>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
-{#            <div class="circleStatsItemBox blue">#}
-{#                <div class="header">Memory</div>#}
-{#                <span class="percent">percent</span>#}
-{#                <div class="circleStat">#}
-{#                    <input type="text" value="100" class="whiteCircle" />#}
-{#                </div>#}
-{#                <div class="footer">#}
-{#                    <span class="count">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GB</span>#}
-{#                    </span>#}
-{#                    <span class="sep"> / </span>#}
-{#                    <span class="value">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GB</span>#}
-{#                    </span>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#        <div class="col-md-4 col-xs-4 circleStatsContainer">#}
-{#            <div class="circleStatsItemBox green">#}
-{#                <div class="header">Memory</div>#}
-{#                <span class="percent">percent</span>#}
-{#                <div class="circleStat">#}
-{#                    <input type="text" value="100" class="whiteCircle" />#}
-{#                </div>#}
-{#                <div class="footer">#}
-{#                    <span class="count">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GB</span>#}
-{#                    </span>#}
-{#                    <span class="sep"> / </span>#}
-{#                    <span class="value">#}
-{#                        <span class="number">64</span>#}
-{#                        <span class="unit">GB</span>#}
-{#                    </span>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-categories" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-categories" data-slide-to="1"></li>
+            </ol>
+        </div>
     </div>
-    <div class="col-md-6">
-        <div class="dashboardTitle">Weekly Activity Comparison</div>
-        <div id="ActivitiesChart"></div>
-
+    <div class="col-xs-12 dashboardWrapper">
+        <div class="box box-transparent col-md-6 blue-black">
+            <div class="box-header blueNavy" data-original-title>
+                <h2 class="text-center"><i class="halflings-icon star white"></i><span class="break"></span>Week's Latest 10 Activities</h2>
+            </div>
+            <div class="box-content">
+                <table id="LatestActivitiesTable" class="col-xs-12 text-center user-providers">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="text-center">Activity</th>
+                            <th class="text-center"><i class="halflings-icon time"></i>Start Time</th>
+                            <th class="text-center"><i class="halflings-icon repeat"></i>Duration (min.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for activity in latest_activities%}
+                        <tr>
+                            <td><i class="activicon-{{ activity.icon }}"></i></td>
+                            <td><a data-toggle="modal" data-target="#showActivityModal" href="{% url 'showactivity' activity.id %}">{{activity.name }}</a></td>
+                            <td><i>{{ activity.start_time }}</i></td>
+                            <td><i>{{ activity.duration|floatformat }}</i></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="carousel-activities" class="carousel carousel-dashboard slide col-md-6" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <div class="dashboardTitle text-center">Week's Top 10 Activities (by Instance)</div>
+                    <div id="TopActivitiesInstanceChart" class="bs-height-config"></div>
+                </div>
+                <div class="item">
+                    <div class="dashboardTitle text-center">Week's Top 10 Activities (by Duration)</div>
+                    <div id="TopActivitiesMinuteChart" class="bs-height-config"></div>
+                </div>
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-activities" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-activities" data-slide-to="1"></li>
+                </ol>
+            </div>
+        </div>
     </div>
 
+    <div class="col-xs-12 dashboardWrapper">
+        <div class="col-xs-12">
+            <div class="dashboardTitle col-sm-6 text-center">
+                <span class="glyphicon glyphicon-cloud show-activity-glyphicon" aria-hidden="true"></span>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-md-2 col-sm-4 circleStatsContainer text-center">
+                <a href="{% url 'settings' %}">
+                    <div class="circleStatsItemBox blueNavy">
+                        <div class="header"><i class="icon-cloud"></i>Connected Providers</div>
+                        <span class="percent">percent</span>
+                        <div class="circleStat">
+                            <input type="text" value="{{ connected_provider_percentage }}" class="whiteCircle" />
+                        </div>
+                        <div class="footer">
+                            <span class="count">
+                                <span class="number">{{ connected_providers }}</span>
+                                <span class="unit"></span>
+                            </span>
+                            <span class="sep"> / </span>
+                            <span class="value">
+                                <span class="number">{{ total_providers }}</span>
+                                <span class="unit">Providers</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-2 col-sm-4 text-center circleStat-right-text">
+                <div class="col-xs-12">
+                    <span class="dashboard-glyphicon-text"> that have tracked</span>
+                    <span class="glyphicon glyphicon-arrow-right show-activity-glyphicon" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4 circleStatsContainer text-center">
+                <a href="{% url 'index' %}">
+                    <div class="circleStatsItemBox blueBlack">
+                        <div class="header"><i class="icon-star"></i>Tracked Activities</div>
+                        <span class="percent">percent</span>
+                        <div class="circleStat">
+                            <input type="text" value="{{ tracked_activities_percentage }}" class="whiteCircle" />
+                        </div>
+                        <div class="footer">
+                            <span class="count">
+                                <span class="number">{{ tracked_activities }}</span>
+                                <span class="unit"></span>
+                            </span>
+                            <span class="sep"> / </span>
+                            <span class="value">
+                                <span class="number">{{ period_total_activities }}</span>
+                                <span class="unit">Activities</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 
+    <script>chart_data = {{ chart_data|safe }};</script>
+    <script>top_activities_chart_data_by_instance = {{ top_activities_chart_data_by_instance|safe }};</script>
+    <script>top_activities_chart_data_by_duration = {{ top_activities_chart_data_by_duration|safe }};</script>
 
+{% endblock %}
 
-
-
+{% block modals %}
+    <div class="modal fade" id="showActivityModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            {#  Data will be fed remotely through display-activity.html template #}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
     <script src="{% static 'activitytracker/js/counter.js' %}"></script>
     <script src="{% static 'activitytracker/js/jquery.knob.modified.js' %}"></script>
     <script src="{% static 'activitytracker/js/custom.js' %}"></script>
-    <script src="{% static 'activitytracker/js/dashboard.js' %}"></script>
     <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
  	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
+    <script src="{% static 'activitytracker/js/dashboard.js' %}"></script>
 {% endblock %}

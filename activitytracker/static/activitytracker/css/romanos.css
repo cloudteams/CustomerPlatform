@@ -55,6 +55,14 @@
     .timeslot-title span:nth-child(2) {
         direction: ltr;
     }
+
+    .glyphicon.glyphicon-arrow-right.show-activity-glyphicon{
+        display:none;
+    }
+
+    .circleStat-right-text {
+        height: 85px;
+    }
 }
 
 @media (min-width: 767px) {
@@ -100,6 +108,15 @@
     .circleStatsContainer {
         width: 100% !important;
     }
+
+    .bs-height-config {
+        height: 220px !important;
+    }
+
 }
 
-
+@media (min-width: 531px) {
+    .bs-height-config {
+        height: 460px !important;
+    }
+}

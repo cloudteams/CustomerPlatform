@@ -24,7 +24,7 @@ class FacebookActivity(OAuth2Validation):
             if media['type'] == "status":
                 activity_performed = Activity.objects.get(activity_name="Status Update")
 
-            elif media['type'] == "photo" and media['status_type'] == 'added_photo':
+            elif media['type'] == "photo" and media['status_type'] == 'added_photos':
                 activity_performed = Activity.objects.get(activity_name="Image Upload")
 
             elif media['type'] == "video" and media['status_type'] == 'added_video':

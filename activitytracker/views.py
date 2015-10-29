@@ -11,9 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage
 from config import *
+from operator import itemgetter
 import string
 import random
 import json
+
 import calendar
 import operator
 import collections
@@ -131,7 +133,7 @@ def register(request):
     if '' in (email, password, repeated_password):
         return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
 
-    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists else email
+    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists() else email
 
     user = User.objects.create_user(
         username=username,
@@ -1067,41 +1069,162 @@ def dashboard(request):
 
     user = request.user
 
-    current_week_category_data = previous_week_category_data =  dict([
+    # Initialize the data. Cant do it in the same row, else they reference each other
+    period_chart_data = collections.OrderedDict(
+        [(d.strftime('%a'), {'count': 0, 'minutes': 0}) for d in (
+            datetime(day=1, month=1, year=2001) + timedelta(days=counter) for counter in range(0, 7)
+        )]
+    )
+
+    prev_period_chart_data = collections.OrderedDict(
+        [(d.strftime('%a'), {'count':0, 'minutes': 0 }) for d in (
+            datetime(day=1, month=1, year=2001) + timedelta(days=counter) for counter in range(0, 7)
+        )]
+    )
+
+    period_category_data = dict([
         (category, {
             'count': 0,
-            'percentage': 0,
+            'minutes': 0,
+            'instance_percentage': 0,
+            'time_percentage': 0,
             'color': color,
+            'icon': icon
         })
-        for (color, category) in Activity.CATEGORY_CHOICES])
+        for ((color, category), (icon, _)) in zip(Activity.CATEGORY_CHOICES, Activity.CATEGORY_ICONS)])
 
-    current_day = datetime.now().date()
-    start_of_current_week = current_day - timedelta(days=current_day.weekday())
+    period_top_activity_data = dict()
 
-    start_of_previous_week = current_day - timedelta(days=current_day.weekday(), weeks=1)
-    end_of_previous_week = start_of_current_week - timedelta(days=1)
+    # Find the proper period ranges
+    end_of_period = datetime.now()
+    start_of_period = end_of_prev_period = end_of_period - timedelta(days=7)
+    start_of_prev_period = end_of_prev_period - timedelta(days=7)
 
-    current_week_total_activities = user.performs_set.filter(
-        start_date__lte=current_day,
-        end_date__gte=start_of_current_week
+    # Total activities inside this week
+    period_total_activities = user.performs_set.filter(
+        start_date__lte=end_of_period,
+        end_date__gte=start_of_period
     ).count()
 
-    for user_instance in user.performs_set.filter(
-            start_date__lte=current_day,
-            end_date__gte=start_of_current_week
-    ):
-        current_week_category_data[user_instance.activity.get_category_display()]['count'] += 1
+    # Initialize total duration and the activities-tracked counter
+    period_total_minutes = 0
+    tracked_activities = 0
 
-    for _ , category_data in current_week_category_data.iteritems():
+    # Find number and duration of activities that occured in this week, 7 days before up to today
+    for user_instance in user.performs_set.filter(
+            start_date__lte=end_of_period,
+            end_date__gte=start_of_period
+    ):
+        # Group by Categories
+        period_category_data[user_instance.activity.get_category_display()]['count'] += 1
+        duration = round((user_instance.end_date - user_instance.start_date).seconds / float(60))
+        period_category_data[user_instance.activity.get_category_display()]['minutes'] += duration
+
+        period_chart_data[user_instance.start_date.strftime('%a')]['count'] += 1
+        period_chart_data[user_instance.start_date.strftime('%a')]['minutes'] += duration
+
+        # Group by Activities
         try:
-            category_data['percentage'] = round(category_data['count']/float(current_week_total_activities), 3)*100
+            period_top_activity_data[user_instance.activity.activity_name]['count'] += 1
+            period_top_activity_data[user_instance.activity.activity_name]['minutes'] += duration
+
+        except KeyError:
+            period_top_activity_data[user_instance.activity.activity_name] = {'count': 1, 'minutes': duration}
+
+        # Count total duration
+        period_total_minutes += duration
+
+        # Check if this activity was inserted by the user or tracked through a provider
+        if PerformsProviderInfo.objects.filter(instance=user_instance).exists():
+            tracked_activities += 1
+
+    # Find number and duration of activities that occured in the previous week
+    for user_instance in user.performs_set.filter(
+        start_date__lte=end_of_prev_period,
+        end_date__gte=start_of_prev_period
+    ):
+        duration = round((user_instance.end_date - user_instance.start_date).seconds / float(60))
+        prev_period_chart_data[user_instance.start_date.strftime('%a')]['count'] += 1
+        prev_period_chart_data[user_instance.start_date.strftime('%a')]['minutes'] += duration
+
+    # Calculate the percentages needed in the dashboard circle knobs
+    for _, category_data in period_category_data.iteritems():
+        try:
+            category_data['instance_percentage'] = round(category_data['count']/float(period_total_activities), 3)*100
+            category_data['time_percentage'] = round(category_data['minutes']/float(period_total_minutes), 3)*100
+            tracked_activities_percentage = round(tracked_activities/float(period_total_activities), 3)*100
         except ZeroDivisionError:
-            category_data['percentage'] = 0
-    print current_week_category_data
+            category_data['instance_percentage'] = category_data['time_percentage'] = tracked_activities_percenage = 0
+
+    # Find the latest 10 activities entered
+    latest_activity_list = list()
+    for user_instance in user.performs_set.filter(
+            start_date__lte=end_of_period,
+            end_date__gte=start_of_period
+    ).order_by('-start_date')[:10]:
+        latest_activity_list.append({
+            'id': user_instance.id,
+            'name': user_instance.activity.activity_name,
+            'icon': user_instance.activity.icon_classname,
+            'start_time': user_instance.start_date.strftime('%m/%d/%Y %H:%M'),
+            'duration': round((user_instance.end_date - user_instance.start_date).seconds / float(60))
+        })
+
+    # Find the Providers that the user has connected
+    connected_providers = len(user.social_auth.filter(provider__in=AVAILABLE_PROVIDERS))
+    total_providers = len(AVAILABLE_PROVIDERS)
+    connected_provider_percentage = round(connected_providers/float(total_providers), 3)*100
+
+    # Format the data to what the js charts expect
+    category_chart_data = list()
+    for (day, data), (_, prev_data) in zip(period_chart_data.items(), prev_period_chart_data.items()):
+        category_chart_data.append({
+            'day': day,
+            'instances': data['count'],
+            'minutes': data['minutes'],
+            'type': 'This Week'
+        })
+        category_chart_data.append({
+            'day': day,
+            'instances': prev_data['count'],
+            'minutes': prev_data['minutes'],
+            'type': 'Previous Week'
+        })
+
+    # Keep formatting for the charts
+    top_activities_chart_data = list()
+    for activity, data in period_top_activity_data.items():
+        top_activities_chart_data.append({
+            'name': activity,
+            'instances': data['count'],
+            'minutes': data['minutes']
+        })
+
+    top_activities_chart_data_by_instance = sorted(
+        top_activities_chart_data,
+        key=itemgetter('instances'),
+        reverse=True
+    )[:10]
+    top_activities_chart_data_by_duration = sorted(
+        top_activities_chart_data,
+        key=itemgetter('minutes'),
+        reverse=True
+    )[:10]
+
     return render(request, 'activitytracker/dashboard.html', {
         'username': user.get_username(),
-        'current_week_category_data': current_week_category_data,
-        'current_week_total_activities': current_week_total_activities
+        'connected_providers': connected_providers,
+        'connected_provider_percentage': connected_provider_percentage,
+        'total_providers': total_providers,
+        'period_category_data': period_category_data,
+        'period_total_activities': period_total_activities,
+        'period_total_minutes': period_total_minutes,
+        'chart_data': json.dumps(category_chart_data),
+        'latest_activities': latest_activity_list,
+        'top_activities_chart_data_by_instance': json.dumps(top_activities_chart_data_by_instance),
+        'top_activities_chart_data_by_duration': json.dumps(top_activities_chart_data_by_duration),
+        'tracked_activities': tracked_activities,
+        'tracked_activities_percentage': tracked_activities_percentage
         }
     )
 
@@ -2440,18 +2563,18 @@ def updatesingleactivitycharts(request):
 
     for key, value in timeaxis_activity_data.iteritems():
         json_list[0].append({
-                        'Date': key,
-                        'Series': activity_selected,
-                        'Instances': value['count'],
-                        'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
+            'Date': key,
+            'Series': activity_selected,
+            'Instances': value['count'],
+            'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
         })
 
     for key, value in timeaxis_category_data.iteritems():
         json_list[0].append({
-                        'Date': key,
-                        'Series': activity_object.get_category_display(),
-                        'Instances': value['count'],
-                        'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
+            'Date': key,
+            'Series': activity_object.get_category_display(),
+            'Instances': value['count'],
+            'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
         })
 
     # Here begins the code for the 2nd Chart -- the lineChart

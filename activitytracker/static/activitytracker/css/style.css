@@ -176,11 +176,11 @@
 	color: #000;
 }
 
-.blue-black,
-.blue-black [class="box-header"]
+.blueBlack,
+.blueBlack [class="box-header"]
  {
-	background-color: #080808 !important;
-	border-color: #080808 !important;
+	background-color: rgb(32, 85, 97) !important;
+	border-color: rgb(32, 85, 97) !important;
 	color: inherit;
 }
 
@@ -3829,6 +3829,11 @@ div .tokenfield {
 	color: rgba(29, 82, 77, 0.9);
 }
 
+.dashboardTitle>.show-activity-glyphicon:first-child{
+	position:relative;
+	top:-5px
+}
+
 .show-activity-text {
 	position: relative;
 	top: -10px;
@@ -4067,11 +4072,60 @@ select[name="gender"]:active{
 .dashboardWrapper {
 	background: white;
 	border-radius: 8px;
+	margin-bottom: 20px
 }
 
+.dashboardWrapper>.box{
+	margin-top: 30px
+}
 .dashboardTitle {
 	font-weight: 600;
 	color: #235965;
 	margin-top: 10px;
 	margin-bottom: 20px;
+}
+
+.carousel-dashboard .carousel-indicators {
+	position: relative !important;
+	left: 0 !important;
+	width: 100% !important;
+	margin-left: 0 !important;
+	bottom: 0 !important;
+
+}
+
+.carousel-dashboard .carousel-indicators li {
+	border: 1px solid #BBB2B2 !important;
+}
+
+.carousel-dashboard .carousel-indicators .active{
+	background: #BBB2B2 !important;
+}
+table>tbody>tr>td>i,
+table>thead>tr>th>i,
+.circleStatsItemBox>.header>i {
+	margin-right:5px;
+	position: relative;
+	top: 2px;
+}
+table>tbody>tr>td>i {
+	color: rgba(29, 82, 77, 0.9) ;
+}
+
+#LatestActivitiesTable>tbody>tr {
+	line-height: 2;
+}
+
+.dashboard-glyphicon-text {
+	font-weight: 600;
+    font-size: 30px;
+    color: rgba(107, 109, 109, 0.76);
+}
+
+.circleStat-right-text {
+	height: 200px
+}
+
+.circleStat-right-text>div {
+	top: 15px
 }

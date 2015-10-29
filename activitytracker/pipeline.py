@@ -10,8 +10,7 @@ def fill_extra_info(backend, user, response, *args, **kwargs):
 
     birthday = response.get('birthday', None)
 
-    if birthday:
-
+    if birthday and backend.name in ('google-oauth2', 'facebook'):
 
         if backend.name == "google-oauth2":
             birthday_parts = birthday.split('-')
