@@ -65,12 +65,12 @@ def login(request):
 
     if request.method != 'POST':
         if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('dashboard'))
 
         return render(request,
                       'activitytracker/login.html',
                       {'redirect_url': request.GET.get('next',
-                                                       '/activitytracker/index'
+                                                       '/activitytracker/dashboard'
                                                        )
                        }
                       )
