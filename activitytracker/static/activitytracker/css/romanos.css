@@ -63,6 +63,10 @@
     .circleStat-right-text {
         height: 85px;
     }
+
+    .analytics-checkbox {
+        margin-bottom: 25px
+    }
 }
 
 @media (min-width: 767px) {

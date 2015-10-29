@@ -63,8 +63,8 @@
                 catch(err) {}
                 var chartOuter = new dimple.chart(svg, response[1]);
                 var chartInner = new dimple.chart(svg, response[0]);
-                chartOuter.setBounds('5%', '10%', '75%', '80%');
-                chartInner.setBounds('5%', '10%', '75%', '80%');
+                chartOuter.setBounds('5%', '10%', '90%', '80%');
+                chartInner.setBounds('5%', '10%', '90%', '80%');
 
                 var inner_p, outer_p;
                 if ( metric == "Number of Instances") {
@@ -75,8 +75,8 @@
                     outer_p = chartOuter.addMeasureAxis("p", "Hours");
                     inner_p = chartInner.addMeasureAxis("p", "Hours");
                 }
-				chartOuterLegend = chartOuter.addLegend("83%", 120, 90, 300, "left");
-				chartInnerLegend = chartInner.addLegend("83%", 20, 90, 300, "left");
+				chartOuterLegend = chartOuter.addLegend("82%", 120, 90, 300, "left");
+				chartInnerLegend = chartInner.addLegend("82%", 20, 90, 300, "left");
                 var outerRing = chartOuter.addSeries("Activity", dimple.plot.pie);
                 var innerRing = chartInner.addSeries("Category", dimple.plot.pie);
                 outerRing.addOrderRule("Category");
@@ -141,7 +141,8 @@
                                             new dimple.color("#326277"), new dimple.color("#9174A5"), new dimple.color("#7B0404"), new dimple.color("#EAE2EF"),
                                             new dimple.color("#562323"), new dimple.color("#03671F"), new dimple.color("#7b6888"), new dimple.color("#E3F25E"),
                                             new dimple.color("#F498DA"), new dimple.color("#6b486b") ];
-				barChart.setBounds('10%', '10%', '90%', '73%');
+                barChart.setMargins("60px", "30px", "110px", "70px");
+				barChart.setBounds(75, 30, 485, 330);
                 var x = barChart.addCategoryAxis("x", "Activity");
 				if (metric == "Number of Instances") {
                     var y = barChart.addMeasureAxis("y", "Instances");
@@ -154,6 +155,9 @@
                 }
                 x.title = "Activities in desc order of Metric";
 				barChart.addSeries("Activity", dimple.plot.bar);
+                barChart.width = $('.analytics-bottomChart').width()- 100;
+                chartOuter.width = $('.analytics-topChart').width()- 100;
+                chartInner.width = $('.analytics-topChart').width()- 100;
                 barChart.draw();
                 chartOuter.draw();
                 chartInner.draw();
@@ -180,7 +184,9 @@
     			});
 
                 $(window).on('resize', function() {
-
+                    chartOuter.width  = $('.analytics-topChart').width() - 100 ;//- 85;
+                    chartInner.width = $('.analytics-topChart').width() - 100 ;//- 85;
+                    barChart.width = $('.analytics-bottomChart').width() - 100;
                     chartOuter.draw(0, true);
                     chartInner.draw(0, true);
                     barChart.draw(0, true);
@@ -214,7 +220,7 @@
                 }
                 catch(err) {}
                 var donutChart = new dimple.chart(svg, response[0]);
-                donutChart.setBounds('5%', '10%', '80%', '80%');
+                donutChart.setBounds('5%', '10%', '90%', '80%');
 
 
                 if ( metric == "Number of Instances") {
@@ -223,13 +229,13 @@
                 else{
                   var  outer_p = donutChart.addMeasureAxis("p", "Hours");
                 }
-                donutChart.addLegend("85%", 20, 90, 300, "left");
+                donutChart.addLegend("82%", 20, 90, 300, "left");
                 var outerRing = donutChart.addSeries("Friend", dimple.plot.pie);
 				outerRing.innerRadius = "-30px";
 
 				var barChart = new dimple.chart(svg2, response[1]);
-                //barChart.setMargins("60px", "30px", "110px", "70px");
-				barChart.setBounds('5%', '10%', '90%', '70%');
+                barChart.setMargins("60px", "30px", "110px", "70px");
+				barChart.setBounds('5%', '10%', '90%', '80%');
 				var y = barChart.addMeasureAxis("y", "Hours");
                 y.tickFormat = ',.2f';
 				var x = barChart.addCategoryAxis("x", ["Start_Date", "Friend"]);
@@ -299,7 +305,7 @@
                 var color_dict = {'0': "#C0BBBB", '1': "red", '2': "yellow", '3': "green"};
                 var goal_dict = {'0': "n/a", '1': "Failed", '2': "In Progress", '3': "Reached"};
                 var lineChart = new dimple.chart(svg, response);
-                lineChart.setBounds('13%', '10%', '87%', '80%');
+                lineChart.setBounds(60, 30, 500, 300);
                 lineChart.addMeasureAxis("y", "Hours");
 
                 var x = lineChart.addCategoryAxis("x", "Start_Date");
@@ -339,9 +345,11 @@
                    return ["Date Started: " + e.x, "Hours: " + e.yValue, "Goal: " + goal_dict[e.cValue]]
                 };
 
+                lineChart.width = $('.analytics-topChart').width()- 100;
                 lineChart.draw();
 
                 $(window).on('resize', function() {
+                    lineChart.width  = $('.analytics-topChart').width() - 100 ;//- 85;
                     lineChart.draw(0, true);
                 });
 
@@ -504,7 +512,7 @@
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
 		format: 'MM/DD/YYYY',
-		startDate: moment().startOf('year'),
+		startDate: moment().subtract(1, 'month'),
 		endDate: moment(),
 		ranges: {
 		   'Today': [moment(), moment()],

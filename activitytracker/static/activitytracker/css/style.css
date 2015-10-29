@@ -3350,14 +3350,6 @@ ul.messagesList li span.date {
 	width: 100% !important;
 	padding: 4px 0.1% !important;
 }
-#metric-select,
-#analysis-select{
-	outline:none !important;
-	margin-left:8.5%;
-	position:relative;
-	top:5px;
-	width: 41.5% !important;
-}
 
 #places-slider {
 	  width: 41.5% !important;
@@ -3534,18 +3526,13 @@ ul.messagesList li span.date {
 }
 
 .analytics-filters-container h1{
-	margin-left:25%;
-	margin-bottom:20px;
+	margin-bottom:30px;
 }
 
 .analytics-filters-container .span5 {
 	min-width:350px;
 }
 
-.analytics-filters-container label{
-	position:relative;
-	top:-5px
-}
 
 .analytics-banner {
 	margin-bottom:2%;
@@ -3555,10 +3542,16 @@ ul.messagesList li span.date {
 	float:right;
 }
 
-.analytics-banner div {
+.analytics-banner>div {
+	padding: 5% !important;
+	border-bottom: 0 !important;
+}
+
+.analytics-banner>div>div {
 	border-bottom:1px solid rgba(255, 255, 255, 0.7);;
 	margin-top:10px;
-	padding:7px 0;
+	padding-top:8px;
+	padding-bottom: 16px;
 }
 
 .analytics-banner span:nth-child(2) {
@@ -3571,12 +3564,6 @@ ul.messagesList li span.date {
 	padding-bottom: 10px;
 }
 
-#dateRange {
-	margin-left:8%;
-	position:relative;
-	top:5px;
-	width: 39% !important;
-}
 
 .analytics-radio {
 	float: none !important;
@@ -3652,15 +3639,25 @@ form {
 	width: 100% !important;
 }
 
-.chosen-container.chosen-container-single a {
+.modal-body .chosen-container.chosen-container-single a {
 	height: 46px;
-	padding: 10px 16px;
 	font-size: 18px;
+	padding: 10px 16px;
+}
+
+.analytics-filters-container .chosen-container.chosen-container-single a {
+	height: 34px;
+	font-size: 14px;
+	padding:6px 17px
+}
+
+.chosen-container.chosen-container-single a {
 	line-height: 1.3333333;
 	border-radius: 6px;
 	background: white !important;
 	border-color: #CCCCCC !important;
 }
+
 
 .input-bottom-space {
 	margin-bottom: 2em
@@ -4129,3 +4126,12 @@ table>tbody>tr>td>i {
 .circleStat-right-text>div {
 	top: 15px
 }
+
+.banner-analytic {
+	direction: rtl;
+}
+
+.banner-analytic>span:nth-child(2) {
+	margin-left: 5px;
+}
+
