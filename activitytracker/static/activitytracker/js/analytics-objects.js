@@ -2,37 +2,37 @@
  * Created by Aggelos.
  */
 
- var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
-    var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
+ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
+    var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 650);
 
     $('select[name="object-select"], #dateRange, select[name="activity-select"], #allObjectsChecked, #allActivitiesChecked').on('change', function(){
         if ($("#allObjectsChecked").prop('checked')) {
 
-            $('#object-select').prop('disabled', true).trigger("liszt:updated");
+            $('#object-select').prop('disabled', true).trigger("chosen:updated");
             if ($("#allActivitiesChecked").prop('checked')) {
                 $('#metric-select').prop('disabled', false);
-                $('#activity-select').prop('disabled', true).trigger("liszt:updated");
+                $('#activity-select').prop('disabled', true).trigger("chosen:updated");
                 AllActivitiesAllObjects();
                 updateObjectsBanner('all','all');
             }
             else {
                 $('#metric-select').prop('disabled', false);
-                $('#activity-select').prop('disabled', false).trigger("liszt:updated");
+                $('#activity-select').prop('disabled', false).trigger("chosen:updated");
                 OneActivityAllObjects();
                 updateObjectsBanner($('#activity-select').val(), 'all')
             }
         }
         else {
             $('#metric-select').prop('disabled', false);
-            $('#object-select').prop('disabled', false).trigger("liszt:updated");
+            $('#object-select').prop('disabled', false).trigger("chosen:updated");
             if ($("#allActivitiesChecked").prop('checked')) {
-                $('#activity-select').prop('disabled', true).trigger("liszt:updated");
+                $('#activity-select').prop('disabled', true).trigger("chosen:updated");
                 OneObjectAllActivities();
                 updateObjectsBanner('all', $('#object-select').val())
             }
             else {
                 $('#metric-select').prop('disabled', true);
-				$('#activity-select').prop('disabled', false).trigger("liszt:updated");
+				$('#activity-select').prop('disabled', false).trigger("chosen:updated");
                 OneActivityOneObject();
                 updateObjectsBanner($('#activity-select').val(), $('#object-select').val())
             }
@@ -63,8 +63,8 @@
                 catch(err) {}
                 var chartOuter = new dimple.chart(svg, response[1]);
                 var chartInner = new dimple.chart(svg, response[0]);
-                chartOuter.setBounds(20, 20, 460, 360);
-                chartInner.setBounds(20, 20, 460, 360);
+                chartOuter.setBounds('5%', '10%', '75%', '80%');
+                chartInner.setBounds('5%', '10%', '75%', '80%');
 
                 var inner_p, outer_p;
                 if ( metric == "Number of Instances") {
@@ -142,7 +142,7 @@
                                             new dimple.color("#562323"), new dimple.color("#03671F"), new dimple.color("#7b6888"), new dimple.color("#E3F25E"),
                                             new dimple.color("#F498DA"), new dimple.color("#6b486b") ];
                 barChart.setMargins("60px", "30px", "110px", "70px");
-				barChart.setBounds(75, 30, 485, 330);
+				barChart.setBounds('10%', '10%', '85%', '73%');
                 var x = barChart.addCategoryAxis("x", "Activity");
                 if (metric == "Number of Instances") {
                     var y = barChart.addMeasureAxis("y", "Instances");
@@ -155,9 +155,6 @@
                 }
                 x.title = "Activities in desc order of Metric";
 				barChart.addSeries("Activity", dimple.plot.bar);
-                barChart.width = $('.analytics-bottomChart').width()- 100;
-                chartOuter.width = $('.analytics-topChart').width()- 100;
-                chartInner.width = $('.analytics-topChart').width()- 100;
                 barChart.draw();
                 chartOuter.draw();
                 chartInner.draw();
@@ -184,9 +181,6 @@
     			});
 
                 $(window).on('resize', function() {
-                    chartOuter.width  = $('.analytics-topChart').width() - 100 ;//- 85;
-                    chartInner.width = $('.analytics-topChart').width() - 100 ;//- 85;
-                    barChart.width = $('.analytics-bottomChart').width() - 100;
                     chartOuter.draw(0, true);
                     chartInner.draw(0, true);
                     barChart.draw(0, true);
@@ -220,7 +214,7 @@
                 }
                 catch(err) {}
                 var donutChart = new dimple.chart(svg, response[0]);
-                donutChart.setBounds(20, 20, 460, 360);
+                donutChart.setBounds('5%', '10%', '80%', '80%');
 
 
                 if ( metric == "Number of Instances") {
@@ -235,7 +229,7 @@
 
 				var barChart = new dimple.chart(svg2, response[1]);
                 barChart.setMargins("60px", "30px", "110px", "70px");
-				barChart.setBounds(75, 30, 485, 330);
+				barChart.setBounds('5%', '10%', '85%', '70%');
 				var y = barChart.addMeasureAxis("y", "Hours");
                 y.tickFormat = ',.2f';
 				var x = barChart.addCategoryAxis("x", ["Start_Date", "Object"]);
@@ -243,8 +237,6 @@
                 x.title = "Instances in order of time";
 				barChart.addSeries("Object", dimple.plot.bar);
                 barChart.addLegend("10%", 0, "80%", 40, "right");
-                barChart.width = $('.analytics-bottomChart').width()- 100;
-                donutChart.width = $('.analytics-topChart').width()- 100;
                 donutChart.defaultColors = [new dimple.color("#98abc5"), new dimple.color("#8a89a6"), new dimple.color("#ff8c00"),new dimple.color("#995411"),
                                             new dimple.color("#7b6888"), new dimple.color("#E07C27"), new dimple.color("#a05d56"), new dimple.color("#d0743c"),
                                             new dimple.color("#7b6888"), new dimple.color("#266419"), new dimple.color("#DF7821"), new dimple.color("#4DA4DA"),
@@ -274,8 +266,6 @@
     			});
 
                 $(window).on('resize', function() {
-                    donutChart.width  = $('.analytics-topChart').width() - 100 ;//- 85;
-                    barChart.width = $('.analytics-bottomChart').width() - 100;
                     donutChart.draw(0, true);
                     barChart.draw(0, true);
                 });
@@ -310,7 +300,7 @@
                 var color_dict = {'0': "#C0BBBB", '1': "red", '2': "yellow", '3': "green"};
                 var goal_dict = {'0': "n/a", '1': "Failed", '2': "In Progress", '3': "Reached"};
                 var lineChart = new dimple.chart(svg, response);
-                lineChart.setBounds(60, 30, 500, 300);
+                lineChart.setBounds('10%', '10%', '85%', '80%');
                 lineChart.addMeasureAxis("y", "Hours");
 
                 var x = lineChart.addCategoryAxis("x", "Start_Date");
@@ -350,11 +340,9 @@
                    return ["Date Started: " + e.x, "Hours: " + e.yValue, "Goal: " + goal_dict[e.cValue]]
                 };
 
-                lineChart.width = $('.analytics-topChart').width()- 100;
                 lineChart.draw();
 
                 $(window).on('resize', function() {
-                    lineChart.width  = $('.analytics-topChart').width() - 100 ;//- 85;
                     lineChart.draw(0, true);
                 });
 
@@ -408,7 +396,7 @@
                 catch(err) {}
 
                 var bubbleChart = new dimple.chart(svg, response);
-                bubbleChart.setBounds(95, 25, 475, 335);
+                bubbleChart.setBounds('10%', '10%', '85%', '80%');
                 var x = bubbleChart.addCategoryAxis("x", "Object");
                 var y = bubbleChart.addCategoryAxis("y", "Activity");
                 if ( metric == "Number of Instances") {
@@ -427,7 +415,6 @@
                                             new dimple.color("#562323"), new dimple.color("#03671F"), new dimple.color("#7b6888"), new dimple.color("#E3F25E"),
                                             new dimple.color("#F498DA"), new dimple.color("#6b486b") ];
 
-                bubbleChart.width = $('.analytics-topChart').width()- 100;
                 x.showGridlines = true;
                 y.showGridlines = true;
                 Done();
@@ -446,7 +433,6 @@
     			});
 
                 $(window).on('resize', function() {
-                    bubbleChart.width  = $('.analytics-topChart').width() - 100 ;//- 85;
                     bubbleChart.draw(0, true);
                 });
 			}
@@ -520,13 +506,13 @@
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
 		format: 'MM/DD/YYYY',
-		startDate: moment().subtract(1, 'month'),
+		startDate: moment().startOf('year'),
 		endDate: moment(),
 		/*sshowDropdowns: true,*/
 		ranges: {
 		   'Today': [moment(), moment()],
 		   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		   'Previous Week (Mo-Su)': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
+		   'Previous Week': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
 		   'Previous Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'Month to Date': [moment().startOf('month'), moment()],
            'Year to Date': [moment().startOf('year'), moment()]
@@ -535,7 +521,7 @@
 			monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			fromLabel: 'From',
 			toLabel: 'To',
-			customRangeLabel: 'Calendar Custom Range'
+			customRangeLabel: 'Custom Range'
 		}
 	});
 

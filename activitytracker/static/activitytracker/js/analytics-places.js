@@ -2,7 +2,7 @@
  * Created by Aggelos.
  */
 
-var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
+var svg = dimple.newSvg(".analytics-topChart", "100%", 600);
     var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 
     $('select[name="place-select"], #dateRange, #allPlacesChecked').on('change', function(){
@@ -37,8 +37,8 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
                 updateMarkers(response[2], response[3], map);
                 var chartOuter = new dimple.chart(svg, response[1]);
                 var chartInner = new dimple.chart(svg, response[0]);
-                chartOuter.setBounds(20, 20, 460, 360);
-                chartInner.setBounds(20, 20, 460, 360);
+                chartOuter.setBounds('5%', '10%', '75%', '80%');
+                chartInner.setBounds('5%', '10%', '75%', '80%');
 
                 var inner_p, outer_p;
                 if ( metric == "Number of Instances") {
@@ -107,10 +107,13 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
                     counter += 1;
                 });
 
-                chartOuter.width = $('.analytics-topChart').width()- 100;
-                chartInner.width = $('.analytics-topChart').width()- 100;
                 chartOuter.draw();
                 chartInner.draw();
+
+                $(window).on('resize', function() {
+                    chartOuter.draw(0, true);
+                    chartInner.draw(0, true);
+                });
 
                 $('select[name="metric-select"]').on('change', function() {
 					var metric = $('#metric-select').val();
@@ -196,7 +199,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
                 catch(err) {}
                 var placesBarChart = new dimple.chart(svg2, response);
                 placesBarChart.setMargins("60px", "30px", "110px", "70px");
-				placesBarChart.setBounds(45, 30, 520, 330);
+				placesBarChart.setBounds('10%', '10%', '85%', '73%');
                 var x = placesBarChart.addCategoryAxis("x", "Place");
                 x.title = "Category Analysis for Places in desc order"
                 if (metric == "Number of Instances") {
@@ -208,16 +211,14 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
                     var y = placesBarChart.addMeasureAxis("y", "Hours");
                 }
                 ;
-                placesBarChart.addLegend("5%", 0, "85%", 20, "right");
+                placesBarChart.addLegend("5%", 20, "90%", "5%", "right");
 				placesBarChart.addSeries("Category", dimple.plot.bar);
                 $.each(response, function(i, e) {
                     placesBarChart.assignColor(e.Category, e.Color);
                 });
-                placesBarChart.width = $('.analytics-extraChart').width()- 100;
                 placesBarChart.draw();
 
                 $(window).on('resize', function() {
-                    placesBarChart.width = $('.analytics-bottomChart').width() - 100;
                     placesBarChart.draw(0, true);
                 });
 
@@ -338,13 +339,13 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
     function updatePlacesChartsAndBanner(){
          if ($("#allPlacesChecked").prop('checked')) {
 
-            $('#place-select').prop('disabled', true).trigger("liszt:updated");
+            $('#place-select').prop('disabled', true).trigger("chosen:updated");
             ActivitiesInPlaceDonutChart('all');
             PlacesCategoryDistributionBarChart();
             updatePlacesBanner('all');
         }
         else {
-            $('#place-select').prop('disabled', false).trigger("liszt:updated");
+            $('#place-select').prop('disabled', false).trigger("chosen:updated");
             ActivitiesInPlaceDonutChart($('#place-select').val());
             updatePlacesBanner($('#place-select').val());
         }
@@ -366,13 +367,13 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
 		format: 'MM/DD/YYYY',
-		startDate: moment().subtract(1, 'month'),
+		startDate: moment().startOf('year'),
 		endDate: moment(),
 		/*sshowDropdowns: true,*/
 		ranges: {
 		   'Today': [moment(), moment()],
 		   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		   'Previous Week (Mo-Su)': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
+		   'Previous Week': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
 		   'Previous Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'Month to Date': [moment().startOf('month'), moment()],
            'Year to Date': [moment().startOf('year'), moment()]
@@ -381,7 +382,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 550);
 			monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			fromLabel: 'From',
 			toLabel: 'To',
-			customRangeLabel: 'Calendar Custom Range'
+			customRangeLabel: 'Custom Range'
 		}
 	});
 

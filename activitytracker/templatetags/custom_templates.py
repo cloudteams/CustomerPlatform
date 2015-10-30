@@ -101,6 +101,6 @@ def addDashes(value):
 
 @register.filter
 def shorten(a):
-    if len(a) > 20:
+    if len(a) > 18:
         return a.split('/')[1]
     return a

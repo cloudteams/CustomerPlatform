@@ -2025,15 +2025,15 @@ fieldset[disabled] .btn-danger:active {
 }
 
 .btn-success {
-  background-color: #43B5AD;
-  border-color: #43B5AD;
+  background-color: #20505b;
+  border-color: #20505b;
 }
 
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:active {
-  background-color: #4cae4c;
-  border-color: #449d44;
+  background-color: #0c7a70;
+  border-color: #0c7a70;
 }
 
 .btn-success.disabled:hover,
@@ -3352,7 +3352,7 @@ ul.messagesList li span.date {
 }
 
 #places-slider {
-	  width: 41.5% !important;
+	width: 100% !important;
 }
 
 #name_of_activity_chzn {

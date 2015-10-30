@@ -8,31 +8,31 @@
     $('select[name="friend-select"], #dateRange, select[name="activity-select"], #allActivitiesChecked, #allFriendsChecked').on('change', function(){
         if ($("#allFriendsChecked").prop('checked')) {
 
-            //$('#friend-select').prop('disabled', true).trigger("liszt:updated");
+            $('#friend-select').prop('disabled', true).trigger("chosen:updated");
             if ($("#allActivitiesChecked").prop('checked')) {
                 //$('#metric-select').prop('disabled', false);
-                //$('#activity-select').prop('disabled', true).trigger("liszt:updated");
+                //$('#activity-select').prop('disabled', true).trigger("chosen:updated");
                 AllActivitiesAllFriends();
                 updateFriendsBanner('all','all');
             }
             else {
-                //$('#metric-select').prop('disabled', false);
-                //$('#activity-select').prop('disabled', false).trigger("liszt:updated");
+                $('#metric-select').prop('disabled', false);
+                $('#activity-select').prop('disabled', false).trigger("chosen:updated");
                 OneActivityAllFriends();
                 updateFriendsBanner($('#activity-select').val(), 'all')
             }
         }
         else {
-            //$('#metric-select').prop('disabled', false);
-            //$('#friend-select').prop('disabled', false).trigger("liszt:updated");
+            $('#metric-select').prop('disabled', false);
+            $('#friend-select').prop('disabled', false).trigger("chosen:updated");
             if ($("#allActivitiesChecked").prop('checked')) {
-                //$('#activity-select').prop('disabled', true).trigger("liszt:updated");
+                $('#activity-select').prop('disabled', true).trigger("chosen:updated");
                 OneFriendAllActivities();
                 updateFriendsBanner('all', $('#friend-select').val())
             }
             else {
-                //$('#metric-select').prop('disabled', true);
-				//$('#activity-select').prop('disabled', false).trigger("liszt:updated");
+                $('#metric-select').prop('disabled', true);
+				$('#activity-select').prop('disabled', false).trigger("chosen:updated");
                 OneActivityOneFriend();
                 updateFriendsBanner($('#activity-select').val(), $('#friend-select').val())
             }
@@ -141,7 +141,7 @@
                                             new dimple.color("#326277"), new dimple.color("#9174A5"), new dimple.color("#7B0404"), new dimple.color("#EAE2EF"),
                                             new dimple.color("#562323"), new dimple.color("#03671F"), new dimple.color("#7b6888"), new dimple.color("#E3F25E"),
                                             new dimple.color("#F498DA"), new dimple.color("#6b486b") ];
-				barChart.setBounds('10%', '10%', '90%', '73%');
+				barChart.setBounds('10%', '10%', '85%', '73%');
                 var x = barChart.addCategoryAxis("x", "Activity");
 				if (metric == "Number of Instances") {
                     var y = barChart.addMeasureAxis("y", "Instances");
@@ -228,8 +228,7 @@
 				outerRing.innerRadius = "-30px";
 
 				var barChart = new dimple.chart(svg2, response[1]);
-                //barChart.setMargins("60px", "30px", "110px", "70px");
-				barChart.setBounds('5%', '10%', '90%', '70%');
+				barChart.setBounds('5%', '10%', '85%', '70%');
 				var y = barChart.addMeasureAxis("y", "Hours");
                 y.tickFormat = ',.2f';
 				var x = barChart.addCategoryAxis("x", ["Start_Date", "Friend"]);
@@ -299,7 +298,7 @@
                 var color_dict = {'0': "#C0BBBB", '1': "red", '2': "yellow", '3': "green"};
                 var goal_dict = {'0': "n/a", '1': "Failed", '2': "In Progress", '3': "Reached"};
                 var lineChart = new dimple.chart(svg, response);
-                lineChart.setBounds('13%', '10%', '87%', '80%');
+                lineChart.setBounds('10%', '10%', '85%', '80%');
                 lineChart.addMeasureAxis("y", "Hours");
 
                 var x = lineChart.addCategoryAxis("x", "Start_Date");
@@ -394,7 +393,7 @@
                 catch(err) {}
 
                 var bubbleChart = new dimple.chart(svg, response);
-                bubbleChart.setBounds('10%', '10%', '90%', '80%');
+                bubbleChart.setBounds('10%', '10%', '85%', '80%');
                 var x = bubbleChart.addCategoryAxis("x", "Friend");
                 var y = bubbleChart.addCategoryAxis("y", "Activity");
                 if ( metric == "Number of Instances") {

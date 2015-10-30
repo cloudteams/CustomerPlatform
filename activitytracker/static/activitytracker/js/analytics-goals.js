@@ -1,17 +1,17 @@
 /**
  * Created by Aggelos.
  */
-var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
+var svg = dimple.newSvg(".analytics-topChart", "100%", 600);
     var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
     var svg3 = dimple.newSvg(".analytics-extraChart", "100%", 600);
 
     $('select[name="analysis-select"], #dateRange, select[name="activity-select"], #allActivitiesChecked').on('change', function(){
         if ($("#allActivitiesChecked").prop('checked')) {
-            $('#activity-select').prop('disabled', true).trigger("liszt:updated");
+            $('#activity-select').prop('disabled', true).trigger("chosen:updated");
             ActivityGoalsDonutChart('all');
         }
         else    {
-            $('#activity-select').prop('disabled', false).trigger("liszt:updated");
+            $('#activity-select').prop('disabled', false).trigger("chosen:updated");
             ActivityGoalsDonutChart($('#activity-select').val());
         }
 
@@ -33,7 +33,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
         var range = $('#dateRange').val();
         $('.analytics-bottomChart h1').text('Goal Breakdown for Activities');
         $('.analytics-extraChart h1').text('Goal Breakdown for Categories');
-		$.ajax({
+        $.ajax({
 			type: "post",
 			data: { csrfmiddlewaretoken: getCookie('csrftoken'), range: range},
 			cache: false,
@@ -52,7 +52,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 // Chart for Activities
 				var barChartActivities = new dimple.chart(svg2, response[0]);
                 barChartActivities.setMargins("60px", "30px", "110px", "70px");
-				barChartActivities.setBounds(75, 30, 485, 330);
+				barChartActivities.setBounds('5%', '10%', '85%', '70%');
                 var x = barChartActivities.addCategoryAxis("x", "Activity");
                 x.addOrderRule("Instances", true);
                 x.title = "Activities Breakdown in desc order of Instances";
@@ -62,14 +62,13 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 barChartActivities.assignColor("Reached", "green");
                 barChartActivities.assignColor("Failed", "rgb(176, 6, 6)");
                 barChartActivities.assignColor("In Progress","rgb(255, 203, 0)");
-                barChartActivities.assignColor("No Goal set","rgb(235, 235, 236)");
-                barChartActivities.width = $('.analytics-bottomChart').width()- 100;
+                barChartActivities.assignColor("No Goal set","#E1E8EF");
                 barChartActivities.draw();
 
                 // Same Chart but for Categories
                 var barChartCategories = new dimple.chart(svg3, response[1]);
                 barChartCategories.setMargins("60px", "30px", "110px", "70px");
-				barChartCategories.setBounds(75, 30, 485, 330);
+				barChartCategories.setBounds('5%', '10%', '85%', '65%');
                 x = barChartCategories.addCategoryAxis("x", "Category");
                 x.addOrderRule("Instances", true);
                 x.title = "Category Breakdown in desc order of Instances";
@@ -80,12 +79,9 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 barChartCategories.assignColor("Failed", "rgb(176, 6, 6)");
                 barChartCategories.assignColor("In Progress","rgb(255, 203, 0)");
                 barChartCategories.assignColor("No Goal set","rgb(235, 235, 236)");
-                barChartCategories.width = $('.analytics-extraChart').width()- 100;
                 barChartCategories.draw();
 
                 $(window).on('resize', function() {
-                    barChartActivities.width = $('.analytics-bottomChart').width() - 100;
-                    barChartCategories.width = $('.analytics-bottomChart').width() - 100;
                     barChartActivities.draw(0, true);
                     barChartCategories.draw(0, true);
                 });
@@ -98,7 +94,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
     function ActivityGoalsDonutChart(activity_chosen) {
         var range = $('#dateRange').val();
         $('.analytics-topChart h1').text('Goal Status Breakdown');
-		$.ajax({
+        $.ajax({
 			type: "post",
 			data: {activity: activity_chosen, csrfmiddlewaretoken: getCookie('csrftoken'), range: range},
 			cache: false,
@@ -114,21 +110,18 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 }
                 catch(err) {}
                 var donutChart = new dimple.chart(svg, response);
-                donutChart.setBounds(60, 20, 460, 360);
+                donutChart.setBounds('5%', '10%', '80%', '80%');
                 donutChart.addMeasureAxis("p", "Instances");
-                donutChart.addLegend("82%", 20, 90, 300, "left");
-                var outerRing = donutChart.addSeries("Goal Status", dimple.plot.pie);
+                donutChart.addLegend("70%", 20, 90, 300, "left");
+                donutChart.addSeries("Goal Status", dimple.plot.pie);
                 donutChart.assignColor("Reached", "green");
                 donutChart.assignColor("Failed", "rgb(176, 6, 6)");
                 donutChart.assignColor("In Progress","rgb(255, 203, 0)");
-                donutChart.assignColor("No Goal set","rgb(235, 235, 236)");
-				outerRing.innerRadius = "-30px";
+                donutChart.assignColor("No Goal set","#E1E8EF");
 
-                donutChart.width = $('.analytics-topChart').width()- 100;
                 donutChart.draw();
 
                 $(window).on('resize', function() {
-                    donutChart.width  = $('.analytics-topChart').width() - 100 ;//- 85;
                     donutChart.draw(0, true);
                 });
 			}
@@ -142,7 +135,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
         var range = $('#dateRange').val();
         $('.analytics-bottomChart h1').text('Activity to Object Goal Breakdown');
         $('.analytics-extraChart h1').text('');
-		$.ajax({
+        $.ajax({
 			type: "post",
 			data: { csrfmiddlewaretoken: getCookie('csrftoken'), range: range},
 			cache: false,
@@ -160,13 +153,15 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 catch(err) {}
 
                 var bubbleChart = new dimple.chart(svg2, response);
-                bubbleChart.setBounds(95, 25, 575, 575);
+                bubbleChart.setBounds('13%', '10%', '85%', '85%');
                 var x = bubbleChart.addCategoryAxis("x", "Object");
                 var y = bubbleChart.addCategoryAxis("y", "Activity");
                 bubbleChart.addMeasureAxis("p", "Instances");
                 var bubbleSeries = bubbleChart.addSeries("Goal Status", dimple.plot.pie);
+
                 var radius_data = maxAxisCategoriesObjects(response);
-                var width  = $('.analytics-bottomChart').width() - 100 ;//- 85;
+                var width  = $('.analytics-bottomChart').width();
+
                 if (radius_data.axis == "y") {
                     bubbleSeries.outerRadius = Math.round(500.0 / (radius_data.categories * 2)).toString();
                     bubbleSeries.innerRadius = Math.round(500.0 / (radius_data.categories * 4)).toString();
@@ -179,7 +174,6 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 bubbleChart.assignColor("Failed", "rgb(176, 6, 6)");
                 bubbleChart.assignColor("In Progress","rgb(255, 203, 0)");
                 bubbleChart.assignColor("No Goal set","rgb(235, 235, 236)");
-                bubbleChart.width = width;
                 x.showGridlines = true;
                 y.showGridlines = true;
                 Done();
@@ -188,7 +182,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
 
 
                 $(window).on('resize', function() {
-                    var new_width  = $('.analytics-bottomChart').width() - 100 ;//- 85;
+                    var new_width  = $('.analytics-bottomChart').width();;
                     bubbleChart.width = new_width;
                     if (radius_data.axis == "x") {
                         bubbleSeries.outerRadius = Math.round(0.95*new_width / (radius_data.categories * 2)).toString();
@@ -206,7 +200,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
         var range = $('#dateRange').val();
         $('.analytics-bottomChart h1').text('Activity to Friend Goal Breakdown');
         $('.analytics-extraChart h1').text('');
-		$.ajax({
+        $.ajax({
 			type: "post",
 			data: { csrfmiddlewaretoken: getCookie('csrftoken'), range: range},
 			cache: false,
@@ -224,16 +218,18 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 catch(err) {}
 
                 var bubbleChart = new dimple.chart(svg2, response);
-                bubbleChart.setBounds(95, 25, 575, 575);
+                bubbleChart.setBounds('13%', '10%', '85%', '85%');
                 var x = bubbleChart.addCategoryAxis("x", "Friend");
                 var y = bubbleChart.addCategoryAxis("y", "Activity");
                 bubbleChart.addMeasureAxis("p", "Instances");
                 var bubbleSeries = bubbleChart.addSeries("Goal Status", dimple.plot.pie);
+
                 var radius_data = maxAxisCategoriesFriends(response);
-                var width  = $('.analytics-bottomChart').width() - 100 ;//- 85;
+                var width  = $('.analytics-bottomChart').width();
+
                 if (radius_data.axis == "y") {
-                    bubbleSeries.outerRadius = Math.round(500.0 / (radius_data.categories * 2)).toString();
-                    bubbleSeries.innerRadius = Math.round(500.0 / (radius_data.categories * 4)).toString();
+                    bubbleSeries.outerRadius = Math.round(600.0 / (radius_data.categories * 2)).toString();
+                    bubbleSeries.innerRadius = Math.round(600.0 / (radius_data.categories * 4)).toString();
                 }
                 else {
                     bubbleSeries.outerRadius = Math.round(0.95*width / (radius_data.categories * 2)).toString();
@@ -243,7 +239,6 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
                 bubbleChart.assignColor("Failed", "rgb(176, 6, 6)");
                 bubbleChart.assignColor("In Progress","rgb(255, 203, 0)");
                 bubbleChart.assignColor("No Goal set","rgb(235, 235, 236)");
-                bubbleChart.width = width;
                 x.showGridlines = true;
                 y.showGridlines = true;
                 Done();
@@ -252,8 +247,9 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
 
 
                 $(window).on('resize', function() {
-                    var new_width  = $('.analytics-bottomChart').width() - 100 ;//- 85;
-                    bubbleChart.width = new_width;
+
+                    var new_width  = $('.analytics-bottomChart').width();
+
                     if (radius_data.axis == "x") {
                         bubbleSeries.outerRadius = Math.round(0.95*new_width / (radius_data.categories * 2)).toString();
                         bubbleSeries.innerRadius = Math.round(0.95*new_width / (radius_data.categories* 4)).toString();
@@ -355,13 +351,13 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
 		format: 'MM/DD/YYYY',
-		startDate: moment().subtract(1, 'month'),
+		startDate: moment().startOf('year'),
 		endDate: moment(),
 		/*sshowDropdowns: true,*/
 		ranges: {
 		   'Today': [moment(), moment()],
 		   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		   'Previous Week (Mo-Su)': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
+		   'Previous Week': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
 		   'Previous Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'Month to Date': [moment().startOf('month'), moment()],
            'Year to Date': [moment().startOf('year'), moment()]
@@ -370,7 +366,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 500);
 			monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			fromLabel: 'From',
 			toLabel: 'To',
-			customRangeLabel: 'Calendar Custom Range'
+			customRangeLabel: 'Custom Range'
 		}
 	});
 
