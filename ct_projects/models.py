@@ -25,6 +25,13 @@ class Project:
         return Idea.objects.filter(project_pk=self.pk)
 
 
+class ProjectInfo(models.Model):
+    orig_pk = models.CharField(max_length=256)
+    title = models.CharField(max_length=512)
+    description = models.TextField()
+    publisher = models.CharField(max_length=256)
+
+
 class ProjectFollowing(models.Model):
     """
     A following relationship between a CloudTeams customer and a project

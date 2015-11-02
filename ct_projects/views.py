@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 import django_comments
@@ -9,7 +9,7 @@ from django_comments.forms import CommentForm
 from django_comments.models import Comment
 from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea
+from ct_projects.models import ProjectFollowing, Idea, ProjectInfo
 
 source = CloudTeamsConnector()
 
@@ -190,3 +190,14 @@ def rate_idea(request, project_pk, pk):
         return redirect(reverse('idea-details', args=(idea.project_pk, idea.pk)))
     else:
         return HttpResponse('Only POST allowed', status=400)
+
+
+# ProjectInfo API
+
+"""
+def api_projects(request):
+    if request.method == 'GET':
+        projects = ProjectInfo.objects.all()
+        return JsonResponse(projects, safe=False)
+    elif
+"""
