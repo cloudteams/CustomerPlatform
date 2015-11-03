@@ -9,13 +9,16 @@ $(function() {
     });
 
     //paginate
-    $('.page-container').bjqs({
+    $('.wizard-page-container').bjqs({
         animtype    : 'slide',
         height      : 600,
-        width       : $('.create-profile-form').width(),
+        width       : $('.breadcrumb').width(),
         responsive  : true,
         animspeed   : 999999
     });
+
+    //input class
+    $('.create-profile-form input').addClass('input-lg form-control');
 
     //preview avatar image
     $("#id_profile_picture").change(function(){
@@ -58,9 +61,10 @@ $(function() {
                         };
                     }));
 
+                    var inp = $(this)[0].element;
                     $('.city-select').css('display', 'block');
-                    $('.city-select').css('left', $('.page-container').offset().left + $('.work-city input').position().left);
-                    $('.city-select').css('top', $('.page-container').offset().top + $('.work-city input').position().top + 30);
+                    $('.city-select').css('left', $('.wizard-page-container').offset().left + $(inp).position().left);
+                    $('.city-select').css('top', $('.wizard-page-container').offset().top + $(inp).position().top + 30);
                 }
             });
         }
@@ -71,6 +75,9 @@ $(function() {
         url: '/profile/get-brand-opinion',
         success: function (data) {
             $('#tech-opinion').html(data);
+            if (data == '') {
+                $('.brand-opinions-field').hide();
+            }
         }
     });
 

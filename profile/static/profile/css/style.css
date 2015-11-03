@@ -17,13 +17,10 @@
     padding: 10px;
 }
 
-ol.bjqs-markers {
-    background: #fcfcfc;
-}
-
 ol.bjqs-markers li {
     display: inline-block !important;
     padding: 10px 20px;
+    text-shadow: 1px 1px #fff;
 }
 
 ol.bjqs-markers li.active-marker {
@@ -43,7 +40,7 @@ ol.bjqs-markers li {
 }
 
 /* Field layout */
-.page-container h2 {
+.wizard-page-container h2 {
     font-size: 28px;
     font-weight: 300;
     text-align: center;
@@ -64,7 +61,7 @@ ol.bjqs-markers li {
     display: inline-block;
 }
 
-.page-container .text-center {
+.wizard-page-container .text-center {
     text-align: center;
     margin-top: 180px;
 }
@@ -76,7 +73,6 @@ ol.bjqs-markers li {
     height: 100px;
     border-radius: 10px;
     margin: 0 10px;
-    border: 1px solid #ddd;
     cursor: pointer;
     min-width: 100px;
     text-align: center;
@@ -97,8 +93,8 @@ ol.bjqs-markers li {
     font-style: normal;
     display: block;
     font-size: 26px;
-    margin: 0 20px 10px 20px;
-    padding: 20px 0;
+    margin: 0 5px 5px 5px;
+    padding: 15px 0;
     background: #aaa;
     border-radius: 50%;
     color: #eee;
@@ -110,7 +106,8 @@ ol.bjqs-markers li {
 }
 
 #trigger-avatar-upload {
-    width: calc(100% - 26px);
+    width: 100%;
+    border-radius: 0 0 5px 5px !important;
 }
 
 /* Brand opinions */
@@ -159,4 +156,9 @@ ol.bjqs-markers li {
 
 .send-opinion.opinion-negative:hover {
     color: #CF000F;
+}
+
+.send-opinion.opinion-indifferent {
+    display: inline-block;
+    margin-top: 20px;
 }
