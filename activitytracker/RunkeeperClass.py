@@ -39,7 +39,7 @@ class Runkeeper(OAuth2Validation):
             if 'total_calories' in activity:
                 result += 'Burned %s calories.' % str(int(round(activity['total_calories'])))
 
-            if 'path' in activity:
+            if 'path' in activity and activity['path']:
 
                 location_lat = float(activity['path'][0]['latitude'])
                 location_lng = float(activity['path'][0]['longitude'])
@@ -56,6 +56,8 @@ class Runkeeper(OAuth2Validation):
             start_date = time_monitored
             end_date = time_monitored + timedelta(seconds=activity['duration'])
 
+            utc_offset = activity['utc_offset']
+
             object_used = "Runkeeper"
             if activity['equipment'] != "None":
                 object_used += ',' + activity['equipment']
@@ -70,12 +72,15 @@ class Runkeeper(OAuth2Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
+
+            provider_instance_id = activity['uri'].split('/fitnessActivities/')[1]
 
             createActivityLinks(provider=self.PROVIDER.lower(),
                                 instance=performs_instance,
-                                provider_instance_id=activity['uri'],
+                                provider_instance_id=provider_instance_id,
                                 url=activity['activity']
                                 )
 
@@ -94,7 +99,7 @@ class Runkeeper(OAuth2Validation):
         if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['noEarlierThan'] = self.metadata.last_updated[:10]
 
-        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -115,6 +120,7 @@ class Runkeeper(OAuth2Validation):
 
             request_url = self.api_base_url + feed['next']
 
+        self.metadata.last_updated = last_updated
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

@@ -8,8 +8,24 @@ class FacebookActivity(OAuth2Validation):
         super(FacebookActivity, self).__init__(user_social_instance)
         self.api_user_timeline_url = 'https://graph.facebook.com/v2.4/me/posts'
 
+    # Fetch Full Name & Timezone of user.
+    def fetchUserExtraData(self, token):
+
+        api_url = 'https://graph.facebook.com/v2.4/me'
+        params = {
+            'access_token': token,
+            'fields': 'timezone,name'
+        }
+
+        r = requests.get(url=api_url, params=params).json()
+
+        if ('timezone' or 'name') not in r:
+            return r['name'], 0
+
+        return r['name'], int(r['timezone'])
+
     @transaction.atomic()
-    def _insertMedia(self, feed):
+    def _insertMedia(self, feed, user_fullname, utc_offset):
 
         _max_id = 0
         _time_barrier = datetime.strptime(EARLIEST_DATA_DATE + ' 00:00:00', "%Y-%m-%d %H:%M:%S")
@@ -24,7 +40,7 @@ class FacebookActivity(OAuth2Validation):
             if media['type'] == "status":
                 activity_performed = Activity.objects.get(activity_name="Status Update")
 
-            elif media['type'] == "photo" and media['status_type'] == 'added_photo':
+            elif media['type'] == "photo" and media['status_type'] == 'added_photos':
                 activity_performed = Activity.objects.get(activity_name="Image Upload")
 
             elif media['type'] == "video" and media['status_type'] == 'added_video':
@@ -59,8 +75,8 @@ class FacebookActivity(OAuth2Validation):
             goal = ''
             goal_status = None
 
-            start_date = time_posted - timedelta(seconds=60)
-            end_date = time_posted
+            start_date = time_posted - timedelta(seconds=60) + timedelta(hours=utc_offset)
+            end_date = time_posted + timedelta(hours=utc_offset)
 
             tags = list()
 
@@ -76,7 +92,7 @@ class FacebookActivity(OAuth2Validation):
 
             tags = list(set(tags))
             tags.remove('') if '' in tags else True
-            #tags.remove('username')
+            tags.remove(user_fullname) if user_fullname in tags else True
 
             friends = ','.join(tags)
 
@@ -90,11 +106,12 @@ class FacebookActivity(OAuth2Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
             # To be confirmed
-            if media['id'] > self.metadata['since_id']:
-                self.metadata['since_id'] = media['id']
+            if media['id'] > self.metadata.since_id:
+                self.metadata.since_id = media['id']
 
             # To be fixed
             if (_max_id > media['id']) or (_max_id == 0):
@@ -118,15 +135,17 @@ class FacebookActivity(OAuth2Validation):
                   'fields': 'created_time,type,status_type,place,likes.summary(true),comments.summary(true),story_tags,with_tags'
         }
 
-        if self.metadata['last_updated'] != DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['since'] = time.mktime(datetime.strptime(
-                                self.metadata['last_updated'],
+                                self.metadata.last_updated,
                                 "%Y-%m-%d %H:%M:%S"
                               ).timetuple())
 
-        self.metadata['last_updated'] = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         response = requests.get(url=self.api_user_timeline_url, params=params).json()
+
+        user_fullname, utc_offset = self.fetchUserExtraData(self.provider_data['access_token'])
 
         while True:
 
@@ -138,15 +157,15 @@ class FacebookActivity(OAuth2Validation):
             if 'error' in response:
                 return HttpResponse(ERROR_MESSAGE)
 
-            _ , status = self._insertMedia(feed)
+            _ , status = self._insertMedia(feed, user_fullname, utc_offset)
 
             if status == "Barrier Reached":
                 break
 
             response = requests.get(url=response['paging']['next']).json()
-            print response
-        self.user_social_instance.save()
 
-        # I still need to get the checkins, both personal and from other people. Also need access to posts of photos
-        # or videos by others that i have been tagged in.
+        self.metadata.last_updated = last_updated
+        self.metadata.save()
+
+        # I still need to get the checkins, both personal and from other people.
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

@@ -22,7 +22,6 @@ class Youtube(OAuth2Validation):
         _time_barrier = datetime.strptime(EARLIEST_DATA_DATE + ' 00:00:00',
                                           "%Y-%m-%d %H:%M:%S"
                                           )
-        print len(videos['items'])
         print videos
         for video, video_details in zip(videos['items'], videos_details):
 
@@ -164,7 +163,7 @@ class Youtube(OAuth2Validation):
 
         fetched_resources = ['uploads', 'watchHistory']
 
-        sync_time = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+        last_updated = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
 
         if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
@@ -176,7 +175,7 @@ class Youtube(OAuth2Validation):
             if outcome == "Error":
                 return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        self.metadata.last_updated = sync_time
+        self.metadata.last_updated = last_updated
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

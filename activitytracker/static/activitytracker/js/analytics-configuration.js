@@ -192,7 +192,7 @@ $('#submitAddPlace').click(function(event){
         success: function (response) {
             table.api().ajax.reload();
             $('#addPlaceModal').modal('hide');
-            $('.btn-setting').blur();
+            $('.btn-blueNavy').blur();
             Done();
 
         }
@@ -336,13 +336,26 @@ function routineInsertMore() {
 
 }
 
-$('.datepicker').datepicker( {
-    changeMonth: true,
-    dateFormat: 'mm/dd'
+//$('.datepicker').datepicker( {
+//    changeMonth: true,
+//    dateFormat: 'mm/dd'
+//});
+
+$('.datepicker').datepicker({
+		autoclose: true,
+        format: "mm/dd"
+}).on('show', function() {
+    // remove the year from the date title before the datepicker show
+    var dateText  = $(".datepicker-days .datepicker-switch").text();
+    if (dateText.indexOf('201') > 0) {
+        var dateTitle = dateText.substr(0, dateText.length - 5);
+        $(".datepicker-days .datepicker-switch").text(dateTitle);
+    }
+    $(".datepicker-months thead tr th").css('visibility', 'hidden')
 });
 
 $('#routineModal').on('hidden.bs.modal', function() {
-    $('.routine-canvas').find('span').removeClass('checked');
+    $('.routine-canvas').find('.radio').prop('checked', false)
     $('#routineInsertMore').removeClass('hidden');
     $('.routine-canvas-show-more').addClass('hidden');
     $('#seasonality, #weekend').removeClass('icon-chevron-up').addClass('icon-chevron-down');
@@ -351,7 +364,8 @@ $('#routineModal').on('hidden.bs.modal', function() {
     $('input[name="weekday_seasonality_start"], input[name="weekday_seasonality_end"], ' +
       'input[name="weekend_seasonality_start"], input[name="weekend_seasonality_end"]').prop('value','');
     $('#weekday-times, #weekend-times').each(function() {
-        $(this).tokenize().clear();
+        $(this).tokenfield('setTokens', []);
+        $(this).val('');
     });
 });
 
@@ -370,7 +384,7 @@ $('#seasonality, #weekend').on('click', function() {
 $('#log-weekday-time, #log-weekend-time').on('click', function() {
     var daytype = $(this).prop('id').split('-')[1];
     var range = $('#'+ daytype + '-range-from').text() + ' - ' + $('#'+ daytype + '-range-to').text();
-    $('#'+ daytype + '-times').tokenize().tokenAdd(range, range);
+    $('#'+ daytype + '-times').tokenfield('createToken', range);
 });
 
 $('#weekday-range-select, #weekend-range-select').slider({
@@ -409,12 +423,10 @@ $('#routineForm').on('submit', function(evt) {
     Loading();
     evt.preventDefault();
 
-    var activity = $('.routine-canvas .checked input').val();
+    var activity = $('.routine-canvas input[name="routine-radiobutton"]:checked').val()
     var setting = $('#submitRoutine').prop('value');
-    var weekday_times_string = $('#weekday-times').val();
-    var weekend_times_string = $('#weekend-times').val();
-    weekday_times_string = (weekday_times_string == null) ? '' : weekday_times_string.join('_');
-    weekend_times_string = (weekend_times_string == null) ? '' : weekend_times_string.join('_');
+    var weekday_times_string = $('#weekday-times').val().replace(/, /g, '_');
+    var weekend_times_string = $('#weekend-times').val().replace(/, /g, '_');
     var weekday_seasonality = $('input[name="weekday_seasonality_start"]').val() + ' - ' + $('input[name="weekday_seasonality_end"]').val();
     var weekend_seasonality = $('input[name="weekend_seasonality_start"]').val() + ' - ' + $('input[name="weekend_seasonality_end"]').val();
 
@@ -475,36 +487,32 @@ function updateRoutineTableValues(responseJSON) {
 		);
 
 		var titleCell = document.createElement('td');
-		$(titleCell).append('<p class="routine-activity-text">' +  activity + '</p>');
+		$(titleCell).append(activity);
 
 		var weekdayTimesCell = document.createElement('td');
-		$.each(activity_data['Weekdays'], function (i, timeRange) {
-			$(weekdayTimesCell).append('<p>' + timeRange + '</p>');
+		$.each(activity_data['Weekdays'], function (i, log) {
+			$(weekdayTimesCell).append("<span class='routine-time'>" + log['time'] + "</span>");
+            if (log['time'] != ' - ') {
+               $(weekdayTimesCell).append("<br/>(<span class='routine-season'>"  + log['season'] + "</span>)<br/><br/>");
+            }
 		});
 
 
 		var weekendTimesCell = document.createElement('td');
-		$.each(activity_data['Weekend'], function (i, timeRange) {
-			$(weekendTimesCell).append('<p>' + timeRange + '</p>');
+		$.each(activity_data['Weekend'], function (i, log) {
+			$(weekendTimesCell).append("<span class='routine-time'>" + log['time'] + "</span>");
+            if (log['time'] != ' - ') {
+               $(weekendTimesCell).append("<br/>(<span class='routine-season'>"  + log['season'] + "</span>)<br/><br/>");
+            }
 		});
-
-		var weekdaySeasonalityCell = document.createElement('td');
-		$.each(activity_data['Weekdays_seasonality'], function (i, dateRange) {
-			$(weekdaySeasonalityCell).append('<p>' + dateRange + '</p>');
-		});
-
-		var weekendSeasonalityCell = document.createElement('td');
-		$.each(activity_data['Weekend_seasonality'], function (i, dateRange) {
-			$(weekendSeasonalityCell).append('<p>' + dateRange + '</p>');
-		});
-
 
 		var optionsCell = document.createElement('td');
+        optionsCell.className = 'text-center';
 		$(optionsCell).append(
-			'<a class="btn btn-blueNavy" href="#" onclick="initializeEditRoutineModal(this)">' +
+			'<a class="btn btn-blueNavy user-routine-options" href="#" onclick="initializeEditRoutineModal(this)">' +
 				'<i class="halflings-icon edit white"></i>' +
 			'</a>' +
-			'<a class="btn btn-blueNavy" href="#" onclick="deleteRoutine(this)">' +
+			'<a class="btn btn-blueNavy user-routine-options" href="#" onclick="deleteRoutine(this)">' +
 				'<i class="halflings-icon trash white"></i>' +
 			'</a>'
 		);
@@ -512,9 +520,7 @@ function updateRoutineTableValues(responseJSON) {
 		$(newRow).append(iconCell);
 		$(newRow).append(titleCell);
 		$(newRow).append(weekdayTimesCell);
-		$(newRow).append(weekdaySeasonalityCell);
 		$(newRow).append(weekendTimesCell);
-		$(newRow).append(weekendSeasonalityCell);
 		$(newRow).append(optionsCell);
 
 		$('#RoutineTable tbody').append(newRow)
@@ -543,7 +549,7 @@ function deleteRoutine(element_clicked) {
 			alert('An Error has occured. Please try again');
 		},
 		success: function (response) {
-			(response == "RowRemoval") ? $('#' + activity_id).remove() : $('#' + activity_id +' td').slice(2,6).text(' - ');
+			(response == "RowRemoval") ? $('#' + activity_id).remove() : $('#' + activity_id +' td').slice(2,4).text(' - ');
 			Done()
 		}
 	});
@@ -556,16 +562,14 @@ function initializeEditRoutineModal(element_clicked) {
 	var activity = $(row).prop('id');
 
 	var weekday_times = [];
-	$('#' + activity + ' td:nth-child(3)').find('p').each(function() {
-		weekday_times.push($(this).text())
-	});
-	var weekday_times_string = weekday_times.join('_');
+	$('#' + activity + ' td:nth-child(3)').find('.routine-time').each(function() {
+        weekday_times.push($(this).text())
+    });
 
 	var weekend_times = [];
-	$('#' + activity + ' td:nth-child(5)').find('p').each(function() {
-		weekend_times.push($(this).text())
+	$('#' + activity + ' td:nth-child(4)').find('.routine-time').each(function() {
+		    weekday_times.push($(this).text())
 	});
-	var weekend_times_string = weekend_times.join('_');
 
 	$('#routineModal').modal('show');
 	/*
@@ -577,22 +581,24 @@ function initializeEditRoutineModal(element_clicked) {
 	*/
 
 	//check the proper icon
-	$('.routine-canvas').find('#' + activity + ' span').addClass('checked');
+	$('.routine-canvas').find('#' + activity + '-radio').prop('checked', true);
 
 	//fill weekday values
-	if (weekday_times != ' - ') {
-		$.each(weekday_times, function (i, range) {
-			$('#weekday-times').tokenfield('createToken', range);
-		});
-	}
+    $.each(weekday_times, function (i, range) {
+        if (range != ' - ') {
+            $('#weekday-times').tokenfield('createToken', range);
+        }
+    });
 
 	//fill weekend times
-	if (weekend_times != ' - ') {
-		$('#weekend').trigger('click');
-		$.each(weekend_times, function (i, range) {
-			$('#weekend-times').tokenfield('createToken', range);
-		});
-	}
+    if (weekend_times != '') {
+        $('#weekend').trigger('click');
+        $.each(weekend_times, function (i, range) {
+            if (range != ' - ') {
+                $('#weekend-times').tokenfield('createToken', range);
+            }
+        });
+    }
 
 	$('#submitRoutine').prop('value', 'edit')
 }

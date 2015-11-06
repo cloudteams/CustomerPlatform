@@ -176,11 +176,11 @@
 	color: #000;
 }
 
-.blue-black,
-.blue-black [class="box-header"]
+.blueBlack,
+.blueBlack [class="box-header"]
  {
-	background-color: #080808 !important;
-	border-color: #080808 !important;
+	background-color: rgb(32, 85, 97) !important;
+	border-color: rgb(32, 85, 97) !important;
 	color: inherit;
 }
 
@@ -344,6 +344,10 @@ div#DataTables_Table_0_filter {
 }
 
 /* showactivitymodal body classes */
+.no-margin-top{
+	margin-top: 0 !important;
+}
+
 .no-margin-bottom{
 	margin-bottom: 0;
 }
@@ -467,7 +471,7 @@ h6 {
   	padding-right: 20px;
   	padding-left: 20px;
 	padding-bottom:0.5em;
-	background: transparent ;
+	background: white ;
 	filter: none;
 	text-shadow: 1px 1px 1px #0a0c0e;
 	border: none;
@@ -576,7 +580,7 @@ a.brand span {
 =================================================================== */
 
 #sidebar-left {
-	background: transparent;
+	background: white !important;
 }
 
 .sidebar-nav > ul{
@@ -1014,10 +1018,12 @@ ul.messages li .message {
           box-shadow: none;
 	overflow: hidden;
 	border-radius: 8px;
+	margin-top:20px;
 }
 
 .modal-header.box-header{
 	border-radius: 0;
+	margin-top: 0;
 }
 
 .box-header h2{
@@ -2025,15 +2031,15 @@ fieldset[disabled] .btn-danger:active {
 }
 
 .btn-success {
-  background-color: #43B5AD;
-  border-color: #43B5AD;
+  background-color: #20505b;
+  border-color: #20505b;
 }
 
 .btn-success:hover,
 .btn-success:focus,
 .btn-success:active {
-  background-color: #4cae4c;
-  border-color: #449d44;
+  background-color: #0c7a70;
+  border-color: #0c7a70;
 }
 
 .btn-success.disabled:hover,
@@ -2765,23 +2771,23 @@ footer {
 /* Circle stats
 =================================================================== */
 
-.circleStats {text-align: center; position: relative;}
 
 .circleStatsItemBox {
 	position: relative;
 	background: #67C2EF;
 	width:100%;
 	min-width: 130px;
-	height: 160px;
+	height: 200px;
 	padding-top: 40px;
 	margin-bottom: 28px;
+	border-radius: 8px !important;
 }
 
 .circleStatsItemBox .header {
 	background: rgba(255,255,255,0.2);
 	color: rgba(255,255,255,0.9);
 	width: 100%; 
-	height: 20px;
+	height: 30px;
 	padding: 5px 0px;
 	position: absolute;
 	top: 0px;
@@ -2791,10 +2797,10 @@ footer {
 	background: rgba(0,0,0,0.1);
 	color: rgba(255,255,255,0.9);
 	width: 100%; 
-	height: 20px;
+	height: 30px;
 	padding: 5px 0px;
 	position: absolute;
-	bottom: 0px;
+	bottom: 0;
 }
 
 .circleStatsItemBox .footer .count{
@@ -3350,17 +3356,9 @@ ul.messagesList li span.date {
 	width: 100% !important;
 	padding: 4px 0.1% !important;
 }
-#metric-select,
-#analysis-select{
-	outline:none !important;
-	margin-left:8.5%;
-	position:relative;
-	top:5px;
-	width: 41.5% !important;
-}
 
 #places-slider {
-	  width: 41.5% !important;
+	width: 100% !important;
 }
 
 #name_of_activity_chzn {
@@ -3422,7 +3420,11 @@ ul.messagesList li span.date {
 
 
 .user-places-options {
-	margin: 0.3em 0.3em 0 0.3em
+	margin: 0.35em 0.3em 0 0.3em
+}
+
+.user-routine-options {
+	margin: 0.25em 0.2em 0 0.2em;
 }
 
 .connected-app > td:nth-child(2){
@@ -3504,6 +3506,7 @@ ul.messagesList li span.date {
 	background-repeat: no-repeat, no-repeat
 }
 
+
 .auth-background-blurred{
 	position: fixed;
 	z-index: -1;
@@ -3519,17 +3522,10 @@ ul.messagesList li span.date {
 	-o-filter: blur(3px);
 	-ms-filter: blur(3px);
 	filter: blur(3spx);
+
+	opacity: 0;
 }
 
-#carouselModal {
-	width: 56%;
-	margin-left: -360px;
-}
-
-#carouselModal .modal-body {
-	max-height:475px;
-	height: 475px;
-}
 
 .analytics-filters-container {
 	background-color: rgba(225, 233, 236, 0.35);;
@@ -3539,18 +3535,13 @@ ul.messagesList li span.date {
 }
 
 .analytics-filters-container h1{
-	margin-left:25%;
-	margin-bottom:20px;
+	margin-bottom:30px;
 }
 
 .analytics-filters-container .span5 {
 	min-width:350px;
 }
 
-.analytics-filters-container label{
-	position:relative;
-	top:-5px
-}
 
 .analytics-banner {
 	margin-bottom:2%;
@@ -3560,10 +3551,16 @@ ul.messagesList li span.date {
 	float:right;
 }
 
-.analytics-banner div {
+.analytics-banner>div {
+	padding: 5% !important;
+	border-bottom: 0 !important;
+}
+
+.analytics-banner>div>div {
 	border-bottom:1px solid rgba(255, 255, 255, 0.7);;
 	margin-top:10px;
-	padding:7px 0;
+	padding-top:8px;
+	padding-bottom: 16px;
 }
 
 .analytics-banner span:nth-child(2) {
@@ -3576,12 +3573,6 @@ ul.messagesList li span.date {
 	padding-bottom: 10px;
 }
 
-#dateRange {
-	margin-left:8%;
-	position:relative;
-	top:5px;
-	width: 39% !important;
-}
 
 .analytics-radio {
 	float: none !important;
@@ -3604,21 +3595,17 @@ ul.messagesList li span.date {
 	margin-top: 10px;
 }
 
-.range-picker {
-	margin-top:10px;
-	width: 340px !important;
-}
-
 input[name='range-logger'] {
 	margin-top:10px;
 }
 
 #seasonality-controls div{
-	margin: 30px 0;
+	margin: 15px 0;
 }
 
 .routine-controls {
-	margin: 30px 0;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	border-top: 2px solid rgba(220, 232, 232, 0.73);
 }
 
@@ -3661,15 +3648,25 @@ form {
 	width: 100% !important;
 }
 
-.chosen-container.chosen-container-single a {
+.modal-body .chosen-container.chosen-container-single a {
 	height: 46px;
-	padding: 10px 16px;
 	font-size: 18px;
+	padding: 10px 16px;
+}
+
+.analytics-filters-container .chosen-container.chosen-container-single a {
+	height: 34px;
+	font-size: 14px;
+	padding:6px 17px
+}
+
+.chosen-container.chosen-container-single a {
 	line-height: 1.3333333;
 	border-radius: 6px;
 	background: white !important;
 	border-color: #CCCCCC !important;
 }
+
 
 .input-bottom-space {
 	margin-bottom: 2em
@@ -3831,6 +3828,11 @@ div .tokenfield {
 .control-group p {
 	position: relative;
 	top: -30px;
+}
+
+.show-dashboard-glyphicon {
+	font-size: 30px;
+	color: white;
 }
 
 .show-activity-glyphicon {
@@ -4058,4 +4060,165 @@ select[name="gender"]:active{
 	margin-left:auto !important;
 	margin-right:auto !important;
 	position:relative;
+}
+
+.controls-title {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.token-label {
+	max-width: 100% !important;
+}
+
+.routine-season {
+	font-style: italic;
+}
+
+.dashboardWrapper {
+	background: white;
+	border-radius: 8px;
+	margin-bottom: 20px
+}
+
+.dashboardWrapper>.box{
+	margin-top: 30px
+}
+
+.wrapperPadding {
+	padding: 20px;
+}
+.dashboardTitle {
+	font-weight: 600;
+	color: #235965;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+.carousel-dashboard .carousel-indicators {
+	position: relative !important;
+	left: 0 !important;
+	width: 100% !important;
+	margin-left: 0 !important;
+	bottom: 0 !important;
+
+}
+
+.carousel-dashboard .carousel-indicators li {
+	border: 1px solid #BBB2B2 !important;
+}
+
+.carousel-dashboard .carousel-indicators .active{
+	background: #BBB2B2 !important;
+}
+table>tbody>tr>td>i,
+table>thead>tr>th>i,
+.circleStatsItemBox>.header>i {
+	margin-right:5px;
+	position: relative;
+	top: 2px;
+}
+table>tbody>tr>td>i {
+	color: rgba(29, 82, 77, 0.9) ;
+}
+
+#LatestActivitiesTable>tbody>tr {
+	line-height: 2;
+}
+
+.dashboard-glyphicon-text {
+	font-weight: 600;
+    font-size: 30px;
+    color: rgba(107, 109, 109, 0.76);
+}
+
+.circleStat-right-text {
+	height: 200px
+}
+
+.circleStat-right-text>div {
+	top: 15px
+}
+
+.banner-analytic {
+	direction: rtl;
+}
+
+.banner-analytic>span:nth-child(2) {
+	margin-left: 5px;
+}
+
+body.modal-open {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: scroll;
+}
+.dashboard-analytics-container {
+	/*border: 2px solid rgba(29, 82, 77, 0.9);*/
+	border-radius: 8px;
+	margin: 30px 0;
+	background:rgba(29, 82, 77, 0.9);
+	color: white
+}
+
+.dashboard-analytic {
+	padding: 10px 5px;
+	font-weight: 600;
+	vertical-align: middle;
+
+}
+
+.dashboard-analytic .dashboard-analytic-number {
+	font-size: 40px;
+	font-weight: 300;
+}
+
+.dashboard-analytic .dashboard-analytic-text {
+	top: 20px
+}
+
+.info-box {
+    display: block;
+    min-height: 85px;
+    background: #fff;
+    width: 100%;
+    box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.info-box-content {
+    padding: 5px 10px;
+    margin-left: 85px;
+	color: black
+}
+
+.info-box-icon {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 8px;
+    display: block;
+    float: left;
+    height: 85px;
+    width: 85px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 85px;
+    background:rgba(29, 82, 77, 0.9);
+}
+
+.info-box-content .info-box-text {
+	display:block;
+	font-weight:500;
+	font-size:30px
+}
+
+.info-box-content .info-box-title {
+	text-transform: uppercase;
+	font-size:13px;
+	margin-top:5px
 }

@@ -17,6 +17,7 @@ class Instagram(OAuth2Validation):
         for media in feed:
 
             time_posted = datetime.utcfromtimestamp(float(media['created_time']))
+            print float(media['created_time'])
 
             if time_posted < _time_barrier:
                 return _max_id, 'Reached Barrier'
@@ -89,7 +90,7 @@ class Instagram(OAuth2Validation):
         if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['min_id'] = self.metadata.since_id
 
-        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -108,6 +109,7 @@ class Instagram(OAuth2Validation):
             if status == "Barrier Reached":
                 break
 
+        self.metadata.last_updated = last_updated
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

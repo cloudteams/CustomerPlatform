@@ -18,7 +18,7 @@ class PerformsProviderInfoAdmin(admin.ModelAdmin):
     list_display = ('instance', 'provider', 'provider_instance_id', 'provider_instance_url')
 
 class PerformsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'activity', 'location_lat', 'location_lng')
+    list_display = ('user', 'activity', 'location_lat', 'location_lng', 'utc_offset')
 
 class UserExtraProviderInfoAdmin(admin.ModelAdmin):
     list_display = ('social_instance', 'get_provider', 'last_updated', 'since_id')
