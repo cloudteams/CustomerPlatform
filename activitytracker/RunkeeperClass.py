@@ -14,7 +14,7 @@ class Runkeeper(OAuth2Validation):
         _time_barrier = datetime.strptime(EARLIEST_DATA_DATE + ' 00:00:00', "%Y-%m-%d %H:%M:%S")
 
         for item_ in feed:
-            print item_
+
             if PerformsProviderInfo.objects.filter(provider='runkeeper',
                                                    provider_instance_id=item_['uri']
                                                    ).count() > 0:
@@ -23,8 +23,7 @@ class Runkeeper(OAuth2Validation):
             activity = requests.get(url=self.api_base_url + item_['uri'],
                                     params={'access_token': self.provider_data['access_token']}
                                     ).json()
-            print 1
-            print activity
+
             time_monitored = datetime.strptime(activity['start_time'], '%a, %d %b %Y %H:%M:%S')
 
             if time_monitored < _time_barrier:
@@ -57,6 +56,8 @@ class Runkeeper(OAuth2Validation):
             start_date = time_monitored
             end_date = time_monitored + timedelta(seconds=activity['duration'])
 
+            utc_offset = activity['utc_offset']
+
             object_used = "Runkeeper"
             if activity['equipment'] != "None":
                 object_used += ',' + activity['equipment']
@@ -71,7 +72,8 @@ class Runkeeper(OAuth2Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
 
             provider_instance_id = activity['uri'].split('/fitnessActivities/')[1]
@@ -97,7 +99,7 @@ class Runkeeper(OAuth2Validation):
         if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['noEarlierThan'] = self.metadata.last_updated[:10]
 
-        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -118,6 +120,7 @@ class Runkeeper(OAuth2Validation):
 
             request_url = self.api_base_url + feed['next']
 
+        self.metadata.last_updated = last_updated
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

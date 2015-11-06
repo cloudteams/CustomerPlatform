@@ -16,94 +16,168 @@
             <a href="#">Dashboard</a>
         </li>
     </ul>
-    <div class="col-xs-12 dashboardWrapper">
-        <div id="carousel-categories" class="carousel carousel-dashboard slide" data-ride="carousel" data-interval="false">
-            <div class="carousel-inner" role="listbox">
-                <div class="item active">
-
-                    <div class="col-md-6 text-center" id="CategoryKnobs">
-                        <div class="dashboardTitle">
-                            <span class="show-activity-glyphicon">{{ period_total_activities|floatformat }} </span>
-                            <span class="glyphicon glyphicon-star show-activity-glyphicon" aria-hidden="true"></span>
-                        </div>
-
-                        {% for category, category_data in period_category_data.items %}
-                        <div class=" col-sm-4 circleStatsContainer ">
-                            <a href="{% url 'analytics-activities' %}">
-                                <div class="circleStatsItemBox {{ category_data.color }}">
-                                    <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
-                                    <span class="percent">percent</span>
-                                    <div class="circleStat">
-                                        <input type="text" value="{{ category_data.instance_percentage }}" class="whiteCircle" />
-                                    </div>
-                                    <div class="footer">
-                                        <span class="count">
-                                            <span class="number">{{ category_data.count }}</span>
-                                            <span class="unit"></span>
-                                        </span>
-                                        <span class="sep"> / </span>
-                                        <span class="value">
-                                            <span class="number">{{ period_total_activities }}</span>
-                                            <span class="unit">Activities</span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        {% endfor %}
+    <div id="carousel-providers" class="carousel carousel-dashboard slide col-xs-12 dashboardWrapper" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <div class="col-md-6">
+                    <div class="dashboardTitle text-center">Activity Info for the Last 7 Days</div>
+                    <div class="col-sm-6">
+                         <div class="info-box text-center">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-tasks show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Total</div>
+                                 <div class="info-box-text">{{ period_total_activities }}</div>
+                             </div>
+                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="dashboardTitle text-center">Activities Comparison (by Instance)</div>
-                        <div id="ActivitiesInstanceChart" class="bs-height-config"></div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-cloud-download show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Synced</div>
+                                 <div class="info-box-text">{{ period_tracked_activities }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-pushpin show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Unique</div>
+                                 <div class="info-box-text">{{ period_total_different_activities }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-time show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Minutes</div>
+                                 <div class="info-box-text">{{ period_total_minutes|floatformat }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-map-marker show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Places</div>
+                                 <div class="info-box-text">{{ period_activities_with_location }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-user show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">with</div>
+                                 <div class="info-box-text">{{ period_activities_with_friends }}</div>
+                             </div>
+                         </div>
                     </div>
                 </div>
-                <div class="item">
-                    <div class="col-md-6 text-center" id="CategoryKnobs">
-                        <div class="dashboardTitle">
-                            <span class="show-activity-glyphicon">{{ period_total_minutes|floatformat }} min </span>
-                            <span class="glyphicon glyphicon-time show-activity-glyphicon" aria-hidden="true"></span>
-                        </div>
-                        {% for category, category_data in period_category_data.items %}
-                        <div class=" col-sm-4 circleStatsContainer ">
-                            <a href="{% url 'analytics-activities' %}">
-                                <div class="circleStatsItemBox {{ category_data.color }}">
-                                    <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
-                                    <span class="percent">percent</span>
-                                    <div class="circleStat">
-                                        <input type="text" value="{{ category_data.time_percentage }}" class="whiteCircle" />
-                                    </div>
-                                    <div class="footer">
-                                        <span class="count">
-                                            <span class="number">{{ category_data.minutes|floatformat }}</span>
-                                            <span class="unit"></span>
-                                        </span>
-                                        <span class="sep"> / </span>
-                                        <span class="value">
-                                            <span class="number">{{ period_total_minutes|floatformat }}</span>
-                                            <span class="unit">Minutes</span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        {% endfor %}
+                <div class="col-md-6">
+                    <div class="dashboardTitle text-center">Service Contribution of Last 7 Days</div>
+                    <div id="ProviderActivities7DayChart" class="bs-height-config"></div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col-md-6">
+                    <div class="dashboardTitle text-center">Lifetime Activity Info</div>
+                    <div class="col-sm-6">
+                         <div class="info-box text-center">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-tasks show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Total</div>
+                                 <div class="info-box-text">{{ total_activities }}</div>
+                             </div>
+                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="dashboardTitle text-center">Activity Comparison (by Duration)</div>
-                        <div id="ActivitiesMinuteChart" class="bs-height-config"></div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-cloud-download show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Synced</div>
+                                 <div class="info-box-text">{{ total_tracked_activities }}</div>
+                             </div>
+                         </div>
                     </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-pushpin show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Unique</div>
+                                 <div class="info-box-text">{{ total_different_activities }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-time show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Minutes</div>
+                                 <div class="info-box-text">{{ total_minutes|floatformat }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-map-marker show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">Places</div>
+                                 <div class="info-box-text">{{ total_activities_with_location }}</div>
+                             </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                         <div class="info-box">
+                             <span class="info-box-icon">
+                                 <span class="glyphicon glyphicon-user show-dashboard-glyphicon" aria-hidden="true"></span>
+                             </span>
+                             <div class="info-box-content text-center">
+                                 <div class="info-box-title">with</div>
+                                 <div class="info-box-text">{{ total_activities_with_friends }}</div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboardTitle text-center">Lifetime Service Contribution</div>
+                    <div id="ProviderActivitiesLifetimeChart" class="bs-height-config"></div>
                 </div>
             </div>
             <ol class="carousel-indicators">
-                <li data-target="#carousel-categories" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-categories" data-slide-to="1"></li>
+                <li data-target="#carousel-providers" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-providers" data-slide-to="1"></li>
             </ol>
         </div>
     </div>
     <div class="col-xs-12 dashboardWrapper">
         <div class="box box-transparent col-md-6 blue-black">
-            <div class="box-header blueNavy" data-original-title>
-                <h2 class="text-center"><i class="halflings-icon star white"></i><span class="break"></span>Week's Latest 10 Activities</h2>
+            <div class="box-header no-margin-top blueNavy" data-original-title>
+                <h2 class="text-center"><i class="halflings-icon star white"></i><span class="break"></span>Latest 10 Activities</h2>
             </div>
             <div class="box-content">
                 <table id="LatestActivitiesTable" class="col-xs-12 text-center user-providers">
@@ -131,12 +205,12 @@
         <div id="carousel-activities" class="carousel carousel-dashboard slide col-md-6" data-ride="carousel" data-interval="false">
             <div class="carousel-inner" role="listbox">
                 <div class="item active">
-                    <div class="dashboardTitle text-center">Week's Top 10 Activities (by Instance)</div>
-                    <div id="TopActivitiesInstanceChart" class="bs-height-config"></div>
+                    <div class="dashboardTitle text-center">Top 10 Activities of Last 7 Days (by Instance)</div>
+                    <div id="Top10ActivitiesInstanceChart" class="bs-height-config"></div>
                 </div>
                 <div class="item">
-                    <div class="dashboardTitle text-center">Week's Top 10 Activities (by Duration)</div>
-                    <div id="TopActivitiesMinuteChart" class="bs-height-config"></div>
+                    <div class="dashboardTitle text-center">Top 10 Activities Last 7 Days (by Duration)</div>
+                    <div id="Top10ActivitiesMinuteChart" class="bs-height-config"></div>
                 </div>
                 <ol class="carousel-indicators">
                     <li data-target="#carousel-activities" data-slide-to="0" class="active"></li>
@@ -145,70 +219,91 @@
             </div>
         </div>
     </div>
+    <div id="carousel-categories" class="carousel carousel-dashboard slide col-xs-12 dashboardWrapper" data-ride="carousel" data-interval="false">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
 
-    <div class="col-xs-12 dashboardWrapper">
-        <div class="col-xs-12">
-            <div class="dashboardTitle col-sm-6 text-center">
-                <span class="glyphicon glyphicon-cloud show-activity-glyphicon" aria-hidden="true"></span>
-            </div>
-        </div>
-        <div class="col-xs-12">
-            <div class="col-md-2 col-sm-4 circleStatsContainer text-center">
-                <a href="{% url 'settings' %}">
-                    <div class="circleStatsItemBox blueNavy">
-                        <div class="header"><i class="icon-cloud"></i>Connected Serv.</div>
-                        <span class="percent">percent</span>
-                        <div class="circleStat">
-                            <input type="text" value="{{ connected_provider_percentage }}" class="whiteCircle" />
-                        </div>
-                        <div class="footer">
-                            <span class="count">
-                                <span class="number">{{ connected_providers }}</span>
-                                <span class="unit"></span>
-                            </span>
-                            <span class="sep"> / </span>
-                            <span class="value">
-                                <span class="number">{{ total_providers }}</span>
-                                <span class="unit">Services</span>
-                            </span>
-                        </div>
+                <div class="col-md-6 text-center" id="CategoryKnobs">
+                    <div class="dashboardTitle text-center">Category Breakdown of Last 7 Days (by Instance)</div>
+                    {% for category, category_data in period_category_data.items %}
+                    <div class=" col-sm-4 circleStatsContainer ">
+                        <a href="{% url 'analytics-activities' %}">
+                            <div class="circleStatsItemBox {{ category_data.color }}">
+                                <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
+                                <span class="percent">percent</span>
+                                <div class="circleStat">
+                                    <input type="text" value="{{ category_data.instance_percentage }}" class="whiteCircle" />
+                                </div>
+                                <div class="footer">
+                                    <span class="count">
+                                        <span class="number">{{ category_data.count }}</span>
+                                        <span class="unit"></span>
+                                    </span>
+                                    <span class="sep"> / </span>
+                                    <span class="value">
+                                        <span class="number">{{ period_total_activities }}</span>
+                                        <span class="unit">Activities</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-2 col-sm-4 text-center circleStat-right-text">
-                <div class="col-xs-12">
-                    <span class="dashboard-glyphicon-text"> that have tracked</span>
-                    <span class="glyphicon glyphicon-arrow-right show-activity-glyphicon" aria-hidden="true"></span>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboardTitle text-center">Activities Comparison (by Instance)</div>
+                    <div id="ActivitiesInstanceChart" class="bs-height-config"></div>
                 </div>
             </div>
-            <div class="col-md-2 col-sm-4 circleStatsContainer text-center">
-                <a href="{% url 'index' %}">
-                    <div class="circleStatsItemBox blueBlack">
-                        <div class="header"><i class="icon-star"></i>Tracked Activities</div>
-                        <span class="percent">percent</span>
-                        <div class="circleStat">
-                            <input type="text" value="{{ tracked_activities_percentage }}" class="whiteCircle" />
-                        </div>
-                        <div class="footer">
-                            <span class="count">
-                                <span class="number">{{ tracked_activities }}</span>
-                                <span class="unit"></span>
-                            </span>
-                            <span class="sep"> / </span>
-                            <span class="value">
-                                <span class="number">{{ period_total_activities }}</span>
-                                <span class="unit">Activities</span>
-                            </span>
-                        </div>
+            <div class="item">
+                <div class="col-md-6 text-center" id="CategoryKnobs">
+                    <div class="dashboardTitle">
+                        <div class="dashboardTitle text-center">Category Breakdown of Last 7 Days (by Duration)</div>
                     </div>
-                </a>
+                    {% for category, category_data in period_category_data.items %}
+                    <div class=" col-sm-4 circleStatsContainer ">
+                        <a href="{% url 'analytics-activities' %}">
+                            <div class="circleStatsItemBox {{ category_data.color }}">
+                                <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
+                                <span class="percent">percent</span>
+                                <div class="circleStat">
+                                    <input type="text" value="{{ category_data.time_percentage }}" class="whiteCircle" />
+                                </div>
+                                <div class="footer">
+                                    <span class="count">
+                                        <span class="number">{{ category_data.minutes|floatformat }}</span>
+                                        <span class="unit"></span>
+                                    </span>
+                                    <span class="sep"> / </span>
+                                    <span class="value">
+                                        <span class="number">{{ period_total_minutes|floatformat }}</span>
+                                        <span class="unit">Minutes</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6">
+                    <div class="dashboardTitle text-center">Activity Comparison (by Duration)</div>
+                    <div id="ActivitiesMinuteChart" class="bs-height-config"></div>
+                </div>
             </div>
         </div>
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-categories" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-categories" data-slide-to="1"></li>
+        </ol>
     </div>
+
 
     <script>chart_data = {{ chart_data|safe }};</script>
     <script>top_activities_chart_data_by_instance = {{ top_activities_chart_data_by_instance|safe }};</script>
     <script>top_activities_chart_data_by_duration = {{ top_activities_chart_data_by_duration|safe }};</script>
+    <script>period_provider_activities = {{ provider_7day_activities_data|safe }};</script>
+    <script>lifetime_provider_activities = {{ provider_lifetime_activities_data|safe }};</script>
+    <script>day_order = {{ day_order|safe }};</script>
 
 {% endblock %}
 

@@ -83,7 +83,6 @@ class Object(models.Model):
 
 # Each Activity instance gets logged in the following class
 
-
 class Performs(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     activity = models.ForeignKey(Activity, db_column="activity_key")
@@ -93,6 +92,7 @@ class Performs(models.Model):
     friends = models.CharField(max_length=200)
     start_date = models.DateTimeField('Start Time')
     end_date = models.DateTimeField('End Time')
+    utc_offset = models.IntegerField(default=0)
     STATUS_CHOICES = (
         ('Reached', 'Reached'),
         ('InProgress', 'In Progress'),
@@ -104,7 +104,7 @@ class Performs(models.Model):
     location_lng = models.FloatField(null=True)
 
     def __str__(self):              # __unicode__ on Python 2
-        return '%s %s %s %s' % (self.activity, self.goal, self.start_date, self.end_date)
+        return '%s %s %s %s' % (self.activity, self.start_date, self.end_date, str(self.utc_offset))
 
 
     def correct_time(self):

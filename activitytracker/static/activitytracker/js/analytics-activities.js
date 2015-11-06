@@ -115,7 +115,7 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 650);
 
                 /* Definition of Bubble Chart for the 2nd Chart */
                 var bubbleChart = new dimple.chart(svg2, response[1]);
-                bubbleChart.setBounds('15%', '10%', '77%', '80%');
+                bubbleChart.setBounds('10%,55px', '10%', '77%', '80%');
                 var y = bubbleChart.addCategoryAxis("y", "Activity");
                 y.showGridlines = true;
                 if (metric == "Number of Instances") {

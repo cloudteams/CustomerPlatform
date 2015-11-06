@@ -38,49 +38,73 @@ $(document).on('ready',function() {
         });
 
     });
+
+
+    /* ************************************************** */
+
+     // Start of: Chart for Provider Data of Last 7 Days
+    svg = dimple.newSvg("#ProviderActivities7DayChart", "100%", "100%");
+
+    var barChartTop = new dimple.chart(svg, period_provider_activities);
+    barChartTop.setBounds('10%', '0%', '85%', '70%');
+
+    barChartTop.addCategoryAxis("x", "provider");
+    y = barChartTop.addMeasureAxis("y", "instances");
+    y.tickFormat = "d";
+
+    barChartTop.addSeries("provider", dimple.plot.bar);
+
+    barChartTop.draw();
+
+    $(window).on('resize', function () {
+        barChartTop.draw(0, true);
+    });
+
+    // End of: Chart for Provider Data of Last 7 Days
+
+     /******************************************************************/
+
+    // Start of:  Top (10) Activities of the Week Chart
+    svg = dimple.newSvg("#Top10ActivitiesInstanceChart", "100%", "100%");
+
+    var barChartMiddle = new dimple.chart(svg, top_activities_chart_data_by_instance);
+    barChartMiddle.setBounds('20%', '0%', '77%', '75%');
+
+    var x = barChartMiddle.addMeasureAxis("x", 'instances');
+    x.tickFormat = "d";
+    barChartMiddle.addCategoryAxis("y", "name").addOrderRule('instances');
+
+    barChartMiddle.addSeries('name', dimple.plot.bar);
+
+    barChartMiddle.draw();
+
+    $(window).on('resize', function () {
+        barChartMiddle.draw(0, true);
+    });
+    // End of: Top (10) Activities of the Week Chart
+
+    /****************************************************/
+
     // Start of: Chart for Instances of Current & Previous Week
     var svg = dimple.newSvg("#ActivitiesInstanceChart", "100%", "100%");
 
-    var timelineChart = new dimple.chart(svg, chart_data);
-    timelineChart.setBounds('10%', '10%', '90%', '75%');
+    var barChartBottom = new dimple.chart(svg, chart_data);
+    barChartBottom.setBounds('10%', '10%', '90%', '75%');
 
-    timelineChart.addCategoryAxis("x", "day").addOrderRule(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
-    var y = timelineChart.addMeasureAxis("y", "instances");
+    barChartBottom.addCategoryAxis("x", ["day", "type"]).addOrderRule(day_order);
+    var y = barChartBottom.addMeasureAxis("y", "instances");
     y.tickFormat = "d";
 
-    timelineChart.addSeries("type", dimple.plot.line);
-    timelineChart.addLegend('5%', 0, "95%", 0, "right");
+    barChartBottom.addSeries("type", dimple.plot.bar);
+    barChartBottom.addLegend('5%', 0, "95%", 0, "right");
 
-    timelineChart.draw();
+    barChartBottom.draw();
 
     $(window).on('resize', function () {
-        timelineChart.draw(0, true);
+        barChartBottom.draw(0, true);
     });
 
     // End of: Chart for Instances of Current & Previous Week
-
-    /* ------------------------------------------------------ */
-
-    // Start of:  Top (10) Activities of the Week Chart
-    svg = dimple.newSvg("#TopActivitiesInstanceChart", "100%", "100%");
-
-    var barChart = new dimple.chart(svg, top_activities_chart_data_by_instance);
-    barChart.setBounds('10%', '10%', '90%', '75%');
-
-    var x = barChart.addMeasureAxis("x", 'instances');
-    x.tickFormat = "d";
-    barChart.addCategoryAxis("y", "name").addOrderRule('instances');
-
-
-    barChart.addSeries('name', dimple.plot.bar);
-    barChart.addLegend('5%', 0, "95%", 0, "right");
-
-    barChart.draw();
-
-    $(window).on('resize', function () {
-        barChart.draw(0, true);
-    });
-    // End of: Top (10) Activities of the Week Chart
 
 });
 
@@ -88,35 +112,13 @@ $(document).on('ready',function() {
 $('#carousel-categories.carousel').one('slid.bs.carousel', function() {
     var svg = dimple.newSvg("#ActivitiesMinuteChart", "100%", "100%");
 
-    var timelineChart = new dimple.chart(svg, chart_data);
-    timelineChart.setBounds('10%', '10%', '90%', '75%');
-
-    timelineChart.addCategoryAxis("x", "day").addOrderRule(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
-    timelineChart.addMeasureAxis("y", "minutes");
-
-    timelineChart.addSeries("type", dimple.plot.line);
-    timelineChart.addLegend('5%', 0, "95%", 0, "right");
-
-    timelineChart.draw();
-
-    $(window).on('resize', function () {
-        timelineChart.draw(0, true);
-    });
-});
-// End of: Chart for Duration of Current & Previous Week (needs to be wrapped around a slid.bs.carousel event)
-
-// Start of: Chart of Top 10 Activities of the week (needs to be here in order to properly calculate the width)
-$('#carousel-activities.carousel').one('slid.bs.carousel', function() {
-    var svg = dimple.newSvg("#TopActivitiesMinuteChart", "100%", "100%");
-
-    var barChart = new dimple.chart(svg, top_activities_chart_data_by_duration);
+    var barChart = new dimple.chart(svg, chart_data);
     barChart.setBounds('10%', '10%', '90%', '75%');
 
-    barChart.addMeasureAxis("x", 'minutes');
-    barChart.addCategoryAxis("y", "name").addOrderRule('minutes');
+    barChart.addCategoryAxis("x", ["day", "type"]).addOrderRule(day_order);
+    barChart.addMeasureAxis("y", "minutes");
 
-
-    barChart.addSeries('name', dimple.plot.bar);
+    barChart.addSeries("type", dimple.plot.bar);
     barChart.addLegend('5%', 0, "95%", 0, "right");
 
     barChart.draw();
@@ -125,10 +127,65 @@ $('#carousel-activities.carousel').one('slid.bs.carousel', function() {
         barChart.draw(0, true);
     });
 });
-// End of: Chart of Top 10 Activities of the week (needs to be wrapped around a slid.bs.carousel event)
+// End of: Chart for Duration of Current & Previous Week (needs to be wrapped around a slid.bs.carousel event)
+
+ /******************************************************************/
+
+// Start of: Chart of Top 10 Activities of the week (needs to be here in order to properly calculate the width)
+
+$('#carousel-activities.carousel').one('slid.bs.carousel', function() {
+
+
+    var svg = dimple.newSvg("#Top10ActivitiesMinuteChart", "100%", "100%");
+
+    var barChart = new dimple.chart(svg, top_activities_chart_data_by_duration);
+    barChart.setBounds('20%', '0%', '77%', '75%');
+
+    barChart.addMeasureAxis("x", 'minutes');
+    barChart.addCategoryAxis("y", "name").addOrderRule('minutes');
+
+
+    barChart.addSeries('name', dimple.plot.bar);
+
+    barChart.draw();
+
+    $(window).on('resize', function () {
+        barChart.draw(0, true);
+    });
+});
+
+// End of of: Chart of Top 10 Activities of the week (needs to be here in order to properly calculate the width)
+
+ /******************************************************************/
+
+// Start of: Chart for Provider Lifetime Data
+
+$('#carousel-providers.carousel').one('slid.bs.carousel', function() {
+
+    var svg = dimple.newSvg("#ProviderActivitiesLifetimeChart", "100%", "100%");
+
+    var barChart = new dimple.chart(svg, lifetime_provider_activities);
+    barChart.setBounds('10%', '0%', '85%', '70%');
+
+    barChart.addCategoryAxis("x", "provider");
+    var y = barChart.addMeasureAxis("y", "instances");
+    y.tickFormat = "d";
+
+    barChart.addSeries("provider", dimple.plot.bar);
+
+    barChart.draw();
+
+    $(window).on('resize', function () {
+        barChart.draw(0, true);
+    });
+});
+// End of: Chart for Provider Lifetime Data
+
+/*****************************************************/
 
 // Remove Edit & Delete Activity Options from Display-Activity Modal
 $('#showActivityModal').on("loaded.bs.modal", function(e) {
     $('#editactivity').addClass('hidden');
     $('#deleteactivity').addClass('hidden');
 });
+

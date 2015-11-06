@@ -344,6 +344,10 @@ div#DataTables_Table_0_filter {
 }
 
 /* showactivitymodal body classes */
+.no-margin-top{
+	margin-top: 0 !important;
+}
+
 .no-margin-bottom{
 	margin-bottom: 0;
 }
@@ -467,7 +471,7 @@ h6 {
   	padding-right: 20px;
   	padding-left: 20px;
 	padding-bottom:0.5em;
-	background: transparent ;
+	background: white ;
 	filter: none;
 	text-shadow: 1px 1px 1px #0a0c0e;
 	border: none;
@@ -576,7 +580,7 @@ a.brand span {
 =================================================================== */
 
 #sidebar-left {
-	background: transparent;
+	background: white !important;
 }
 
 .sidebar-nav > ul{
@@ -1014,10 +1018,12 @@ ul.messages li .message {
           box-shadow: none;
 	overflow: hidden;
 	border-radius: 8px;
+	margin-top:20px;
 }
 
 .modal-header.box-header{
 	border-radius: 0;
+	margin-top: 0;
 }
 
 .box-header h2{
@@ -3500,6 +3506,7 @@ ul.messagesList li span.date {
 	background-repeat: no-repeat, no-repeat
 }
 
+
 .auth-background-blurred{
 	position: fixed;
 	z-index: -1;
@@ -3515,6 +3522,8 @@ ul.messagesList li span.date {
 	-o-filter: blur(3px);
 	-ms-filter: blur(3px);
 	filter: blur(3spx);
+
+	opacity: 0;
 }
 
 
@@ -3821,14 +3830,14 @@ div .tokenfield {
 	top: -30px;
 }
 
+.show-dashboard-glyphicon {
+	font-size: 30px;
+	color: white;
+}
+
 .show-activity-glyphicon {
 	font-size: 37px;
 	color: rgba(29, 82, 77, 0.9);
-}
-
-.dashboardTitle>.show-activity-glyphicon:first-child{
-	position:relative;
-	top:-5px
 }
 
 .show-activity-text {
@@ -4075,6 +4084,10 @@ select[name="gender"]:active{
 .dashboardWrapper>.box{
 	margin-top: 30px
 }
+
+.wrapperPadding {
+	padding: 20px;
+}
 .dashboardTitle {
 	font-weight: 600;
 	color: #235965;
@@ -4135,3 +4148,77 @@ table>tbody>tr>td>i {
 	margin-left: 5px;
 }
 
+body.modal-open {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: scroll;
+}
+.dashboard-analytics-container {
+	/*border: 2px solid rgba(29, 82, 77, 0.9);*/
+	border-radius: 8px;
+	margin: 30px 0;
+	background:rgba(29, 82, 77, 0.9);
+	color: white
+}
+
+.dashboard-analytic {
+	padding: 10px 5px;
+	font-weight: 600;
+	vertical-align: middle;
+
+}
+
+.dashboard-analytic .dashboard-analytic-number {
+	font-size: 40px;
+	font-weight: 300;
+}
+
+.dashboard-analytic .dashboard-analytic-text {
+	top: 20px
+}
+
+.info-box {
+    display: block;
+    min-height: 85px;
+    background: #fff;
+    width: 100%;
+    box-shadow: 2px 3px 2px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.info-box-content {
+    padding: 5px 10px;
+    margin-left: 85px;
+	color: black
+}
+
+.info-box-icon {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 8px;
+    display: block;
+    float: left;
+    height: 85px;
+    width: 85px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 85px;
+    background:rgba(29, 82, 77, 0.9);
+}
+
+.info-box-content .info-box-text {
+	display:block;
+	font-weight:500;
+	font-size:30px
+}
+
+.info-box-content .info-box-title {
+	text-transform: uppercase;
+	font-size:13px;
+	margin-top:5px
+}

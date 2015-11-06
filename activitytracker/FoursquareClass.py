@@ -17,6 +17,8 @@ class Foursquare(OAuth2Validation):
 
         for checkin in feed:
 
+            utc_offset = checkin['timeZoneOffset'] / 60
+
             if PerformsProviderInfo.objects.filter(provider='foursquare',
                                                    provider_instance_id=checkin['id']
                                                    ).count() > 0:
@@ -49,8 +51,8 @@ class Foursquare(OAuth2Validation):
                                               ) for friend in checkin['with']
                                    )
 
-            start_date = time_monitored - timedelta(seconds=60)
-            end_date = time_monitored
+            start_date = time_monitored - timedelta(seconds=60) + timedelta(hours=utc_offset)
+            end_date = time_monitored + timedelta(hours=utc_offset)
 
             object_used = "Foursquare"
 
@@ -64,7 +66,8 @@ class Foursquare(OAuth2Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
 
             createActivityLinks(provider=self.PROVIDER.lower(),
@@ -101,7 +104,7 @@ class Foursquare(OAuth2Validation):
                                                ).timetuple())
                                            )
 
-        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
 
@@ -119,6 +122,7 @@ class Foursquare(OAuth2Validation):
 
             params['offset'] += params['limit']
 
+        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

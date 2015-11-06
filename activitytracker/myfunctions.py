@@ -60,9 +60,28 @@ def haversine(lat1, lon1, lat2, lon2):
 
     return km
 
+def calculateUtcOffset(lat, lng, recorded_datetime):
+
+    if (lat is None) or (lat == 0):
+        return 0
+
+    api_url = 'https://maps.googleapis.com/maps/api/timezone/json'
+    params = {
+        'timestamp': time.mktime(recorded_datetime.timetuple()),
+        'location': '%s,%s' % (str(lat), str(lng))
+    }
+
+    r = requests.get(url=api_url, params=params).json()
+
+    if r['status'] != 'OK':
+        return 0
+
+    return (r['rawOffset'] + r['dstOffset']) / 3600
+
+
 
 def addActivityFromProvider(user, goal, goal_status, friends, objects, result, location_lat, location_lng,
-                            location_address, start_date, end_date, activity):
+                            location_address, start_date, end_date, activity, utc_offset=0):
 
     """
     Create an Activity Object from the data provided in the parameters.
@@ -79,7 +98,8 @@ def addActivityFromProvider(user, goal, goal_status, friends, objects, result, l
                                  location_lng=location_lng,
                                  start_date=start_date,
                                  end_date=end_date,
-                                 result=result
+                                 result=result,
+                                 utc_offset=utc_offset
     )
 
     performs_instance.save()

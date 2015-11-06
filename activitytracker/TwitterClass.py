@@ -16,6 +16,11 @@ class Twitter(OAuth1Validation):
 
         for tweet in tweets:
 
+            if tweet['user']['utc_offset'] is not None:
+                utc_offset = tweet['user']['utc_offset'] / 3600
+            else:
+                utc_offset = 0
+
             time_tweeted = datetime.strptime(str(tweet['created_at']), "%a %b %d %H:%M:%S +0000 %Y")
 
             if time_tweeted < _time_barrier:
@@ -60,8 +65,8 @@ class Twitter(OAuth1Validation):
             goal = ""
             goal_status = None
 
-            start_date = time_tweeted - timedelta(seconds=60)
-            end_date = time_tweeted
+            start_date = time_tweeted - timedelta(seconds=60) + timedelta(hours=utc_offset)
+            end_date = time_tweeted + timedelta(hours=utc_offset)
 
             friends_list = (list(set([mention['name'] for mention in tweet['entities']['user_mentions']])))
             friends_list.remove(tweet['user']['name']) if tweet['user']['name'] in friends_list else True
@@ -77,15 +82,15 @@ class Twitter(OAuth1Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
 
             if (tweet['id'] -1 < _max_id) or (_max_id == 0):
-
                 _max_id = tweet['id'] - 1
 
-            if tweet['id'] > self.metadata.since_id:
-                self.metadata.since_id = tweet['id']
+            if tweet['id_str'] > self.metadata.since_id:
+                self.metadata.since_id = tweet['id_str']
 
             createActivityLinks(provider=self.PROVIDER.lower(),
                                 instance=performs_instance,
@@ -117,17 +122,15 @@ class Twitter(OAuth1Validation):
         if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
             params['since_id'] = self.metadata.since_id
 
-        self.metadata.last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         while True:
-            print self.api_user_timeline_url
-            print params
 
             tweets = requests.get(url=self.api_user_timeline_url,
                                   params=params,
                                   auth=auth
                                   ).json()
-            print tweets
+
             if not tweets:
                 break
 
@@ -139,6 +142,7 @@ class Twitter(OAuth1Validation):
             if status == "Barrier Reached":
                 break
 
+        self.metadata.last_updated = last_updated
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)
