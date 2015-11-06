@@ -21,7 +21,10 @@ def start_wizard(request):
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             # save the profile
-            form.save()
+            profile = form.save(commit=False)
+            profile.has_been_saved = True
+            profile.save()
+
             # update user
             profile.user.location = form.cleaned_data['location']
             profile.user.save()

@@ -13,3 +13,6 @@ activitytracker/static/bower_components
 
 # CACHED CSS/JS
 static/CACHE
+
+# user avatars
+avatars/*

@@ -2,44 +2,33 @@
     min-width: 300px !important;
 }
 
+ul.main-menu i {
+    min-width: 20px;
+    text-align: center;
+}
+
+.create-profile-form {
+    height: calc(100vh - 240px);
+    overflow-y: scroll;
+}
+
 /* Slider */
 
 .page-container {
     background-color: #f7f7f7;
 }
 
-.bjqs-prev {
-    display: none;
-}
-.bjqs-prev a, .bjqs-next a {
-    background-color: #777;
-    color: #fff;
-    padding: 10px;
-}
-
-ol.bjqs-markers li {
-    display: inline-block !important;
-    padding: 10px 20px;
-    text-shadow: 1px 1px #fff;
-}
-
-ol.bjqs-markers li.active-marker {
-    background: #f7f7f7;
-}
-
-ul.bjqs-controls.v-centered li.bjqs-next a {
-    top: 70% !important;
-}
-
-ol.bjqs-markers li {
-    -webkit-transition: background 0.3s ease-in-out;
-	-moz-transition: background 0.3s ease-in-out;
-	-o-transition: background 0.3s ease-in-out;
-	-ms-transition: background 0.3s ease-in-out;
-	transition: background 0.3s ease-in-out;
-}
-
 /* Field layout */
+
+#avatar-container img {
+    width: 100%;
+    max-height: 100%;
+}
+
+.save-error-retry {
+    cursor: pointer;
+}
+
 .wizard-page-container h2 {
     font-size: 28px;
     font-weight: 300;
@@ -63,7 +52,21 @@ ol.bjqs-markers li {
 
 .wizard-page-container .text-center {
     text-align: center;
-    margin-top: 180px;
+    margin-top: 20px;
+}
+
+.wizard-page-container li {
+    list-style: none;
+}
+
+.wizard-page-container li h2 {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(33,33,33, 0.5);
+}
+
+.wizard-page-container li:first-of-type h2 {
+    border-top: none;
 }
 
 /* NiceOpt */

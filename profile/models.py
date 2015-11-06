@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     # Avatar
-    profile_picture = models.ImageField(upload_to='avatars/', blank=True, null=True, default=None)
+    profile_picture = models.ImageField(upload_to='media/avatars/', blank=True, null=True, default=None)
 
     # Generic info
     first_name = models.CharField(max_length=255)
@@ -42,6 +42,9 @@ class UserProfile(models.Model):
 
     # Tech level
     tech_level = models.CharField(max_length=8, blank=True, default='', choices=TECH_LEVELS)
+
+    # Check if the profile wizard has run at least once
+    has_been_saved = models.BooleanField(default=False, editable=False)
 
     def get_display_name(self):
         return '%s %s.' % (self.first_name, self.last_name_initial)
