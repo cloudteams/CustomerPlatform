@@ -16,3 +16,6 @@ static/CACHE
 
 # user avatars
 avatars/*
+
+# passwords
+passwords.py
