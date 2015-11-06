@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     # Avatar
-    profile_picture = models.ImageField(upload_to='media/avatars/', blank=True, null=True, default=None)
+    profile_picture = models.ImageField(upload_to='avatars/', blank=True, null=True, default=None)
 
     # Generic info
     first_name = models.CharField(max_length=255)

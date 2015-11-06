@@ -12,19 +12,6 @@ $(function() {
     //input class
     $('.create-profile-form input').addClass('input-lg form-control');
 
-    //preview avatar image
-    $("#id_profile_picture").change(function(){
-        if (this.files && this.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#avatar-container').html('<img src="' + e.target.result + '"/>');
-            }
-
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
-
     //trigger file selection
     $('#trigger-avatar-upload').click(function() {
         $('#id_profile_picture').click();
@@ -117,22 +104,44 @@ $(function() {
     });
 
     /* Save form automatically */
-    function post_profile() {
-        $('.profile-save-msg').html('Saving... <i class="fa fa-spinner fa-pulse"></i>')
-        $.ajax({
-            url: '.',
-            method: 'POST',
-            data: $('.create-profile-form').serialize(),
-            success: function(data) {
-                $('.profile-save-msg').html('Saved <i class="fa fa-check"></i>');
-            },
-            error: function() {
-                $('.profile-save-msg').html('<span class="alert-danger save-error-retry" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>Error while saving, try again</span>');
-            }
-        });
-    }
+    ProfileFormManager = {
+        avatar_updated: false,
 
-    $('.create-profile-form input').on('focusout', post_profile);
-    $('.create-profile-form select').on('change', post_profile);
-    $('body').on('click', '.save-error-retry', post_profile);
+        post_profile: function() {
+            $('.profile-save-msg').html('Saving... <i class="fa fa-spinner fa-pulse"></i>')
+            $.ajax({
+                url: '.',
+                method: 'POST',
+                data: new FormData($('.create-profile-form')[0]),
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    $('.profile-save-msg').html('Saved <i class="fa fa-check"></i>');
+                    ProfileFormManager.avatar_updated = false;
+                },
+                error: function() {
+                    $('.profile-save-msg').html('<span class="alert-danger save-error-retry" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>Error while saving, try again</span>');
+                }
+            });
+        }
+    };
+
+    $('.create-profile-form input').on('focusout', ProfileFormManager.post_profile);
+    $('.create-profile-form select').on('change', ProfileFormManager.post_profile);
+    $('body').on('click', '.save-error-retry', ProfileFormManager.post_profile);
+
+    //preview avatar image
+    $("#id_profile_picture").change(function(){
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#avatar-container').html('<img src="' + e.target.result + '"/>');
+            }
+
+            reader.readAsDataURL(this.files[0]);
+            ProfileFormManager.avatar_updated = true;
+            ProfileFormManager.post_profile();
+        }
+    });
 });

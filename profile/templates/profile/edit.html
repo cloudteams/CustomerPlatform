@@ -10,12 +10,12 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home"></i>
-            <a href="{% url 'start-profile-wizard' %}">Customer profile wizard</a>
+            <a href="{% url 'start-profile-wizard' %}">Customer profile</a>
         </li>
     </ul>
 
     <div class="clearfix">
-        <h1 class="pull-left">Create your profile in CloudTeams in a few steps!</h1>
+        <h1 class="pull-left">{% if profile.has_been_saved %}Your profile in CloudTeams{% else %}Create your profile in CloudTeams in a few steps!{% endif %}</h1>
         <div class="profile-save-msg pull-right"></div>
     </div>
 

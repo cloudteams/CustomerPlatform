@@ -125,9 +125,8 @@ function drawDonut() {
 				success: function (data) {
 					plotDonutChart(data);
 				},
-				error: function(){
-					alert('Client did not receive a response. Reloading page')
-					window.location.reload();
+				error: function(xhr){
+					console.log(xhr.responseText);
 				}
 			});
 };
@@ -379,7 +378,6 @@ function RenderViewActivities(view){
 		 error: function (xhr, status, error) {
 			 Done();
 			 alert('Internal Server Error. Page will be reloaded');
-			 window.location.reload();
 		 },
 		 success: function (responseString) {
 			 DrawGroupUngroupSortWithChart(responseString);
@@ -403,7 +401,6 @@ function CheckDisplay(activityData){
 		 error: function (xhr, status, error) {
 			 Done();
 			 alert('Internal Server Error. Page will be reloaded');
-			 window.location.reload();
 		 },
 		 success: function (responseString) {
 			 if (responseString.indexOf(activityData.id) != -1) {

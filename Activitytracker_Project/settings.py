@@ -123,7 +123,7 @@ STATIC_ROOT = 'activitytracker/static'
 
 # Files uploaded by users (e.g avatars)
 MEDIA_ROOT = 'media'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 # django-bower. Bower components dir
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/')
