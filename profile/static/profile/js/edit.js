@@ -3,19 +3,14 @@ $(function() {
     $('select:not(#id_platforms, #id_devices, #id_influences, #id_tech_level)').chosen();
 
     //nice options
-    NiceOpts.init('#id_platforms, #id_devices, #id_influences');
+    NiceOpts.init('#id_platforms, #id_devices');
+    NiceOpts.init('#id_influences', {break_after: [2]});
     NiceOpts.init('#id_tech_level', {
         style: 'numbers'
     });
 
-    //paginate
-    $('.page-container').bjqs({
-        animtype    : 'slide',
-        height      : 600,
-        width       : $('.create-profile-form').width(),
-        responsive  : true,
-        animspeed   : 999999
-    });
+    //input class
+    $('.create-profile-form input').addClass('input-lg form-control');
 
     //preview avatar image
     $("#id_profile_picture").change(function(){
@@ -58,9 +53,10 @@ $(function() {
                         };
                     }));
 
+                    var inp = $(this)[0].element;
                     $('.city-select').css('display', 'block');
-                    $('.city-select').css('left', $('.page-container').offset().left + $('.work-city input').position().left);
-                    $('.city-select').css('top', $('.page-container').offset().top + $('.work-city input').position().top + 30);
+                    $('.city-select').css('left', $('.wizard-page-container').offset().left + $(inp).position().left);
+                    $('.city-select').css('top', $('.wizard-page-container').offset().top + $(inp).position().top + 30);
                 }
             });
         }
@@ -71,9 +67,13 @@ $(function() {
         url: '/profile/get-brand-opinion',
         success: function (data) {
             $('#tech-opinion').html(data);
+            if (data == '') {
+                $('.brand-opinions-field').hide();
+            }
         }
     });
 
+    /* Send an opinion about a brand */
     $('body').on('click', '.send-opinion', function() {
         var brand = $(this).closest('form').find('input[name="brand"]').val();
         var opinion = $(this).data('value');
@@ -101,4 +101,38 @@ $(function() {
             }
         })
     });
+
+    /* On scroll update menu */
+    $('.create-profile-form').scroll(function() {
+        var st = $(this).scrollTop();
+        var lis = $(this).find('ul.profile-wizard-paginator > li');
+
+        $('ul.main-menu li').removeClass('active');
+        for (var i=0; i<lis.length; i++) {
+            if ($(lis[i]).offset().top >= 0) { // find which is currently visible
+                $('ul.main-menu li a[href="#' + $(lis[i]).find('div').attr('id') + '"]').parent().addClass('active');
+                break;
+            }
+        }
+    });
+
+    /* Save form automatically */
+    function post_profile() {
+        $('.profile-save-msg').html('Saving... <i class="fa fa-spinner fa-pulse"></i>')
+        $.ajax({
+            url: '.',
+            method: 'POST',
+            data: $('.create-profile-form').serialize(),
+            success: function(data) {
+                $('.profile-save-msg').html('Saved <i class="fa fa-check"></i>');
+            },
+            error: function() {
+                $('.profile-save-msg').html('<span class="alert-danger save-error-retry" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>Error while saving, try again</span>');
+            }
+        });
+    }
+
+    $('.create-profile-form input').on('focusout', post_profile);
+    $('.create-profile-form select').on('change', post_profile);
+    $('body').on('click', '.save-error-retry', post_profile);
 });

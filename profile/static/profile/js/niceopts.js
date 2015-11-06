@@ -25,7 +25,8 @@ var NiceOpts = {
     },
 
     init: function(selector, options) {
-        options = options || {style: 'icons'};
+        options = options || {};
+        options.style = options.style || 'icons';
 
         // hide the actual select
         $(selector).css('display', 'none');
@@ -62,6 +63,12 @@ var NiceOpts = {
                 opt_div += opt.text() + '</div>';
 
                 $(opt_container).append(opt_div);
+
+                if (typeof(options.break_after) != "undefined") {
+                    if (options.break_after.indexOf(j) >= 0) {
+                        $(opt_container).append('<div class="option-seperator"></div>');
+                    }
+                }
             }
         }
     }
@@ -78,11 +85,13 @@ $(function() {
 
         $(this).addClass('option-active');
         $(this).parent().parent().find('select > option[value="' + $(this).data('value') + '"]').attr('selected', true);
+        $(this).parent().parent().find('select').change();
     });
 
     //on un-select
     $('body').on('click', '.opt-container > .option.option-active', function() {
         $(this).removeClass('option-active');
         $(this).parent().parent().find('select > option[value="' + $(this).data('value') + '"]').attr('selected', false);
+        $(this).parent().parent().find('select').change();
     });
 });

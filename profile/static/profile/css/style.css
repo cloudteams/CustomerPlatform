@@ -2,48 +2,34 @@
     min-width: 300px !important;
 }
 
+ul.main-menu i {
+    min-width: 20px;
+    text-align: center;
+}
+
+.create-profile-form {
+    height: calc(100vh - 240px);
+    overflow-y: scroll;
+}
+
 /* Slider */
 
 .page-container {
     background-color: #f7f7f7;
 }
 
-.bjqs-prev {
-    display: none;
-}
-.bjqs-prev a, .bjqs-next a {
-    background-color: #777;
-    color: #fff;
-    padding: 10px;
-}
-
-ol.bjqs-markers {
-    background: #fcfcfc;
-}
-
-ol.bjqs-markers li {
-    display: inline-block !important;
-    padding: 10px 20px;
-}
-
-ol.bjqs-markers li.active-marker {
-    background: #f7f7f7;
-}
-
-ul.bjqs-controls.v-centered li.bjqs-next a {
-    top: 70% !important;
-}
-
-ol.bjqs-markers li {
-    -webkit-transition: background 0.3s ease-in-out;
-	-moz-transition: background 0.3s ease-in-out;
-	-o-transition: background 0.3s ease-in-out;
-	-ms-transition: background 0.3s ease-in-out;
-	transition: background 0.3s ease-in-out;
-}
-
 /* Field layout */
-.page-container h2 {
+
+#avatar-container img {
+    width: 100%;
+    max-height: 100%;
+}
+
+.save-error-retry {
+    cursor: pointer;
+}
+
+.wizard-page-container h2 {
     font-size: 28px;
     font-weight: 300;
     text-align: center;
@@ -64,9 +50,23 @@ ol.bjqs-markers li {
     display: inline-block;
 }
 
-.page-container .text-center {
+.wizard-page-container .text-center {
     text-align: center;
-    margin-top: 180px;
+    margin-top: 20px;
+}
+
+.wizard-page-container li {
+    list-style: none;
+}
+
+.wizard-page-container li h2 {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(33,33,33, 0.5);
+}
+
+.wizard-page-container li:first-of-type h2 {
+    border-top: none;
 }
 
 /* NiceOpt */
@@ -76,7 +76,6 @@ ol.bjqs-markers li {
     height: 100px;
     border-radius: 10px;
     margin: 0 10px;
-    border: 1px solid #ddd;
     cursor: pointer;
     min-width: 100px;
     text-align: center;
@@ -97,8 +96,8 @@ ol.bjqs-markers li {
     font-style: normal;
     display: block;
     font-size: 26px;
-    margin: 0 20px 10px 20px;
-    padding: 20px 0;
+    margin: 0 5px 5px 5px;
+    padding: 15px 0;
     background: #aaa;
     border-radius: 50%;
     color: #eee;
@@ -110,7 +109,8 @@ ol.bjqs-markers li {
 }
 
 #trigger-avatar-upload {
-    width: calc(100% - 26px);
+    width: 100%;
+    border-radius: 0 0 5px 5px !important;
 }
 
 /* Brand opinions */
@@ -159,4 +159,9 @@ ol.bjqs-markers li {
 
 .send-opinion.opinion-negative:hover {
     color: #CF000F;
+}
+
+.send-opinion.opinion-indifferent {
+    display: inline-block;
+    margin-top: 20px;
 }
