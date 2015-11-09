@@ -1242,10 +1242,7 @@ def dashboard(request):
 
     # Find the latest 10 activities entered
     latest_activity_list = list()
-    for user_instance in user.performs_set.filter(
-            start_date__lte=end_of_period,
-            end_date__gte=start_of_period
-    ).order_by('-start_date')[:10]:
+    for user_instance in user.performs_set.all().order_by('-start_date')[:10]:
         latest_activity_list.append({
             'id': user_instance.id,
             'name': user_instance.activity.activity_name,
