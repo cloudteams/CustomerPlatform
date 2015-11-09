@@ -16,17 +16,24 @@
     font-size: 150%;
 }
 
-.profile-view .influences-row {
+.profile-view .inline-row {
     display: inline-block;
     vertical-align: top;
 }
 .profile-view .inline-edit {
-    margin-top: 20px;
+    margin-top: 25px;
     display: inline-block;
 }
 
+.profile-view .geek-level {
+    font-size: 18px;
+}
 .profile-view h4 {
     font-size: 20px;
+}
+
+.profile-view .opinions-container {
+    margin-bottom: 20px;
 }
 
 .chosen-container {

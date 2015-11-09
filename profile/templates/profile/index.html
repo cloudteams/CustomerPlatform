@@ -14,18 +14,18 @@
         </li>
     </ul>
 
-    <h1>My profile</h1>
+    <div class="clearfix">
+        <a href="{% url 'start-profile-wizard' %}" class="btn btn-primary pull-right"><i class="fa fa-pencil"></i> Edit profile</a>
+    </div>
 
     <div class="container profile-view">
 
         <div class="row">
             <div class="col-xs-2">
-                <div class="profile-avatar" {% if profile.profile_picture %}style="background-image:url(/media/{{profile.profile_picture}});"{% endif %}>
-
-                </div>
+                <div class="profile-avatar" {% if profile.profile_picture %}style="background-image:url(/media/{{profile.profile_picture}});"{% endif %}></div>
             </div>
 
-            <div class="col-xs-10">
+            <div class="col-xs-6">
                 <div class="personal-info">
                     <p class="name-age">
                         {{ profile.first_name }} {% if profile.last_name_initial %} {{ profile.last_name_initial }} {% endif %}.
@@ -60,37 +60,81 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12">
+                    <p class="col-md-12">
                         <h4>You & tech</h4>
 
+                        <b>Influences</b>
                         {% if profile.influences %}
                             <p>Regarding technology, you're influenced by: </p>
-                            <div class="influences-row">
+                            <div><div class="inline-row">
                                 <select id="influences-view">
                                     {% for influence in profile.influences %}
                                         <option value="{{influence}}">{{influence|choice_to_str:influences_field}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <a href="{% url 'start-profile-wizard' %}#influences" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a>
+                            <a href="{% url 'start-profile-wizard' %}#influences" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></div>
                         {% else %}
                             <p><a href="{% url 'start-profile-wizard' %}#influences"><i class="fa fa-plus"></i> What influences you when it comes to technology?</a></p>
                         {% endif %}
 
+                        <b>Devices</b>
                         {% if profile.devices %}
                             <p>You're using the following devices: </p>
-                            <div class="devices-row">
+                            <div><div class="inline-row">
                                 <select id="devices-view">
                                     {% for device in profile.devices %}
                                         <option value="{{device}}">{{device|choice_to_str:devices_field}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <a href="{% url 'start-profile-wizard' %}#devices" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a>
+                            <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></div>
                         {% else %}
-                            <p><a href="{% url 'start-profile-wizard' %}#devices"><i class="fa fa-plus"></i> What devices are you using?</a></p>
+                            <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What devices are you using?</a></p>
+                        {% endif %}
+
+                        <b>Platforms</b>
+                        {% if profile.platforms %}
+                            <p>You're using the following platforms : </p>
+                            <div><div class="inline-row">
+                                <select id="platforms-view">
+                                    {% for platform in profile.platforms %}
+                                        <option value="{{platform}}">{{platform|choice_to_str:platforms_field}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></div>
+                        {% else %}
+                            <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What platforms are you using?</a></p>
+                        {% endif %}
+
+                        <b>Your tech level</b>
+                        {% if profile.platforms %}
+                            <p>You're overall tech level: <span class="geek-level">{{profile.tech_level}}</span>
+
+                            <a href="{% url 'start-profile-wizard' %}#you-and-tech" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                        {% else %}
+                            <p><a href="{% url 'start-profile-wizard' %}#you-and-tech"><i class="fa fa-plus"></i> What's your overall tech level?</a></p>
                         {% endif %}
                     </div>
+                </div>
+
+            <div class="col-xs-4">
+                <div class="opinions-container opinions-like">
+                    <h4>Brands you like</h4>
+                    {% for brand in liked_brands %}
+                        <img src="{{brand|get_brand_icon}}" width="{{brand|get_icon_width}}" class="brand-icon" title="{{brand|lower}}"/>
+                    {% empty %}
+                        <p>No brands you like found.</p>
+                    {% endfor %}
+                </div>
+                <div class="opinions-container opinions-dislike">
+                    <h4>Brands you dislike</h4>
+                    {% for brand in disliked_brands %}
+                        <img src="{{brand|get_brand_icon}}" width="{{brand|get_icon_width}}" class="brand-icon" title="{{brand|lower}}"/>
+                    {% empty %}
+                        <p>No brands you dislike found.</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>

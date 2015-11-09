@@ -1,9 +1,23 @@
 from datetime import date
 from django import template
+from django.templatetags.static import static
 
 __author__ = 'dipap'
 
 register = template.Library()
+
+
+@register.filter
+def get_brand_icon(brand):
+    return static('profile/img/brands/%s.png' % brand.lower())
+
+
+@register.filter
+def get_icon_width(brand):
+    if brand == 'TWITTER':
+        return 40
+
+    return 30
 
 
 @register.filter

@@ -2,10 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.templatetags.static import static
 from profile.forms import UserProfileForm
 from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
 from profile.models import UserBrandOpinion, UserProfile
+from profile.templatetags.profile_tags import get_brand_icon
 
 
 @login_required
@@ -17,6 +17,8 @@ def view_my_profile(request):
         'influences_field': UserProfile.influences.field,
         'devices_field': UserProfile.devices.field,
         'platforms_field': UserProfile.platforms.field,
+        'liked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='P')],
+        'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
     }
 
     if profile.has_been_saved:  # proceed to details page
@@ -51,10 +53,6 @@ def start_wizard(request):
 
     params['form'] = form
     return render(request, 'profile/edit.html', params)
-
-
-def get_brand_icon(brand):
-    return static('profile/img/brands/%s.png' % brand.lower())
 
 
 @login_required
