@@ -358,7 +358,7 @@ $('#routineModal').on('hidden.bs.modal', function() {
     $('.routine-canvas').find('.radio').prop('checked', false)
     $('#routineInsertMore').removeClass('hidden');
     $('.routine-canvas-show-more').addClass('hidden');
-    $('#seasonality, #weekend').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+    $('#seasonality, #weekend').removeClass('fa fa-chevron-up').addClass('fa fa-chevron-down');
     $('.seasonality-input, .weekend-input').addClass('hidden');
     $('#submitRoutine').prop('value', 'add');
     $('input[name="weekday_seasonality_start"], input[name="weekday_seasonality_end"], ' +
@@ -370,14 +370,14 @@ $('#routineModal').on('hidden.bs.modal', function() {
 });
 
 $('#seasonality, #weekend').on('click', function() {
-    if ($(this).attr('class') == 'icon-chevron-down') {
+    if ($(this).attr('class') == 'fa fa-chevron-down') {
         $('.' + $(this).attr('id') + '-input').removeClass('hidden');
-        $(this).removeClass("icon-chevron-down").addClass("icon-chevron-up")
+        $(this).removeClass("fa fa-chevron-down").addClass("fa fa-chevron-up")
     }
 
     else {
         $('.' + $(this).attr('id') + '-input').addClass('hidden');
-        $(this).removeClass("icon-chevron-up").addClass("icon-chevron-down")
+        $(this).removeClass("fa fa-chevron-up").addClass("fa fa-chevron-down")
     }
 });
 
