@@ -10,7 +10,6 @@ urlpatterns = [
     url(r'^account/passforgot/$', views.passwordforget, name='passwordforget'),
     url(r'^account/verification/(?P<verification_token>\w+)/$', views.email_verification, name='emailVerification'),
     url(r'^account/password_reset/(?P<passwordreset_token>\w+)/$', views.password_reset, name='passwordReset'),
-    #url(r'^account/password_reset/password_update/$', views.forgotten_password_update, name='forgottenPasswordUpdate'),
     url(r'^account/register/$', views.register, name='register'),
     url(r'^account/routine(?:/(?P<setting>\w+))?/$', views.routineSettings, name='routineSettings'),
     url(r'^activity/add/$', views.addactivity, name='addactivity'),

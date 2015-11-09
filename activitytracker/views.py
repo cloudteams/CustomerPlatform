@@ -192,7 +192,7 @@ def passwordforget(request):
     user = User.objects.get(username=username)
     characters = string.ascii_letters + string.digits
     passwordforget_token = ''.join(random.choice(characters) for _ in range(20))
-    passwordforget_url = '%s/activitytracker/account/password_reset/%s' % (SERVER_URL, passwordforget_token)
+    passwordforget_url = '%s/activitytracker/account/password_reset/%s' % (request.get_host(), passwordforget_token)
     passwordforget_instance = UserUniqueTokens(
         user=user,
         token=passwordforget_token,
