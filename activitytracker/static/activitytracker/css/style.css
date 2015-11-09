@@ -915,9 +915,7 @@ ul.messages li .message {
 }
 
 .breadcrumb a:hover {
-	color: #646464;
-	text-shadow: 0px 1px 1px #fff;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 .dark {
