@@ -1,3 +1,34 @@
+.profile-view .profile-avatar {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 150px;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.profile-view .personal-info {
+    margin-bottom: 20px;
+}
+
+.profile-view .name-age {
+    font-size: 150%;
+}
+
+.profile-view .influences-row {
+    display: inline-block;
+    vertical-align: top;
+}
+.profile-view .inline-edit {
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.profile-view h4 {
+    font-size: 20px;
+}
+
 .chosen-container {
     min-width: 300px !important;
 }
@@ -8,7 +39,7 @@ ul.main-menu i {
 }
 
 .create-profile-form {
-    height: calc(100vh - 240px);
+    height: calc(100vh - 280px);
     overflow-y: scroll;
 }
 
@@ -34,6 +65,15 @@ ul.main-menu i {
     font-weight: 300;
     text-align: center;
     margin: 20px 0;
+}
+
+.chosen-single {
+    height: auto !important;
+}
+
+.chosen-single span {
+    padding: 10px;
+    font-size: 18px;
 }
 
 .centered-fields {
@@ -70,6 +110,10 @@ ul.main-menu i {
 }
 
 /* NiceOpt */
+.opt-container.inline {
+    display: inline-block;
+}
+
 .opt-container .option {
     display: inline-block;
     padding: 5px 10px;
@@ -82,7 +126,7 @@ ul.main-menu i {
     vertical-align: top;
 }
 
-.opt-container .option.option-active {
+.opt-container.active .option.option-active {
     background: #1C2B36;
     color: #fff;
 }

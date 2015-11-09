@@ -4,8 +4,9 @@ from profile import views
 __author__ = 'dipap'
 
 urlpatterns = [
-    # start the wizard
-    url(r'^$', views.start_wizard, name='start-profile-wizard'),
+    # profile
+    url(r'^$', views.view_my_profile, name='view-my-profile'),
+    url(r'^edit/$', views.start_wizard, name='start-profile-wizard'),
 
     # Brand opinions
     url(r'^get-brand-opinion$', views.get_brand_opinion, name='get-brand-opinion'),

@@ -27,6 +27,7 @@ var NiceOpts = {
     init: function(selector, options) {
         options = options || {};
         options.style = options.style || 'icons';
+        options.size = options.size || 4;
 
         // hide the actual select
         $(selector).css('display', 'none');
@@ -35,7 +36,14 @@ var NiceOpts = {
         for (var i=0; i<$(selector).length; i++) {
             //add a container for the options
             var select = $($(selector)[i]);
-            select.parent().append('<div class="opt-container"></div>');
+            var container = $('<div class="opt-container"></div>');
+            if (!options.disabled) {
+                $(container).addClass('active');
+            }
+            if (options.inline) {
+                $(container).addClass('inline');
+            }
+            select.parent().append(container);
             var opt_container = $(select).parent().find('.opt-container');
 
             //add all options in the container
@@ -54,7 +62,7 @@ var NiceOpts = {
                 opt_div += '" data-value="' + opt.val() + '">';
                 if (options.style == 'icons') {
                     if (this.icons[opt.val()]) {
-                        opt_div += '<span class="fa ' + this.icons[opt.val()] + ' fa-4x"></span>'
+                        opt_div += '<span class="fa ' + this.icons[opt.val()] + ' fa-' + options.size + 'x"></span>'
                     }
                 } else if (options.style == 'numbers') {
                     opt_div += '<i class="number-icon">' + (cnt) + '</i>'
@@ -76,7 +84,7 @@ var NiceOpts = {
 
 $(function() {
     //on select
-    $('body').on('click', '.opt-container > .option:not(.option-active)', function() {
+    $('body').on('click', '.opt-container.active > .option:not(.option-active)', function() {
         //check if other options have to be cleared first
         if (!$(this).parent().parent().find('select').attr('multiple')) {
             $(this).parent().parent().find('select > option').attr('selected', false);
@@ -89,7 +97,7 @@ $(function() {
     });
 
     //on un-select
-    $('body').on('click', '.opt-container > .option.option-active', function() {
+    $('body').on('click', '.opt-container.active > .option.option-active', function() {
         $(this).removeClass('option-active');
         $(this).parent().parent().find('select > option[value="' + $(this).data('value') + '"]').attr('selected', false);
         $(this).parent().parent().find('select').change();
