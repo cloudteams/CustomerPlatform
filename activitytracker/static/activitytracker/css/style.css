@@ -756,7 +756,7 @@ border-bottom: 1px solid transparent;
 }
 
 .dropdown-menu li > a:hover,
-.dropdown-menu li > a:focus, {
+.dropdown-menu li > a:focus {
   	color: whitesmoke;
   	text-decoration: none;
   	background: #0c7a70;
@@ -4221,4 +4221,9 @@ body.modal-open {
 	text-transform: uppercase;
 	font-size:13px;
 	margin-top:5px
+}
+
+.vertical-margin {
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
