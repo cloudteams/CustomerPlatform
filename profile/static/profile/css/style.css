@@ -21,8 +21,9 @@
     vertical-align: top;
 }
 .profile-view .inline-edit {
-    margin-top: 25px;
     display: inline-block;
+    color: #777;
+    text-decoration: none;
 }
 
 .profile-view .geek-level {
@@ -173,8 +174,12 @@ ul.main-menu i {
 	transition: opacity 0.3s ease-in-out;
 }
 
+.profile-view .brand-opinions-field {
+    margin-top: 20px;
+}
+
 .opinion-col {
-    margin-top: 100px;
+    margin-top: 50px;
 }
 
 .opinion-col-right {
@@ -188,7 +193,7 @@ ul.main-menu i {
 .col-brand .brand-icon {
     border-radius: 50%;
     display: block;
-    margin-left: 25%;
+    margin: auto;
 }
 
 .send-opinion {
