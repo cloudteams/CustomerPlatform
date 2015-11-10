@@ -196,7 +196,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'circle-arrow-right',
             'buttonText': 'Connect',
             'statusText': 'App not Connected',
-            'statusIcon': 'icon-remove-circle',
+            'statusIcon': 'fa fa-times-circle-o',
             'statusFontColor': 'red',
             'providerIconName': provider
         }
@@ -205,7 +205,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'repeat',
             'buttonText': 'Re-Authorize',
             'statusText': 'Expired or de-authorized',
-            'statusIcon': 'icon-warning-sign',
+            'statusIcon': 'fa fa-warning',
             'statusFontColor': 'orangered',
             'providerIconName': provider
         }
@@ -214,7 +214,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'repeat',
             'buttonText': 'Retry',
             'statusText': 'Too many requests sent. Try again later',
-            'statusIcon': 'icon-warning-sign',
+            'statusIcon': 'fa fa-exclamation-circle',
             'statusFontColor': 'red',
             'providerIconName': provider
         }
@@ -223,7 +223,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'trash',
             'buttonText': 'De-Authorize',
             'statusText': 'App connected',
-            'statusIcon': 'icon-ok-circle',
+            'statusIcon': 'fa fa-check-circle-o',
             'statusFontColor': 'green',
             'providerIconName': provider
         }

@@ -1,0 +1,218 @@
+.profile-view .profile-avatar {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 150px;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.profile-view .personal-info {
+    margin-bottom: 20px;
+}
+
+.profile-view .name-age {
+    font-size: 150%;
+}
+
+.profile-view .inline-row {
+    display: inline-block;
+    vertical-align: top;
+}
+.profile-view .inline-edit {
+    margin-top: 25px;
+    display: inline-block;
+}
+
+.profile-view .geek-level {
+    font-size: 18px;
+}
+.profile-view h4 {
+    font-size: 20px;
+}
+
+.profile-view .opinions-container {
+    margin-bottom: 20px;
+}
+
+.chosen-container {
+    min-width: 300px !important;
+}
+
+ul.main-menu i {
+    min-width: 20px;
+    text-align: center;
+}
+
+.create-profile-form {
+    height: calc(100vh - 280px);
+    overflow-y: scroll;
+}
+
+/* Slider */
+
+.page-container {
+    background-color: #f7f7f7;
+}
+
+/* Field layout */
+
+#avatar-container img {
+    width: 100%;
+    max-height: 100%;
+}
+
+.save-error-retry {
+    cursor: pointer;
+}
+
+.wizard-page-container h2 {
+    font-size: 28px;
+    font-weight: 300;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.chosen-single {
+    height: auto !important;
+}
+
+.chosen-single span {
+    padding: 10px;
+    font-size: 18px;
+}
+
+.centered-fields {
+    width: 1200px;
+    margin-left: calc(50% - 600px);
+}
+
+.centered-fields  .field {
+    padding: 10px 0;
+}
+
+.centered-fields  .field label {
+    min-width: 400px;
+    display: inline-block;
+}
+
+.wizard-page-container .text-center {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.wizard-page-container li {
+    list-style: none;
+}
+
+.wizard-page-container li h2 {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(33,33,33, 0.5);
+}
+
+.wizard-page-container li:first-of-type h2 {
+    border-top: none;
+}
+
+/* NiceOpt */
+.opt-container.inline {
+    display: inline-block;
+}
+
+.opt-container .option {
+    display: inline-block;
+    padding: 5px 10px;
+    height: 100px;
+    border-radius: 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    min-width: 100px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.opt-container.active .option.option-active {
+    background: #1C2B36;
+    color: #fff;
+}
+
+.opt-container .option span {
+    display: block;
+    margin: 10px 0;
+}
+
+.opt-container .number-icon {
+    font-style: normal;
+    display: block;
+    font-size: 26px;
+    margin: 0 5px 5px 5px;
+    padding: 15px 0;
+    background: #aaa;
+    border-radius: 50%;
+    color: #eee;
+}
+/* Basic info */
+#avatar-container {
+    height: 300px;
+    border: 1px dotted #aaa;
+}
+
+#trigger-avatar-upload {
+    width: 100%;
+    border-radius: 0 0 5px 5px !important;
+}
+
+/* Brand opinions */
+#tech-opinion {
+    -webkit-transition: opacity 0.3s ease-in-out;
+	-moz-transition: opacity 0.3s ease-in-out;
+	-o-transition: opacity 0.3s ease-in-out;
+	-ms-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
+}
+
+.opinion-col {
+    margin-top: 100px;
+}
+
+.opinion-col-right {
+    text-align: right;
+}
+
+.col-brand {
+    text-align: center;
+}
+
+.col-brand .brand-icon {
+    border-radius: 50%;
+    display: block;
+    margin-left: 25%;
+}
+
+.send-opinion {
+    cursor: pointer;
+    -webkit-transition: color 0.3s ease-in-out;
+	-moz-transition: color 0.3s ease-in-out;
+	-o-transition: color 0.3s ease-in-out;
+	-ms-transition: color 0.3s ease-in-out;
+	transition: color 0.3s ease-in-out;
+}
+
+.send-opinion:hover {
+    color: #BFBFBF;
+}
+
+.send-opinion.opinion-positive:hover {
+    color: #26A65B;
+}
+
+.send-opinion.opinion-negative:hover {
+    color: #CF000F;
+}
+
+.send-opinion.opinion-indifferent {
+    display: inline-block;
+    margin-top: 20px;
+}

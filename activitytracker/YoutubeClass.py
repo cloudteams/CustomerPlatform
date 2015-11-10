@@ -55,15 +55,11 @@ class Youtube(OAuth2Validation):
             goal = ''
             goal_status = None
 
-            start_date = time_youtubed - timedelta(seconds=120)
-            end_date = time_youtubed
+            friends = ''
 
-            friends  = ''
-
-            result = "This video has been viewed %s and liked %s times in total" \
-                     % (str(video_details['statistics']['viewCount']),
-                        str(video_details['statistics']['likeCount'])
-                        )
+            views = video_details['statistics']['viewCount'] if 'viewCount' in video_details['statistics'] else 0
+            likes = video_details['statistics']['likeCount'] if 'likeCount' in video_details['statistics'] else 0
+            result = "This video has been viewed %s and liked %s times in total" % (str(views), str(likes))
 
             video_id = video['contentDetails']['videoId']
             video_url = 'https://www.youtube.com/watch?v=' + video_id

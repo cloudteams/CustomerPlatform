@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <h2>Your job</h2>
+
+    <div class="centered-fields">
+        <div class="field">
+            <label for="id_business_sector">Choose in which business sector you're currently working</label>
+            {{ form.business_sector }}
+        </div>
+        <div class="field">
+            <label for="id_work_position">What's your position in your current work?</label>
+            {{ form.work_position }}
+        </div>
+        <div class="field work-city">
+            <label for="id_work_location">Where is your workplace (only city)?</label>
+            {{ form.work_location }}
+        </div>
+        <div class="field">
+            <label for="id_years_experience">How many years of experience do you have in this industry?</label>
+            {{ form.years_experience }}
+        </div>
+    </div>
+</div>

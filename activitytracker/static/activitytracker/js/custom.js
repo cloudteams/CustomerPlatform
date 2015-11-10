@@ -61,7 +61,7 @@ function ScriptIsLoaded(scriptTag){
 
 function LoadingWithBackdrop(){
 	$("#overlay").show();
-	$('<div class="modal-backdrop"></div>').appendTo(document.body);
+	$('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
 }
 
 function WaitFunctionToLoad(e){
@@ -125,9 +125,8 @@ function drawDonut() {
 				success: function (data) {
 					plotDonutChart(data);
 				},
-				error: function(){
-					alert('Client did not receive a response. Reloading page')
-					window.location.reload();
+				error: function(xhr){
+					console.log(xhr.responseText);
 				}
 			});
 };
@@ -370,6 +369,7 @@ function RenderViewActivities(view){
 	var data = CalendarDaterange(view);
 	data.csrfmiddlewaretoken = getCookie('csrftoken');
 	Loading();
+	console.log(data)
 	 $.ajax({
 		 type: "post",
 		 data: data,
@@ -379,37 +379,11 @@ function RenderViewActivities(view){
 		 error: function (xhr, status, error) {
 			 Done();
 			 alert('Internal Server Error. Page will be reloaded');
-			 window.location.reload();
 		 },
 		 success: function (responseString) {
+			 console.log(responseString)
 			 DrawGroupUngroupSortWithChart(responseString);
 			 Done();
-		 }
-	 });
-}
-
-/* Check whether newly added Activity should be displayed on the view it was added on*/
-function CheckDisplay(activityData){
-	var CurrentView = $('#main_calendar').fullCalendar('getView');
-	var data = CalendarDaterange(CurrentView);
-	data.csrfmiddlewaretoken = getCookie('csrftoken');
-	Loading();
-	 $.ajax({
-		 type: "post",
-		 data: data,
-		 cache: false,
-		 url: BASE_URL + "index/displayperiod/",
-		 dataType: "text",
-		 error: function (xhr, status, error) {
-			 Done();
-			 alert('Internal Server Error. Page will be reloaded');
-			 window.location.reload();
-		 },
-		 success: function (responseString) {
-			 if (responseString.indexOf(activityData.id) != -1) {
-				 drawActivity(activityData); // draw the activity
-				 drawDonut(); // re-draw chart
-			 }
 		 }
 	 });
 }

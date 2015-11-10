@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from Activitytracker_Project import passwords
 from config import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,8 +49,15 @@ INSTALLED_APPS = (
     'djangobower',
     'compressor',
 
+    # comments app
+    'django.contrib.sites',
+    'django_comments',
+
     # Projects app - access to CloudTeams Projects & related functionality
     'ct_projects',
+
+    # Profile wizard app - allows customers to quickly setup their profile
+    'profile',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,8 +85,12 @@ LOGIN_URL = 'login'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'activity_tracker_db',
+        'USER': passwords.DB_USER,
+        'PASSWORD': passwords.DB_PASSWORD,
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -102,7 +114,9 @@ USE_L10N = True
 
 USE_TZ = False
 
+SITE_ID = 1
 
+PROJECT_REFRESH_PERIOD_MINUTES = 10
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
@@ -111,6 +125,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = 'activitytracker/static'
 #STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
 
+
+# Files uploaded by users (e.g avatars)
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
 
 # django-bower. Bower components dir
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/')
@@ -122,7 +140,7 @@ INSTALLED_FINDERS = {
 # django-bower. Installed js-css.
 BOWER_INSTALLED_APPS = (
     'jquery#2.1.4',
-    'bootstrap#3.3',
+    'bootstrap#3',
     'jquery-tokenize#2.5.1',
     'datatables#1.10',
     'jquery-ui#1.11.4',

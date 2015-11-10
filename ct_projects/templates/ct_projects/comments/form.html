@@ -1,0 +1,26 @@
+{% load comments i18n %}
+<form action="/projects/comments/post/" method="post" class="ct_projects_form">{% csrf_token %}
+    {% if next %}
+        <div><input type="hidden" name="next" value="{{ next }}"/></div>
+    {% endif %}
+
+    {{comment_form.security_hash}}
+
+    {{comment_form.content_type}}
+    {{comment_form.object_pk}}
+    {{comment_form.timestamp}}
+
+    <input id="id_name" type="hidden" name="name" value="{{ request.user.username }}" />
+    <input type="hidden" name="email" value="{{ request.user.email }}" id="id_email" />
+
+    <p>
+        <label for="id_comment">Post your own comment:</label>
+        {{comment_form.comment}}
+    </p>
+
+    <input id="id_honeypot" name="honeypot" class="hidden" type="text">
+
+    <p>
+        <input type="submit" name="post" class="btn btn-primary" value="{% trans "Post" %}"/>
+    </p>
+</form>

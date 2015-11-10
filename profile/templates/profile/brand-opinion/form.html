@@ -1,0 +1,19 @@
+<form method="POST" action="{% url 'opinion-about' %}">{% csrf_token %}
+    <input type="hidden" name="brand" value="{{brand}}"/>
+    <input type="hidden" name="opinion"value="-" />
+
+    <div class="container">
+        <div class="row">
+            <span class="col-xs-4 opinion-col opinion-col-right">
+                <span class="send-opinion opinion-negative" data-value="N"><i class="fa fa-2x fa-thumbs-down"></i></span>
+            </span>
+            <span class="col-xs-4 col-brand">
+                <img src="{{brand_icon}}" width="200" class="brand-icon" />
+                <span class="send-opinion opinion-indifferent" data-value="-">Indifferent <i class="fa fa-arrow-right"></i></span>
+            </span>
+            <span class="col-xs-4 opinion-col">
+                <span class="send-opinion opinion-positive" data-value="P"><i class="fa fa-2x fa-thumbs-up"></i></span>
+            </span>
+        </div>
+    </div>
+</form>

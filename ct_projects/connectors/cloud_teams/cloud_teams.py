@@ -1,3 +1,6 @@
+from datetime import timedelta
+from django.utils.timezone import now
+from Activitytracker_Project.settings import PROJECT_REFRESH_PERIOD_MINUTES
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
 from ct_projects.models import Project
@@ -11,11 +14,19 @@ class CloudTeamsConnector:
         self.srv = XMLRPC_Server(SERVER_URL, USER_PASSWD, verbose=0)
         self.PROJECTS_FOLDER_ID = XAPI_TEST_FOLDER
         self.projects = None
+        self.latest_update_on = now()
 
     def list_projects(self, q=None):
         """
         :return: A list with all projects found on BSCW
         """
+
+        # invalidate cache after PROJECT_REFRESH_PERIOD_MINUTES
+        time_now = now()
+        if time_now - self.latest_update_on >= timedelta(minutes=PROJECT_REFRESH_PERIOD_MINUTES):
+            self.projects = []
+            self.latest_update_on = time_now
+
         if not self.projects:
             result = []
 
