@@ -145,7 +145,7 @@ def register(request):
 
     characters = string.ascii_letters + string.digits
     verification_token = ''.join(random.choice(characters) for _ in range(20))
-    verification_url = '%s/activitytracker/account/verification/%s' % (request.get_host(), verification_token)
+    verification_url = 'http://%s/activitytracker/account/verification/%s' % (request.get_host(), verification_token)
     verification_instance = UserUniqueTokens(
         user=user,
         token=verification_token,
@@ -1182,7 +1182,6 @@ def dashboard(request):
 
         # Count friends in activities of this period
         period_activities_with_location += 1 if user_instance.location_address else False
-        print
 
     # Find number and duration of activities that occured in the previous week
     for user_instance in user.performs_set.filter(
@@ -2813,6 +2812,7 @@ def routineSettings(request, setting='show'):
             return
 
         time_list = time_string.split(delimiter)
+
         for time_range in time_list:
             time_parts = time_range.split(' - ')
             start_time, end_time = time_parts[0], time_parts[1]

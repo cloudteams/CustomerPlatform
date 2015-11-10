@@ -370,7 +370,7 @@ $('#routineModal').on('hidden.bs.modal', function() {
 });
 
 $('#seasonality, #weekend').on('click', function() {
-    if ($(this).attr('class') == 'fa fa-chevron-down') {
+    if ($(this).hasClass('fa-chevron-down')) {
         $('.' + $(this).attr('id') + '-input').removeClass('hidden');
         $(this).removeClass("fa fa-chevron-down").addClass("fa fa-chevron-up")
     }
@@ -390,7 +390,7 @@ $('#log-weekday-time, #log-weekend-time').on('click', function() {
 $('#weekday-range-select, #weekend-range-select').slider({
     min: 0,
     tooltip: "hide",
-    max: 96,
+    max: 95,
     step: 1,
     value: [24,70],
     formater: function(value) {
