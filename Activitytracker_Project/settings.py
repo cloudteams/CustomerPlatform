@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from Activitytracker_Project import passwords
+#from Activitytracker_Project import passwords
 from config import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,8 +29,6 @@ TEMPLATE_DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 SECRET_KEY = 'o2gyhpz9aodq95f#*=jj#(sb@0c&ss&07+8-p3k&97mhqcx349'
-
-
 
 # Application definition
 
@@ -83,16 +81,24 @@ LOGIN_URL = 'login'
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'activity_tracker_db',
+#         'USER': passwords.DB_USER,
+#         'PASSWORD': passwords.DB_PASSWORD,
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'activity_tracker_db',
-        'USER': passwords.DB_USER,
-        'PASSWORD': passwords.DB_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
