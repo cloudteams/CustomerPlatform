@@ -369,7 +369,6 @@ function RenderViewActivities(view){
 	var data = CalendarDaterange(view);
 	data.csrfmiddlewaretoken = getCookie('csrftoken');
 	Loading();
-	console.log(data)
 	 $.ajax({
 		 type: "post",
 		 data: data,
@@ -381,7 +380,6 @@ function RenderViewActivities(view){
 			 alert('Internal Server Error. Page will be reloaded');
 		 },
 		 success: function (responseString) {
-			 console.log(responseString)
 			 DrawGroupUngroupSortWithChart(responseString);
 			 Done();
 		 }
