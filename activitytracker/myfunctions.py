@@ -268,8 +268,8 @@ def getFormattedRoutines(user, shared_routine_list, day_types):
 
             for routine_data_log in routine_data_logs:
 
-                start_time = '' if not routine_data_log.start_time else routine_data_log.start_time.strftime('%H:%M')
-                end_time = '' if not routine_data_log.end_time else routine_data_log.end_time.strftime('%H:%M')
+                start_time = '' if routine_data_log.start_time is None else routine_data_log.start_time.strftime('%H:%M')
+                end_time = '' if routine_data_log.end_time is None else routine_data_log.end_time.strftime('%H:%M')
 
                 seasonality_start = '' if not routine_data_log.seasonal_start else routine_data_log.seasonal_start.strftime('%m/%d')
                 seasonality_end = '' if not routine_data_log.seasonal_end else routine_data_log.seasonal_end.strftime('%m/%d')
