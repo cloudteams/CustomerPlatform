@@ -35,27 +35,26 @@
 
 
         $('#showActivityModal')
-        .on("shown.bs.modal", function (e) {
-            try {
-                initializeShowMap()
-            }
-            catch (err) {}
-        });
-        $('#showGroupActivityModal').on("shown.bs.modal", function (e) {
-            try {
-                initializeGroupShowMaps()
-            }
-            catch (err) {}
-        });
-        $('#editActivityModal')
-            .on("shown.bs.modal", function (e) {
+            .on("loaded.bs.modal shown.bs.modal", function (e) {
                 try {
-                    $('body').addClass('modal-open');
-                    initializeEditMap()
+                    initializeShowMap()
                 }
                 catch (err) {}
             });
 
+        $('#showGroupActivityModal')
+            .on("loaded.bs.modal shown.bs.modal", function (e) {
+                try {
+                    initializeGroupShowMaps()
+                }
+                catch (err) {}
+            });
+
+        $('#editActivityModal')
+            .on("shown.bs.modal loaded.bs.modal", function (e) {
+                $('body').addClass('modal-open');
+                initializeEditMap()
+            });
 
         $(document).ready(function () {
             // executes when DOM is loaded and ready
