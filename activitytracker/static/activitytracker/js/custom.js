@@ -61,7 +61,7 @@ function ScriptIsLoaded(scriptTag){
 
 function LoadingWithBackdrop(){
 	$("#overlay").show();
-	$('<div class="modal-backdrop"></div>').appendTo(document.body);
+	$('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
 }
 
 function WaitFunctionToLoad(e){

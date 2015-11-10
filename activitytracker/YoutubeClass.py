@@ -55,9 +55,6 @@ class Youtube(OAuth2Validation):
             goal = ''
             goal_status = None
 
-            start_date = time_youtubed - timedelta(seconds=120)
-            end_date = time_youtubed
-
             friends = ''
 
             views = video_details['statistics']['viewCount'] if 'viewCount' in video_details['statistics'] else 0

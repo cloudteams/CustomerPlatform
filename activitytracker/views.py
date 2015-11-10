@@ -2773,7 +2773,18 @@ def updateactivitiesbanner(request):
 
 
 def social_login(request, action):
-    return render(request, 'activitytracker/social-login.html',{'action': action})
+
+    action_parts = action.split('/')
+    if action_parts[0] == 'sync':
+        action = 'Sync'
+        provider = action_parts[1]
+    else:
+        provider = None
+
+    return render(request, 'activitytracker/social-login.html', {
+        'action': action,
+        'provider': provider
+    })
 
 def syncProviderActivities(request, provider):
     social_instance = request.user.social_auth.get(provider=provider)
