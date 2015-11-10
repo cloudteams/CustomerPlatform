@@ -5,7 +5,7 @@ __author__ = 'dipap'
 
 
 class UserProfileForm(forms.ModelForm):
-    location = forms.CharField()
+    location = forms.CharField(required=False)
 
     class Meta:
         model = UserProfile
