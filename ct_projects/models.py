@@ -40,6 +40,7 @@ class BSCWProject(models.Model):
 
     def to_json(self):
         return {
+            'id': self.pk,
             'title': self.title,
             'description': self.description,
             'logo': self.logo,
