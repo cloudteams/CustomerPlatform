@@ -25,6 +25,30 @@ class Project:
         return Idea.objects.filter(project_pk=self.pk)
 
 
+class BSCWProject(models.Model):
+    """
+    A BSCW Project
+    Only exposed from projects API
+    BSCW is responsible for posting to the API to keep project information up to date
+    """
+    owner_username = models.CharField(max_length=255)
+    team_name = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    title = models.CharField(max_length=255, unique=True)
+    description = models.TextField()
+    logo = models.URLField(blank=True, null=True, default=None)
+
+    def to_json(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'logo': self.logo,
+            'owner_username': self.owner_username,
+            'team_name': self.team_name,
+            'created': self.created,
+        }
+
+
 class ProjectFollowing(models.Model):
     """
     A following relationship between a CloudTeams customer and a project
