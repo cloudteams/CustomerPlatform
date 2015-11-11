@@ -17,6 +17,15 @@
                                 <li><a class="submenu" href="{% url 'analytics-objects' %}"><i class="fa fa-wrench"></i><span class="hidden-sm"> Objects</span></a></li>
                             </ul>
 						</li>
-                        <li><a href="{% url 'configuration' %}"><i class="fa fa-cogs"></i><span class="hidden-sm"> Configuration</span></a></li>
+                        <li>
+							<a class="dropmenu" href="#"><i class="fa fa-cogs"></i><span class="hidden-sm"> Settings &nbsp;<span class="caret"></span></span></a>
+							<ul>
+								<li><a class="submenu" href="{% url 'configuration' %}"><i class="fa fa-cogs"></i><span class="hidden-sm"> Setup details</span></a></li>
+								<li><a class="submenu" href="#"><i class="fa fa-youtube-play"></i><span class="hidden-sm"> Manual </span><span class="coming-soon">soon !</span></a></li>
+								<li><a class="submenu" href="{% url 'settings' %}"><i class="fa fa-calendar"></i><span class="hidden-sm"> Services</span></a></li>
+								<li><a class="submenu" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i><span class="hidden-sm"> Logout</span></a></li>
+								<li><a class="submenu" href="{% url 'delete-account' %}"><i class="fa fa-trash-o"></i><span class="hidden-sm"> Delete account</span></a></li>
+							</ul>
+						</li>
                     </ul>
 				</div>

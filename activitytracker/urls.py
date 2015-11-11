@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^account/password_reset/(?P<passwordreset_token>\w+)/$', views.password_reset, name='passwordReset'),
     url(r'^account/register/$', views.register, name='register'),
     url(r'^account/routine(?:/(?P<setting>\w+))?/$', views.routineSettings, name='routineSettings'),
+    url(r'^account/delete/$', views.delete_account, name='delete-account'),
     url(r'^activity/add/$', views.addactivity, name='addactivity'),
     url(r'^activity/display-activity/(?P<performs_identification>[0-9]+)/$', views.showactivity, name='showactivity'),
     url(r'^activity/display-group-activity/(?P<group_identification>[0-9_]+)/$', views.showgroupactivity, name='showGroupactivity'),

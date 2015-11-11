@@ -2885,6 +2885,17 @@ def routineSettings(request, setting='show'):
         else:
             return HttpResponse('RowPersistance')
 
+
+@login_required
+def delete_account(request):
+    # Delete the account of the signed in user
+    if request.method == 'GET':
+        # confirmation page
+        return render(request, 'activitytracker/delete-account.html')
+    elif request.method == 'POST':
+        request.user.delete()
+        return redirect('/')
+
 def updateallroutinecharts(request):
 
 
