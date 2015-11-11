@@ -1212,7 +1212,8 @@ def dashboard(request):
             'day': day,
             'instances': data['count'],
             'minutes': data['minutes'],
-            'type': (datetime.utcnow() - timedelta(days=6)).strftime('%b %d') + ' - Today'
+            'type': (datetime.utcnow() - timedelta(days=6)).strftime('%b %d') + ' - Today',
+            'period_order': 2
         })
         category_chart_data.append({
             'day': day,
@@ -1221,7 +1222,8 @@ def dashboard(request):
             'type': '%s - %s' % (
                 (datetime.utcnow() - timedelta(days=13)).strftime('%b %d'),
                 (datetime.utcnow() - timedelta(days=7)).strftime('%b %d')
-            )
+            ),
+            'period_order': 1
         })
 
     # And again format for the needed js charts

@@ -95,7 +95,7 @@ $(document).on('ready',function() {
     var y = barChartBottom.addMeasureAxis("y", "instances");
     y.tickFormat = "d";
 
-    barChartBottom.addSeries("type", dimple.plot.bar);
+    barChartBottom.addSeries("type", dimple.plot.bar).addOrderRule("period_order", true);
     barChartBottom.addLegend('5%', 0, "95%", 0, "right");
 
     barChartBottom.draw();
@@ -118,7 +118,7 @@ $('#carousel-categories.carousel').one('slid.bs.carousel', function() {
     barChart.addCategoryAxis("x", ["day", "type"]).addOrderRule(day_order);
     barChart.addMeasureAxis("y", "minutes");
 
-    barChart.addSeries("type", dimple.plot.bar);
+    barChart.addSeries("type", dimple.plot.bar).addOrderRule("period_order", true);
     barChart.addLegend('5%', 0, "95%", 0, "right");
 
     barChart.draw();
