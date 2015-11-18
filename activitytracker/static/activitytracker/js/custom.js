@@ -505,7 +505,19 @@ $(document).ready(function(){
 		$(this).parent().find('ul').slideToggle();
 	
 	});
-			
+
+
+	/* ----------- Show video if not on XS ------------ */
+	if ($(window).width() >= 800) {
+
+		$('#videoModal').modal('show');
+
+	}
+
+	$('#videoModal').on('hidden.bs.modal', function () {
+        $('#videoModal').remove()
+    });
+
 	/* ---------- Acivate Functions ---------- */
 	template_functions();
 	charts();
@@ -762,6 +774,7 @@ function charts() {
 
 
 /******************************************* For Login Page ************************************************/
+
 	$("#loginForm").submit(function(event) {
 		event.preventDefault();
 		var user = document.forms["loginForm"]["username"].value;
@@ -850,6 +863,7 @@ function charts() {
 	});
 
 /******************************************************************************************/
+ 	// For Password Reset
 
 	$("#passwordResetForm").submit(function(event) {
 		event.preventDefault();

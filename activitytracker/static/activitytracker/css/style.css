@@ -4223,3 +4223,8 @@ body.modal-open {
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
+
+#videoModal .modal-dialog {
+	width:1060px !important;
+	height: 600px;
+}
