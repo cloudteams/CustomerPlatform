@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^profile/', include('profile.urls')),
 
     # home page redirect
-    url(r'^$', RedirectView.as_view(url='activitytracker/', permanent=True)),
+    url(r'^$', RedirectView.as_view(url='projects/', permanent=True)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

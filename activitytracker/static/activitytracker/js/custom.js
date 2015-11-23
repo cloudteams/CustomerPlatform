@@ -780,7 +780,7 @@ function charts() {
 			},
 			success: function (user_type) {
 				$('#messageParagraph').text('');
-				window.location.replace(SERVER_URL + next_redirect_url);
+				window.location.replace('/');
 			}
 		});
 	});

@@ -81,8 +81,10 @@
                 </a>
                 <div class="nav navbar-menu pull-right">
                         <!-- start: User Dropdown -->
-                    <a class=' link-petrol' href="{% url 'index' %}">Activities</a> |
+                    <!--<a class=' link-petrol' href="{% url 'index' %}">Activities</a> |-->
                     <a class=' link-petrol' href="{% url 'all-projects' %}">Projects</a> |
+                    <a class=' link-petrol' href="{% url 'view-my-profile' %}">Profile</a> |
+                    <a class=' link-petrol' href="{% url 'view-my-profile' %}">Notifications (<span class="notification-count">0</span>) </a> |
                     <span class="dropdown">
                     <a id="dropdownMenu1" class="dropdown-toggle" data-toggle="dropdown" href="#" data-target="#" aria-haspopup="true" aria-expanded="true">
                          {{ request.user.username }}
@@ -90,7 +92,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li>
-                            <a href="{% url 'start-profile-wizard' %}"><i class="halflings-icon user"></i> Profile</a>
+                            <a href="{% url 'index' %}"><i class="halflings-icon user"></i> Activities</a>
                         </li>
                         <li>
                             <a href="{% url 'settings' %}"><i class="halflings-icon cog"></i> Services</a>
