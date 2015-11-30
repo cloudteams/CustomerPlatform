@@ -3,17 +3,17 @@
  */
 
 var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
-var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
+var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 650);
 
     $('select[name="friend-select"], #dateRange, select[name="activity-select"], #allActivitiesChecked, #allFriendsChecked').on('change', function(){
         if ($("#allActivitiesChecked").prop('checked')) {
 
-            $('#activity-select').prop('disabled', true).trigger("liszt:updated");
+            $('#activity-select').prop('disabled', true).trigger("chosen:updated");
             updateAllActivitiesCharts();
             updateActivitiesBanner('all')
         }
         else {
-               $('#activity-select').prop('disabled', false).trigger("liszt:updated")
+               $('#activity-select').prop('disabled', false).trigger("chosen:updated")
                updateSingleActivityCharts();
                updateActivitiesBanner($('#activity-select').val())
         }
@@ -43,8 +43,8 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                 catch(err) {}
                 var chartOuter = new dimple.chart(svg, response[1]);
                 var chartInner = new dimple.chart(svg, response[0]);
-                chartOuter.setBounds(20, 20, 460, 360);
-                chartInner.setBounds(20, 20, 460, 360);
+                chartOuter.setBounds('5%', '10%', '75%', '80%');
+                chartInner.setBounds('5%', '10%', '75%', '80%');
 
                 var inner_p, outer_p;
                 if ( metric == "Number of Instances") {
@@ -55,8 +55,8 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                     outer_p = chartOuter.addMeasureAxis("p", "Hours");
                     inner_p = chartInner.addMeasureAxis("p", "Hours");
                 }
-				chartOuterLegend = chartOuter.addLegend("82%", 120, 90, 500, "left");
-				chartInnerLegend = chartInner.addLegend("82%", 20, 90, 300, "left");
+				chartOuterLegend = chartOuter.addLegend("83%", 120, 90, 500, "left");
+				chartInnerLegend = chartInner.addLegend("83%", 20, 90, 300, "left");
                 var outerRing = chartOuter.addSeries("Activity", dimple.plot.pie);
                 var innerRing = chartInner.addSeries("Category", dimple.plot.pie);
                 outerRing.addOrderRule("Category");
@@ -115,14 +115,17 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 
                 /* Definition of Bubble Chart for the 2nd Chart */
                 var bubbleChart = new dimple.chart(svg2, response[1]);
-                bubbleChart.setBounds(95, 25, 475, 500);
+                bubbleChart.setBounds('10%,55px', '10%', '77%', '80%');
                 var y = bubbleChart.addCategoryAxis("y", "Activity");
+                y.showGridlines = true;
                 if (metric == "Number of Instances") {
                     var x = bubbleChart.addCategoryAxis("x","Instances");
+                    x.showGridlines = true;
                     bubbleChart.addSeries("Instances", dimple.plot.bubble);
                 }
                 else {
                     var x = bubbleChart.addCategoryAxis("x","Interval");
+                    x.showGridlines = true;
                     bubbleChart.addSeries("Interval", dimple.plot.bubble);
                     x.title = "Duration Intervals in Hours"
                 }
@@ -135,10 +138,6 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                                             new dimple.color("#F498DA"), new dimple.color("#6b486b") ];
 
 
-                y.showGridlines = true;
-                bubbleChart.width = $('.analytics-bottomChart').width()- 100;
-                chartOuter.width = $('.analytics-topChart').width()- 100;
-                chartInner.width = $('.analytics-topChart').width()- 100;
                 chartOuter.draw();
                 chartInner.draw();
                 bubbleChart.draw();
@@ -148,7 +147,7 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 					if ( metric == "Number of Instances") {
 						outer_p.measure = "Instances";
 						inner_p.measure = "Instances";
-                        bubbleChart.series.splice(0,1)
+                        bubbleChart.series.splice(0,1);
                         bubbleChart.addSeries("Instances", dimple.plot.bubble);
                         x.categoryFields = ["Instances"];
                         x.title = "Instances"
@@ -157,7 +156,7 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 					else{
 						outer_p.measure = "Hours";
 						inner_p.measure = "Hours";
-                        bubbleChart.series.splice(0,1)
+                        bubbleChart.series.splice(0,1);
                         bubbleChart.addSeries("Interval", dimple.plot.bubble);
                         x.categoryFields = ["Interval"];
                         x.title = "Duration Intervals in Hours"
@@ -168,9 +167,6 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
     			});
 
                 $(window).on('resize', function() {
-                    chartOuter.width  = $('.analytics-topChart').width() - 100 ;
-                    chartInner.width = $('.analytics-topChart').width() - 100 ;
-                    bubbleChart.width = $('.analytics-bottomChart').width() - 100;
                     chartOuter.draw(0, true);
                     chartInner.draw(0, true);
                     bubbleChart.draw(0, true);
@@ -205,7 +201,7 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                 }
                 catch(err) {}
                 var timelineChart = new dimple.chart(svg, response[0]);
-                timelineChart.setBounds(60, 30, 505, 305);
+                timelineChart.setBounds('10%', '10%', '85%', '80%');
 
 
                 var x = timelineChart.addTimeAxis("x", "Date", "%m/%d/%Y", findProperInterval(range)[1]);
@@ -241,7 +237,6 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                 var s = timelineChart.addSeries("Series", dimple.plot.line);
                 timelineChart.addLegend("5%", 10, "85%", 20, "right");
                 s.interpolation = "step";
-                timelineChart.width  = $('.analytics-topChart').width() - 100 ;
                 timelineChart.draw();
 
 
@@ -250,7 +245,7 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                 var color_dict = {'0': "#C0BBBB", '1': "red", '2': "yellow", '3': "green"};
                 var goal_dict = {'0': "n/a", '1': "Failed", '2': "In Progress", '3': "Reached"};
                 var lineChart = new dimple.chart(svg2, response[1]);
-                lineChart.setBounds(60, 30, 530, 305);
+                lineChart.setBounds('10%', '10%', '85%', '72%');
                 lineChart.addMeasureAxis("y", "Hours");
 
                 var linechart_x = lineChart.addCategoryAxis("x", "Start_Date");
@@ -288,8 +283,6 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
                    }
                    return ["Date Started: " + e.x, "Hours: " + e.yValue, "Goal: " + goal_dict[e.cValue]]
                 };
-
-                lineChart.width = $('.analytics-bottomChart').width()- 100;
                 lineChart.draw();
 
                 function AllSameStatus(list){
@@ -344,8 +337,6 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 				});
 
                 $(window).on('resize', function() {
-                    timelineChart.width  = $('.analytics-topChart').width() - 100 ;
-                    lineChart.width  = $('.analytics-bottomChart').width() - 100 ;
                     lineChart.draw(0, true);
                     timelineChart.draw(0, true);
                 });
@@ -394,13 +385,13 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
 		format: 'MM/DD/YYYY',
-		startDate: moment().subtract(1, 'month'),
+		startDate: moment().startOf('year'),
 		endDate: moment(),
 		/*sshowDropdowns: true,*/
 		ranges: {
 		   'Today': [moment(), moment()],
 		   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		   'Previous Week (Mo-Su)': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
+		   'Previous Week': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
 		   'Previous Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'Month to Date': [moment().startOf('month'), moment()],
            'Year to Date': [moment().startOf('year'), moment()]
@@ -409,7 +400,7 @@ var svg2 = dimple.newSvg(".analytics-bottomChart", "100%", 600);
 			monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			fromLabel: 'From',
 			toLabel: 'To',
-			customRangeLabel: 'Calendar Custom Range'
+			customRangeLabel: 'sCustom Range'
 		}
 	});
 

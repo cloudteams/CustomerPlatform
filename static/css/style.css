@@ -2,6 +2,17 @@
     text-shadow: none;
 }
 
-.navbar .nav > li > a:hover {
-    color: #fff;
+.coming-soon {
+    text-transform: uppercase;
+    font-size: .8em;
+    background: yellow;
+    padding: 5px;
+    color: #777;
+    border-radius: 5px;
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.nav-tabs.nav-stacked > li:last-child > a {
+    margin-bottom: 0 !important;
 }

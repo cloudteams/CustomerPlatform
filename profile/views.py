@@ -1,10 +1,30 @@
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.templatetags.static import static
 from profile.forms import UserProfileForm
 from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
-from profile.models import UserBrandOpinion
+from profile.models import UserBrandOpinion, UserProfile
+from profile.templatetags.profile_tags import get_brand_icon
+
+
+@login_required
+def view_my_profile(request):
+    # load profile
+    profile = request.user.profile
+    params = {
+        'profile': profile,
+        'influences_field': UserProfile.influences.field,
+        'devices_field': UserProfile.devices.field,
+        'platforms_field': UserProfile.platforms.field,
+        'liked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='P')],
+        'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
+    }
+
+    if profile.has_been_saved:  # proceed to details page
+        return render(request, 'profile/index.html', params)
+    else:
+        return redirect(reverse('start-profile-wizard'))
 
 
 @login_required
@@ -21,19 +41,18 @@ def start_wizard(request):
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             # save the profile
-            form.save()
+            profile = form.save(commit=False)
+            profile.has_been_saved = True
+            profile.save()
+
             # update user
             profile.user.location = form.cleaned_data['location']
             profile.user.save()
 
-            return redirect('/')
+            return redirect(reverse('start-profile-wizard'))
 
     params['form'] = form
     return render(request, 'profile/edit.html', params)
-
-
-def get_brand_icon(brand):
-    return static('profile/img/brands/%s.png' % brand.lower())
 
 
 @login_required

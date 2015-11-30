@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load custom_templates %}
+{% block css %}
+    <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/tokenfield-typeahead.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bower_components/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="col-xs-12">
+    <h1>Delete user account</h1>
+
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+        <span class="sr-only">Warning:</span>
+        <p>If you delete your account, all your personal data you have provided, including any services you have connected, will be removed.</p>
+        <p>This action <em>can't be undone</em>.</p>
+    </div>
+
+    <form action="." method="POST" class="delete-account-form clearfix">{% csrf_token %}
+        <input type="submit" class="btn btn-danger pull-left" value="Delete my account & all related data" />
+        <a href="/" class="btn btn-default pull-right">Back to home page</a>
+    </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'activitytracker/js/custom.js' %}"></script>
+{% endblock %}

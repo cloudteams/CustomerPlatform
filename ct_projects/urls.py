@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from ct_projects import views
+from ct_projects import views, project_api
 
 __author__ = 'dipap'
 
@@ -23,4 +23,8 @@ urlpatterns = [
     # comments
     url(r'^comments/posted/$', views.comment_posted),
     url(r'^comments/', include('django_comments.urls')),
+
+    # project API
+    url(r'^api/all/$', project_api.project_list),
+    url(r'^api/(?P<pk>\d+)/$', project_api.project),
 ]

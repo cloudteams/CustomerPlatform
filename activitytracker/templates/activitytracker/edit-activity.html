@@ -67,7 +67,7 @@
             </div>
             <div class="left-inner-addon col-sm-12">
                 <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                <input id="places-input-edit" class="input-lg form-control" name="location" type="text" placeholder="Search for Places" value={{ instance.location_address }}>
+                <input id="places-input-edit" class="input-lg form-control" name="location" type="text" placeholder="Search for Places" value="{{ instance.location_address }}">
             </div>
             <div id="map-canvas-edit" class="col-xs-offset-1 col-xs-10 map-canvas"></div>
         </div>
@@ -219,7 +219,6 @@
             mapEdit.setZoom(9);
         {% endif %}
     }
-    google.maps.event.addDomListener(window, 'load', initializeEditMap);
 </script>
 
 

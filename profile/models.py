@@ -34,14 +34,17 @@ class UserProfile(models.Model):
     years_experience = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     # Influences
-    influences = MultiSelectField(max_length=16, blank=True, default='', choices=INFLUENCES)
+    influences = MultiSelectField(max_length=255, blank=True, default='', choices=INFLUENCES)
 
     # Devices & platforms
-    devices = MultiSelectField(max_length=2, blank=True, default='', choices=DEVICES)
-    platforms = MultiSelectField(max_length=8, blank=True, default='', choices=PLATFORMS)
+    devices = MultiSelectField(max_length=255, blank=True, default='', choices=DEVICES)
+    platforms = MultiSelectField(max_length=255, blank=True, default='', choices=PLATFORMS)
 
     # Tech level
     tech_level = models.CharField(max_length=8, blank=True, default='', choices=TECH_LEVELS)
+
+    # Check if the profile wizard has run at least once
+    has_been_saved = models.BooleanField(default=False, editable=False)
 
     def get_display_name(self):
         return '%s %s.' % (self.first_name, self.last_name_initial)

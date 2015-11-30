@@ -60,9 +60,28 @@ def haversine(lat1, lon1, lat2, lon2):
 
     return km
 
+def calculateUtcOffset(lat, lng, recorded_datetime):
+
+    if (lat is None) or (lat == 0):
+        return 0
+
+    api_url = 'https://maps.googleapis.com/maps/api/timezone/json'
+    params = {
+        'timestamp': time.mktime(recorded_datetime.timetuple()),
+        'location': '%s,%s' % (str(lat), str(lng))
+    }
+
+    r = requests.get(url=api_url, params=params).json()
+
+    if r['status'] != 'OK':
+        return 0
+
+    return (r['rawOffset'] + r['dstOffset']) / 3600
+
+
 
 def addActivityFromProvider(user, goal, goal_status, friends, objects, result, location_lat, location_lng,
-                            location_address, start_date, end_date, activity):
+                            location_address, start_date, end_date, activity, utc_offset=0):
 
     """
     Create an Activity Object from the data provided in the parameters.
@@ -79,7 +98,8 @@ def addActivityFromProvider(user, goal, goal_status, friends, objects, result, l
                                  location_lng=location_lng,
                                  start_date=start_date,
                                  end_date=end_date,
-                                 result=result
+                                 result=result,
+                                 utc_offset=utc_offset
     )
 
     performs_instance.save()
@@ -176,7 +196,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'circle-arrow-right',
             'buttonText': 'Connect',
             'statusText': 'App not Connected',
-            'statusIcon': 'icon-remove-circle',
+            'statusIcon': 'fa fa-times-circle-o',
             'statusFontColor': 'red',
             'providerIconName': provider
         }
@@ -185,7 +205,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'repeat',
             'buttonText': 'Re-Authorize',
             'statusText': 'Expired or de-authorized',
-            'statusIcon': 'icon-warning-sign',
+            'statusIcon': 'fa fa-warning',
             'statusFontColor': 'orangered',
             'providerIconName': provider
         }
@@ -194,7 +214,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'repeat',
             'buttonText': 'Retry',
             'statusText': 'Too many requests sent. Try again later',
-            'statusIcon': 'icon-warning-sign',
+            'statusIcon': 'fa fa-exclamation-circle',
             'statusFontColor': 'red',
             'providerIconName': provider
         }
@@ -203,7 +223,7 @@ def getAppManagementDomValues(status, provider):
             'buttonIcon': 'trash',
             'buttonText': 'De-Authorize',
             'statusText': 'App connected',
-            'statusIcon': 'icon-ok-circle',
+            'statusIcon': 'fa fa-check-circle-o',
             'statusFontColor': 'green',
             'providerIconName': provider
         }
@@ -248,8 +268,8 @@ def getFormattedRoutines(user, shared_routine_list, day_types):
 
             for routine_data_log in routine_data_logs:
 
-                start_time = '' if not routine_data_log.start_time else routine_data_log.start_time.strftime('%H:%M')
-                end_time = '' if not routine_data_log.end_time else routine_data_log.end_time.strftime('%H:%M')
+                start_time = '' if routine_data_log.start_time is None else routine_data_log.start_time.strftime('%H:%M')
+                end_time = '' if routine_data_log.end_time is None else routine_data_log.end_time.strftime('%H:%M')
 
                 seasonality_start = '' if not routine_data_log.seasonal_start else routine_data_log.seasonal_start.strftime('%m/%d')
                 seasonality_end = '' if not routine_data_log.seasonal_end else routine_data_log.seasonal_end.strftime('%m/%d')

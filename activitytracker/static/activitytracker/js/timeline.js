@@ -22,23 +22,23 @@ function createTimelineInstance(instance, align) {
 	$(content).append(activity);
 
 	if (instance.tools != "") {
-		var using = jQuery.parseHTML("<i class='icon-wrench timeslot-icon'></i>");
+		var using = jQuery.parseHTML("<i class='fa fa-wrench timeslot-icon'></i>");
 		$(content).find('.timeslot-title span:nth-child(2)').append(using);
 	}
 	if (instance.location_address != "") {
-		var location = jQuery.parseHTML("<i class='icon-map-marker timeslot-icon'></i>");
+		var location = jQuery.parseHTML("<i class='fa fa-map-marker timeslot-icon'></i>");
 		$(content).find('.timeslot-title span:nth-child(2)').append(location);
 	}
 	if (instance.result != ""){
-		var result = jQuery.parseHTML("<i class='icon-ok-circle timeslot-icon'></i>");
+		var result = jQuery.parseHTML("<i class='fa fa-ok-circle timeslot-icon'></i>");
 		$(content).find('.timeslot-title span:nth-child(2)').append(result);
 	}
 	if (instance.goal != ""){
-		var goal = jQuery.parseHTML("<i class='icon-trophy timeslot-icon'></i>");
+		var goal = jQuery.parseHTML("<i class='fa fa-trophy timeslot-icon'></i>");
 		$(content).find('.timeslot-title span:nth-child(2)').append(goal);
 	}
 	if (instance.friends != "") {
-		var together_with = jQuery.parseHTML("<i class='icon-group timeslot-icon'></i>");
+		var together_with = jQuery.parseHTML("<i class='fa fa-group timeslot-icon'></i>");
 		$(content).find('.timeslot-title span:nth-child(2)').append(together_with);
 	}
 	var duration = jQuery.parseHTML("<span><i>Duration</i><span class='tl-display'>" + (instance.duration).replace(/([a-z])/g,'$1 ') + "</span></span>");

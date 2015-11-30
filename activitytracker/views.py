@@ -11,9 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage
 from config import *
+from operator import itemgetter
 import string
 import random
 import json
+
 import calendar
 import operator
 import collections
@@ -63,12 +65,12 @@ def login(request):
 
     if request.method != 'POST':
         if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('dashboard'))
 
         return render(request,
                       'activitytracker/login.html',
                       {'redirect_url': request.GET.get('next',
-                                                       '/activitytracker/index'
+                                                       '/activitytracker/dashboard'
                                                        )
                        }
                       )
@@ -76,12 +78,12 @@ def login(request):
     username_or_email = request.POST['username']
     password = request.POST['password']
 
-    if User.objects.filter(username=username_or_email).count() == 0:
+    if User.objects.filter(username__iexact=username_or_email).count() == 0:
 
-        if User.objects.filter(email=username_or_email).count() == 0:
+        if User.objects.filter(email__iexact=username_or_email).count() == 0:
             return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
         else:
-            username = User.objects.get(email=username_or_email).username
+            username = User.objects.get(email__iexact=username_or_email).username
 
     else:
         username = username_or_email
@@ -131,7 +133,7 @@ def register(request):
     if '' in (email, password, repeated_password):
         return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
 
-    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists else email
+    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists() else email
 
     user = User.objects.create_user(
         username=username,
@@ -143,7 +145,7 @@ def register(request):
 
     characters = string.ascii_letters + string.digits
     verification_token = ''.join(random.choice(characters) for _ in range(20))
-    verification_url = '%s/activitytracker/account/verification/%s' % (request.get_host(), verification_token)
+    verification_url = 'http://%s/activitytracker/account/verification/%s' % (request.get_host(), verification_token)
     verification_instance = UserUniqueTokens(
         user=user,
         token=verification_token,
@@ -166,18 +168,31 @@ def register(request):
 def passwordforget(request):
 
     USER_NOT_EXISTS_MSG = 'No such User exists'
+    NOT_VERIFIED_MSG = 'Please verify your account before you request a password recovery'
     SUCCESS_MSG = 'We have sent you an email with instructions on how to reset your password'
+
 
     if request.method != 'POST':
         return render(request, 'activitytracker/passforget.html')
 
-    if User.objects.filter(username=request.POST['username']).count() == 0:
-        return HttpResponseBadRequest(USER_NOT_EXISTS_MSG)
+    username_or_email = request.POST['username']
 
-    user = User.objects.get(username=request.POST['username'])
+    if User.objects.filter(username__iexact=username_or_email).count() == 0:
+        if User.objects.filter(email__iexact=username_or_email).count() == 0:
+            return HttpResponseBadRequest(USER_NOT_EXISTS_MSG)
+        else:
+            username = User.objects.get(email__iexact=username_or_email).username
+
+    else:
+        username = username_or_email
+
+    if not User.objects.get(username=username).is_active:
+        return HttpResponseBadRequest(NOT_VERIFIED_MSG)
+
+    user = User.objects.get(username=username)
     characters = string.ascii_letters + string.digits
     passwordforget_token = ''.join(random.choice(characters) for _ in range(20))
-    passwordforget_url = '%s/activitytracker/account/password_reset/%s' % (SERVER_URL, passwordforget_token)
+    passwordforget_url = '%s/activitytracker/account/password_reset/%s' % (request.get_host(), passwordforget_token)
     passwordforget_instance = UserUniqueTokens(
         user=user,
         token=passwordforget_token,
@@ -430,9 +445,11 @@ def placestojson(request):
 
 # Basic View, Gets called on "History" page load
 @login_required
-def index(request):
+def index(request, new_user=False):
 
     user = request.user
+
+    new_user = True if new_user == "NewUser" else False
 
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
@@ -441,7 +458,7 @@ def index(request):
     context = {
                'username': user.get_username(),
                'activity_data': activity_data,
-               'show_carousel_guide': False
+               'show_carousel_guide': new_user
     }
 
     if not user.logged_in_before:
@@ -518,7 +535,6 @@ def getgroupedactivities(request):
 # Gets called each time an activity is added
 def addactivity(request):
 
-    DB_ERROR = 'Database Insertion Error. Check your fields and try again'
     FIELD_ERROR = 'Please fill up at least date and time fields correctly'
     DATE_ERROR = 'Activity cant end sooner than it began'
 
@@ -540,7 +556,7 @@ def addactivity(request):
     objects = request.POST['tool']
     friends = request.POST['friend_list']
     location_address = request.POST['location_address']
-    location_lat = None if request.POST['lng'] == ''  else request.POST['lat']
+    location_lat = None if request.POST['lng'] == '' else request.POST['lat']
     location_lng = None if request.POST['lng'] == '' else request.POST['lng']
 
     start_datetime = datetime.strptime(start_datetime, "%m/%d/%Y %H:%M:%S")
@@ -548,6 +564,8 @@ def addactivity(request):
 
     if start_datetime > end_datetime:
         return HttpResponseBadRequest(DATE_ERROR)
+
+    utc_offset = calculateUtcOffset(location_lat, location_lng, start_datetime)
 
     instance = addActivityFromProvider(user=user,
                                        activity=activity,
@@ -560,11 +578,9 @@ def addactivity(request):
                                        result=result,
                                        location_lat=location_lat,
                                        location_lng=location_lng,
-                                       location_address=location_address
+                                       location_address=location_address,
+                                       utc_offset=utc_offset
                                        )
-    #print instance
-    #except ValueError:
-    #    return HttpResponseBadRequest(DB_ERROR)
 
     return HttpResponse(
         json.dumps(
@@ -742,6 +758,8 @@ def updateactivity(request, performs_id):
 
         instance.delete()
 
+        utc_offset = calculateUtcOffset(location_lat, location_lng, start_date)
+
         instance = addActivityFromProvider(user=user,
                                            activity=activity,
                                            start_date=start_date,
@@ -753,7 +771,8 @@ def updateactivity(request, performs_id):
                                            result=result,
                                            location_lat=location_lat,
                                            location_lng=location_lng,
-                                           location_address=location_address
+                                           location_address=location_address,
+                                           utc_offset=utc_offset
                                            )
 
     except ValueError:
@@ -1038,7 +1057,7 @@ def timeline_events_json(request):
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 @login_required
-def analytics_configuration(request):
+def configuration(request):
     user = request.user
 
     routine_activities = getFormattedRoutines(user, basic_routine_activities, day_types)
@@ -1053,14 +1072,286 @@ def analytics_configuration(request):
 
     return render(
         request,
-        'activitytracker/analytics-configuration.html', {
+        'activitytracker/configuration.html', {
             'username': user.get_username(),
             'routineActivities': routine_activities,
             'routineExtraActivities': routine_extra_activities
         }
     )
 
+@login_required
+def dashboard(request):
 
+    user = request.user
+
+    # Initialize the data. Cant do it in the same row, else they reference each other
+    period_chart_data = collections.OrderedDict(
+        [(d.strftime('%a'), {'count': 0, 'minutes': 0}) for d in (
+            datetime.utcnow() + timedelta(days=counter) for counter in range(0, 7)
+        )]
+    )
+
+    prev_period_chart_data = collections.OrderedDict(
+        [(d.strftime('%a'), {'count':0, 'minutes': 0 }) for d in (
+            datetime.utcnow() + timedelta(days=counter) for counter in range(0, 7)
+        )]
+    )
+
+    day_order = [d.strftime('%a') for d in (
+        datetime.utcnow() + timedelta(days=counter+1) for counter in range(0, 7)
+    )]
+
+    period_category_data = dict([
+        (category, {
+            'count': 0,
+            'minutes': 0,
+            'instance_percentage': 0,
+            'time_percentage': 0,
+            'color': color,
+            'icon': icon
+        })
+        for ((color, category), (icon, _)) in zip(Activity.CATEGORY_CHOICES, Activity.CATEGORY_ICONS)])
+
+    period_provider_data = dict([(provider, 0) for provider in AVAILABLE_PROVIDERS])
+
+    lifetime_provider_data = dict([(provider, 0) for provider in AVAILABLE_PROVIDERS])
+
+    period_top10_activity_data = dict()
+
+    # Find the proper period ranges
+    today = datetime.utcnow().date()
+
+    end_of_period = datetime.now()
+    start_of_period = datetime(today.year, today.month, today.day) - timedelta(days=6)
+    end_of_prev_period = start_of_period - timedelta(seconds=1)
+    start_of_prev_period = start_of_period - timedelta(days=7)
+
+    # Total activities inside this week
+    period_total_activities = user.performs_set.filter(
+        start_date__lte=end_of_period,
+        end_date__gte=start_of_period
+    ).count()
+
+    # Total unique activities inside this week
+    period_total_different_activities = user.performs_set.filter(
+        start_date__lte=end_of_period,
+        end_date__gte=start_of_period
+    ).values('activity__activity_name').distinct().count()
+
+    # Initialize total duration and the activities-tracked counter
+    period_total_minutes = 0
+    period_tracked_activities = 0
+    period_activities_with_friends = 0
+    period_activities_with_location = 0
+
+    # Find data of activities that occured in this week, 7 days before, up to today
+    for user_instance in user.performs_set.filter(
+            start_date__lte=end_of_period,
+            end_date__gte=start_of_period
+    ):
+        # Group by Categories
+        period_category_data[user_instance.activity.get_category_display()]['count'] += 1
+        duration = round((user_instance.end_date - user_instance.start_date).seconds / float(60))
+        period_category_data[user_instance.activity.get_category_display()]['minutes'] += duration
+
+        period_chart_data[user_instance.start_date.strftime('%a')]['count'] += 1
+        period_chart_data[user_instance.start_date.strftime('%a')]['minutes'] += duration
+
+        # Group by Activities
+        try:
+            period_top10_activity_data[user_instance.activity.activity_name]['count'] += 1
+            period_top10_activity_data[user_instance.activity.activity_name]['minutes'] += duration
+
+        except KeyError:
+            period_top10_activity_data[user_instance.activity.activity_name] = {'count': 1, 'minutes': duration}
+
+        # Count period duration of Activities
+        period_total_minutes += duration
+
+        # Count and Bucket the Activities that derived from connected Services
+        try:
+            provider = PerformsProviderInfo.objects.get(instance=user_instance).provider.replace('_', '-')
+            period_provider_data[provider] += 1
+            period_tracked_activities += 1
+
+        except ObjectDoesNotExist:
+            pass
+
+        # Count friends in activities of this period
+        period_activities_with_friends += len(user_instance.friends.split(',')) if user_instance.friends else False
+
+        # Count friends in activities of this period
+        period_activities_with_location += 1 if user_instance.location_address else False
+
+    # Find number and duration of activities that occured in the previous week
+    for user_instance in user.performs_set.filter(
+        start_date__lte=end_of_prev_period,
+        end_date__gte=start_of_prev_period
+    ):
+        duration = round((user_instance.end_date - user_instance.start_date).seconds / float(60))
+        prev_period_chart_data[user_instance.start_date.strftime('%a')]['count'] += 1
+        prev_period_chart_data[user_instance.start_date.strftime('%a')]['minutes'] += duration
+
+    # Calculate the percentages needed in the dashboard circle knobs
+    for _, category_data in period_category_data.iteritems():
+        try:
+            category_data['instance_percentage'] = round(category_data['count']/float(period_total_activities), 3)*100
+            category_data['time_percentage'] = round(category_data['minutes']/float(period_total_minutes), 3)*100
+        except ZeroDivisionError:
+            category_data['instance_percentage'] = category_data['time_percentage'] = 0
+
+    # Find the Providers that the user has connected
+    connected_providers = len(user.social_auth.filter(provider__in=AVAILABLE_PROVIDERS))
+    total_providers = len(AVAILABLE_PROVIDERS)
+    connected_provider_percentage = round(connected_providers/float(total_providers), 3)*100
+
+    # Format the data to what the js charts expect
+    category_chart_data = list()
+    for (day, data), (_, prev_data) in zip(period_chart_data.items(), prev_period_chart_data.items()):
+        category_chart_data.append({
+            'day': day,
+            'instances': data['count'],
+            'minutes': data['minutes'],
+            'type': (datetime.utcnow() - timedelta(days=6)).strftime('%b %d') + ' - Today',
+            'period_order': 2
+        })
+        category_chart_data.append({
+            'day': day,
+            'instances': prev_data['count'],
+            'minutes': prev_data['minutes'],
+            'type': '%s - %s' % (
+                (datetime.utcnow() - timedelta(days=13)).strftime('%b %d'),
+                (datetime.utcnow() - timedelta(days=7)).strftime('%b %d')
+            ),
+            'period_order': 1
+        })
+
+    # And again format for the needed js charts
+    provider_7day_activities_data = list([
+        {'instances': instances, 'provider': provider} for provider, instances in period_provider_data.iteritems()
+    ])
+
+    provider_lifetime_activities_data = list([
+        {'instances': instances, 'provider': provider} for provider, instances in lifetime_provider_data.iteritems()
+    ])
+
+    """
+    ########################################################################################
+        Top 10 and Latest 10 Activities of User in the Last 7 Days by Duration and Instances
+    ########################################################################################
+    """
+
+    # Find the latest 10 activities entered
+    latest_activity_list = list()
+    for user_instance in user.performs_set.all().order_by('-start_date')[:10]:
+        latest_activity_list.append({
+            'id': user_instance.id,
+            'name': user_instance.activity.activity_name,
+            'icon': user_instance.activity.icon_classname,
+            'start_time': user_instance.start_date.strftime('%m/%d/%Y %H:%M'),
+            'duration': round((user_instance.end_date - user_instance.start_date).seconds / float(60))
+        })
+
+    # Format top 10 Activities for the JS Chart
+    top_activities_chart_data = list()
+    for activity, data in period_top10_activity_data.items():
+        top_activities_chart_data.append({
+            'name': activity,
+            'instances': data['count'],
+            'minutes': data['minutes']
+        })
+
+    # Get the Top 10 Activities by no. of instances
+    top_activities_chart_data_by_instance = sorted(
+        top_activities_chart_data,
+        key=itemgetter('instances'),
+        reverse=True
+    )[:10]
+
+    # Get the Top 10 Activities by duration
+    top_activities_chart_data_by_duration = sorted(
+        top_activities_chart_data,
+        key=itemgetter('minutes'),
+        reverse=True
+    )[:10]
+
+
+    """
+    ##################################################
+        Lifetime Data for the User
+    ##################################################
+    """
+
+    # Lifetime Activities of User
+    lifetime_activities = user.performs_set.all().count()
+
+    # Lifetime Unique Activities of User
+    lifetime_different_activities = user.performs_set.values('activity__activity_name').distinct().count()
+
+    # Initialize other Lifetime Counters
+    lifetime_minutes = 0
+    lifetime_activities_with_friends = 0
+    lifetime_activities_with_location = 0
+    lifetime_tracked_activities = 0
+
+    # For Lifetime Activities
+    for instance in user.performs_set.all():
+
+        # Count the number of Friends that participated
+        lifetime_activities_with_friends += len(instance.friends.split(',')) if instance.friends else False
+
+        # Count the number of locations the Activities took place
+        lifetime_activities_with_location += 1 if instance.location_address else False
+
+        # Count the total minutes
+        lifetime_minutes += (instance.end_date - instance.start_date).seconds / 60
+
+        # Count and bucket the activities that derived from Services and NOT manually inserted
+        try:
+            provider = PerformsProviderInfo.objects.get(instance=instance).provider.replace('_', '-')
+            lifetime_provider_data[provider] += 1
+            lifetime_tracked_activities += 1
+
+        except ObjectDoesNotExist:
+            pass
+
+    provider_lifetime_activities_data = list([
+        {'instances': instances, 'provider': provider} for provider, instances in lifetime_provider_data.iteritems()
+    ])
+
+    """
+    #############################################
+        End of Calculations
+    #############################################
+    """
+
+    return render(request, 'activitytracker/dashboard.html', {
+        'username': user.get_username(),
+        'connected_providers': connected_providers,
+        'connected_provider_percentage': connected_provider_percentage,
+        'total_providers': total_providers,
+        'period_category_data': period_category_data,
+        'period_total_activities': period_total_activities,
+        'period_total_different_activities': period_total_different_activities,
+        'period_activities_with_location': period_activities_with_location,
+        'period_activities_with_friends': period_activities_with_friends,
+        'period_total_minutes': period_total_minutes,
+        'chart_data': json.dumps(category_chart_data),
+        'latest_activities': latest_activity_list,
+        'top_activities_chart_data_by_instance': json.dumps(top_activities_chart_data_by_instance),
+        'top_activities_chart_data_by_duration': json.dumps(top_activities_chart_data_by_duration),
+        'period_tracked_activities': period_tracked_activities,
+        'total_tracked_activities': lifetime_tracked_activities,
+        'provider_7day_activities_data': json.dumps(provider_7day_activities_data),
+        'provider_lifetime_activities_data': json.dumps(provider_lifetime_activities_data),
+        'day_order': day_order,
+        'total_activities': lifetime_activities,
+        'total_different_activities': lifetime_different_activities,
+        'total_minutes': lifetime_minutes,
+        'total_activities_with_friends': lifetime_activities_with_friends,
+        'total_activities_with_location': lifetime_activities_with_location
+        }
+    )
 
 @login_required
 def analytics_activities(request):
@@ -1104,7 +1395,7 @@ def analytics_routine(request):
             'color': activity.category,
             'icon_classname': activity.icon_classname,
         }
-    print routine_activities
+
     return render(request, 'activitytracker/analytics-routine.html',
                   {
                    'username': user.get_username(),
@@ -2397,18 +2688,18 @@ def updatesingleactivitycharts(request):
 
     for key, value in timeaxis_activity_data.iteritems():
         json_list[0].append({
-                        'Date': key,
-                        'Series': activity_selected,
-                        'Instances': value['count'],
-                        'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
+            'Date': key,
+            'Series': activity_selected,
+            'Instances': value['count'],
+            'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
         })
 
     for key, value in timeaxis_category_data.iteritems():
         json_list[0].append({
-                        'Date': key,
-                        'Series': activity_object.get_category_display(),
-                        'Instances': value['count'],
-                        'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
+            'Date': key,
+            'Series': activity_object.get_category_display(),
+            'Instances': value['count'],
+            'Hours': round(value['time'].seconds/float(3600) + value['time'].days*float(24), 2),
         })
 
     # Here begins the code for the 2nd Chart -- the lineChart
@@ -2483,7 +2774,18 @@ def updateactivitiesbanner(request):
 
 
 def social_login(request, action):
-    return render(request, 'activitytracker/social-login.html',{'action': action})
+
+    action_parts = action.split('/')
+    if action_parts[0] == 'sync':
+        action = 'Sync'
+        provider = action_parts[1]
+    else:
+        provider = None
+
+    return render(request, 'activitytracker/social-login.html', {
+        'action': action,
+        'provider': provider
+    })
 
 def syncProviderActivities(request, provider):
     social_instance = request.user.social_auth.get(provider=provider)
@@ -2512,6 +2814,7 @@ def routineSettings(request, setting='show'):
             return
 
         time_list = time_string.split(delimiter)
+
         for time_range in time_list:
             time_parts = time_range.split(' - ')
             start_time, end_time = time_parts[0], time_parts[1]
@@ -2582,6 +2885,17 @@ def routineSettings(request, setting='show'):
         else:
             return HttpResponse('RowPersistance')
 
+
+@login_required
+def delete_account(request):
+    # Delete the account of the signed in user
+    if request.method == 'GET':
+        # confirmation page
+        return render(request, 'activitytracker/delete-account.html')
+    elif request.method == 'POST':
+        request.user.delete()
+        return redirect('/')
+
 def updateallroutinecharts(request):
 
 
@@ -2593,14 +2907,20 @@ def updateallroutinecharts(request):
     day_type_requested = request.POST['day_type']
     datestart = (request.POST['range']).split('-')[0]
     dateend = (request.POST['range']).split('-')[1]
-    range_left = chosen_start = datetime.strptime(datestart, "%m/%d/%Y ").date()
-    range_right = chosen_end = datetime.strptime(dateend, " %m/%d/%Y").date()
+    range_left = datetime.strptime(datestart, "%m/%d/%Y ").date()
+    range_right = datetime.strptime(dateend, " %m/%d/%Y").date()
+    chosen_start = datetime.strptime(datestart, "%m/%d/%Y ").date()
+    chosen_end = datetime.strptime(dateend, " %m/%d/%Y").date()
     routine = request.POST['routine'].replace('-', ' ')
     routine_activity = Activity.objects.get(activity_name=routine)
     chart_data = collections.OrderedDict()
     routine_instances = dict()
     routine_instances['Weekdays'] = user.routine_set.filter(activity=routine_activity, day_type="Weekdays")
     routine_instances['Weekend'] = user.routine_set.filter(activity=routine_activity, day_type="Weekend")
+
+    # Initialize a "visited" index in order to count each unique activity instance only once in total
+    # regardless of the different routine logs overlapping its duration
+    visited_ids = list()
 
     while True:
 
@@ -2645,13 +2965,17 @@ def updateallroutinecharts(request):
 
             for action in background_actions:
 
+                # If we already checked this activity instance in a different iteration
+                if action.id in visited_ids:
+                    continue
+
+
                 action_start = action.start_date
                 action_end = action.end_date
 
                 if (routine_start < action_start) and (routine_end > action_end) :
                     intersection_time = action_end - action_start
                     rest_time = action_end - action_end         # It is 0 of course
-
 
                 elif (routine_start < action_start) and (routine_end <= action_end):
                     intersection_time = routine_end - action_start
@@ -2662,7 +2986,7 @@ def updateallroutinecharts(request):
                     rest_time = routine_start - action_start + routine_end - action_end
 
                 else:
-                    intersection_time  = routine_end - routine_start
+                    intersection_time = routine_end - routine_start
                     rest_time = routine_start - action_start + action_end - routine_end
 
                 try:
@@ -2676,10 +3000,16 @@ def updateallroutinecharts(request):
                     chart_data[action.activity.activity_name]['intersection_time'] = intersection_time
                     chart_data[action.activity.activity_name]['rest_time'] = rest_time
 
+                # Add this ID to the visited list
+                visited_ids.append(action.id)
+
+
         range_left += timedelta(days=1)
 
     json_list = []
     for key, value in chart_data.iteritems():
+
+
         json_entries = [
 
             {'Action': key ,
@@ -2704,13 +3034,3 @@ def updateallroutinecharts(request):
         json_list += json_entries
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
-
-@login_required
-def overview(request):
-    return render(
-        request,
-        'activitytracker/overview.html',
-        {
-          'username': request.user.get_username()
-        }
-    )

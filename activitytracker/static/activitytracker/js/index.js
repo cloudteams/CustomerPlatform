@@ -35,27 +35,26 @@
 
 
         $('#showActivityModal')
-        .on("shown.bs.modal", function (e) {
-            try {
-                initializeShowMap()
-            }
-            catch (err) {}
-        });
-        $('#showGroupActivityModal').on("shown.bs.modal", function (e) {
-            try {
-                initializeGroupShowMaps()
-            }
-            catch (err) {}
-        });
-        $('#editActivityModal')
-            .on("shown.bs.modal", function (e) {
+            .on("loaded.bs.modal shown.bs.modal", function (e) {
                 try {
-                    $('body').addClass('modal-open');
-                    initializeEditMap()
+                    initializeShowMap()
                 }
                 catch (err) {}
             });
 
+        $('#showGroupActivityModal')
+            .on("loaded.bs.modal shown.bs.modal", function (e) {
+                try {
+                    initializeGroupShowMaps()
+                }
+                catch (err) {}
+            });
+
+        $('#editActivityModal')
+            .on("shown.bs.modal loaded.bs.modal", function (e) {
+                $('body').addClass('modal-open');
+                initializeEditMap()
+            });
 
         $(document).ready(function () {
             // executes when DOM is loaded and ready
@@ -96,7 +95,7 @@
                     $('#addActivityModal').modal('hide');
                     Done();
                     document.getElementById("addForm").reset();
-                    $('#name_of_activity').val('').trigger('liszt:updated');
+                    $('#name_of_activity').val('').trigger('chosen:updated');
                     //$('#friends').data('tokenize').clear();
                     //$('#tools').data('tokenize').clear();
                     $('#goalstatus').addClass('hidden');
@@ -209,7 +208,6 @@
                     alert("Couldn't fetch this Address. Try again!")
                 },
                 success: function (response) {
-                    console.log(response);
                     $('#places-input').val(response.results[0].formatted_address)
                 }
             });
@@ -260,6 +258,7 @@
 
     $('#addActivityModal')
         .on('shown.bs.modal', function () {
+
             google.maps.event.trigger(map, "resize");
             map.setCenter({ lat: 37.9908372, lng: 23.7383394});
             map.setZoom(9);

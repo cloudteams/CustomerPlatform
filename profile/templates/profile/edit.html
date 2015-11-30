@@ -4,31 +4,37 @@
 
 {% block extra_css %}
     <link href="{% static 'profile/css/chosen.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'profile/css/bjqs.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
     <ul class="breadcrumb">
         <li>
-            <i class="icon-home"></i>
-            <a href="{% url 'start-profile-wizard' %}">Customer profile wizard</a>
+            <a href="{% url 'view-my-profile' %}">My profile</a>
+        </li>
+        <li>
+            <a href="{% url 'start-profile-wizard' %}">Edit profile</a>
         </li>
     </ul>
 
-    <h1>Create your profile in CloudTeams in a few steps!</h1>
+    <div class="clearfix">
+        <h1 class="pull-left">{% if profile.has_been_saved %}Your profile in CloudTeams{% else %}Create your profile in CloudTeams in a few steps!{% endif %}</h1>
+        <div class="profile-save-msg pull-right"></div>
+    </div>
+
 
     <form class="create-profile-form" action="." method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         {% with p=form.instance %}
-            <div class="page-container">
-                <ul class="bjqs">
+            <div class="wizard-page-container">
+                <ul class="profile-wizard-paginator">
                     <li>
-                        <h2>Intoduction</h2>
-                        <div class="text-center">
-                            <p>In this wizard you can complete information about your relatioship with different technologies.</p>
-                            <p>Feel free leave empty any information you don't want to send us.</p>
-                            <p>Click next to go to the next page & start the wizard.</p>
+                        <div id="intro">
+                            <h2>Intoduction</h2>
+                            <div class="text-center">
+                                <p>In this page you can complete information about you, your work and the relatioship you have with different technologies.</p>
+                                <p>Feel free leave empty any information you don't want to send us.</p>
+                            </div>
                         </div>
                     </li>
                     <li>
@@ -61,12 +67,6 @@
                         </div>
                     </li>
 
-                    <li>
-                        <div class="text-center">
-                            <p>Thank you very much & have a nice time in CloudTeams!</p>
-                            <input type="submit" class="btn btn-primary" value="Save my profile" />
-                        </div>
-                    </li>
                 </ul>
             </div>
         {% endwith %}
@@ -76,8 +76,8 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'profile/js/bjqs-1.3.min.js' %}"></script>
     <script src="{% static 'profile/js/chosen.jquery.min.js' %}"></script>
     <script src="{% static 'profile/js/niceopts.js' %}"></script>
-    <script src="{% static 'profile/js/start.js' %}"></script>
+    <script src="{% static 'profile/js/brand-feedback.js' %}"></script>
+    <script src="{% static 'profile/js/edit.js' %}"></script>
 {% endblock %}

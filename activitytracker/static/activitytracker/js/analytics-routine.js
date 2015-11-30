@@ -4,15 +4,15 @@
 
 var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 
-    $('input[name="daytype"],  #dateRange').on('change', function(){
+    $('select[name="daytype-select"],  #dateRange').on('change', function(){
         updateRoutineCharts()
     });
 
     function updateRoutineCharts() {
 
         var range = $('#dateRange').val();
-        var metric = $('input[name="metric"]:checked').val();
-        var day_type = $('input[name="daytype"]:checked').val();
+        var metric = $('#metric-select').val();
+        var day_type = $('#daytype-select').val();
         var routineChecked = $('input[name="routine-radiobutton"]:checked').val();
 
         $('.analytics-topChart h1').text('Routine Action Distribution');
@@ -39,8 +39,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 
                 var barChart = new dimple.chart(svg, response);
 
-                barChart.setBounds(75, 30, 485, 330);
-                barChart.setMargins("60px", "30px", "110px", "70px");
+                barChart.setBounds("10%,60px", "10%", "75%", "80%");
 
                 barChart.defaultColors = [
                     new dimple.color("#106D1B"), new dimple.color("#8A0505"),
@@ -59,15 +58,15 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 
                 var series = barChart.addSeries("Timeslice", dimple.plot.bar);
                 series.addOrderRule('Timeslice', true);
-                barChart.addLegend(60, 10, 510, 20, "right");
-                barChart.width = $('.analytics-bottomChart').width()- 100;
+                barChart.addLegend("10%", 10, "80%", 40, "right");
                 barChart.draw();
                 updateRoutineBanner(response);
 
 
 
-                $('input[name="metric"]').on('change', function() {
-					var metric = $('input[name="metric"]:checked').val();
+                $('select[name="metric-select"]').on('change', function() {
+					var metric = $('#metric-select').val();
+                    console.log(response)
 					if ( metric == "instances") {
 
                         x.measure = "Instances";
@@ -84,7 +83,6 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
     			});
 
                 $(window).on('resize', function() {
-                    barChart.width = $('.analytics-bottomChart').width() - 100;
                     barChart.draw(0, true);
                 });
 			}
@@ -106,7 +104,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
             total_time += object['Hours']
         });
 
-        var shared_duration_percentage = ((shared_time/total_time) * 100).toFixed(2);
+        var shared_duration_percentage = ((shared_time/total_time) * 100).toFixed(1);
 
         $('#date-range-total-analytics').text($('#dateRange').val());
 
@@ -120,13 +118,13 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
     $('#dateRange').val('01/01/2015 - ' + moment().format("MM/DD/YYYY"));
 	$('#dateRange').daterangepicker({
 		format: 'MM/DD/YYYY',
-		startDate: moment().subtract(1, 'month'),
+		startDate: moment().startOf('year'),
 		endDate: moment(),
 		/*sshowDropdowns: true,*/
 		ranges: {
 		   'Today': [moment(), moment()],
 		   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		   'Previous Week (Mo-Su)': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
+		   'Previous Week': [moment().subtract(1, 'week').startOf('week').add(1,'day'), moment().subtract(1,'week').endOf('week').add(1,'day')],
 		   'Previous Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
            'Month to Date': [moment().startOf('month'), moment()],
            'Year to Date': [moment().startOf('year'), moment()]
@@ -135,7 +133,7 @@ var svg = dimple.newSvg(".analytics-topChart", "100%", 650);
 			monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			fromLabel: 'From',
 			toLabel: 'To',
-			customRangeLabel: 'Calendar Custom Range'
+			customRangeLabel: 'Custom Range'
 		}
 	});
 

@@ -8,11 +8,6 @@
     <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.bootstrap.css" rel="stylesheet">
     <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css' %}" rel="stylesheet">
 
-    <style>
-        .ui-datepicker-year{
-            display:none;
-        }
-    </style>
 {% endblock %}
 
 
@@ -20,58 +15,16 @@
 
     <ul class="breadcrumb">
         <li>
-            <i class="icon-home"></i>
+            <i class="fa fa-home"></i>
             <a href="{% url 'index' %}">Home</a>
         </li>
         <li><a href="#">Settings</a></li>
     </ul>
    <!-- Content begins HERE ------------------------------------------------------------------>
     <div class="row">
-{#        <div class="box box-transparent col-sm-6 blue-black">#}
-{#            <div class="box-header blueNavy" data-original-title>#}
-{#                <h2 class="text-center"><i class="halflings-icon user white"></i><span class="break"></span>Profile Information</h2>#}
-{#                <div class="box-icon">#}
-{#                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#routineModal"><i class="halflings-icon white calendar"></i></a>#}
-{#                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#editinfo"><i class="halflings-icon white edit"></i></a>#}
-{#                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#changepassword"><i class="halflings-icon white lock"></i></a>#}
-{#                    <a href="#" class="btn-setting" data-toggle="modal" data-target="#deleteaccount"><i class="halflings-icon white ban-circle"></i></a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="box-content">#}
-{#                <table class="col-xs-12 user-info">#}
-{#                    <tr>#}
-{#                        <td>Username:</td>#}
-{#                        <td id="Tblusername">{{ username }}</td>#}
-{#                    </tr>#}
-{#                    <tr>#}
-{#                        <td>First Name:</td>#}
-{#                        <td id="Tblfirstname">{{ firstname }}</td>#}
-{#                    </tr>#}
-{#                    <tr>#}
-{#                        <td>Last Name:</td>#}
-{#                        <td id="Tbllastname">{{ lastname }}</td>#}
-{#                    </tr>#}
-{#                    <tr>#}
-{#                        <td>E-Mail Address:</td>#}
-{#                        <td id="Tblemail">{{ email }}</td>#}
-{#                    </tr>#}
-{#                    <tr>#}
-{#                        <td>Date of Birth:</td>#}
-{#                        <td id="Tblbirth">{{ birth }}</td>#}
-{#                    </tr>#}
-{#                    <tr>#}
-{#                      <td>Gender:</td>#}
-{#                      <td id="Tblgender">{{ gender }}</td>#}
-{#                    </tr>#}
-{#                </table>#}
-{#            </div>#}
-{#            <div class="col-sm-12">#}
-{#                <p id="successmsg" class="success-message text-center">&nbsp;</p>#}
-{#            </div>#}
-{#        </div>#}
-        <div class="col-sm-6 box box-transparent">
+        <div class="col-sm-10 col-sm-offset-1 dashboardWrapper">
             <div class="box-header blueNavy" data-original-title>
-                <h2 class="text-center"><i class="icon-cloud white"></i><span class="break"></span>Available Providers</h2>
+                <h2 class="text-center"><i class="fa fa-cloud white"></i><span class="break"></span>Available Providers</h2>
             </div>
             <div class="box-content row">
                 <table id=ProvidersTable" class="col-xs-12 text-center user-providers">
@@ -88,7 +41,7 @@
                                     <i class="halflings-icon refresh white" title="Synchronize"></i>
                                 </a>
                                 {% endif %}
-                                <a onclick="appFunctionHandler('{{ provider_name }}')" class="btn connected-app-button btn-blueNavy" title="{{ provider_data.buttonText }}">
+                                <a onclick="appFunctionHandler('{{ provider_name }}', this)" class="btn connected-app-button btn-blueNavy" title="{{ provider_data.buttonText }}">
                                     <i class="halflings-icon {{ provider_data.buttonIcon }} white" title="{{ provider_data.buttonText }}"></i>
                                 </a>
                             </td>
@@ -97,179 +50,12 @@
                     </tbody>
                 </table>
             </div>
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4 col-xs-12 vertical-margin text-center alert-success hidden" id="success-msg"></div>
+            </div>
         </div>
     </div>
-{#    <div class='row'>#}
-{#        <div class="box box-transparent col-sm-6 blue-black">#}
-{#            <div class="box-header blueNavy" data-original-title>#}
-{#                <h2 class="text-center"><i class="halflings-icon map-marker white"></i><span class="break"></span>Personal Places</h2>#}
-{#                <div class="box-icon">#}
-{#                    <a href="#" class="btn-setting header-font-white" data-toggle="modal" data-target="#addPlaceModal"><i class="halflings-icon white plus"></i>add a place</a>#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="box-content">#}
-{#                <table id="PlacesTable" class="col-xs-12 user-places">#}
-{#                    <thead class="places-header">#}
-{#                        <tr>#}
-{#                            <th>Place Name</th>#}
-{#                            <th>Place Address</th>#}
-{#                            <th class="never">Hidden Lat</th>#}
-{#                            <th class="never">Hidden Lng</th>#}
-{#                            <th>Options</th>#}
-{#                        </tr>#}
-{#                    </thead>#}
-{#                    <tbody>#}
-{#                        <!-- data from dataTables -->#}
-{#                    </tbody>#}
-{#                </table>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div> {#  this row should close after the routine is ended. Move div properly #}
 
-{% endblock %}
-
-{% block modals %}
-
-
-
-    <!-- Modal for User's info editing -->
-{#    <div class="modal fade" id="editinfo">#}
-{#        <div class="modal-dialog">#}
-{#            <div class="modal-content">#}
-{#                <div class="modal-header box-header blueNavy">#}
-{#                    <button type="button" class="close" data-dismiss="modal">×</button>#}
-{#                    <h2><i class="halflings-icon edit white"></i><span class="break" ></span>Edit Account Information</h2>#}
-{#                </div>#}
-{#                <form action="{% url 'settings' %}" method="post" name="editinfoForm" id="editinfoForm">#}
-{#                    {% csrf_token %}#}
-{#                    <div class="modal-body row">#}
-{#                        <h3 class="col-xs-10 col-xs-offset-2 "> Here you can modify all kind of personal information</h3>#}
-{#                        <hr class="col-xs-8 col-xs-offset-2">#}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control" name="username" type="text" value="{{ username }}" />#}
-{#                        </div>#}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control" name="firstname" type="text" value="{{ firstname }}" />#}
-{#                        </div>#}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control" name="lastname" type="text" value="{{ lastname }}" />#}
-{#                        </div>#}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control"  disabled name="email" type="text" value="{{ email }}"/>#}
-{#                        </div>#}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>#}
-{#                            <input placeholder="{{ birth }}" type="text" name="birthday" value ="{{ birth }}"class="datepicker input-lg form-control" >#}
-{#                        </div>#}
-{#                        <div class="col-sm-6 col-sm-offset-5">#}
-{#                            <select name="gender" class="input-sm text-center">#}
-{#                                {% if gender == 'M' %}#}
-{#                                    <option value="M" selected >Male</option>#}
-{#                                    <option value="F">Female</option>#}
-{#                                {% else %}#}
-{#                                    <option value="M">Male</option>#}
-{#                                    <option value="F" selected >Female</option>#}
-{#                                {% endif %}#}
-{#                            </select>#}
-{#                        </div>#}
-{#                        <div class="col-xs-12 text-center error-message">#}
-{#                                <h3 id="editinfomsg"></h3>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="modal-footer">#}
-{#                        <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Cancel</a>#}
-{#                        <input type="submit" class="btn btn-blueNavy" name="submitEdit" value="Update">#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{##}
-{#    <!-- Modal to change the password -->#}
-{#    <div class="modal fade" id="changepassword">#}
-{#        <div class="modal-dialog">#}
-{#            <div class="modal-content">#}
-{#                <div class="modal-header box-header blueNavy">#}
-{#                    <button type="button" class="close" data-dismiss="modal">×</button>#}
-{#                    <h2><i class="halflings-icon lock white"></i><span class="break" ></span>Change Account Passowrd</h2>#}
-{#                </div>#}
-{#                <form action="{% url 'settings' %}" method="post" id="passchangeForm" name="passchangeForm">#}
-{#                    {% csrf_token %}#}
-{#                    <div class="modal-body row">#}
-{#                        <h3 class="col-xs-10 col-xs-offset-1 text-center">#}
-{#                            {% if social_login %}#}
-{#                                Set a password, so you can enter without using social media:#}
-{#                            {% else %}#}
-{#                                Change your password easily by filling the fields bellow:#}
-{#                            {% endif %}#}
-{#                        </h3>#}
-{#                        <p class="col-xs-10 col-xs-offset-1 text-center" style="font-style: italic">#}
-{#                            (Performing this will log you out of all devices for safety)#}
-{#                        </p>#}
-{#                        <hr class="col-xs-8 col-xs-offset-2">#}
-{##}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3 {% if social_login %}hidden{% endif %}">#}
-{#                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control" name="old_password" type="password" placeholder="current password"/>#}
-{#                        </div>#}
-{##}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control" name="new_password" type="password" placeholder="new password"/>#}
-{#                        </div>#}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3">#}
-{#                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control " name="new_password_repeat" type="password" placeholder="repeat new password"/>#}
-{#                        </div>#}
-{#                        <div class="col-xs-12 text-center error-message">#}
-{#                            <h3 id="passchangemsg"></h3>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="modal-footer">#}
-{#                        <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Cancel</a>#}
-{#                        <input type="submit" class="btn btn-blueNavy" name="submitChangepass" value="Change">#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{##}
-{#    <!-- Modal to delete the account -->#}
-{#    <div class="modal fade" id="deleteaccount">#}
-{#        <div class="modal-dialog">#}
-{#            <div class="modal-content">#}
-{#                <div class="modal-header box-header blueNavy">#}
-{#                    <button type="button" class="close" data-dismiss="modal">×</button>#}
-{#                    <h2><i class="halflings-icon ban-circle white"></i><span class="break" ></span>Delete Account</h2>#}
-{#                </div>#}
-{#                <form action="{% url 'settings' %}" method="post" id="deleteaccountForm" name="deleteaccountForm" >#}
-{#                    {% csrf_token %}#}
-{#                    <div class="modal-body row">#}
-{#                        <h3 class="col-xs-10 col-xs-offset-1 text-center">#}
-{#                            To delete your account type your password and click "Delete":#}
-{#                        </h3>#}
-{##}
-{#                        <div class="left-inner-addon col-sm-6 col-sm-offset-3" title="Password">#}
-{#                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>#}
-{#                            <input class="input-lg form-control" name="password" type="password" placeholder="current password"/>#}
-{#                        </div>#}
-{##}
-{#                        <div class="col-xs-12 text-center error-message">#}
-{#                                <h3 id="deleteaccountmsg"></h3>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="modal-footer">#}
-{#                        <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Cancel</a>#}
-{#                        <input type="submit" class="btn btn-danger" name="submitDelete" value="Delete">#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
 {% endblock %}
 
 {% block js %}

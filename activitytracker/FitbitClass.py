@@ -2,13 +2,15 @@ from myfunctions import *
 from AuthorizationChecks import *
 from django.db import transaction
 
+utc_offset = 0
+
 class Fitbit(OAuth1Validation):
 
     def __init__(self, user_social_instance):
         super(Fitbit, self).__init__(user_social_instance)
         self.api_base_url = 'https://api.fitbit.com'
 
-    def utcOffset(self, auth):
+    def fetchUtcOffset(self, auth):
 
         FITBIT_PROFILE_DATA_URI = '/1/user/-/profile.json'
 
@@ -21,7 +23,7 @@ class Fitbit(OAuth1Validation):
         if 'offsetFromUTCMillis' not in profile_data['user']:
             return timedelta(seconds=0)
 
-        return timedelta(milliseconds=profile_data['user']['offsetFromUTCMillis'])
+        return profile_data['user']['offsetFromUTCMillis']/3600000
 
     def _evaluateMealTime(self, meal_id):
         if meal_id == 1:
@@ -47,6 +49,8 @@ class Fitbit(OAuth1Validation):
 
     @transaction.atomic()
     def _insertFoodActivities(self, feed):
+
+        global utc_offset
 
         for activity in feed['foods']:
 
@@ -84,7 +88,8 @@ class Fitbit(OAuth1Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
 
             createActivityLinks(provider=self.PROVIDER.lower(),
@@ -98,6 +103,8 @@ class Fitbit(OAuth1Validation):
 
     @transaction.atomic()
     def _insertSleepActivities(self, feed):
+
+        global utc_offset
 
         for activity in feed['sleep']:
 
@@ -137,7 +144,8 @@ class Fitbit(OAuth1Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
 
             createActivityLinks(provider=self.PROVIDER.lower(),
@@ -151,6 +159,8 @@ class Fitbit(OAuth1Validation):
 
     @transaction.atomic()
     def _insertFitnessActivities(self, feed):
+
+        global utc_offset
 
         for activity in feed:
 
@@ -193,7 +203,8 @@ class Fitbit(OAuth1Validation):
                                                         start_date=start_date,
                                                         end_date=end_date,
                                                         result=result,
-                                                        objects=object_used
+                                                        objects=object_used,
+                                                        utc_offset=utc_offset
                                                         )
 
             createActivityLinks(provider=self.PROVIDER.lower(),
@@ -252,7 +263,7 @@ class Fitbit(OAuth1Validation):
         if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
             last_sync = EARLIEST_DATA_DATE
 
-        chosen_day = (datetime.utcnow() + self.utcOffset(auth)).strftime("%Y-%m-%d")
+        chosen_day = datetime.utcnow().strftime("%Y-%m-%d")
 
         while True:
 
@@ -282,7 +293,7 @@ class Fitbit(OAuth1Validation):
         if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
             last_sync = EARLIEST_DATA_DATE
 
-        chosen_day = (datetime.utcnow() + self.utcOffset(auth)).strftime("%Y-%m-%d")
+        chosen_day = datetime.utcnow().strftime("%Y-%m-%d")
 
         while True:
 
@@ -294,7 +305,7 @@ class Fitbit(OAuth1Validation):
             url = self.api_base_url + FITBIT_SLEEP_URI
 
             sleep_feed = requests.get(url=url, auth=auth).json()
-            print sleep_feed
+
             if 'errors' in sleep_feed:
                 return 'Error'
 
@@ -316,7 +327,11 @@ class Fitbit(OAuth1Validation):
                       self.resource_owner_secret
                       )
 
-        self.metadata.last_updated = (datetime.utcnow() + self.utcOffset(auth)).strftime("%Y-%m-%d %H:%M:%S")
+        global utc_offset
+
+        utc_offset = self.fetchUtcOffset(auth)
+
+        update_time = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
         status = self.fetchFitnessActivities(auth)
 
@@ -333,6 +348,7 @@ class Fitbit(OAuth1Validation):
         if status != 'Ok':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
+        self.metadata.last_updated = update_time
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

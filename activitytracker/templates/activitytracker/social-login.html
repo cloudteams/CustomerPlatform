@@ -22,6 +22,13 @@
         window.opener.location.href = '{% url 'index' 'NewUser' %}';
         window.close()
         </script>
+    {% elif action == "Sync" %}
+        <script>
+        window.onunload = function (e) {
+            window.opener.synchronizeProvider('{{ provider }}');
+        };
+        window.close()
+        </script>
     {% else %}
         <div class="login-box col-md-offset-4 col-md-4">
 
@@ -38,7 +45,7 @@
                     Login via social community failed.
                     This is caused because you have a registered but unverified account that shares the
                     same e-mail address as the service you tried to log in with. Please visit your e-mail address
-                    and verify your account using the e-mail we have sent you at registration time.
+                    and verify your account using the link from the email we have sent you during registration time.
 
                 {% elif action == "LoginFailed" %}
                     Login via social community failed.

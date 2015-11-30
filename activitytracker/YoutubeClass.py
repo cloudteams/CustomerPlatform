@@ -22,7 +22,6 @@ class Youtube(OAuth2Validation):
         _time_barrier = datetime.strptime(EARLIEST_DATA_DATE + ' 00:00:00',
                                           "%Y-%m-%d %H:%M:%S"
                                           )
-        print len(videos['items'])
         print videos
         for video, video_details in zip(videos['items'], videos_details):
 
@@ -56,15 +55,11 @@ class Youtube(OAuth2Validation):
             goal = ''
             goal_status = None
 
-            start_date = time_youtubed - timedelta(seconds=120)
-            end_date = time_youtubed
+            friends = ''
 
-            friends  = ''
-
-            result = "This video has been viewed %s and liked %s times in total" \
-                     % (str(video_details['statistics']['viewCount']),
-                        str(video_details['statistics']['likeCount'])
-                        )
+            views = video_details['statistics']['viewCount'] if 'viewCount' in video_details['statistics'] else 0
+            likes = video_details['statistics']['likeCount'] if 'likeCount' in video_details['statistics'] else 0
+            result = "This video has been viewed %s and liked %s times in total" % (str(views), str(likes))
 
             video_id = video['contentDetails']['videoId']
             video_url = 'https://www.youtube.com/watch?v=' + video_id
@@ -164,7 +159,7 @@ class Youtube(OAuth2Validation):
 
         fetched_resources = ['uploads', 'watchHistory']
 
-        sync_time = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
+        last_updated = str(datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"))
 
         if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
@@ -176,7 +171,7 @@ class Youtube(OAuth2Validation):
             if outcome == "Error":
                 return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        self.metadata.last_updated = sync_time
+        self.metadata.last_updated = last_updated
         self.metadata.save()
 
         return HttpResponse(self.PROVIDER.capitalize() + SUCCESS_MESSAGE)

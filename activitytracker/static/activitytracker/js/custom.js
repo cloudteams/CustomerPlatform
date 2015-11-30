@@ -17,6 +17,34 @@ $('body').on('hidden.bs.modal', '.modal', function () {
 	$(this).removeData('bs.modal');
 });
 
+
+//function CalculateUtcOffset(lat, lng) {
+//
+//	if ((lat == null) || (lng == null) || (lat == 0) || (lng == 0)){
+//		return 0
+//	}
+//
+//	$.ajax({
+//		type: "get",
+//		url: 'https://maps.googleapis.com/maps/api/timezone/json',
+//		data: {location: lat.toString() + ',' + lng.toString(), timestamp: 0},
+//		async: false,
+//		dataType: "json",
+//		success: function (response) {
+//			try {
+//				utcOffset = (response['rawOffset'] + response['dstOffset'])/ 3600
+//			}
+//			catch (e) {utcOffset =  0}
+//		},
+//		error: function(){
+//			utcOffset = 0
+//		}
+//	});
+//
+//	return utcOffset
+//}
+
+
 function ScriptIsLoaded(scriptTag){
     var scripts = document.getElementsByTagName("script");
 	var src;
@@ -33,7 +61,7 @@ function ScriptIsLoaded(scriptTag){
 
 function LoadingWithBackdrop(){
 	$("#overlay").show();
-	$('<div class="modal-backdrop"></div>').appendTo(document.body);
+	$('<div class="modal-backdrop fade in"></div>').appendTo(document.body);
 }
 
 function WaitFunctionToLoad(e){
@@ -97,9 +125,8 @@ function drawDonut() {
 				success: function (data) {
 					plotDonutChart(data);
 				},
-				error: function(){
-					alert('Client did not receive a response. Reloading page')
-					window.location.reload();
+				error: function(xhr){
+					console.log(xhr.responseText);
 				}
 			});
 };
@@ -122,6 +149,8 @@ function submitFields(form, csrf ) {
 	 catch (e){
 		var tools = ""
 	 }
+
+
  	 var goal = document.forms[form]["goal"].value;
 	 var result = document.forms[form]["result"].value;
 	 var location_address = document.forms[form]["location"].value;
@@ -138,9 +167,7 @@ function submitFields(form, csrf ) {
 						csrfmiddlewaretoken: csrf
 					  };
 	if (goal != ""){
-		console.log(goal)
 		 data_return.goalstatus = document.forms[form]["goalstatus"].value;
-		console.log(data_return.goalstatus)
 	 }
 	return data_return
 };
@@ -231,12 +258,10 @@ function DrawGroupUngroupSort(id_list) {
 		dataType: "json",
 		error: function (xhr, status, error) {
 			Done();
-			alert(xhr.responseText);
 		},
 		success: function (responseJSON) {
 			eraseAllActivities();
-			console.log(responseJSON)
-			$.each(responseJSON, function(i, e){ 
+			$.each(responseJSON, function(i, e){
 				drawActivity(e);
 				if (document.getElementById('groupcheckbox').checked && (e.id).indexOf("_") != -1) {
 					$('#'+ e.id).attr("data-target", "#showGroupActivityModal");
@@ -266,13 +291,11 @@ function DrawGroupUngroupSortWithChart(id_list) {
 		dataType: "json",
 		error: function (xhr, status, error) {
 			Done();
-			alert(xhr.responseText);
 		},
 		success: function (responseJSON) {
 			eraseAllActivities();
 			$.each(responseJSON, function(i, e){
 				drawActivity(e);
-				console.log('1')
 				if (document.getElementById('groupcheckbox').checked && (e.id).indexOf("_") != -1) {
 					$('#'+ e.id).attr("data-target", "#showGroupActivityModal");
 					$('#'+ e.id).attr("href", '/activitytracker/activity/display-group-activity/' + e.id);
@@ -355,38 +378,10 @@ function RenderViewActivities(view){
 		 error: function (xhr, status, error) {
 			 Done();
 			 alert('Internal Server Error. Page will be reloaded');
-			 window.location.reload();
 		 },
 		 success: function (responseString) {
-			 console.log(responseString);
 			 DrawGroupUngroupSortWithChart(responseString);
 			 Done();
-		 }
-	 });
-}
-
-/* Check whether newly added Activity should be displayed on the view it was added on*/
-function CheckDisplay(activityData){
-	var CurrentView = $('#main_calendar').fullCalendar('getView');
-	var data = CalendarDaterange(CurrentView);
-	data.csrfmiddlewaretoken = getCookie('csrftoken');
-	Loading();
-	 $.ajax({
-		 type: "post",
-		 data: data,
-		 cache: false,
-		 url: BASE_URL + "index/displayperiod/",
-		 dataType: "text",
-		 error: function (xhr, status, error) {
-			 Done();
-			 alert('Internal Server Error. Page will be reloaded');
-			 window.location.reload();
-		 },
-		 success: function (responseString) {
-			 if (responseString.indexOf(activityData.id) != -1) {
-				 drawActivity(activityData); // draw the activity
-				 drawDonut(); // re-draw chart
-			 }
 		 }
 	 });
 }
@@ -477,32 +472,7 @@ jQuery(document).ready(function($){
 });	
 
 $(document).ready(function(){
-		
-			
-	$("#username").focus(function() {
-		
-		$(this).parent(".input-prepend").addClass("input-prepend-focus");
-	
-	});
-	
-	$("#username").focusout(function() {
-		
-		$(this).parent(".input-prepend").removeClass("input-prepend-focus");
-	
-	});
-	
-	$("#password").focus(function() {
-		
-		$(this).parent(".input-prepend").addClass("input-prepend-focus");
-	
-	});
-	
-	$("#password").focusout(function() {
-		
-		$(this).parent(".input-prepend").removeClass("input-prepend-focus");
-	
-	});
-	
+
 				
 	/* ---------- Add class .active to current link  ---------- */
 	$('ul.main-menu li a').each(function(){
@@ -543,19 +513,6 @@ $(document).ready(function(){
 
 });
 
-/* ---------- Like/Dislike ---------- */
-
-
-/* ---------- Check Retina ---------- */
-
-function retina(){
-	
-	retinaMode = (window.devicePixelRatio > 1);
-	
-	return retinaMode;
-	
-}
-
 
 /* ---------- Numbers Sepparator ---------- */
 
@@ -578,7 +535,7 @@ function template_functions(){
 	
 	/* ---------- Datepicker ---------- */
 	$('.datepicker').datepicker({
-		autoclose: true,
+		autoclose: true
 	});
 
 	/* ---------- Uniform ---------- */
@@ -596,15 +553,6 @@ function template_functions(){
 	  $(this).tab('show');
 	});
 
-	/* ---------- Makes elements soratble, elements that sort need to have id attribute to save the result ---------- */
-	$('.sortable').sortable({
-		revert:true,
-		cancel:'.btn,.box-content,.nav-header',
-		update:function(event,ui){
-			//line below gives the ids of elements, you can make ajax call here to save it to the database
-			//console.log($(this).sortable('toArray'));
-		}
-	});
 
 	/* ---------- Tooltip ---------- */
 	$('[rel="tooltip"],[data-rel="tooltip"]').tooltip({"placement":"bottom",delay: { show: 400, hide: 200 }});
@@ -614,24 +562,6 @@ function template_functions(){
 
 
 	/* ---------- Fullscreen ---------- */
-	$('#toggle-fullscreen').button().click(function () {
-		var button = $(this), root = document.documentElement;
-		if (!button.hasClass('active')) {
-			$('#thumbnails').addClass('modal-fullscreen');
-			if (root.webkitRequestFullScreen) {
-				root.webkitRequestFullScreen(
-					window.Element.ALLOW_KEYBOARD_INPUT
-				);
-			} else if (root.mozRequestFullScreen) {
-				root.mozRequestFullScreen();
-			}
-		} else {
-			$('#thumbnails').removeClass('modal-fullscreen');
-			(document.webkitCancelFullScreen ||
-				document.mozCancelFullScreen ||
-				$.noop).apply(document);
-		}
-	});
 
 
 	$('.btn-close').click(function(e){
@@ -850,7 +780,7 @@ function charts() {
 			},
 			success: function (user_type) {
 				$('#messageParagraph').text('');
-				window.location.replace(SERVER_URL + next_redirect_url);
+				window.location.replace('/');
 			}
 		});
 	});
@@ -862,7 +792,6 @@ function charts() {
 		var user = document.forms["forgetForm"]["username"].value;
 		Loading();
 		$('#usercheck-error-message').addClass('hidden');
-		console.log('triggered');
 		$.ajax({
 			type: "post",
 			data: {username:user, csrfmiddlewaretoken: getCookie('csrftoken')},
@@ -885,18 +814,12 @@ function charts() {
 	$("#registerForm").submit(function(event) {
 		Loading();
 		event.preventDefault();
-		var data = {username: document.forms["registerForm"]["username"].value,
+		var data = {
 					password: document.forms["registerForm"]["password"].value,
 					password_repeat: document.forms["registerForm"]["password_repeat"].value,
-					firstname: document.forms["registerForm"]["firstname"].value,
-					lastname: document.forms["registerForm"]["lastname"].value,
-					birthday: document.forms["registerForm"]["birthday"].value,
-					gender: document.forms["registerForm"]["gender"].value,
 					email: document.forms["registerForm"]["email"].value,
 					csrfmiddlewaretoken: getCookie('csrftoken')
 		};
-		$( "#usernamemessage").addClass('hidden');
-		$( "#birthdaymessage").addClass('hidden');
 		$( "#emailmessage").addClass('hidden');
 		$("#passwordmessage").addClass('hidden');
 		$.ajax({
@@ -908,17 +831,11 @@ function charts() {
 			error: function (xhr, status, error) {
 				Done();
 				var response = xhr.responseText;
-				if (response == "UsernameExists") {
-					$("#usernamemessage").removeClass('hidden');
-				}
-				else if (response == "EmailExists") {
+				if (response == "EmailExists") {
 					$("#emailmessage").removeClass('hidden');
 				}
 				else if (response == "PasswordMismatch") {
 					$("#passwordmessage").removeClass('hidden');
-				}
-				else if (response == "BirthdayError") {
-					$("#birthdaymessage").removeClass('hidden');
 				}
 				else {
 					alert('Some fields have not been filled')

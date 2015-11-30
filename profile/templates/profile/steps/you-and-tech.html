@@ -7,14 +7,6 @@
             {{ form.tech_level }}
         </div>
 
-        <div class="field">
-            <h4>What's your opinion about the following brands?</h4>
-            <p>Click <i class="fa fa-check"></i> if it's positive, <i class="fa fa-times"></i> if it's negative, or <i class="fa fa-arrow-right"></i> if you feel indifferent about the brand or don't want to answer.</p>
-            <p>Click "Next" whenever you're done.</p>
-
-            <div id="tech-opinion">
-
-            </div>
-        </div>
+        {% include "profile/brand-opinion/feedback.html" %}
     </div>
 </div>

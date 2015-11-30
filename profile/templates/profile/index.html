@@ -1,0 +1,148 @@
+{% extends "profile/base.html" %}
+{% load profile_tags %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block extra_css %}
+    <link href="{% static 'profile/css/chosen.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'view-my-profile' %}">My profile</a>
+        </li>
+    </ul>
+
+    <div class="clearfix">
+        <a href="{% url 'start-profile-wizard' %}" class="btn btn-primary pull-right"><i class="fa fa-pencil"></i> Edit profile</a>
+    </div>
+
+    <div class="container profile-view">
+
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="profile-avatar" {% if profile.profile_picture %}style="background-image:url(/media/{{profile.profile_picture}});"{% endif %}></div>
+
+                <div class="row">
+                    <p class="col-md-12">
+                        <h4>You & tech</h4>
+
+                        <b>Influences</b>
+                        {% if profile.influences %}
+                            <p>Regarding technology, you're influenced by: (<a href="{% url 'start-profile-wizard' %}#influences" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a>)</p>
+                            <div><div class="inline-row">
+                                <select id="influences-view">
+                                    {% for influence in profile.influences %}
+                                        <option value="{{influence}}">{{influence|choice_to_str:influences_field}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div></div>
+                        {% else %}
+                            <p><a href="{% url 'start-profile-wizard' %}#influences"><i class="fa fa-plus"></i> What influences you when it comes to technology?</a></p>
+                        {% endif %}
+
+                        <b>Devices</b>
+                        {% if profile.devices %}
+                            <p>You're using the following devices: <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                            <div><div class="inline-row">
+                                <select id="devices-view">
+                                    {% for device in profile.devices %}
+                                        <option value="{{device}}">{{device|choice_to_str:devices_field}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            </div>
+                        {% else %}
+                            <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What devices are you using?</a></p>
+                        {% endif %}
+
+                        <b>Platforms</b>
+                        {% if profile.platforms %}
+                            <p>You're using the following platforms : <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                            <div><div class="inline-row">
+                                <select id="platforms-view">
+                                    {% for platform in profile.platforms %}
+                                        <option value="{{platform}}">{{platform|choice_to_str:platforms_field}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            </div>
+                        {% else %}
+                            <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What platforms are you using?</a></p>
+                        {% endif %}
+
+                        <b>Your tech level</b>
+                        {% if profile.platforms %}
+                            <p>You're overall tech level: <a href="{% url 'start-profile-wizard' %}#you-and-tech" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                            <p><span class="geek-level">{{profile.tech_level}}</span></p>
+                        {% else %}
+                            <p><a href="{% url 'start-profile-wizard' %}#you-and-tech"><i class="fa fa-plus"></i> What's your overall tech level?</a></p>
+                        {% endif %}
+                </div>
+            </div>
+
+            <div class="col-xs-6">
+                <div class="personal-info">
+                    <p class="name-age">
+                        {{ profile.first_name }} {% if profile.last_name_initial %} {{ profile.last_name_initial }} {% endif %}.
+                        {% if profile.year_of_birth %} ({{ profile.year_of_birth|age_from_birthyear }}) {% endif %}
+                    </p>
+
+                    {% if profile.user.location %}
+                        <p>Currently living in {{profile.user.location}}</p>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1">
+                        <i class="fa fa-building-o fa-4x"></i>
+                    </div>
+                    <div class="col-md-11">
+                        {% if profile.business_sector or profile.work_position or profile.work_location or profile.years_experience %}
+                            Works {% if profile.business_sector %} in {{profile.business_sector}} {% endif %}
+                            {% if profile.work_position %} as a {{profile.work_position}} {% endif %}
+                            {% if profile.years_experience %} for {{profile.years_experience}} years {% endif %}.<br />
+                            {% if profile.work_location %}
+                                Work location: {{profile.work_location}} <br />
+                            {% endif %}
+
+                            <a href="{% url 'start-profile-wizard' %}#work-step"><i class="fa fa-pencil"></i> Update work information</a>
+                        {% else %}
+                            No work information<br />
+                            <a href="{% url 'start-profile-wizard' %}#work-step"><i class="fa fa-plus"></i> Add work information</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% include "profile/brand-opinion/feedback.html" %}
+            </div>
+
+            <div class="col-xs-3">
+                <div class="opinions-container opinions-like">
+                    <h4>Brands you like</h4>
+                    {% for brand in liked_brands %}
+                        <img src="{{brand|get_brand_icon}}" width="{{brand|get_icon_width}}" class="brand-icon" title="{{brand|lower}}"/>
+                    {% empty %}
+                        <p>No brands you like found.</p>
+                    {% endfor %}
+                </div>
+                <div class="opinions-container opinions-dislike">
+                    <h4>Brands you dislike</h4>
+                    {% for brand in disliked_brands %}
+                        <img src="{{brand|get_brand_icon}}" width="{{brand|get_icon_width}}" class="brand-icon" title="{{brand|lower}}"/>
+                    {% empty %}
+                        <p>No brands you dislike found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'profile/js/niceopts.js' %}"></script>
+    <script src="{% static 'profile/js/brand-feedback.js' %}"></script>
+    <script src="{% static 'profile/js/view.js' %}"></script>
+{% endblock %}

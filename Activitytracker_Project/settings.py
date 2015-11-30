@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from Activitytracker_Project import passwords
 from config import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -84,8 +85,12 @@ LOGIN_URL = 'login'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'activity_tracker_db',
+        'USER': passwords.DB_USER,
+        'PASSWORD': passwords.DB_PASSWORD,
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -121,6 +126,10 @@ STATIC_ROOT = 'activitytracker/static'
 #STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
 
 
+# Files uploaded by users (e.g avatars)
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
+
 # django-bower. Bower components dir
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'activitytracker/static/')
 
@@ -143,7 +152,8 @@ BOWER_INSTALLED_APPS = (
     'bootstrap-chosen',
     'bootstrap-datepicker',
     'bootstrap-tokenfield',
-    'datatables-responsive'
+    'datatables-responsive',
+    'bootstrap-daterangepicker'
 
 )
 
