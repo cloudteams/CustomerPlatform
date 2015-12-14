@@ -5,5 +5,5 @@
 
 <p>
     {{idea.title}}, {{comment_count}} comment{{comment_count|pluralize}} |
-    <a href="{% url 'idea-details' idea.project_pk idea.pk %}">View details</a>
+    <a href="{% url 'idea-details' idea.project.pk idea.pk %}">View details</a>
 </p>

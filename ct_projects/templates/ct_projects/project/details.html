@@ -22,11 +22,13 @@
         </div>
     </div>
 
-    <p class="category">{{project.project_type}} | {{project.category}}</p>
-    <p>{{project.description}}</p>
+    <p class="category">{{project.application_type}} | {{project.category}}</p>
+    {% if project.description %}
+        <p>{{project.description}}</p>
+    {% endif %}
 
     {% if project.managers %}
-        By: {{project.managers|join:", "}}
+        By: {{project.managers}}
     {% endif %}
 
     {% with idea_count=project.ideas.all.count %}

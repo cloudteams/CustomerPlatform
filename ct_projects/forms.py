@@ -1,19 +1,19 @@
-from ct_projects.models import Idea, IdeaRating, BSCWProject
+from ct_projects.models import Idea, IdeaRating, Project
 from django import forms
 
 __author__ = 'dipap'
 
 
-class BSCWProjectForm(forms.ModelForm):
+class ProjectForm(forms.ModelForm):
     class Meta:
-        model = BSCWProject
+        model = Project
         exclude = ['created', ]
 
 
 class IdeaForm(forms.ModelForm):
     class Meta:
         model = Idea
-        exclude = ['user', 'project_pk', ]
+        exclude = ['user', 'project', ]
 
 
 class IdeaRatingForm(forms.ModelForm):

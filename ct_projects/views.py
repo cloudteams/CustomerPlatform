@@ -1,17 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
-import django_comments
 from django_comments.forms import CommentForm
 from django_comments.models import Comment
-from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea
-
-source = CloudTeamsConnector()
+from ct_projects.models import ProjectFollowing, Idea, Project
 
 
 def list_projects(request):
@@ -19,7 +16,7 @@ def list_projects(request):
     A list of all projects in cloud teams
     """
     q = request.GET.get('q', '')
-    projects = source.list_projects(q)
+    projects = Project.objects.filter(Q(title__icontains=q) | Q(description__icontains=q))
     pages = Paginator(projects, 10)
 
     context = {
@@ -37,8 +34,7 @@ def followed_projects(request):
     """
     q = request.GET.get('q', '')
 
-    projects = [p for p in source.list_projects(q)
-                if ProjectFollowing.objects.filter(user=request.user, project_pk=p.pk)]
+    projects = [f.project for f in ProjectFollowing.objects.filter(user=request.user)]
 
     context = {
         'projects': projects,
@@ -53,16 +49,16 @@ def follow_project(request, pk):
     # only posts allowed to this method
     if request.method == 'POST':
         # get project
-        project = source.get_project(pk)
+        project = Project.objects.get(pk=pk)
         if not project:
-            return HttpResponse('Project #%s does not exist' % pk, status=404)
+            return HttpResponse('Project #%d does not exist' % pk, status=404)
 
         # check if already followed
-        if ProjectFollowing.objects.filter(project_pk=pk, user=request.user):
-            return HttpResponse('You are already following project #%s' % pk, status=403)
+        if ProjectFollowing.objects.filter(project=project, user=request.user):
+            return HttpResponse('You are already following project #%d' % pk, status=403)
 
         # follow & return OK
-        ProjectFollowing.objects.create(project_pk=pk, user=request.user)
+        ProjectFollowing.objects.create(project=project, user=request.user)
         return redirect(reverse('all-projects'))
     else:
         return HttpResponse('Only POST allowed', status=400)
@@ -73,14 +69,14 @@ def unfollow_project(request, pk):
     # only posts allowed to this method
     if request.method == 'POST':
         # get project
-        project = source.get_project(pk)
+        project = Project.objects.get(pk=pk)
         if not project:
-            return HttpResponse('Project #%s does not exist' % pk, status=404)
+            return HttpResponse('Project #%d does not exist' % pk, status=404)
 
         # check if actually followed
-        pfs = ProjectFollowing.objects.filter(project_pk=pk, user=request.user)
+        pfs = ProjectFollowing.objects.filter(project=project, user=request.user)
         if not pfs:
-            return HttpResponse('You are not following project #%s' % pk, status=403)
+            return HttpResponse('You are not following project #%d' % pk, status=403)
 
         # unfollow & return OK
         pfs.delete()
@@ -96,9 +92,9 @@ def project_details(request, pk):
     # only gets allowed to this method
     if request.method == 'GET':
         # get project
-        project = source.get_project(pk)
+        project = Project.objects.get(pk=pk)
         if not project:
-            return HttpResponse('Project #%s does not exist' % pk, status=404)
+            return HttpResponse('Project #%d does not exist' % pk, status=404)
 
         context = {
             'project': project,
@@ -115,9 +111,9 @@ def post_idea(request, pk):
     Post a new idea on a project
     """
     # get project
-    project = source.get_project(pk)
+    project = Project.objects.get(pk=pk)
     if not project:
-        return HttpResponse('Project #%s does not exist' % pk, status=404)
+        return HttpResponse('Project #%d does not exist' % pk, status=404)
 
     context = {
         'project': project
@@ -133,7 +129,7 @@ def post_idea(request, pk):
             # save the idea
             idea = form.save(commit=False)
             idea.user = request.user
-            idea.project_pk = project.pk
+            idea.project = project
             idea.save()
 
             # redirect to project home page
@@ -157,7 +153,7 @@ class IdeaDetailView(DetailView):
 
         idea = context['idea']
         context['comment_form'] = CommentForm(idea)
-        context['project'] = source.get_project(str(idea.project_pk))
+        context['project'] = idea.project
         return context
 
 idea_details = IdeaDetailView.as_view()
@@ -169,7 +165,7 @@ def comment_posted(request):
         comment = Comment.objects.get(pk=comment_id)
         idea = Idea.objects.get(id=comment.object_pk)
         if idea:
-            return redirect(reverse('idea-details', args=(idea.project_pk, idea.pk)))
+            return redirect(reverse('idea-details', args=(idea.project.pk, idea.pk)))
 
 
 @login_required
@@ -187,7 +183,7 @@ def rate_idea(request, project_pk, pk):
         rating.idea = idea
         rating.save()
 
-        return redirect(reverse('idea-details', args=(idea.project_pk, idea.pk)))
+        return redirect(reverse('idea-details', args=(idea.project.pk, idea.pk)))
     else:
         return HttpResponse('Only POST allowed', status=400)
 

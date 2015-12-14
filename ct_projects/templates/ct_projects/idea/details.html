@@ -11,10 +11,10 @@
             <a href="{% url 'all-projects' %}">Projects</a>
         </li>
         <li>
-            <a href="{% url 'project-details' idea.project_pk %}">{{project.title}}</a>
+            <a href="{% url 'project-details' idea.project.pk %}">{{project.title}}</a>
         </li>
         <li>
-            <a href="{% url 'idea-details' idea.project_pk idea.pk %}">{{idea.title}}</a>
+            <a href="{% url 'idea-details' idea.project.pk idea.pk %}">{{idea.title}}</a>
         </li>
     </ul>
 
@@ -22,7 +22,7 @@
         <h1>
             {{idea.title}}
         </h1>
-        <a href="{% url 'project-details' idea.project_pk %}" class="btn pull-right">Back to project</a>
+        <a href="{% url 'project-details' idea.project.pk %}" class="btn pull-right">Back to project</a>
     </div>
 
     <p>{{idea.description|linebreaksbr}}</p>

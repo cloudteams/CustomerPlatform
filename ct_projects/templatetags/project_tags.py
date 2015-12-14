@@ -8,12 +8,12 @@ register = template.Library()
 
 @register.filter
 def is_followed_by(project, user):
-    return ProjectFollowing.objects.filter(project_pk=project.pk, user=user).count() > 0
+    return ProjectFollowing.objects.filter(project=project, user=user).count() > 0
 
 
 @register.filter
 def count_followers(project):
-    return ProjectFollowing.objects.filter(project_pk=project.pk).count()
+    return ProjectFollowing.objects.filter(project=project).count()
 
 
 @register.simple_tag

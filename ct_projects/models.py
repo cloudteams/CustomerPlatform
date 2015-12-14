@@ -15,8 +15,8 @@ class Project(models.Model):
     """
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255)
-    project_managers = models.TextField()  # comma-separated list of usernames
-    project_members = models.TextField(blank=True, null=True, default=None)  # comma-separated list of usernames
+    managers = models.TextField()  # comma-separated list of usernames
+    members = models.TextField(blank=True, null=True, default=None)  # comma-separated list of usernames
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
     description = models.TextField(blank=True, null=True, default=None)
@@ -30,8 +30,8 @@ class Project(models.Model):
     def to_json(self):
         return {
             'id': self.pk,
-            'project_manager': self.project_manager,
-            'project_members': self.project_members,
+            'managers': self.managers.split(','),
+            'members': self.members.split(','),
             'created': self.created,
             'name': self.title,
             'description': self.description,
@@ -40,7 +40,7 @@ class Project(models.Model):
             'rewards': self.rewards,
             'logo': self.logo,
             'is_public': self.is_public,
-            'number_of_followers': ProjectFollowing.objects.filter(project_pk=self.pk).count(),
+            'number_of_followers': self.followed.all().count(),
             'ideas': [idea.to_json() for idea in self.ideas.all()],
             'campaigns': [campaign.to_json() for campaign in self.campaigns.all()],
         }
@@ -50,8 +50,8 @@ class ProjectFollowing(models.Model):
     """
     A following relationship between a CloudTeams customer and a project
     """
-    user = models.ForeignKey(User)
-    project_pk = models.IntegerField(validators=[MinValueValidator(0)])
+    user = models.ForeignKey(User, related_name='follows')
+    project = models.ForeignKey(Project, related_name='followed')
     created = models.DateTimeField(auto_now_add=True, editable=False)  # relationship timestamp
 
 

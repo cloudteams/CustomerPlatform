@@ -29,12 +29,13 @@ class CloudTeamsConnector:
                 project = current[0]
 
             project.title = entry['name']
-            project.project_type = entry['bscw_cloudteams:p_type']
+            project.description = entry['description'] if 'description' in entry else ''
+            project.application_type = entry['bscw_cloudteams:p_type']
             project.logo = entry['bscw_cloudteams:p_logo'] if 'bscw_cloudteams:p_logo' in entry else ''
             project.rewards = entry['rewards'] if 'rewards' in entry else ''
             project.category = entry['bscw_cloudteams:p_category']
-            project.project_managers = ','.join(entry['managers'])
-            project.project_members = ','.join(entry['members']) if 'members' in entry else ''
+            project.managers = ','.join(entry['managers'])
+            project.members = ','.join(entry['members']) if 'members' in entry else ''
             project.is_public = entry['is_public'] if 'is_public' in entry else False
             project.created = datetime.fromtimestamp(int(entry['ctime']))
 

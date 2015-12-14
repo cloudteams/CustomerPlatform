@@ -14,11 +14,11 @@ urlpatterns = [
     url(r'^(?P<project_pk>[\w-]+)/ideas/(?P<pk>\d+)/rate/$', views.rate_idea, name='rate-idea'),
 
     # project details
-    url(r'^(?P<pk>[\w-]+)/$', views.project_details, name='project-details'),
+    url(r'^(?P<pk>\d+)/$', views.project_details, name='project-details'),
 
     # following projects
-    url(r'^(?P<pk>[\w-]+)/follow/$', views.follow_project, name='follow-project'),
-    url(r'^(?P<pk>[\w-]+)/unfollow/$', views.unfollow_project, name='unfollow-project'),
+    url(r'^(?P<pk>\d+)/follow/$', views.follow_project, name='follow-project'),
+    url(r'^(?P<pk>\d+)/unfollow/$', views.unfollow_project, name='unfollow-project'),
 
     # comments
     url(r'^comments/posted/$', views.comment_posted),

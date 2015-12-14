@@ -6,12 +6,15 @@
         {% endif %}
 
         <h4><a href="{% url 'project-details' project.pk %}">{{project.title}}</a></h4>
-        <p class="category">{{project.project_type}} | {{project.category}}</p>
+        <p class="category">{{project.application_type}} | {{project.category}}</p>
         <div class="pull-right">
             {% include "ct_projects/project/follow-form.html" %}
         </div>
 
-        <p>{{project.description}}</p>
+        {% if project.description %}
+            <p>{{project.description}}</p>
+        {% endif %}
+
         {% with idea_count=project.ideas.count %}
             <p>
                 {{idea_count}} idea{{idea_count|pluralize}} |

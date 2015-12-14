@@ -2,8 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from ct_projects.forms import BSCWProjectForm
-from ct_projects.models import BSCWProject
+from ct_projects.forms import ProjectForm
+from ct_projects.models import Project
 
 __author__ = 'dipap'
 
@@ -15,10 +15,10 @@ def project_list(request):
     """
     if request.method == 'GET':
         # list existing projects
-        return JsonResponse([p.to_json() for p in BSCWProject.objects.all()], safe=False)
+        return JsonResponse([p.to_json() for p in Project.objects.all()], safe=False)
     elif request.method == 'POST':
         # create a new project
-        form = BSCWProjectForm(request.POST)
+        form = ProjectForm(request.POST)
         if form.is_valid():
             instance = form.save()
             return JsonResponse(instance.to_json(), safe=False)
@@ -37,7 +37,7 @@ def project(request, pk):
     """
     # find project with ID=pk
     try:
-        instance = BSCWProject.objects.get(pk=int(pk))
+        instance = Project.objects.get(pk=int(pk))
     except ObjectDoesNotExist:
         return JsonResponse({'error': 'Project #%d not found' % int(pk)}, status=404)
 
@@ -46,7 +46,7 @@ def project(request, pk):
         return JsonResponse(instance.to_json(), safe=False)
     elif request.method == 'POST':
         # update project
-        form = BSCWProjectForm(request.POST, instance=instance)
+        form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             instance = form.save()
             return JsonResponse(instance.to_json(), safe=False)
