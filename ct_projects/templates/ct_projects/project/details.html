@@ -9,29 +9,34 @@
             <i class="icon-home"></i>
             <a href="{% url 'all-projects' %}">Projects</a>
         </li>
-        <i class="icon-angle-right"></i>
         <li>
             <a href="{% url 'project-details' project.pk %}">{{project.title}}</a>
         </li>
     </ul>
 
-    <h1>{{project.title}}</h1>
+    <div class="clearfix">
+        <img class="pull-left" scr="{{project.logo}}" height="60" />
+        <h1 class="pull-left">{{project.title}}</h1>
         <div class="pull-right">
             {% include "ct_projects/project/follow-form.html" %}
-            <a href="{% url 'post-idea' project.pk %}" class="btn btn-primary">+ Post idea</a>
         </div>
+    </div>
 
-
-    <p class="info">{{project|count_followers}} followers</p>
+    <p class="category">{{project.project_type}} | {{project.category}}</p>
     <p>{{project.description}}</p>
-    <p>{{project.publisher}}</p>
+
+    {% if project.managers %}
+        By: {{project.managers|join:", "}}
+    {% endif %}
 
     {% with idea_count=project.ideas.all.count %}
-        <p>{{idea_count}} idea{{idea_count|pluralize}}</p>
+        <p class="info">{{project|count_followers}} followers - {{idea_count}} idea{{idea_count|pluralize}}</p>
     {% endwith %}
 
     {% for idea in project.ideas.all %}
         {% include "ct_projects/idea/teaser.html" %}
     {% endfor %}
+
+    <a href="{% url 'post-idea' project.pk %}" class="btn btn-primary">+ Post idea</a>
 {% endautoescape %}
 {% endblock %}

@@ -116,8 +116,6 @@ USE_TZ = False
 
 SITE_ID = 1
 
-PROJECT_REFRESH_PERIOD_MINUTES = 10
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 

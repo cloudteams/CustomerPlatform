@@ -1,6 +1,5 @@
-from datetime import timedelta
+from datetime import datetime
 from django.utils.timezone import now
-from Activitytracker_Project.settings import PROJECT_REFRESH_PERIOD_MINUTES
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
 from ct_projects.models import Project
@@ -16,58 +15,30 @@ class CloudTeamsConnector:
         self.projects = None
         self.latest_update_on = now()
 
-    def list_projects(self, q=None):
+    def fetch_projects(self):
         """
-        :return: A list with all projects found on BSCW
+        Populates Customer Platform DB with projects from the Teams Platform
+        :return: Number of projects fetched from CloudTeams team platform
         """
+        entries = self.srv.get_projectstore('')
+        for entry in entries:
+            project = Project()
+            project.id = entry['__id__']
+            current = Project.objects.filter(pk=project.id)
+            if current:
+                project = current[0]
 
-        # invalidate cache after PROJECT_REFRESH_PERIOD_MINUTES
-        time_now = now()
-        if time_now - self.latest_update_on >= timedelta(minutes=PROJECT_REFRESH_PERIOD_MINUTES):
-            self.projects = []
-            self.latest_update_on = time_now
+            project.title = entry['name']
+            project.project_type = entry['bscw_cloudteams:p_type']
+            project.logo = entry['bscw_cloudteams:p_logo'] if 'bscw_cloudteams:p_logo' in entry else ''
+            project.rewards = entry['rewards'] if 'rewards' in entry else ''
+            project.category = entry['bscw_cloudteams:p_category']
+            project.project_managers = ','.join(entry['managers'])
+            project.project_members = ','.join(entry['members']) if 'members' in entry else ''
+            project.is_public = entry['is_public'] if 'is_public' in entry else False
+            project.created = datetime.fromtimestamp(int(entry['ctime']))
 
-        if not self.projects:
-            result = []
+            # save the project in the database
+            project.save()
 
-            entries = self.srv.lst_entries(self.PROJECTS_FOLDER_ID)[1]
-            for entry in entries:
-                pk = entry['oid']
-                title = entry['title']
-                file_type_pos = entry['summary'].find('<span class="label_css">')
-
-                # find description
-                description = entry['summary'][:file_type_pos-1]
-
-                # find publisher info
-                publisher_start = entry['summary'].rfind('</span>') + len('</span>')
-                publisher = entry['summary'][publisher_start + 1:]
-
-                result.append(Project(pk=pk, title=title, description=description, publisher=publisher))
-
-            # cache the result
-            self.projects = result
-
-        # filter out results
-        if not q:
-            results = self.projects
-        else:
-            q = q.lower()
-            results = []
-
-            for project in self.projects:
-                if q in project.title.lower() or q in project.description.lower() or q in project.publisher.lower():
-                    results.append(project)
-
-        return results
-
-    def get_project(self, pk):
-        """
-        :param pk: The unique identifier of the project
-        :return: A project instance if found, None otherwise
-        """
-        for project in self.list_projects():
-            if project.pk == pk:
-                return project
-
-        return None
+        return len(entries)

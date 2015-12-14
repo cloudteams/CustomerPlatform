@@ -10,11 +10,9 @@
             <i class="icon-home"></i>
             <a href="{% url 'all-projects' %}">Projects</a>
         </li>
-        <i class="icon-angle-right"></i>
         <li>
             <a href="{% url 'project-details' idea.project_pk %}">{{project.title}}</a>
         </li>
-        <i class="icon-angle-right"></i>
         <li>
             <a href="{% url 'idea-details' idea.project_pk idea.pk %}">{{idea.title}}</a>
         </li>

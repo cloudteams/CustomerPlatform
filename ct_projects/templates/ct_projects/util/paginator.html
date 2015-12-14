@@ -1,8 +1,8 @@
 {% load project_tags %}
 
 {% if page_obj.paginator.num_pages > 1 %}
-    <div class="pagination centered">
-        <ul class="inline">
+    <div class="centered">
+        <ul class="pagination">
         {% if page_obj.has_previous %}
             <li><a href="?{% url_replace request page_param|default:'page' page_obj.number|add:'-1' %}"
                                          title="previous">&lsaquo;</a></li>

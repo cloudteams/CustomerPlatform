@@ -9,7 +9,7 @@ from django_comments.forms import CommentForm
 from django_comments.models import Comment
 from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea, ProjectInfo
+from ct_projects.models import ProjectFollowing, Idea
 
 source = CloudTeamsConnector()
 
@@ -20,7 +20,7 @@ def list_projects(request):
     """
     q = request.GET.get('q', '')
     projects = source.list_projects(q)
-    pages = Paginator(projects, 2)
+    pages = Paginator(projects, 10)
 
     context = {
         'page_obj': pages.page(int(request.GET.get('page', '1'))),
@@ -191,13 +191,3 @@ def rate_idea(request, project_pk, pk):
     else:
         return HttpResponse('Only POST allowed', status=400)
 
-
-# ProjectInfo API
-
-"""
-def api_projects(request):
-    if request.method == 'GET':
-        projects = ProjectInfo.objects.all()
-        return JsonResponse(projects, safe=False)
-    elif
-"""

@@ -25,6 +25,9 @@ def url_replace(request, field, value):
 
 @register.filter
 def get_user_rate(idea, user):
+    if not user.is_authenticated():
+        return None
+
     qs = idea.ratings.filter(user=user)
     if qs:
         return qs[0]
@@ -38,3 +41,9 @@ def rate_larger_than(rating, i):
         return False
 
     return rating >= int(i)
+
+
+@register.filter
+def join(lst, sep):
+    return sep.join(lst)
+
