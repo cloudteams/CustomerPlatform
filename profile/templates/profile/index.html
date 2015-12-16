@@ -29,51 +29,57 @@
                         <h4>You & tech</h4>
 
                         <b>Influences</b>
-                        {% if profile.influences %}
-                            <p>Regarding technology, you're influenced by: (<a href="{% url 'start-profile-wizard' %}#influences" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a>)</p>
-                            <div><div class="inline-row">
-                                <select id="influences-view">
-                                    {% for influence in profile.influences %}
-                                        <option value="{{influence}}">{{influence|choice_to_str:influences_field}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div></div>
-                        {% else %}
-                            <p><a href="{% url 'start-profile-wizard' %}#influences"><i class="fa fa-plus"></i> What influences you when it comes to technology?</a></p>
-                        {% endif %}
+                        {% with influence_list=profile.user.influences.all %}
+                            {% if influence_list %}
+                                <p>Regarding technology, you're influenced by: <a href="{% url 'start-profile-wizard' %}#influences" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                                <div><div class="inline-row">
+                                    <select id="influences-view">
+                                        {% for influence in influence_list %}
+                                            <option value="{{influence.influence}}">{{influence.influence}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div></div>
+                            {% else %}
+                                <p><a href="{% url 'start-profile-wizard' %}#influences"><i class="fa fa-plus"></i> What influences you when it comes to technology?</a></p>
+                            {% endif %}
+                        {% endwith %}
 
                         <b>Devices</b>
-                        {% if profile.devices %}
-                            <p>You're using the following devices: <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
-                            <div><div class="inline-row">
-                                <select id="devices-view">
-                                    {% for device in profile.devices %}
-                                        <option value="{{device}}">{{device|choice_to_str:devices_field}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            </div>
-                        {% else %}
-                            <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What devices are you using?</a></p>
-                        {% endif %}
+                        {% with device_list=profile.user.devices.all %}
+                            {% if device_list %}
+                                <p>You're using the following devices: <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                                <div><div class="inline-row">
+                                    <select id="devices-view">
+                                        {% for device_usage in device_list %}
+                                            <option value="{{device_usage.device}}">{{device_usage.device}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                </div>
+                            {% else %}
+                                <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What devices are you using?</a></p>
+                            {% endif %}
+                        {% endwith %}
 
                         <b>Platforms</b>
-                        {% if profile.platforms %}
-                            <p>You're using the following platforms : <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
-                            <div><div class="inline-row">
-                                <select id="platforms-view">
-                                    {% for platform in profile.platforms %}
-                                        <option value="{{platform}}">{{platform|choice_to_str:platforms_field}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            </div>
-                        {% else %}
-                            <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What platforms are you using?</a></p>
-                        {% endif %}
+                        {% with platform_list=profile.user.platforms.all %}
+                            {% if platform_list %}
+                                <p>You're using the following platforms : <a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
+                                <div><div class="inline-row">
+                                    <select id="platforms-view">
+                                        {% for platform_usage in platform_list %}
+                                            <option value="{{platform_usage.platform}}">{{platform_usage.platform}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                </div>
+                            {% else %}
+                                <p><a href="{% url 'start-profile-wizard' %}#devices-and-platforms-step"><i class="fa fa-plus"></i> What platforms are you using?</a></p>
+                            {% endif %}
+                        {% endwith %}
 
                         <b>Your tech level</b>
-                        {% if profile.platforms %}
+                        {% if profile.tech_level %}
                             <p>You're overall tech level: <a href="{% url 'start-profile-wizard' %}#you-and-tech" class="inline-edit"><i class="fa fa-pencil"></i> Edit</a></p>
                             <p><span class="geek-level">{{profile.tech_level}}</span></p>
                         {% else %}

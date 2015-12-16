@@ -198,50 +198,50 @@ WORK_POSITIONS = (
 )
 
 INFLUENCES = (
-    ('FAMILY', 'Family & relatives'),
-    ('FRIENDS', 'Friends & social circle'),
-    ('COWORKERS', 'Co-workers'),
-    ('ADS', 'Advertisement'),
-    ('TV', 'TV & Media'),
-    ('BLOGS', 'Blogs'),
-    ('OTHER', 'Other'),
+    ('Family & relatives', 'Family & relatives'),
+    ('Friends & social circle', 'Friends & social circle'),
+    ('Co-workers', 'Co-workers'),
+    ('Advertisement', 'Advertisement'),
+    ('TV & Media', 'TV & Media'),
+    ('Blogs', 'Blogs'),
+    ('Other', 'Other'),
 )
 
 DEVICES = (
     ('PC', 'PC'),
-    ('LT', 'Laptop'),
-    ('TB', 'Tablet'),
-    ('MF', 'Mobile phone'),
-    ('WE', 'Wearable'),
+    ('Laptop', 'Laptop'),
+    ('Tablet', 'Tablet'),
+    ('Mobile phone', 'Mobile phone'),
+    ('Wearable', 'Wearable'),
 )
 
 PLATFORMS = (
-    ('MSWIN', 'MS Windows'),
-    ('OSX', 'OS X'),
-    ('LINUX', 'Linux'),
-    ('IOS', 'iOS'),
-    ('ANDR', 'Android'),
+    ('MS Windows', 'MS Windows'),
+    ('OS X', 'OS X'),
+    ('Linux', 'Linux'),
+    ('iOS', 'iOS'),
+    ('Android', 'Android'),
 )
 
 BROWSERS = (
-    ('IE', 'Internet Explorer'),
-    ('FF', 'Firefox'),
-    ('CH', 'Chrome'),
-    ('SF', 'Safari'),
+    ('Internet Explorer', 'Internet Explorer'),
+    ('Firefox', 'Firefox'),
+    ('Chrome', 'Chrome'),
+    ('Safari', 'Safari'),
 )
 
 TECH_LEVELS = (
-    ('BEG', 'Beginner'),
-    ('INT', 'Intermediate'),
-    ('EXP', 'Expert'),
-    ('GEEK', 'gEEk'),
+    ('Beginner', 'Beginner'),
+    ('Intermediate', 'Intermediate'),
+    ('Expert', 'Expert'),
+    ('Geek', 'gEEk'),
 )
 DEFAULT_BRANDS = (
-    ('FACEBOOK', 'Facebook'),
-    ('TWITTER', 'Twitter'),
-    ('GOOGLE', 'Google'),
-    ('INSTAGRAM', 'Instagram'),
-    ('APPLE', 'Apple'),
+    ('Facebook', 'Facebook'),
+    ('Twitter', 'Twitter'),
+    ('Google', 'Google'),
+    ('Instagram', 'Instagram'),
+    ('Apple', 'Apple'),
 )
 
 BRAND_OPINIONS = (

@@ -2,26 +2,26 @@ var NiceOpts = {
     icons: {
         //devices
         'PC': 'fa-desktop',
-        'TB': 'fa-tablet',
-        'LT': 'fa-laptop',
-        'MF': 'fa-mobile',
-        'WE': 'fa-clock-o',
+        'Tablet': 'fa-tablet',
+        'Laptop': 'fa-laptop',
+        'Mobile phone': 'fa-mobile',
+        'Wearable': 'fa-clock-o',
 
         //platforms
-        'MSWIN': 'fa-windows',
-        'OSX': 'fa-apple',
-        'LINUX': 'fa-linux',
-        'IOS': 'fa-apple',
-        'ANDR': 'fa-android',
+        'MS Windows': 'fa-windows',
+        'OS X': 'fa-apple',
+        'Linux': 'fa-linux',
+        'iOS': 'fa-apple',
+        'Android': 'fa-android',
 
         //influences
-        'FAMILY': 'fa-child',
-        'FRIENDS': 'fa-group',
-        'BLOGS': 'fa-file-text',
-        'TV': 'fa-television',
-        'ADS': 'fa-volume-up',
-        'COWORKERS': 'fa-building-o',
-        'OTHER': 'fa-ellipsis-h'
+        'Family & relatives': 'fa-child',
+        'Friends & social circle': 'fa-group',
+        'Blogs': 'fa-file-text',
+        'TV & Media': 'fa-television',
+        'Advertisement': 'fa-volume-up',
+        'Co-workers': 'fa-building-o',
+        'Other': 'fa-ellipsis-h'
     },
 
     init: function(selector, options) {

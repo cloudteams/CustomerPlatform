@@ -1,4 +1,6 @@
 from django import forms
+
+from profile.lists import INFLUENCES, DEVICES, PLATFORMS
 from profile.models import UserProfile
 
 __author__ = 'dipap'
@@ -6,6 +8,12 @@ __author__ = 'dipap'
 
 class UserProfileForm(forms.ModelForm):
     location = forms.CharField(required=False)
+    # Influences
+    influences = forms.MultipleChoiceField(choices=INFLUENCES, required=False)
+
+    # Devices & platforms
+    devices = forms.MultipleChoiceField(choices=DEVICES, required=False)
+    platforms = forms.MultipleChoiceField(choices=PLATFORMS, required=False)
 
     class Meta:
         model = UserProfile
@@ -25,3 +33,7 @@ class UserProfileForm(forms.ModelForm):
 
         if self.instance.user.location:
             self.initial['location'] = self.instance.user.location
+
+        self.initial['influences'] = [influence.influence for influence in self.instance.user.influences.all()]
+        self.initial['platforms'] = [platform_usages.platform for platform_usages in self.instance.user.platforms.all()]
+        self.initial['devices'] = [device_usage.device for device_usage in self.instance.user.devices.all()]

@@ -1,3 +1,10 @@
+"""
+DEPRECATED
+Do not use this field in models as inline data (comma-separated lists) won't be parsed by the Anonymizer
+Usage of such lists in relational databases has many drawbacks on filter/update/delete
+Do not remove - used by older migrations
+"""
+
 from django.contrib.humanize.templatetags.humanize import apnumber
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import capfirst

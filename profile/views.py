@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from profile.forms import UserProfileForm
 from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
-from profile.models import UserBrandOpinion, UserProfile
+from profile.models import UserBrandOpinion, UserProfile, Influence, DeviceUsage, PlatformUsage
 from profile.templatetags.profile_tags import get_brand_icon
 
 
@@ -14,9 +14,6 @@ def view_my_profile(request):
     profile = request.user.profile
     params = {
         'profile': profile,
-        'influences_field': UserProfile.influences.field,
-        'devices_field': UserProfile.devices.field,
-        'platforms_field': UserProfile.platforms.field,
         'liked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='P')],
         'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
     }
@@ -44,6 +41,31 @@ def start_wizard(request):
             profile = form.save(commit=False)
             profile.has_been_saved = True
             profile.save()
+
+            # add related information
+            for influence in form.cleaned_data['influences']:
+                if Influence.objects.filter(user=profile.user, influence=influence).count() == 0:
+                    Influence.objects.create(user=profile.user, influence=influence)
+
+            for influence in Influence.objects.filter(user=profile.user):
+                if influence.influence not in form.cleaned_data['influences']:
+                    influence.delete()
+
+            for device in form.cleaned_data['devices']:
+                if DeviceUsage.objects.filter(user=profile.user, device=device).count() == 0:
+                    DeviceUsage.objects.create(user=profile.user, device=device)
+
+            for device_usage in DeviceUsage.objects.filter(user=profile.user):
+                if device_usage.device not in form.cleaned_data['devices']:
+                    device_usage.delete()
+
+            for platform in form.cleaned_data['platforms']:
+                if PlatformUsage.objects.filter(user=profile.user, platform=platform).count() == 0:
+                    PlatformUsage.objects.create(user=profile.user, platform=platform)
+
+            for platform_usage in PlatformUsage.objects.filter(user=profile.user):
+                if platform_usage.platform not in form.cleaned_data['platforms']:
+                    platform_usage.delete()
 
             # update user
             profile.user.location = form.cleaned_data['location']
