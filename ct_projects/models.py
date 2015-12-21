@@ -1,9 +1,12 @@
+from django.contrib.contenttypes import generic
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
 # The project is not a typical Django model as it's not saved on the CloudTeams community site but on BSCW
 from django.db.models import Sum
+from django_comments.models import Comment
+
 from activitytracker.models import User
 
 
@@ -66,19 +69,22 @@ class Idea(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
 
+    comments = generic.GenericRelation(Comment, object_id_field='object_pk')
+
     def get_rating_count(self):
         return self.ratings.all().count()
 
     def get_average_rating(self):
         count = self.get_rating_count()
         if count > 0:
-            return self.ratings.all().aggregate(Sum('value'))['value__sum'] / (count + 0.0)
+            result = self.ratings.all().aggregate(Sum('value'))['value__sum'] / (count + 0.0)
+            return int(result*100) / 100.0
         else:
             return None
 
-    def get_anonymized_username(self):
+    def get_anonymized_username(self, user):
         # TODO use anonymized usernames in project ideas
-        return self.user.username
+        return user.username
 
     def to_json(self):
         return {
@@ -86,7 +92,16 @@ class Idea(models.Model):
             'description': self.description,
             'created': self.created,
             'updated': self.updated,
-            'author': self.get_anonymized_username(),
+            'author': self.get_anonymized_username(self.user),
+            'rating': self.get_average_rating(),
+            'comments': [self.comment_to_json(c) for c in self.comments.all()],
+        }
+
+    def comment_to_json(self, comment):
+        return {
+            'author': self.get_anonymized_username(comment.user),
+            'text': comment.comment,
+            'created': comment.submit_date,
         }
 
 
