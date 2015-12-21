@@ -23,7 +23,7 @@ def project_list(request):
             instance = form.save()
             return JsonResponse(instance.to_json(), safe=False)
         else:
-            return JsonResponse({'error': form.errors}, status=403)
+            return JsonResponse({'error': form.errors}, status=400)
     else:
         # invalid/unsupported HTTP method
         # do not support PUT/DELETE on project list by default to avoid accidents
@@ -51,7 +51,7 @@ def project(request, pk):
             instance = form.save()
             return JsonResponse(instance.to_json(), safe=False)
         else:
-            return JsonResponse({'error': form.errors}, status=403)
+            return JsonResponse({'error': form.errors}, status=400)
     elif request.method == 'DELETE':
         # delete project
         instance.delete()
