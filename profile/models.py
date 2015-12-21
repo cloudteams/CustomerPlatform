@@ -33,7 +33,7 @@ class UserProfile(models.Model):
     years_experience = models.IntegerField(blank=True, null=True, validators=[MinValueValidator(0)])
 
     # Tech level
-    tech_level = models.CharField(max_length=8, blank=True, default='', choices=TECH_LEVELS)
+    tech_level = models.CharField(max_length=31, blank=True, default='', choices=TECH_LEVELS)
 
     # Check if the profile wizard has run at least once
     has_been_saved = models.BooleanField(default=False, editable=False)
