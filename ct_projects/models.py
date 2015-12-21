@@ -18,7 +18,7 @@ class Project(models.Model):
     """
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255)
-    managers = models.TextField()  # comma-separated list of usernames
+    managers = models.TextField(blank=True, null=True, default=None)  # comma-separated list of usernames
     members = models.TextField(blank=True, null=True, default=None)  # comma-separated list of usernames
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
