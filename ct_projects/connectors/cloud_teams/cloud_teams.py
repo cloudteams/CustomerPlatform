@@ -37,7 +37,7 @@ class CloudTeamsConnector:
             project.managers = ','.join(entry['managers']) if 'managers' in entry else ''
             project.members = ','.join(entry['members']) if 'members' in entry else ''
             project.is_public = entry['is_public'] if 'is_public' in entry else False
-            project.created = datetime.fromtimestamp(int(entry['ctime']))
+            project.created = datetime.fromtimestamp(int(entry['ctime'])) if 'ctime' in entry else now()
 
             # save the project in the database
             project.save()
