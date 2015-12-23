@@ -2,7 +2,7 @@ from datetime import datetime
 from django.utils.timezone import now
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
-from ct_projects.models import Project
+from ct_projects.models import Project, Campaign, Document, Poll
 
 __author__ = 'dipap'
 
@@ -15,7 +15,7 @@ class CloudTeamsConnector:
         self.projects = None
         self.latest_update_on = now()
 
-    def fetch_projects(self):
+    def fetch_all(self):
         """
         Populates Customer Platform DB with projects from the Teams Platform
         :return: Number of projects fetched from CloudTeams team platform
@@ -23,7 +23,7 @@ class CloudTeamsConnector:
         entries = self.srv.get_projectstore('')
         for entry in entries:
             project = Project()
-            project.id = entry['__id__']
+            project.id = int(entry['__id__'])
             current = Project.objects.filter(pk=project.id)
             if current:
                 project = current[0]
@@ -41,5 +41,60 @@ class CloudTeamsConnector:
 
             # save the project in the database
             project.save()
+
+            # get all project campaigns
+            if 'campaigns' in entry:
+                for c_entry in entry['campaigns']:
+                    campaign = Campaign()
+                    campaign.id = int(c_entry['__id__'])
+                    current = Campaign.objects.filter(pk=campaign.id)
+                    if current:
+                        campaign = current[0]
+
+                    # fill in campaign info
+                    campaign.name = c_entry['name']
+                    campaign.description = c_entry['descr'] if 'descr' in c_entry else ''
+                    campaign.logo = c_entry['logo'] if 'logo' in c_entry else ''
+                    campaign.starts = datetime.fromtimestamp(int(entry['start'])) if 'start' in entry else now()
+                    campaign.expires = datetime.fromtimestamp(int(entry['start'])) if 'end' in entry else None
+                    campaign.project = project
+
+                    # save the campaign in the database
+                    campaign.save()
+
+                    # add all campaign documents
+                    if 'documents' in c_entry:
+                        for d_entry in c_entry['documents']:
+                            document = Document()
+                            document.id = int(d_entry['__id__'])
+                            current = Document.objects.filter(pk=document.id)
+                            if current:
+                                document = current[0]
+
+                            # fill in document info
+                            document.name = d_entry['name']
+                            document.link = d_entry['url']
+                            document.description = d_entry['descr'] if 'descr' in d_entry else ''
+                            document.campaign = campaign
+
+                            # save the document in the database
+                            document.save()
+
+                    # add all campaign polls
+                    if 'polls' in c_entry:
+                        for p_entry in c_entry['polls']:
+                            poll = Poll()
+                            poll.id = int(p_entry['__id__'])
+                            current = Poll.objects.filter(pk=poll.id)
+                            if current:
+                                poll = current[0]
+
+                            # fill in poll info
+                            poll.name = p_entry['name']
+                            poll.description = p_entry['descr'] if 'descr' in p_entry else ''
+                            poll.campaign = campaign
+
+                            # save the poll in the database
+                            poll.save()
 
         return len(entries)

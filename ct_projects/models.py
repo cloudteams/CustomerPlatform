@@ -8,6 +8,8 @@ from django.db.models import Sum
 from django_comments.models import Comment
 
 from activitytracker.models import User
+from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD
+from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
 
 
 class Project(models.Model):
@@ -117,22 +119,85 @@ class IdeaRating(models.Model):
 
 
 class Campaign(models.Model):
-    title = models.CharField(max_length=255)
+    """
+    A CloudTeams Campaign
+    Each campaign is part of a project
+    Teams Platform is responsible for posting to the API to keep campaign information up to date
+    """
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
     project = models.ForeignKey(Project, related_name='campaigns')
     description = models.TextField()
-    expires = models.DateTimeField()
+    starts = models.DateTimeField()
+    expires = models.DateTimeField(blank=True, null=True, default=None)
     rewards = models.TextField(blank=True, null=True, default=None)
     logo = models.URLField(blank=True, null=True, default=None)
-    campaign_type = models.CharField(max_length=31, default='Questionnaire')
-    content_url = models.URLField()
 
     def to_json(self):
         return {
-            'title': self.title,
+            'id': self.id,
+            'name': self.name,
             'description': self.description,
+            'starts': self.starts,
             'expires': self.expires,
             'rewards': self.rewards,
             'logo': self.logo,
-            'campaign_type': self.campaign_type,
-            'content_url': self.content_url,
         }
+
+
+class Document(models.Model):
+    """
+    A CloudTeams Document
+    Each document is part of a campaign
+    Teams Platform is responsible for posting to the API to keep document information up to date
+    """
+    id = models.IntegerField(primary_key=True)
+    campaign = models.ForeignKey(Campaign, related_name='documents')
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    link = models.URLField()
+
+    def get_absolute_url(self):
+        return self.link
+
+
+class Poll(models.Model):
+    """
+    A CloudTeams Poll
+    Each poll is part of a campaign
+    Teams Platform is responsible for posting to the API to keep poll information up to date
+    Users get poll tokens to make sure we can later distribute awards
+    """
+    id = models.IntegerField(primary_key=True)
+    campaign = models.ForeignKey(Campaign, related_name='polls')
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def get_poll_token_link(self, user):
+        # find persona for user in the context of this project
+        persona_id = self.campaign.project.get_persona(user)
+
+        # get or create the link/user/persona combination
+        try:
+            token = PollToken.objects.get(poll=self, user=user, persona_id=persona_id)
+        except PollToken.DoesNotExist:
+            # get the token link
+            token_link = XMLRPC_Server(SERVER_URL, USER_PASSWD, verbose=0).get_polltoken(str(self.id))
+
+            # create the token object
+            token = PollToken.objects.create(poll=self, user=user, persona_id=persona_id, token_link=token_link)
+
+        return token.get_absolute_url()
+
+
+class PollToken(models.Model):
+    """
+    The token that allows a CloudTeams customer to access a poll on Team Platform
+    """
+    token_link = models.URLField()
+    poll = models.ForeignKey(Poll, related_name='tokens')
+    user = models.ForeignKey(User, related_name='poll_tokens')
+    persona_id = models.IntegerField()
+
+    def get_absolute_url(self):
+        return '%s&persona=%d' % (self.token_link, self.persona_id)
