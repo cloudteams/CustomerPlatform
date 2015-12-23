@@ -47,3 +47,7 @@ def rate_larger_than(rating, i):
 def join(lst, sep):
     return sep.join(lst)
 
+
+@register.filter
+def get_poll_token_link(poll, user):
+    return poll.get_poll_token_link(user)

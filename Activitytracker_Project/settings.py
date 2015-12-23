@@ -221,3 +221,5 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
+ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr:8000'
+

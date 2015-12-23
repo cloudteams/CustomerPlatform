@@ -1,3 +1,6 @@
+import json
+
+import requests
 from django.contrib.contenttypes import generic
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -7,6 +10,7 @@ from django.db import models
 from django.db.models import Sum
 from django_comments.models import Comment
 
+from Activitytracker_Project.settings import ANONYMIZER_URL
 from activitytracker.models import User
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
@@ -31,6 +35,21 @@ class Project(models.Model):
     rewards = models.TextField(blank=True, null=True, default=None)
 
     is_public = models.BooleanField(default=False)
+
+    def anonymize(self, user):
+        """
+        :param user: A user account in the CloudTeams Customer platform
+        :return: The (first) persona user in which the user belongs in the context of this project
+        """
+        req = requests.get(ANONYMIZER_URL + '/persona-builder/api/find-user/?project=%d&user=%d' % (self.pk, user.pk))
+        if req.status_code == 200:
+            resp = json.loads(req.content)
+            if 'persona' in resp:
+                return resp
+            else:
+                return None
+        else:
+            return None
 
     def to_json(self):
         return {
@@ -174,20 +193,27 @@ class Poll(models.Model):
     description = models.TextField()
 
     def get_poll_token_link(self, user):
-        # find persona for user in the context of this project
-        persona_id = self.campaign.project.get_persona(user)
-
-        # get or create the link/user/persona combination
         try:
-            token = PollToken.objects.get(poll=self, user=user, persona_id=persona_id)
-        except PollToken.DoesNotExist:
-            # get the token link
-            token_link = XMLRPC_Server(SERVER_URL, USER_PASSWD, verbose=0).get_polltoken(str(self.id))
+            # get or create the link/user/persona combination
+            try:
+                token = PollToken.objects.get(poll=self, user=user)
+            except PollToken.DoesNotExist:
+                # find persona for user in the context of this project
+                anonymous = self.campaign.project.anonymize(user)
+                if anonymous:
+                    persona_id = anonymous['persona']
+                else:
+                    persona_id = None
 
-            # create the token object
-            token = PollToken.objects.create(poll=self, user=user, persona_id=persona_id, token_link=token_link)
+                # get the token link
+                token_link = XMLRPC_Server(SERVER_URL, USER_PASSWD, verbose=0).get_polltoken(str(self.id))
 
-        return token.get_absolute_url()
+                # create the token object
+                token = PollToken.objects.create(poll=self, user=user, persona_id=persona_id, token_link=token_link)
+
+            return token.get_absolute_url()
+        except:
+            return '/'
 
 
 class PollToken(models.Model):
@@ -197,7 +223,11 @@ class PollToken(models.Model):
     token_link = models.URLField()
     poll = models.ForeignKey(Poll, related_name='tokens')
     user = models.ForeignKey(User, related_name='poll_tokens')
-    persona_id = models.IntegerField()
+    persona_id = models.IntegerField(blank=True, null=True)
 
     def get_absolute_url(self):
-        return '%s&persona=%d' % (self.token_link, self.persona_id)
+        result = self.token_link
+        if self.persona_id:
+            result += '&persona=%d' % self.persona_id
+
+        return result

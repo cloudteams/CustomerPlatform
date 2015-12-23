@@ -8,7 +8,7 @@ from django.views.generic import DetailView
 from django_comments.forms import CommentForm
 from django_comments.models import Comment
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea, Project
+from ct_projects.models import ProjectFollowing, Idea, Project, Campaign
 
 
 def list_projects(request):
@@ -187,3 +187,10 @@ def rate_idea(request, project_pk, pk):
     else:
         return HttpResponse('Only POST allowed', status=400)
 
+
+class CampaignDetailView(DetailView):
+    model = Campaign
+    template_name = 'ct_projects/campaign/details.html'
+    context_object_name = 'campaign'
+
+campaign_details = CampaignDetailView.as_view()

@@ -1,0 +1,7 @@
+{% load url from future %}
+
+<div>
+    <h3>{{campaign.name}}</h3>
+    <p>{{campaign.polls.all|length}} polls, {{campaign.documents.all|length}} documents</p>
+    <a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}">View details</a>
+</div>

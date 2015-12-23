@@ -31,6 +31,14 @@
         By: {{project.managers}}
     {% endif %}
 
+    <h2>Campaigns</h2>
+    {% for campaign in project.campaigns.all %}
+        {% include "ct_projects/campaign/teaser.html" %}
+    {% empty %}
+        <p>No project campaigns yet.</p>
+    {% endfor %}
+
+    <h2>Ideas</h2>
     {% with idea_count=project.ideas.all.count %}
         <p class="info">{{project|count_followers}} followers - {{idea_count}} idea{{idea_count|pluralize}}</p>
     {% endwith %}
