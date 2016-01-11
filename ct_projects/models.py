@@ -12,7 +12,7 @@ from django_comments.models import Comment
 
 from Activitytracker_Project.settings import ANONYMIZER_URL
 from activitytracker.models import User
-from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD
+from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
 
 
@@ -193,27 +193,24 @@ class Poll(models.Model):
     description = models.TextField()
 
     def get_poll_token_link(self, user):
+        # get or create the link/user/persona combination
         try:
-            # get or create the link/user/persona combination
-            try:
-                token = PollToken.objects.get(poll=self, user=user)
-            except PollToken.DoesNotExist:
-                # find persona for user in the context of this project
-                anonymous = self.campaign.project.anonymize(user)
-                if anonymous:
-                    persona_id = anonymous['persona']
-                else:
-                    persona_id = None
+            token = PollToken.objects.get(poll=self, user=user)
+        except PollToken.DoesNotExist:
+            # find persona for user in the context of this project
+            anonymous = self.campaign.project.anonymize(user)
+            if anonymous:
+                persona_id = anonymous['persona']
+            else:
+                persona_id = None
 
-                # get the token link
-                token_link = XMLRPC_Server(SERVER_URL, USER_PASSWD, verbose=0).get_polltoken(str(self.id))
+            # get the token link
+            token_link = XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD, verbose=0).get_polltoken(str(self.id))
 
-                # create the token object
-                token = PollToken.objects.create(poll=self, user=user, persona_id=persona_id, token_link=token_link)
+            # create the token object
+            token = PollToken.objects.create(poll=self, user=user, persona_id=persona_id, token_link=token_link)
 
-            return token.get_absolute_url()
-        except:
-            return '/'
+        return token.get_absolute_url()
 
 
 class PollToken(models.Model):
