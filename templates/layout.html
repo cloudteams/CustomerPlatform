@@ -1,160 +1,193 @@
+{% load staticfiles %}
+{% load url from future %}
+{% load compress %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-
-	<!-- start: Meta -->
-	<meta charset="utf-8">
-	<title>{% block app_title %}{% endblock %}</title>
-	<meta name="description" content="Activity Tracker Application">
-	<meta name="author" content="Aggelos Arvanitakis">
-	<meta name="keyword" content="Activity, Track, Tracker, Manage, Logs, Everyday Life">
-	<!-- end: Meta -->
-	
-	<!-- start: Mobile Specific -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- end: Mobile Specific -->
-	
-	<!-- start: CSS -->
-    {% load staticfiles %}
-    {% load custom_templates %}
-
-    {% load compress %}
-
-    {% compress css %}
-        <link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
-	    <link href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css' %}" rel="stylesheet">
-        <link href="{% static 'activitytracker/css/style.css' %}" rel="stylesheet">
-        <link href="{% static 'bower_components/clockpicker/dist/bootstrap-clockpicker.min.css' %}" rel="stylesheet">
-        <link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
-        <link href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}" rel="stylesheet">
-        <link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}" rel="stylesheet">
-        <link href="{% static 'bower_components/chosen/chosen.min.css' %}" rel="stylesheet">
-        <link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
-        <link href="{% static 'activitytracker/css/style-font.css' %}" rel="stylesheet">
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
-    {% endcompress %}
-
-    {% compress css %}
-        {% block css %}
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta http-equiv="cleartype" content="on">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link rel="apple-touch-icon" href="apple-touch-icon.png">
+		<link rel="stylesheet" href="{% static "css/global-dev.css" %}">
+		{% compress css %}
+			<link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
+			<link href="{% static 'bower_components/clockpicker/dist/bootstrap-clockpicker.min.css' %}" rel="stylesheet">
+			<link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+			<link href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}" rel="stylesheet">
+			<link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}" rel="stylesheet">
+			<link href="{% static 'bower_components/chosen/chosen.min.css' %}" rel="stylesheet">
+			<link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
+			<link href="{% static 'css/style.css' %}" rel="stylesheet">
+		{% endcompress %}
+		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+		{% block css %}
         {% endblock %}
-    {% endcompress %}
+	</head>
+
+	<body>
+		<header>
+			<nav class="global-nav">
+				<div class="container">
+					<ul>
+						<li class="brand">
+							<div class="vertical-align">
+								<div class="middle">
+									<a href="public-projects-logged-in.php" alt="home">
+										<img src="{% static "img/logo-white.svg" %}" class="logo svg" alt="Cloudteams logo">
+									</a>
+								</div>
+							</div>
+						</li>
+
+						<li class="search">
+							<div class="vertical-align">
+								<div class="middle">
+									<input class="input-search" type="text" name="search" placeholder="Search projects">
+										<img src="{% static "img/icons/icon-search.svg" %}" class="icon-search svg" alt="Search icon">
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="vertical-align">
+								<div class="middle">
+									<a href="developer-dashboard-projects.php">
+										<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
+										Dashboard
+									</a>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="vertical-align">
+								<div class="middle">
+									<a href="developer-dashboard-notifications.php">
+										<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
+										Notifications
+									</a>
+								</div>
+							</div>
+						</li>
+
+						<li class="profile">
+							<div class="vertical-align">
+								<div class="middle">
+									<a href="#nowhere">
+										{% if request.user.is_authenticated %}
+                                            <img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
+                                            {{ request.user.username }}
+
+										    <i class="fa fa-angle-down"></i>
+                                        {% else %}
+                                            <a href="/activitytracker/login/">Login</a>
+                                        {% endif %}
+									</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
+
+		<section class="page page-user-dashboard-projects dashboard-page user-dashboard-page message">
+			<div class="complete-profile active">
+				<div class="container">
+					<img class="icon menu-icon svg" src="{% static "img/icons/icon-check.svg" %}">
+					<p>Tell us more about yourself and complete your profile <a href="{% url 'view-my-profile' %}">Go to your profile page</a></p>
+					<div class="close-message">
+						<img class="icon close-item svg" src="{% static "img/icons/icon-close.svg" %}">
+					</div>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="content">
+					<div class="row">
+						{% include "util/user-dashboard-side-menu.html" %}
+
+						<main class="col-lg-9">
+							{% block content %}
+							{% endblock %}
+						</main>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<footer id="footer" class="footer-dashboard-user">
+			<div class="container">
+				<div class="row">
+
+					<div class="col-sm-4">
+						<ul>
+							<li><h2 class="header-small">About us</h2></li>
+							<li><a href="">How does it work?</a></li>
+							<li><a href="">Contact us</a></li>
+							<li><a href="">About CloudTeams</a></li>
+							<li><a href="">News</a></li>
+							<li><a href="" id="tutorial-btn-to-step-1" class="tutorial-button" data-toggle="modal" data-target="#popup-tutorial-user">Help tour</a></li>
+							<li><a href="">Disclaimer</a></li>
+						</ul>
+					</div>
+
+					<div class="col-sm-4">
+						<div class="row">
+							<ul class="col-xs-12">
+								<li><h2 class="header-small">Projects</h2></li>
+							</ul>
+
+							<ul class="col-xs-6">
+								<li><a href="">Art</a></li>
+								<li><a href="">Business</a></li>
+								<li><a href="">Design</a></li>
+								<li><a href="">Film</a></li>
+								<li><a href="">Food</a></li>
+								<li><a href="">Games</a></li>
+							</ul>
+
+							<ul class="col-xs-6">
+								<li><a href="">Journalism</a></li>
+								<li><a href="">Music</a></li>
+								<li><a href="">Photography</a></li>
+								<li><a href="">Publishing</a></li>
+								<li><a href="">Technology</a></li>
+								<li><a href="">Sport</a></li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="col-sm-4">
+						<ul class="social-media">
+							<li><h2 class="header-small">Connect</h2></li>
+							<li><a href="" alt="twitter"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="" alt="facebook"><i class="fa fa-facebook"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="brand">
+				<img src="{% static "img/logo-white.svg" %}" class="logo svg" alt="Cloudteams logo">
+			</div>
+
+			{% include "util/popup-tutorial-user.html" %}
+		</footer>
 
 
-    <!-- end: CSS -->
-	
-
-	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
-	<!--[if lt IE 9]>
-	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<link id="ie-style" href="css/ie.css" rel="stylesheet">
-	<![endif]-->
-	
-	<!--[if IE 9]>
-		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
-	<![endif]-->
-		
-	<!-- start: Favicon -->
-	<link rel="shortcut icon" type="image/icon" href="/static/favicon.ico"/>
-	<!-- end: Favicon -->
-		
-</head>
-
-<body>
-    <div class="page-container">
-        <div class="auth-background-blurred">
-
-        </div>
-        <!-- start: Header -->
-        <div class="navbar">
-            <div class="navbar-inner">
-{#              <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive">#}
-                <span class="navbar-header-title">CloudTeams</span>
-
-                <!-- start: Header Menu -->
-                <a class="btn btn-default navbar-btn collapse-btn visible-xs" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <div class="nav navbar-menu pull-right">
-                        <!-- start: User Dropdown -->
-                    <!--<a class=' link-petrol' href="{% url 'index' %}">Activities</a> |-->
-                    <a class=' link-petrol' href="{% url 'all-projects' %}">Projects</a> |
-                    <a class=' link-petrol' href="{% url 'view-my-profile' %}">Profile</a> |
-                    {% if request.user.is_authenticated %}
-                        <a class=' link-petrol' href="{% url 'view-my-profile' %}">Notifications (<span class="notification-count">0</span>) </a> |
-                        <span class="dropdown">
-                        <a id="dropdownMenu1" class="dropdown-toggle" data-toggle="dropdown" href="#" data-target="#" aria-haspopup="true" aria-expanded="true">
-                             {{ request.user.username }}
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li>
-                                <a href="{% url 'index' %}"><i class="halflings-icon user"></i> Activities</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'settings' %}"><i class="halflings-icon cog"></i> Services</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'logout' %}"><i class="halflings-icon off"></i> Logout</a>
-                            </li>
-                        </ul>
-                        </span>    <!-- end: User Dropdown -->
-                    {% else %}
-                        <a href="/activitytracker/login/">Login</a>
-                    {% endif %}
-                </div>
-                    <!-- end: Header Menu -->
-            </div>
-            <!-- end: Navbar -->
-        </div>
-        <!-- start: Header -->
-
-        <div class="container col-xs-12 no-padding-left">
-                <!-- start: Main Menu -->
-                <div id="sidebar-left" class="col-sm-2 no-padding-left dashboardWrapper">
-                    {% block menu %}{% endblock %}
-                </div>
-                <!-- end: Main Menu -->
-
-                <noscript>
-                    <div class="alert alert-block span10">
-                        <h4 class="alert-heading">Warning!</h4>
-                        <p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
-                    </div>
-                </noscript>
-
-                <!-- start: Content -->
-                <div id="content" class="col-sm-10">
-                    {% block content %}
-                    {% endblock %}
-                </div>
-                <!-- Loading .gif -->
-                <div id="overlay"><img src="{% static 'activitytracker/img/ajax-loader.gif' %}" alt="Loading" /></div>
-                <div class="clearfix"></div>
-                <!-- end: Loading .fig -->
-        </div>
-        <!-- end: container -->
-
-        <footer>
-            <p style="float:left">&copy; <a href="https://academics.epu.ntua.gr" target="_blank">2015 Decision Support Systems Lab</a></p>
-        </footer>
-
-    </div>
-
-        {% block modals %}
+		{% block modals %}
 
 
         {% endblock %}
-
-        <!-- start: JavaScript-->
-        {% compress js %}
-            <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+		<script type="text/javascript" src="{% static "js/global-dev.js" %}"></script>
+		<script type="text/javascript" src="{% static "js/common-dev.js" %}"></script>
+		{% compress js %}
             <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-            <script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
+			<script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
             <script src="{% static 'bower_components/jqueryui-touch-punch/jquery.ui.touch-punch.min.js' %}"></script>
             <script src="{% static 'bower_components/chosen/chosen.jquery.min.js' %}"></script>
             <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
@@ -164,11 +197,8 @@
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
             </script>
         {% endcompress %}
+		{% block js %}
+		{% endblock %}
 
-        {% compress js %}
-            {% block js %}
-            {% endblock %}
-        {% endcompress %}
-        <!-- end: JavaScript-->
-</body>
+	</body>
 </html>

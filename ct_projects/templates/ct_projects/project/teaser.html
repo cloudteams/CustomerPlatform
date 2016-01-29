@@ -1,25 +1,93 @@
 {% load url from future %}
+{% load staticfiles %}
 
-    <div class="clearfix">
-        {% if project.logo %}
-            <img scr="{{project.logo}}" height="30"/>
-        {% endif %}
+<article class="project col-lg-6 col-xs-12 block-line-half">
+	<div class="background">
+		<div class="background-image">
+			<img src="{{ project.logo }}">
+			<img class="square svg" src="{% static "img/icon-folders-8d39bbb3.svg" %}">
+		</div>
 
-        <h4><a href="{% url 'project-details' project.pk %}">{{project.title}}</a></h4>
-        <p class="category">{{project.application_type}} | {{project.category}}</p>
-        <div class="pull-right">
-            {% include "ct_projects/project/follow-form.html" %}
-        </div>
+		<header>
+			<h3 class="header-medium secondary">{{ project.title }}</h3>
 
-        {% if project.description %}
-            <p>{{project.description}}</p>
-        {% endif %}
+			<div class="tooltip-container">
+				<a href="#nowhere" class="open-tooltip-button"><img class="more-options svg" src="{% static "img/icon-more-options-fbdbd735.svg" %}"></a>
+				<div class="custom-tooltip">
+					<ul>
+						<li>
+							<a href="">Delete project</a>
+						</li>
+						<li><a href="">Lorem ipsum</a></li>
+						<li><a href="">Lorem ipsum</a></li>
+					</ul>
+				</div>
+			</div>
+		</header>
 
-        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count %}
-            <p>
-                {{idea_count}} idea{{idea_count|pluralize}} |
-                {{campaign_count}} campaign{{campaign_count|pluralize}} |
-                <a href="{% url 'project-details' project.pk %}">View details</a>
-            </p>
+        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count followers_count=project.followers.all %}
+            <div class="content">
+                <table>
+                    <tr class="row">
+                        <td class="col-xs-5">
+                            <img class="icon menu-icon svg" src="{% static "img/icon-followers-654741d3.svg" %}">
+                            <p>Followers</p>
+                        </td>
+                        <td class="col-xs-7">
+                            <p class="bold">{{ followers_count }}</p>
+                        </td>
+                    </tr>
+
+                    <tr class="row">
+                        <td class="col-xs-5">
+                            <img class="icon menu-icon svg" src="{% static "img/icon-campaigns-96784c9b.svg" %}">
+                            <p>Running campaigns</p>
+                        </td>
+                        <td class="col-xs-7">
+                            <p class="bold">{{ campaign_count }}</p>
+                        </td>
+                    </tr>
+
+                    <tr class="row">
+                        <td class="col-xs-5">
+                            <img class="icon menu-icon svg" src="{% static "img/icon-rewards-f6d4d815.svg" %}">
+                            <p>Rewards</p>
+                        </td>
+                        <td class="col-xs-7">
+                            <p class="bold">Yes</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content last">
+                <table>
+                    <tr class="row">
+                        <td class="col-xs-5">
+                            <img class="icon menu-icon svg" src="{% static "img/icon-pending-accepted-a9421b1c.svg" %}">
+                            <p>Invites</p>
+                        </td>
+                        <td class="col-xs-7">
+                            <p class="bold">2</p>
+                        </td>
+                    </tr>
+
+                    <tr class="row">
+                        <td class="col-xs-5">
+                            <img class="icon menu-icon svg" src="{% static "img/icon-campaign-participated-79a84226.svg" %}">
+                            <p>Completed campaigns</p>
+                        </td>
+                        <td class="col-xs-7">
+                            <p class="bold">4</p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         {% endwith %}
-    </div>
+
+		<footer>
+			<a href="{% url 'project-details' project.pk %}" class="btn">Show project</a>
+		</footer>
+	</div>
+</article>
+
