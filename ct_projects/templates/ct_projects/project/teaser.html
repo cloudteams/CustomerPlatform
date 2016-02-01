@@ -25,7 +25,7 @@
 			</div>
 		</header>
 
-        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count followers_count=project.followers.all %}
+        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count followed_count=followed.all.count %}
             <div class="content">
                 <table>
                     <tr class="row">
@@ -34,7 +34,7 @@
                             <p>Followers</p>
                         </td>
                         <td class="col-xs-7">
-                            <p class="bold">{{ followers_count }}</p>
+                            <p class="bold">{{ followed_count }}</p>
                         </td>
                     </tr>
 
@@ -54,7 +54,7 @@
                             <p>Rewards</p>
                         </td>
                         <td class="col-xs-7">
-                            <p class="bold">Yes</p>
+                            <p class="bold">{% if project.rewards %}Yes{% else %}No{% endif %}</p>
                         </td>
                     </tr>
                 </table>
@@ -68,7 +68,7 @@
                             <p>Invites</p>
                         </td>
                         <td class="col-xs-7">
-                            <p class="bold">2</p>
+                            <p class="bold">-</p>
                         </td>
                     </tr>
 
@@ -78,7 +78,7 @@
                             <p>Completed campaigns</p>
                         </td>
                         <td class="col-xs-7">
-                            <p class="bold">4</p>
+                            <p class="bold">-</p>
                         </td>
                     </tr>
                 </table>

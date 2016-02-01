@@ -43,3 +43,20 @@ form.ct_projects_form input[type="text"], form.ct_projects_form textarea {
     color: red;
     cursor: pointer;
 }
+
+/* Profile overview */
+.public-overview-data .vertical-align .middle table tr td {
+    width: 50% !important;
+}
+
+.public-overview-data.public-project-overview-data .vertical-align .middle:first-of-type {
+    width: 50%;
+}
+
+.public-overview-data.public-project-overview-data .vertical-align .middle:nth-of-type(2) {
+    width: 40%;
+}
+
+.public-overview-data.public-project-overview-data .vertical-align .middle:nth-of-type(3) {
+    width: 10%;
+}

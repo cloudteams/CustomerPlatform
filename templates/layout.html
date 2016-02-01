@@ -28,96 +28,34 @@
 	</head>
 
 	<body>
-		<header>
-			<nav class="global-nav">
-				<div class="container">
-					<ul>
-						<li class="brand">
-							<div class="vertical-align">
-								<div class="middle">
-									<a href="public-projects-logged-in.php" alt="home">
-										<img src="{% static "img/logo-white.svg" %}" class="logo svg" alt="Cloudteams logo">
-									</a>
-								</div>
-							</div>
-						</li>
+		{% include "util/menu.html" %}
 
-						<li class="search">
-							<div class="vertical-align">
-								<form class="project-search middle" action="/projects/" method="GET">
-									<input name="q" class="input-search" type="text" placeholder="Search projects" value="{{ q }}" autocomplete="false" />
-									<img src="{% static "img/icons/icon-search.svg" %}" class="icon-search svg" alt="Search icon">
-								</form>
-							</div>
-						</li>
-
-						<li>
-							<div class="vertical-align">
-								<div class="middle">
-									<a href="/activitytracker/dashboard/">
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
-										Dashboard
-									</a>
-								</div>
-							</div>
-						</li>
-
-						<li>
-							<div class="vertical-align">
-								<div class="middle">
-									<a href="/notifications/">
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
-										Notifications
-									</a>
-								</div>
-							</div>
-						</li>
-
-						<li class="profile">
-							<div class="vertical-align">
-								<div class="middle">
-									{% if request.user.is_authenticated %}
-										<a href="/profile/">
-                                            <img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
-                                            {{ request.user.username }}
-
-										    <i class="fa fa-angle-down"></i>
-                                        {% else %}
-                                            <a href="/activitytracker/login/?next=/profile/">Login</a>
-                                        {% endif %}
-									</a>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</header>
-
-		<section class="page page-user-dashboard-projects dashboard-page user-dashboard-page message">
-			<div class="complete-profile active">
-				<div class="container">
-					<img class="icon menu-icon svg" src="{% static "img/icons/icon-check.svg" %}">
-					<p>Tell us more about yourself and complete your profile <a href="{% url 'view-my-profile' %}">Go to your profile page</a></p>
-					<div class="close-message">
-						<img class="icon close-item svg" src="{% static "img/icons/icon-close.svg" %}">
+		{% block content_full %}
+			<section class="page page-user-dashboard-projects dashboard-page user-dashboard-page message">
+				<div class="complete-profile active">
+					<div class="container">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-check.svg" %}">
+						<p>Tell us more about yourself and complete your profile <a href="{% url 'view-my-profile' %}">Go to your profile page</a></p>
+						<div class="close-message">
+							<img class="icon close-item svg" src="{% static "img/icons/icon-close.svg" %}">
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="container">
-				<div class="content">
-					<div class="row">
-						{% include "util/user-dashboard-side-menu.html" %}
+				<div class="container">
+					<div class="content">
+						<div class="row">
+							{% include "util/user-dashboard-side-menu.html" %}
 
-						<main class="col-lg-9">
-							{% block content %}
-							{% endblock %}
-						</main>
+							<main class="col-lg-9">
+								{% block content %}
+								{% endblock %}
+							</main>
+						</div>
 					</div>
 				</div>
-			</div>
-		</section>
+			</section>
+		{% endblock %}
 
 		<footer id="footer" class="footer-dashboard-user">
 			<div class="container">
