@@ -1,26 +1,27 @@
 {% extends "ct_projects/base.html" %}
 {% load url from future %}
+{% load staticfiles %}
 
 {% block content %}
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            <a href="{% url 'all-projects' %}">Projects</a>
-        </li>
-    </ul>
 
-    <h1>CloudTeams Projects</h1>
+    <header class="main-header">
+        <div class="vertical-align">
+            <div class="middle">
+                <img class="svg" src="{% static " img/icons/icon-projects.svg" %}">
+                <h1 class="header-large">Projects</h1>
+            </div>
 
-    <form class="project-search" action="." method="GET">
-        <input type="search" name="q" placeholder="Discover projects" value="{{q}}"/>
-        <input type="submit" class="btn btn-primary" value="Search" />
-    </form>
+            <div class="middle last">
+                <p class="project-counter"><span>{{ n_of_projects }}</span></p>
 
-    <div class="project-wrapper">
-        {% with projects=page_obj.object_list %}
-            {% include "ct_projects/project/list.html" %}
-        {% endwith %}
-    </div>
+                <p class="project-counter">Projects</p>
+            </div>
+        </div>
+    </header>
+
+    {% with projects=page_obj.object_list show_new=True %}
+        {% include "ct_projects/project/list.html" %}
+    {% endwith %}
 
     {% include "ct_projects/util/paginator.html" %}
 {% endblock %}

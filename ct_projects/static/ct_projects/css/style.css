@@ -19,6 +19,7 @@
 
 .project-search input {
     vertical-align: top;
+    color: #b1b1b1;
 }
 
 .project-search input[type="search"] {

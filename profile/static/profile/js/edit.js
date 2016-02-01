@@ -10,7 +10,7 @@ $(function() {
     });
 
     //input class
-    $('.create-profile-form input').addClass('input-lg form-control');
+    //$('.create-profile-form input').addClass('input-lg form-control');
 
     //trigger file selection
     $('#trigger-avatar-upload').click(function() {
@@ -20,6 +20,7 @@ $(function() {
     //autocomplete cities
     $('.work-city input, #id_location').autocomplete({
         source: function( request, response ) {
+            var that = this;
             $.ajax({
                 url: "https://api.teleport.org/api/cities/?search=" + request.term,
                 dataType: "json",
@@ -40,14 +41,14 @@ $(function() {
                         };
                     }));
 
-                    var inp = $(this)[0].element;
+                    var inp = $(that)[0].element;
                     $('.city-select').css('display', 'block');
                     $('.city-select').css('left', $('.wizard-page-container').offset().left + $(inp).position().left);
                     $('.city-select').css('top', $('.wizard-page-container').offset().top + $(inp).position().top + 30);
                 }
             });
         }
-    }).autocomplete("widget").addClass("city-select");
+    }).autocomplete("widget").css('width', '200px').addClass("city-select").attr('autocomplete', 'false');
 
     /* On scroll update menu */
     $('.create-profile-form').scroll(function() {

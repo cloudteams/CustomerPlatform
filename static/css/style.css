@@ -16,3 +16,17 @@
 .nav-tabs.nav-stacked > li:last-child > a {
     margin-bottom: 0 !important;
 }
+
+.breadcrumb {
+    background: none;
+}
+
+h1 {
+    color: #fff;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+

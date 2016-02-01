@@ -44,17 +44,17 @@
 
 						<li class="search">
 							<div class="vertical-align">
-								<div class="middle">
-									<input class="input-search" type="text" name="search" placeholder="Search projects">
-										<img src="{% static "img/icons/icon-search.svg" %}" class="icon-search svg" alt="Search icon">
-								</div>
+								<form class="project-search middle" action="/projects/" method="GET">
+									<input name="q" class="input-search" type="text" placeholder="Search projects" value="{{ q }}" autocomplete="false" />
+									<img src="{% static "img/icons/icon-search.svg" %}" class="icon-search svg" alt="Search icon">
+								</form>
 							</div>
 						</li>
 
 						<li>
 							<div class="vertical-align">
 								<div class="middle">
-									<a href="developer-dashboard-projects.php">
+									<a href="/activitytracker/dashboard/">
 										<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
 										Dashboard
 									</a>
@@ -65,7 +65,7 @@
 						<li>
 							<div class="vertical-align">
 								<div class="middle">
-									<a href="developer-dashboard-notifications.php">
+									<a href="/notifications/">
 										<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
 										Notifications
 									</a>
@@ -76,14 +76,14 @@
 						<li class="profile">
 							<div class="vertical-align">
 								<div class="middle">
-									<a href="#nowhere">
-										{% if request.user.is_authenticated %}
+									{% if request.user.is_authenticated %}
+										<a href="/profile/">
                                             <img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
                                             {{ request.user.username }}
 
 										    <i class="fa fa-angle-down"></i>
                                         {% else %}
-                                            <a href="/activitytracker/login/">Login</a>
+                                            <a href="/activitytracker/login/?next=/profile/">Login</a>
                                         {% endif %}
 									</a>
 								</div>

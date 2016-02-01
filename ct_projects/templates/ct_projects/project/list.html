@@ -1,5 +1,11 @@
-{% for project in projects %}
-    <div class="project-teaser">
-        {% include "ct_projects/project/teaser.html" %}
+<section class="user-dashboard-projects-content">
+	<div class="row">
+	    {% if show_new %}
+            {% include "ct_projects/project/new.html" %}
+        {% endif %}
+
+        {% for project in projects %}
+            {% include "ct_projects/project/teaser.html" %}
+        {% endfor %}
     </div>
-{% endfor %}
+</section>

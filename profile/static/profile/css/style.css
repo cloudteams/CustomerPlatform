@@ -37,6 +37,25 @@
     margin-bottom: 20px;
 }
 
+/* Chosen */
+.chosen-single {
+    background: none !important;
+    border: 1px solid #b1b1b1 !important;
+    box-shadow: none !important;
+}
+
+.chosen-single:hover,
+.chosen-single:active {
+    border-color: #7d3c8c !important;
+    transition: border-color 350ms cubic-bezier(0.785, 0.135, 0.15, 0.86) !important;
+}
+
+.chosen-single span {
+    padding: 5px 15px !important;
+    font-size: 16px;
+    color: #b1b1b1;
+}
+
 .chosen-container {
     min-width: 300px !important;
 }
@@ -58,6 +77,9 @@ ul.main-menu i {
 }
 
 /* Field layout */
+.create-profile-form input {
+    color: #b1b1b1;
+}
 
 #avatar-container img {
     width: 100%;
@@ -134,13 +156,13 @@ ul.main-menu i {
 }
 
 .opt-container.active .option.option-active {
-    background: #1C2B36;
+    background: #38173f;
     transition: all 0.3s ease-in-out;
     color: #fff;
 }
 
 .opt-container.active .option:hover {
-    background: rgba(28, 43, 54, 0.5);
+    background: rgba(56, 23, 63, 0.5);
     transition: all 0.3s ease-in-out;
     color: #fff;
 }
@@ -162,7 +184,7 @@ ul.main-menu i {
 }
 /* Basic info */
 #avatar-container {
-    height: 300px;
+    height: 200px;
     border: 1px dotted #aaa;
 }
 
@@ -200,6 +222,7 @@ ul.main-menu i {
     border-radius: 50%;
     display: block;
     margin: auto;
+    width: 100px;
 }
 
 .send-opinion {
@@ -226,4 +249,27 @@ ul.main-menu i {
 .send-opinion.opinion-indifferent {
     display: inline-block;
     margin-top: 20px;
+}
+
+/* Autocomplete */
+.ui-autocomplete-input {
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.ui-autocomplete {
+    background: #fff;
+}
+
+.ui-autocomplete .ui-menu-item {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.ui-autocomplete .ui-menu-item:hover {
+    color: #38173f;
+    transition: color 0.3s ease-in-out;
+}
+
+.ui-menu, .ui-menu > .ui-menu-item, .ui-menu-item > a {
+    max-width: 660px !important;
 }

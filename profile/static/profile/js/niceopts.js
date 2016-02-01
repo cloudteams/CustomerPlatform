@@ -15,7 +15,7 @@ var NiceOpts = {
         'Android': 'fa-android',
 
         //influences
-        'Family & relatives': 'fa-child',
+        'Family & relatives': 'fa-home',
         'Friends & social circle': 'fa-group',
         'Blogs': 'fa-file-text',
         'TV & Media': 'fa-television',
