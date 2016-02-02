@@ -60,3 +60,28 @@ form.ct_projects_form input[type="text"], form.ct_projects_form textarea {
 .public-overview-data.public-project-overview-data .vertical-align .middle:nth-of-type(3) {
     width: 10%;
 }
+
+/* Project teasers */
+section.user-dashboard-projects-content {
+    width: 100%;
+}
+
+.project .background {
+    border-top: 1px solid #ebebeb;
+}
+
+.project .background .background-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 200px;
+    z-index: 0;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid #ebebeb;
+    border-right: 1px solid #ebebeb;
+    border-left: 1px solid #ebebeb;
+}
+
+/* Project details */
+.public-project-overview-content > header.main-header {
+    background-position: center;
+}

@@ -1,12 +1,13 @@
 {% load url from future %}
 {% load staticfiles %}
 
-<article class="project col-lg-6 col-xs-12 block-line-half">
+<article class="project public-project col-lg-4 col-md-6 col-xs-12 block-line-half">
 	<div class="background">
-		<div class="background-image">
-			<img src="{{ project.logo }}">
-			<img class="square svg" src="{% static "img/icon-folders-8d39bbb3.svg" %}">
-		</div>
+        {% if project.logo %}
+            <div class="background-image" style="background-image: url({{ project.logo }});">
+                <img class="square svg" src="{% static "img/icon-folders-8d39bbb3.svg" %}">
+            </div>
+        {% endif %}
 
 		<header>
 			<h3 class="header-medium secondary">{{ project.title }}</h3>
@@ -25,7 +26,7 @@
 			</div>
 		</header>
 
-        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count followed_count=followed.all.count %}
+        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count followed_count=project.followed.all.count %}
             <div class="content">
                 <table>
                     <tr class="row">

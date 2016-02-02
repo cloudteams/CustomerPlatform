@@ -1,7 +1,64 @@
 {% load url from future %}
+{% load staticfiles %}
+{% load project_tags %}
 
-<div>
-    <h3>{{campaign.name}}</h3>
-    <p>{{campaign.polls.all|length}} polls, {{campaign.documents.all|length}} documents</p>
-    <a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}">View details</a>
-</div>
+<article class="campaign public-campaign block-line-half col-lg-4 col-md-6 clear-3">
+	<div class="background">
+		<header class="article-header">
+			<h3 class="header-medium secondary">{{campaign.name}}</h3>
+			<p class="highlight bold">{{campaign.project.title}}</p>
+
+			<div class="tooltip-container">
+				<a href="#nowhere" class="open-tooltip-button"><img class="more-options svg" src="{% static "img/icons/icon-more-options.svg" %}""></a>
+				<div class="custom-tooltip">
+					<ul>
+						<li>
+							<a href="">Delete campaign</a>
+						</li>
+						<li><a href="">Lorem ipsum</a></li>
+						<li><a href="">Lorem ipsum</a></li>
+					</ul>
+				</div>
+			</div>
+		</header>
+
+		<div class="content dates">
+			<img class="icon menu-icon svg" src="{% static "img/icons/icon-date-start.svg" %}"">
+			<p><time datetime="{{ campaign.starts|date:"Y-m-d" }}">{{ campaign.starts|date:"d-m-Y" }}</time></p>
+
+            {% if campaign.expires %}
+                <img class="icon menu-icon svg" src="{% static "img/icons/icon-date-end.svg" %}"">
+                <p><time datetime="{{ campaign.expires|date:"Y-m-d" }}">{{ campaign.expires|date:"d-m-Y" }}</time></p>
+            {% endif %}
+		</div>
+
+		<div class="content data">
+			<table>
+				<tr class="row">
+					<td class="col-xs-5">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-pending-accepted.svg" %}"">
+						<p>Participants</p>
+					</td>
+					<td class="col-xs-7">
+						<p class="bold">-</p>
+					</td>
+				</tr>
+
+				<tr class="row">
+					<td class="col-xs-5">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-time.svg" %}"">
+						<p>Days left</p>
+					</td>
+					<td class="col-xs-7">
+						<p class="bold">{{ campaign|print_days_left }}</p>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<footer>
+			<a href="#nowhere" id="link-to-subpage-5" class="btn link-to-subpage link-to-hidden-subpage">Participate</a>
+			<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}" id="link-to-subpage-5" class="btn-transparent link-to-subpage link-to-hidden-subpage">See all info</a>
+		</footer>
+	</div>
+</article>

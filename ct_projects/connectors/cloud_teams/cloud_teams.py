@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.utils.timezone import now
-from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER
+from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
 from ct_projects.models import Project, Campaign, Document, Poll
 
@@ -10,7 +10,7 @@ __author__ = 'dipap'
 class CloudTeamsConnector:
 
     def __init__(self):
-        self.srv = XMLRPC_Server(SERVER_URL, USER_PASSWD, verbose=0)
+        self.srv = XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD, verbose=0)
         self.PROJECTS_FOLDER_ID = XAPI_TEST_FOLDER
         self.projects = None
         self.latest_update_on = now()
@@ -29,9 +29,9 @@ class CloudTeamsConnector:
                 project = current[0]
 
             project.title = entry['name']
-            project.description = entry['description'] if 'description' in entry else ''
+            project.description = entry['descr'] if 'descr' in entry else ''
             project.application_type = entry['bscw_cloudteams:p_type']
-            project.logo = entry['bscw_cloudteams:p_logo'] if 'bscw_cloudteams:p_logo' in entry else ''
+            project.logo = entry['logo'] if 'logo' in entry else ''
             project.rewards = entry['rewards'] if 'rewards' in entry else ''
             project.category = entry['bscw_cloudteams:p_category']
             project.managers = ','.join(entry['managers']) if 'managers' in entry else ''

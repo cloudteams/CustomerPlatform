@@ -1,5 +1,6 @@
 import json
 
+import datetime
 import requests
 from django.contrib.contenttypes import generic
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -35,6 +36,16 @@ class Project(models.Model):
     rewards = models.TextField(blank=True, null=True, default=None)
 
     is_public = models.BooleanField(default=False)
+
+    def get_running_campaigns(self):
+        return [c for c in self.campaigns.all() if not c.has_expired()]
+
+    def get_closed_campaigns(self):
+        return [c for c in self.campaigns.all() if c.has_expired()]
+
+    def get_related(self):
+        # TODO implement related projects algorithm
+        return Project.objects.all()[:3]
 
     def anonymize(self, user):
         """
@@ -151,6 +162,18 @@ class Campaign(models.Model):
     expires = models.DateTimeField(blank=True, null=True, default=None)
     rewards = models.TextField(blank=True, null=True, default=None)
     logo = models.URLField(blank=True, null=True, default=None)
+
+    def has_expired(self):
+        if self.expires:
+            return datetime.datetime.today() > self.expires
+
+    def get_days_left(self):
+        if self.has_expired():
+            return None
+        elif not self.expires:
+            return None
+        else:
+            return (datetime.datetime.today() - self.expires).days
 
     def to_json(self):
         return {

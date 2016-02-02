@@ -49,15 +49,13 @@
 							<div class="vertical-align">
 								<div class="middle">
 									{% if request.user.is_authenticated %}
-										<a href="/profile/">
                                             <img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
-                                            {{ request.user.username }}
+                                            <a href="/profile/">{{ request.user.username }}</a>
 
 										    <i class="fa fa-angle-down"></i>
                                         {% else %}
                                             <a href="/activitytracker/login/?next=/profile/">Login</a>
                                         {% endif %}
-									</a>
 								</div>
 							</div>
 						</li>

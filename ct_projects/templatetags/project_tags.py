@@ -51,3 +51,12 @@ def join(lst, sep):
 @register.filter
 def get_poll_token_link(poll, user):
     return poll.get_poll_token_link(user)
+
+
+@register.filter
+def print_days_left(project):
+    days = project.get_days_left()
+    if days:
+        return str(days)
+    else:
+        return "-"

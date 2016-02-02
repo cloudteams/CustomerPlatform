@@ -2,26 +2,36 @@
 {% load url from future %}
 {% load staticfiles %}
 
+{% block title %}Projects{% endblock %}
+{% block section_class %}page-public-projects-logged-in{% endblock %}
 {% block content %}
+    <div class="container">
+        <section class="public-projects-logged-in-content">
+            <header>
+                <h2 class="header-large public">Latest projects</h2>
+                <p class="header-small action-text"><a href="#nowhere">See all</a></p>
 
-    <header class="main-header">
-        <div class="vertical-align">
-            <div class="middle">
-                <img class="svg" src="{% static " img/icons/icon-projects.svg" %}">
-                <h1 class="header-large">Projects</h1>
+                <div class="filter-container">
+                    <label for="filter-projects">Filter projects</label>
+                    <div class="select-dropdown">
+                        <i class="fa fa-angle-down"></i>
+                        <select name="filter-projects" id="filter-projects" onchange="" size="1">
+                            <option value="all-projects" selected>All projects</option>
+                            <option value="filter-1">Filter 2</option>
+                            <option value="filter-2">Filter 3</option>
+                            <option value="filter-3">Filter 4</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+
+            <div class="row">
+                {% with projects=page_obj.object_list show_new=True %}
+                    {% include "ct_projects/project/list.html" %}
+                {% endwith %}
             </div>
 
-            <div class="middle last">
-                <p class="project-counter"><span>{{ n_of_projects }}</span></p>
-
-                <p class="project-counter">Projects</p>
-            </div>
-        </div>
-    </header>
-
-    {% with projects=page_obj.object_list show_new=True %}
-        {% include "ct_projects/project/list.html" %}
-    {% endwith %}
-
-    {% include "ct_projects/util/paginator.html" %}
+            {% include "ct_projects/util/paginator.html" %}
+        </section>
+    </div>
 {% endblock %}
