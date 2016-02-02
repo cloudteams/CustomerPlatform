@@ -6,8 +6,8 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover, a:not(
     color: #38173f;
 }
 
-.navbar .nav > li > a {
-    text-shadow: none;
+.global-nav a:hover {
+    color: #fff !important;
 }
 
 .coming-soon {
