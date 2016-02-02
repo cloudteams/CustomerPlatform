@@ -1,3 +1,11 @@
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
+    transition: color 0.3s ease-in-out;
+}
+
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover, a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):focus {
+    color: #38173f;
+}
+
 .navbar .nav > li > a {
     text-shadow: none;
 }

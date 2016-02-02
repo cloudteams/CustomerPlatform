@@ -8,7 +8,7 @@
 
         <div class="col-xs-4">
             <div id="avatar-container">
-                {% if p.profile_picture %}<img src="/media/{{p.profile_picture}}" width="100%" />{% endif %}
+                <div class="avatar-img" {% if p.profile_picture %}style="background-image: url(/media/{{p.profile_picture}});"{% endif %} ></div>
             </div>
             <div class="btn btn-primary" id="trigger-avatar-upload">Upload an avatar</div>
         </div>

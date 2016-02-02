@@ -1,10 +1,15 @@
+/* My profile view */
+.profile-view {
+    margin-top: 20px;
+}
+
 .profile-view .profile-avatar {
     position: relative;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     height: 150px;
-    width: 100%;
+    width: 150px;
     border-radius: 50%;
 }
 
@@ -127,16 +132,30 @@ ul.main-menu i {
 
 .wizard-page-container li {
     list-style: none;
+    color: #424242;
 }
 
 .wizard-page-container li h2 {
     margin-top: 40px;
     padding-top: 40px;
-    border-top: 1px solid rgba(33,33,33, 0.5);
+    border-top: 1px solid #ebebeb;
 }
 
 .wizard-page-container li:first-of-type h2 {
     border-top: none;
+}
+
+/* Intro & avatar */
+#intro h2 {
+    margin-top: 0;
+}
+
+.avatar-img {
+    background-size: cover;
+    height: 200px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 /* NiceOpt */
@@ -258,6 +277,10 @@ ul.main-menu i {
 
 .ui-autocomplete {
     background: #fff;
+    border: 1px solid #7d3c8c;
+    position: absolute !important;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .ui-autocomplete .ui-menu-item {
@@ -266,8 +289,10 @@ ul.main-menu i {
 }
 
 .ui-autocomplete .ui-menu-item:hover {
-    color: #38173f;
+    background-color: #38173f;
+    color: #fff;
     transition: color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .ui-menu, .ui-menu > .ui-menu-item, .ui-menu-item > a {

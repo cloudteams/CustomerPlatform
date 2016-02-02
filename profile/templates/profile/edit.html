@@ -1,80 +1,73 @@
 {% extends "profile/base.html" %}
 {% load url from future %}
 {% load staticfiles %}
+{% block title %}Edit profile{% endblock %}
 
 {% block extra_css %}
     <link href="{% static 'profile/css/chosen.min.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
-    <ul class="breadcrumb">
-        <li>
-            <a href="{% url 'view-my-profile' %}">My profile</a>
-        </li>
-        <li>
-            <a href="{% url 'start-profile-wizard' %}">Edit profile</a>
-        </li>
-    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="profile-save-msg pull-right"></div>
 
-    <div class="clearfix">
-        <h1 class="pull-left">{% if profile.has_been_saved %}Your profile in CloudTeams{% else %}Create your profile in CloudTeams in a few steps!{% endif %}</h1>
-        <div class="profile-save-msg pull-right"></div>
-    </div>
+                <form class="create-profile-form" action="." method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
+                    {% with p=form.instance %}
+                        <div class="wizard-page-container">
+                            <ul class="profile-wizard-paginator">
+                                <li>
+                                    <div id="intro">
+                                        <h2>Intoduction</h2>
+                                        <div class="text-center">
+                                            <p>In this page you can complete information about you, your work and the relatioship you have with different technologies.</p>
+                                            <p>Feel free leave empty any information you don't want to send us.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="step" id="basic-info-step">
+                                        {% include "profile/steps/basic-info.html" %}
+                                    </div>
+                                </li>
 
-    <form class="create-profile-form" action="." method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+                                <li>
+                                    <div class="step" id="work-step">
+                                        {% include "profile/steps/work.html" %}
+                                    </div>
+                                </li>
 
-        {% with p=form.instance %}
-            <div class="wizard-page-container">
-                <ul class="profile-wizard-paginator">
-                    <li>
-                        <div id="intro">
-                            <h2>Intoduction</h2>
-                            <div class="text-center">
-                                <p>In this page you can complete information about you, your work and the relatioship you have with different technologies.</p>
-                                <p>Feel free leave empty any information you don't want to send us.</p>
-                            </div>
+                                <li>
+                                    <div class="step" id="influences">
+                                        {% include "profile/steps/influences.html" %}
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="step" id="devices-and-platforms-step">
+                                        {% include "profile/steps/devices-and-platforms.html" %}
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div class="step" id="you-and-tech">
+                                        {% include "profile/steps/you-and-tech.html" %}
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                            <a href="{% url 'view-my-profile' %}" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</a>
                         </div>
-                    </li>
-                    <li>
-                        <div class="step" id="basic-info-step">
-                            {% include "profile/steps/basic-info.html" %}
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="step" id="work-step">
-                            {% include "profile/steps/work.html" %}
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="step" id="influences">
-                            {% include "profile/steps/influences.html" %}
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="step" id="devices-and-platforms-step">
-                            {% include "profile/steps/devices-and-platforms.html" %}
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="step" id="you-and-tech">
-                            {% include "profile/steps/you-and-tech.html" %}
-                        </div>
-                    </li>
-
-                </ul>
-
-                <a href="{% url 'view-my-profile' %}" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</a>
+                    {% endwith %}
+                    <!---->
+                </form>
             </div>
-        {% endwith %}
-        <!---->
-    </form>
-
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}

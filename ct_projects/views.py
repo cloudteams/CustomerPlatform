@@ -102,6 +102,9 @@ def project_details(request, pk):
             'idea_form': IdeaForm(),
         }
 
+        if request.GET.get('tab', '') == 'ideas':
+            context['tab'] = 'ideas'
+
         return render(request, 'ct_projects/project/details.html', context)
     else:
         return HttpResponse('Only GET allowed', status=400)
@@ -135,7 +138,7 @@ def post_idea(request, pk):
             idea.save()
 
             # redirect to project home page
-            return redirect(reverse('project-details', args=(pk, )))
+            return redirect(reverse('project-details', args=(pk, )) + '?tab=ideas')
         else:
             context['form'] = form
             status = 400
@@ -185,7 +188,7 @@ def rate_idea(request, project_pk, pk):
         rating.idea = idea
         rating.save()
 
-        return redirect(reverse('idea-details', args=(idea.project.pk, idea.pk)))
+        return redirect(reverse('project-details', args=(idea.project.pk, )) + '?tab=ideas')
     else:
         return HttpResponse('Only POST allowed', status=400)
 
