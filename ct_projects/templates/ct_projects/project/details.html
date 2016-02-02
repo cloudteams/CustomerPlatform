@@ -19,15 +19,15 @@
             <div class="submenu">
                 <div class="container">
                     <ul class="menu-subpage public">
-                        <li id="link-to-subpage-1" class="link-to-subpage active">About this project</li>
-                        <li id="link-to-subpage-2" class="link-to-subpage">Campaigns</li>
+                        <li id="link-to-subpage-1" class="link-to-subpage {% if not default_campaign %}active{% endif %}">About this project</li>
+                        <li id="link-to-subpage-2" class="link-to-subpage {% if default_campaign %}active{% endif %}">Campaigns</li>
                         <li id="link-to-subpage-3" class="link-to-subpage">Customer ideas</li>
                         <li id="link-to-subpage-4" class="link-to-subpage">Blog posts</li>
                     </ul>
                 </div>
             </div>
 
-            <section id="subpage-1" class="subpage active">
+            <section id="subpage-1" class="subpage {% if not default_campaign %}active{% endif %}">
                 {% include "ct_projects/project/overview.html" %}
 
                 <div class="container">
@@ -101,16 +101,16 @@
                     <div class="container">
                         <ul class="menu-subsection public">
                             {% if request.user.is_authenticated %}
-                                <li id="link-to-subsection-1" class="link-to-subsection active">Invited</li>
+                                <li id="link-to-subsection-1" class="link-to-subsection">Invited</li>
                             {% endif %}
-                            <li id="link-to-subsection-2" class="link-to-subsection {% if not request.user.is_authenticated %}active{% endif %}">Running</li>
+                            <li id="link-to-subsection-2" class="link-to-subsection active">Running</li>
                             <li id="link-to-subsection-3" class="link-to-subsection">Closed</li>
                         </ul>
                     </div>
                 </div>
 
                 {% if request.user.is_authenticated %}
-                    <section id="subsection-1" class="subsection active">
+                    <section id="subsection-1" class="subsection">
                         <div class="container">
                             <div class="content">
                                 <div class="row">
@@ -121,7 +121,7 @@
                     </section>
                 {% endif %}
 
-                <section id="subsection-2" class="subsection {% if not request.user.is_authenticated %}active{% endif %}">
+                <section id="subsection-2" class="subsection active">
                     <div class="container">
                         <div class="content">
                             <div class="row">
@@ -151,15 +151,25 @@
                     <div class="content about">
                         <header>
                             <h2 class="header-large secondary">Customer ideas</h2>
-                            <a href="#nowhere" class="btn" alt="send idea">Send idea</a>
+                            <div class="btn show-idea-form">Send idea</div>
+                            <form action="{% url 'post-idea' project.pk %}" method="POST" class="form-post-idea" style="display: none;">{% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{idea_form.as_p}}
+
+                                        <div class="clearfix">
+                                            <input type="submit" class="btn btn-primary pull-left" value="Post idea" />
+                                            <div class="hide-idea-form btn btn-transparent">Cancel</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </header>
                     </div>
 
-                    <?php include("partials/project-customer-idea.php"); ?>
-                    <?php include("partials/project-customer-idea.php"); ?>
-                    <?php include("partials/project-customer-idea.php"); ?>
-                    <?php include("partials/project-customer-idea.php"); ?>
-                    <?php include("partials/project-customer-idea.php"); ?>
+                    {% with ideas=project.ideas.all %}
+                        {% include "ct_projects/idea/list.html" %}
+                    {% endwith %}
                 </div>
             </section>
 
@@ -172,101 +182,19 @@
                     </div>
 
                     <div class="row">
-                        <?php include("partials/public-project-campaign-blogpost.php"); ?>
-                        <?php include("partials/public-project-campaign-blogpost.php"); ?>
-                        <?php include("partials/public-project-campaign-blogpost.php"); ?>
-                        <?php include("partials/public-project-campaign-blogpost.php"); ?>
-                        <?php include("partials/public-project-campaign-blogpost.php"); ?>
-                        <?php include("partials/public-project-campaign-blogpost.php"); ?>
+                        <td class="col-md-12">
+                            <p>No blog posts yet.</p>
+                        </td>
                     </div>
                 </div>
             </section>
 
-            <section id="subpage-5" class="subpage">
-                <div class="give-feedback">
-                    <div class="container">
-                        <div class="vertical-align">
-                            <div class="middle">
-                                <h2 class="header-medium secondary">Give feedback on our homepage and get awesome rewards</h2>
-                            </div>
-
-                            <div class="middle">
-                                <label>Select an other campaign</label>
-
-                                <div class="select-dropdown">
-                                    <i class="fa fa-angle-down"></i>
-                                    <select name="visable-to" id="visable-to" onchange="" size="1">
-                                        <option value="Campaign title" selected>Campaign title</option>
-                                        <option value="Campaign title">Campaign title 2</option>
-                                        <option value="Campaign title">Campaign title 3</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="submenu">
-                    <div class="container">
-                        <ul class="menu-subsection public">
-                            <li id="link-to-subsection-4" class="link-to-subsection active">About campaign</li>
-                            <li id="link-to-subsection-5" class="link-to-subsection">Rewards</li>
-                            <li id="link-to-subsection-6" class="link-to-subsection">Results</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <section id="subsection-4" class="subsection active">
-                    <?php include("partials/public-project-campaign-closed-data.php"); ?>
-
-                    <div class="container">
-                        <div class="content">
-                            <h2 class="header-medium secondary">About this campaign</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.Lorem ipsum dolor sit amet, consectetur adipisicing Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor dolor sit amet.</p>
-
-                            <h2 class="header-medium secondary">Expected results</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.Lorem ipsum dolor sit amet, consectetur adipisicing Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor dolor sit amet.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="subsection-5" class="subsection">
-                    <?php include("partials/public-project-campaign-running-data.php"); ?>
-
-                    <div class="container">
-                        <div class="content">
-                            <header>
-                                <h2 class="header-medium secondary">Rewards</h2>
-                            </header>
-
-                            <?php include("partials/public-project-campaign-reward.php"); ?>
-                            <?php include("partials/public-project-campaign-reward.php"); ?>
-                            <?php include("partials/public-project-campaign-reward.php"); ?>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="subsection-6" class="subsection">
-                    <?php include("partials/public-project-campaign-running-data.php"); ?>
-
-                    <div class="container">
-                        <div class="content">
-                            <header>
-                                <h2 class="header-medium secondary">Results</h2>
-                            </header>
-
-                            <div class="still-running">
-                                <div class="vertical-align">
-                                    <div class="middle">
-                                        <img src="{% static "img/campaign-results.svg" %}" alt="results">
-
-                                        <h3 class="header-medium secondary">This campaign is still running</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <section id="subpage-5" class="subpage campaign-info-container {% if default_campaign %}active{% endif %}">
+                {% if default_campaign %}
+                    {% with campaign=default_campaign %}
+                        {% include "ct_projects/campaign/content.html" %}
+                    {% endwith %}
+                {% endif %}
             </section>
         </section>
 {% endblock %}

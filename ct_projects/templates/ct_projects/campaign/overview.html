@@ -1,0 +1,65 @@
+{% load staticfiles %}
+
+{% with expired=campaign.has_expired %}
+    <div class="public-overview-data public-project-campaign-overview-data">
+        <div class="container">
+            <div class="vertical-align">
+                <div class="middle">
+                    <table>
+                        <tr>
+                            <td>
+                                <img class="icon svg" src="{% static "img/icons/icon-activities.svg" %}">
+                                <p>Status</p>
+                            </td>
+                            <td>
+                                <p>{% if expired %}closed{% else %}open{% endif %}</p>
+                            </td>
+                        </tr>
+    
+                        <tr>
+                            <td>
+                                <img class="icon svg" src="{% static "img/icons/icon-pending-accepted.svg" %}">
+                                <p>Participated</p>
+                            </td>
+                            <td>
+                                <p>-</p>
+                            </td>
+                        </tr>
+    
+                        <tr>
+                            <td>
+                                <img class="icon svg" src="{% static "img/icons/icon-date-start.svg" %}">
+                                <p>Date opened</p>
+                            </td>
+                            <td>
+                                <p><time datetime="{{ campaign.starts|date:"Y-m-d" }}">{{ campaign.starts|date:"d-m-Y" }}</time></p>
+                            </td>
+                        </tr>
+    
+                        <tr>
+                            <td>
+                                <img class="icon svg" src="{% static "img/icons/icon-date-end.svg" %}">
+                                <p>Date {% if expired %}closed{% else %}closing{% endif %}</p>
+                            </td>
+                            <td>
+                                <p><time datetime="{{ campaign.expires|date:"Y-m-d" }}">{{ campaign.expires|date:"d-m-Y" }}</time></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+    
+                <div class="middle">
+                    <a href="#nowhere" class="btn-grey">
+                        {% if expired %}
+                            <img class="icon svg delete" src="{% static "img/icons/icon-delete.svg" %}">
+                            Closed
+                        {% else %}
+                            <i class="fa fa-check green-text"></i>
+                            Open
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endwith %}

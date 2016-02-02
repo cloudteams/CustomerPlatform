@@ -1,16 +1,16 @@
+/* General use classes */
+.green-text {
+    color: #2ECC71;
+}
+
 .centered {
     text-align: center;
 }
 
-.pagination {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-}
-
 .pagination .current {
-    background: #1C2B36;
+    background: #28102d;
     color: #fff;
+    cursor: default;
 }
 
 .follow-button {
@@ -81,7 +81,49 @@ section.user-dashboard-projects-content {
     border-left: 1px solid #ebebeb;
 }
 
-/* Project details */
+/* Project details, ideas & comments */
 .public-project-overview-content > header.main-header {
     background-position: center;
+}
+
+.idea .data .fa {
+    color: #b1b1b1;
+    margin-right: 10px;
+}
+
+.like-button button {
+    border: none;
+    background: none;
+}
+
+.form-post-idea input[type="submit"] {
+    width: calc(100% - 115px);
+    border-radius: 5px 0 0 5px;
+}
+
+.form-post-idea .hide-idea-form {
+    border-radius: 0 5px 5px 0;
+}
+
+.campaign .article-header h3 {
+    width: calc(100% - 25px);
+}
+
+.campaign footer .btn {
+    width: calc(100% - 10px);
+    padding: 10px;
+}
+
+/* Polls & documents */
+.header-medium.campaign-bookmark {
+    text-align: center;
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    width: 300px;
+    margin: 20px 15px;
+}
+
+.campaign-poll .article-header {
+    margin-bottom: 0 !important;
 }

@@ -1,0 +1,94 @@
+{% load url from future %}
+{% load project_tags %}
+{% load staticfiles %}
+
+
+<div class="give-feedback">
+    <div class="container">
+        <div class="vertical-align">
+            <div class="middle">
+                <h2 class="header-medium secondary">Give feedback on our homepage and get awesome rewards</h2>
+            </div>
+
+            <div class="middle">
+                <label>Select an other campaign</label>
+
+                <div class="select-dropdown">
+                    <i class="fa fa-angle-down"></i>
+                    <select name="visable-to" id="visable-to" onchange="" size="1">
+                        {% for campaign in campaign.project.campaigns.all %}
+                            <option value="{{ campaign.pk }}">{{ campaign.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="submenu">
+    <div class="container">
+        <ul class="menu-subsection public">
+            <li id="link-to-subsection-4" class="link-to-subsection active">About campaign</li>
+            <li id="link-to-subsection-5" class="link-to-subsection">Rewards</li>
+            <li id="link-to-subsection-6" class="link-to-subsection">Results</li>
+        </ul>
+    </div>
+</div>
+
+{% include "ct_projects/campaign/overview.html" %}
+
+<section id="subsection-4" class="subsection active">
+    <div class="container">
+        <div class="content">
+            <h2 class="header-medium secondary">About this campaign</h2>
+
+            <p>{{ campaign.description }}</p>
+
+            <h2 class="header-medium secondary campaign-bookmark">Polls</h2>
+            {% for poll in campaign.polls.all %}
+                {% include "ct_projects/campaign/poll.html" %}
+            {% empty %}
+                <p>No polls in this campaign</p>
+            {% endfor %}
+
+            <h2 class="header-medium secondary campaign-bookmark">Documents</h2>
+            {% for document in campaign.documents.all %}
+                {% include "ct_projects/campaign/document.html" %}
+            {% empty %}
+                <p>No documents in this campaign</p>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<section id="subsection-5" class="subsection">
+    <div class="container">
+        <div class="content">
+            <header>
+                <h2 class="header-medium secondary">Rewards</h2>
+            </header>
+
+            <p>{{ campaign.rewards|default:"No rewards" }}</p>
+        </div>
+    </div>
+</section>
+
+<section id="subsection-6" class="subsection">
+    <div class="container">
+        <div class="content">
+            <header>
+                <h2 class="header-medium secondary">Results</h2>
+            </header>
+
+            <div class="still-running">
+                <div class="vertical-align">
+                    <div class="middle">
+                        <h3 class="header-medium secondary">This campaign is still running</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,40 @@
+{% load staticfiles %}
+{% load project_tags %}
+
+<article class="campaign campaign-poll public-campaign block-line-half col-lg-4 col-md-6 clear-3">
+	<div class="background">
+		<header class="article-header">
+			<h3 class="header-medium secondary">{{ poll.name }}</h3>
+			<p class="highlight bold">{{ poll.campaign.project.title }}</p>
+
+			<div class="tooltip-container">
+				<a href="#nowhere" class="open-tooltip-button"><img class="more-options svg" src="{% static "img/icons/icon-more-options.svg" %}"></a>
+				<div class="custom-tooltip">
+					<ul>
+						<li>
+							<a href="#nowhere">Participate</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</header>
+
+		<div class="content data">
+			{% if poll.description %}
+                {{poll.description}}
+            {% else %}
+                No poll description
+            {% endif %}
+		</div>
+
+		<footer>
+            {% if request.user.is_authenticated %}
+			    <a href="{{poll|get_poll_token_link:request.user}}"
+                   class="btn">Participate in this poll<</a>
+            {% else %}
+                <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
+                   class="btn">Participate in this poll<</a>
+            {% endif %}
+		</footer>
+	</div>
+</article>

@@ -60,3 +60,11 @@ def print_days_left(project):
         return str(days)
     else:
         return "-"
+
+
+@register.filter
+def is_liked_by(idea, user):
+    if not user.is_authenticated():
+        return False
+
+    return idea.ratings.filter(user=user).exists()

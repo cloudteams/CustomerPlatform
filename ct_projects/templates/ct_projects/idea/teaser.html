@@ -1,9 +1,48 @@
 {% load comments %}
+{% load humanize %}
+{% load staticfiles %}
+{% load project_tags %}
 {% load url from future %}
 
 {% get_comment_count for ct_projects.idea idea.pk as comment_count %}
 
-<p>
-    {{idea.title}}, {{comment_count}} comment{{comment_count|pluralize}} |
-    <a href="{% url 'idea-details' idea.project.pk idea.pk %}">View details</a>
-</p>
+<article class="idea block">
+	<div class="idea-container">
+		<header>
+			<h3 class="header-medium secondary">{{idea.title}}</h3>
+		</header>
+
+		<i class="fa fa-angle-right"></i>
+
+		<div class="content">
+			<p>{{idea.description|linebreaksbr}}</p>
+
+            {% render_comment_list for idea %}
+		</div>
+	</div>
+
+	<div class="data">
+		<img class="icon like svg" src="{% static "img/icons/icon-like.svg" %}">
+		<p class="highlight">{{ idea.ratings.all.count }}</p>
+
+        <i class="fa fa-comment-o"></i>
+        <p class="highlight">{{ comment_count }}</p>
+
+		<img class="icon time svg" src="{% static "img/icons/icon-time.svg" %}">
+		<p class="highlight">{{ idea.created|naturaltime }}</p>
+
+
+        <!--<a href="{% url 'idea-details' idea.project.pk idea.pk %}">View details</a>-->
+		<div class="right">
+            <form class="rating-form" method="POST" action="{% url 'rate-idea' idea.project.pk idea.pk %}">{% csrf_token %}
+                <input type="number" name="value" value="1" class="hidden" />
+                <input type="submit" class="hidden" value="Submit rating" />
+
+                <p class="like-button {% if idea|is_liked_by:request.user %}active{% endif %}">
+                    <button type="submit"><img class="icon like-fill svg" src="{% static "img/icons/icon-like-fill.svg" %}">
+                    Like</button>
+                </p>
+            </form>
+		</div>
+	</div>
+</article>

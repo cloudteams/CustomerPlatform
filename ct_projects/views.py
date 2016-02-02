@@ -99,6 +99,7 @@ def project_details(request, pk):
 
         context = {
             'project': project,
+            'idea_form': IdeaForm(),
         }
 
         return render(request, 'ct_projects/project/details.html', context)

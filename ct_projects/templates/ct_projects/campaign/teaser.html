@@ -13,10 +13,9 @@
 				<div class="custom-tooltip">
 					<ul>
 						<li>
-							<a href="">Delete campaign</a>
+							<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}">More about this campaign</a>
 						</li>
-						<li><a href="">Lorem ipsum</a></li>
-						<li><a href="">Lorem ipsum</a></li>
+						<li><a href="#nowhere">Participate</a></li>
 					</ul>
 				</div>
 			</div>
@@ -57,8 +56,8 @@
 		</div>
 
 		<footer>
-			<a href="#nowhere" id="link-to-subpage-5" class="btn link-to-subpage link-to-hidden-subpage">Participate</a>
-			<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}" id="link-to-subpage-5" class="btn-transparent link-to-subpage link-to-hidden-subpage">See all info</a>
+			<a href="#nowhere" id="link-to-subpage-6" class="btn ">Participate</a>
+			<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}" class="btn-transparent">See all info</a>
 		</footer>
 	</div>
 </article>
