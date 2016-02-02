@@ -34,12 +34,8 @@
 		<section class="page public-page {% block section_class %}{% endblock %}">
 			<div class="content">
 				<main>
-					<header class="main-header">
-						<div class="container">
-							<h1 class="header-extra-large public">Cloudteams</h1>
-							<p class="public-page-subtitle">Collect rewards for giving feedback</p>
-						</div>
-					</header>
+					{% block pre_content %}
+					{% endblock %}
 
 					{% block content %}
 					{% endblock %}

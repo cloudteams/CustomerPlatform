@@ -173,7 +173,7 @@ class Campaign(models.Model):
         elif not self.expires:
             return None
         else:
-            return (datetime.datetime.today() - self.expires).days
+            return (self.expires - datetime.datetime.today()).days
 
     def to_json(self):
         return {

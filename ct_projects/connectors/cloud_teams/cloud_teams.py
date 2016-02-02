@@ -55,8 +55,8 @@ class CloudTeamsConnector:
                     campaign.name = c_entry['name']
                     campaign.description = c_entry['descr'] if 'descr' in c_entry else ''
                     campaign.logo = c_entry['logo'] if 'logo' in c_entry else ''
-                    campaign.starts = datetime.fromtimestamp(int(entry['start'])) if 'start' in entry else now()
-                    campaign.expires = datetime.fromtimestamp(int(entry['start'])) if 'end' in entry else None
+                    campaign.starts = datetime.strptime(c_entry['start'], '%Y-%m-%d %H:%M:%S') if 'start' in c_entry else now()
+                    campaign.expires = datetime.strptime(c_entry['end'], '%Y-%m-%d %H:%M:%S') if ('end' in c_entry) and (c_entry['end'] != 'Never') else None
                     campaign.project = project
 
                     # save the campaign in the database
