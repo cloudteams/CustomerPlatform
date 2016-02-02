@@ -198,4 +198,9 @@ class CampaignDetailView(DetailView):
     template_name = 'ct_projects/campaign/details.html'
     context_object_name = 'campaign'
 
+    def get_context_data(self, **kwargs):
+        ctx = super(CampaignDetailView, self).get_context_data(**kwargs)
+        ctx['idea_form'] = IdeaForm()
+        return ctx
+
 campaign_details = CampaignDetailView.as_view()
