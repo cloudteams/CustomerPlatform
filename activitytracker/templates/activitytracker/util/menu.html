@@ -3,29 +3,6 @@
 				<div class="nav-collapse sidebar-nav collapse padding-5">
 					<ul class="nav nav-tabs nav-stacked main-menu">
                         <li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i><span class="hidden-sm"> Dashboard </span></a></li>
-						<li ><a href="{% url 'index' %}"><i class="fa fa-calendar-plus-o"></i><span class="hidden-sm"> History</span></a></li>
-						<li><a href="{% url 'timeline' %}"><i class="fa fa-tasks"></i><span class="hidden-sm"> Timeline</span></a></li>
-						<li><a href="{% url 'goals' %}"><i class="fa fa-trophy"></i><span class="hidden-sm"> Goals</span></a></li>
-						<li>
-							<a class="dropmenu" href="#"><i class="fa fa-bar-chart"></i><span class="hidden-sm"> Analytics &nbsp;<span class="caret"></span></span></a>
-							<ul>
-                                <li><a class="submenu" href="{% url 'analytics-routine' %}"><i class="fa fa-calendar"></i><span class="hidden-sm"> Routine</span></a></li>
-								<li><a class="submenu" href="{% url 'analytics-activities' %}"><i class="fa fa-star"></i><span class="hidden-sm"> Activities</span></a></li>
-								<li><a class="submenu" href="{% url 'analytics-friends' %}"><i class="fa fa-group"></i><span class="hidden-sm"> Friends</span></a></li>
-								<li><a class="submenu" href="{% url 'analytics-goals' %}"><i class="fa fa-trophy"></i><span class="hidden-sm"> Goals</span></a></li>
-                                <li><a class="submenu" href="{% url 'analytics-places' %}"><i class="fa fa-globe"></i><span class="hidden-sm"> Places</span></a></li>
-                                <li><a class="submenu" href="{% url 'analytics-objects' %}"><i class="fa fa-wrench"></i><span class="hidden-sm"> Objects</span></a></li>
-                            </ul>
-						</li>
-                        <li>
-							<a class="dropmenu" href="#"><i class="fa fa-cogs"></i><span class="hidden-sm"> Settings &nbsp;<span class="caret"></span></span></a>
-							<ul>
-								<li><a class="submenu" href="{% url 'configuration' %}"><i class="fa fa-cogs"></i><span class="hidden-sm"> Setup details</span></a></li>
-								<li><a class="submenu" href="#"><i class="fa fa-youtube-play"></i><span class="hidden-sm"> Manual </span><span class="coming-soon">soon !</span></a></li>
-								<li><a class="submenu" href="{% url 'settings' %}"><i class="fa fa-calendar"></i><span class="hidden-sm"> Services</span></a></li>
-								<li><a class="submenu" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i><span class="hidden-sm"> Logout</span></a></li>
-								<li><a class="submenu" href="{% url 'delete-account' %}"><i class="fa fa-trash-o"></i><span class="hidden-sm"> Delete account</span></a></li>
-							</ul>
-						</li>
+                        <li><a href="{% url 'settings' %}"><i class="fa fa-cogs"></i><span class="hidden-sm"> Settings </span></a></li>
                     </ul>
 				</div>

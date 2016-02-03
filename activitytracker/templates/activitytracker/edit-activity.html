@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+
+	<!-- start: CSS -->
+    {% load staticfiles %}
+    {% load custom_templates %}
+
+<div class="modal-header box-header blueNavy" style='border-bottom:6px solid {{ color }} !important'>
+    <h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>{{ instance.activity }} Editable Details</h2>
+</div>
+<form action="{% url 'updateactivity' instance.id %}" method="post" name="editForm" id="editForm">
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="row no-reverse-margin">
+            <div class="col-sm-12 input-bottom-space">
+                <select data-placeholder="Search for activities" data-rel="chosen" id="name_of_activity" name="name_of_activity" class="form-group col-md-12">
+                {% for category,list in activity_data.items %}
+                <option value=''></option>
+                <optgroup label="{{ category }}">
+                    {% for name in list %}
+                    <option {% if name == instance.activity.activity_name %} selected {% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </optgroup>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="left-inner-addon col-sm-6">
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                <input placeholder="  Start date" value="{{ start_date }}" type="text" name="start_date" data-provide='datepicker' data-date-container='#addActivityModal' class="datepicker form-control input-lg" >
+            </div>
+            <div class="left-inner-addon col-sm-6">
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                <input placeholder="  End date" value="{{ end_date }}"type="text" name="end_date" data-provide='datepicker' data-date-container='#addActivityModal' class="datepicker form-control input-lg">
+            </div>
+            <div class="left-inner-addon col-sm-6">
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                <input id="start_time" name="start_time" value="{{ start_t }}"class="clockpicker input-lg form-control" data-autoclose="true" size="16" type="text" placeholder="Start Time">
+            </div>
+            <div class="left-inner-addon col-sm-6">
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                <input id="end_time" name="end_time" value="{{ end_t }}"class="input-lg form-control clockpicker" data-autoclose="true" size="16" type="text" placeholder="End Time">
+            </div>
+            <div class="left-inner-addon col-sm-12">
+                <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                <input placeholder="Any goal at all?" value="{{ instance.goal }}" type="text" name="goal" autocomplete='off' id="goalinputEdit" class="input-lg form-control">
+                <div id="goalstatusEdit" class="hidden">
+                    <label class='radio-inline radio-form' style='color:green'><input type="radio" class='radio' name="goalstatus" value="Reached" id="ReachedEdit"/>Reached</label>
+                    <label class='radio-inline radio-form' style='color:orange'><input type="radio" class='radio' name="goalstatus" value="InProgress" id="InProgressEdit"/>In Progress</label>
+                    <label class='radio-inline radio-form' style='color:red'><input type="radio" class='radio' name="goalstatus" value="Failed" id="FailedEdit"/>Failed</label>
+                </div>
+            </div>
+            <div class="left-inner-addon col-sm-12">
+                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                <input placeholder="What did it result into?" value="{{ instance.result }}" type="text" name="result" autocomplete='off' id="result" class="input-lg form-control">
+            </div>
+            <div class="left-inner-addon col-sm-12">
+                 <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                 <input id="friends_edit" type='text' class="input-lg form-control tokenfield" name="friends" placeholder="With whom where you with?" data-tokens="{{ instance_friend_list|safe|remove_spaces }}">
+            </div>
+            <div class="left-inner-addon col-sm-12">
+                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                <input id="tools_edit" type='text' class="input-lg form-control tokenfield" name="tools" placeholder="What did you use?" data-tokens="{{ instance_object_list|safe|remove_spaces }}">
+            </div>
+            <div class="left-inner-addon col-sm-12">
+                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                <input id="places-input-edit" class="input-lg form-control" name="location" type="text" placeholder="Search for Places" value="{{ instance.location_address }}">
+            </div>
+            <div id="map-canvas-edit" class="col-xs-offset-1 col-xs-10 map-canvas"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+         <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Cancel</a>
+         <input type="button" class="btn btn-blueNavy" value="Update" id="editActivityModalSubmit" onclick="handleActivityUpdate('{% url 'updateactivity' instance.id %}')"/>
+    </div>
+</form>
+
+	<!-- Modals end here -->
+<script>
+
+    if (document.forms['editForm']["goal"].value.length != 0){
+        $('#goalstatusEdit').removeClass('hidden');
+        $('#' + '{{ instance.goal_status }}'+'Edit').click()
+    }
+    else {
+        $('#InProgressEdit').click()
+    }
+
+    $('.datepicker').datepicker({
+		autoclose: true,
+		container: '#editActivityModal'
+	});
+    $('.clockpicker').clockpicker();
+
+    $('[data-rel="chosen"],[rel="chosen"]').chosen();
+    $('#goalinputEdit').on('keyup change',function() {
+         if ( document.forms['editForm']["goal"].value.length == 0){
+             $('#goalstatusEdit').addClass('hidden');
+         }
+         else{
+             $('#goalstatusEdit').removeClass('hidden')
+         }
+    });
+
+    $.ajax({
+        type: "get",
+        cache: false,
+        url: BASE_URL + 'index/fetch_tokenfield_values/',
+        dataType: "json",
+        error: function (xhr, status, error) {
+        },
+        success: function (response) {
+            $('#friends_edit').tokenfield({
+                autocomplete: {
+                    source: response[0]
+                }
+            });
+            $('#tools_edit').tokenfield({
+                autocomplete: {
+                    source: response[1],
+                    delay: 100
+                }
+            });
+            $('.tokenfield').on('tokenfield:createtoken', function (event) {
+                var existingTokens = $(this).tokenfield('getTokens');
+                $.each(existingTokens, function(index, token) {
+                    if (token.value === event.attrs.value)
+                        event.preventDefault();
+                });
+            });
+        }
+    });
+
+    var mapEdit; // reference to Gmaps, can't be done without global/custom scope variable
+    var markerEdit; // reference to marker. Can't get reference to marker(s) from a map object => need for global var
+    function initializeEditMap() {
+        try {
+            var lat = {{ instance.location_lat }};
+            var lng = {{ instance.location_lng }};
+        }
+        catch(err) { // If None
+            lat = lng = NaN
+        }
+        markerEdit = new google.maps.Marker({
+            draggable: true,
+            position: {lat:lat, lng:lng}
+        });
+
+        mapEdit = new google.maps.Map(document.getElementById('map-canvas-edit'), {mapTypeControl : false});
+        markerEdit.setMap(mapEdit);
+        google.maps.event.addListener(markerEdit, 'dragend', function (event) {
+
+            markerEdit.setMap(null);
+            markerEdit.position = event.latLng;
+            mapEdit.setCenter(markerEdit.position);
+            markerEdit.setMap(mapEdit);
+
+            var geoLocations = (markerEdit.getPosition().toString()).replace('(', '').replace(' ', '').replace(')', '');
+            $.ajax({
+                type: "get",
+                cache: false,
+                url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + geoLocations,
+                dataType: "json",
+                error: function (xhr, status, error) {
+                    alert("Couldn't fetch this Address. Try again!")
+                },
+                success: function (response) {
+                    $('#places-input-edit').val(response.results[0].formatted_address)
+                }
+            });
+        });
+
+        var input = (document.getElementById('places-input-edit'));
+        var searchBox = new google.maps.places.SearchBox((input));
+        var defaultBounds = new google.maps.LatLngBounds(
+                new google.maps.LatLng(-33.8902, 151.1759),
+                new google.maps.LatLng(-33.8474, 151.2631));
+        mapEdit.fitBounds(defaultBounds);
+
+        google.maps.event.addListener(searchBox, 'places_changed', function () {
+            var place = searchBox.getPlaces()[0]; // We dont want more than 1 markers
+            if (place.length == 0) {
+                return;
+            }
+
+            markerEdit.setMap(null); // Nullify the previous marker
+            // For only the 1st place, get the icon, place name, and location.
+            var bounds = new google.maps.LatLngBounds();
+            var image = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Move the marker to the new Location
+            markerEdit.position = place.geometry.location;
+            markerEdit.setMap(mapEdit);
+            markerEdit.setAnimation(google.maps.Animation.DROP);
+
+            bounds.extend(place.geometry.location);
+
+            mapEdit.fitBounds(bounds);
+            mapEdit.setZoom(16);
+        });
+        google.maps.event.addListener(mapEdit, 'bounds_changed', function () {
+            var bounds = mapEdit.getBounds();
+            searchBox.setBounds(bounds);
+        });
+        {% if instance.location_address %}
+            mapEdit.setCenter({lat:lat, lng:lng});
+            mapEdit.setZoom(16);
+        {% else %}
+            mapEdit.setCenter({ lat: 37.9908372, lng: 23.7383394});
+            mapEdit.setZoom(9);
+        {% endif %}
+    }
+</script>
+
+
+</html>

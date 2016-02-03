@@ -7,25 +7,14 @@
     <link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/1.0.7/css/responsive.bootstrap.css" rel="stylesheet">
     <link href="{% static 'bower_components/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.min.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/settings.css' %}" rel="stylesheet">
 
 {% endblock %}
 
 
 {% block content %}
-
-    <ul class="breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{% url 'index' %}">Home</a>
-        </li>
-        <li><a href="#">Settings</a></li>
-    </ul>
-   <!-- Content begins HERE ------------------------------------------------------------------>
     <div class="row">
-        <div class="col-sm-10 col-sm-offset-1 dashboardWrapper">
-            <div class="box-header blueNavy" data-original-title>
-                <h2 class="text-center"><i class="fa fa-cloud white"></i><span class="break"></span>Available Providers</h2>
-            </div>
+        <div class="col-sm-8 col-sm-offset-2 dashboardWrapper ">
             <div class="box-content row">
                 <table id=ProvidersTable" class="col-xs-12 text-center user-providers">
                     <tbody>
@@ -34,15 +23,15 @@
                         <tr class="connected-app {{ provider_name }}">
                             <td ><img src="{% static 'activitytracker/img/'|add:provider_name|add:'.png' %}"/></td>
                             <td><span class="connected-app-text provider-name">{{ provider_name|capitalizeFirstLetter|removeDashes }}</span></td>
-                            <td><span class="connected-app-text" style="color:{{ provider_data.statusFontColor }}"><i class='{{ provider_data.statusIcon }}'></i>&nbsp;{{ provider_data.statusText }}</span></td>
+                            <td><span class="connected-app-text" style="color:{{ provider_data.statusFontColor }}">{{ provider_data.statusText }}</span></td>
                             <td>
                                 {% if provider_data.statusText == "App connected" %}
                                 <a class="btn connected-app-button btn-blueNavy" onclick="synchronizeProvider('{{ provider_name }}')" title="Synchronize">
-                                    <i class="halflings-icon refresh white" title="Synchronize"></i>
+                                    <i class="fa fa-refresh white" title="Synchronize"></i>
                                 </a>
                                 {% endif %}
                                 <a onclick="appFunctionHandler('{{ provider_name }}', this)" class="btn connected-app-button btn-blueNavy" title="{{ provider_data.buttonText }}">
-                                    <i class="halflings-icon {{ provider_data.buttonIcon }} white" title="{{ provider_data.buttonText }}"></i>
+                                    <i class="fa fa-{{ provider_data.buttonIcon }} white" title="{{ provider_data.buttonText }}"></i>
                                 </a>
                             </td>
                         </tr>

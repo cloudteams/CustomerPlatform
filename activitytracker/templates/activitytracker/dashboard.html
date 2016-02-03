@@ -4,18 +4,11 @@
 {% block css %}
     <link href="{% static 'activitytracker/css/analytics-extra.css' %}" rel="stylesheet">
     <link href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <ul class="breadcrumb hidden-xs">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{% url 'index' %}">Home</a>
-        </li>
-        <li>
-            <a href="#">Dashboard</a>
-        </li>
-    </ul>
     <div id="carousel-providers" class="carousel carousel-dashboard slide col-xs-12 dashboardWrapper" data-ride="carousel" data-interval="false">
         <div class="carousel-inner" role="listbox">
             <div class="item active">
@@ -24,7 +17,7 @@
                     <div class="col-sm-6">
                          <div class="info-box text-center">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-tasks show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-tasks show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Total</div>
@@ -35,7 +28,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-cloud-download show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-cloud-download show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Synced</div>
@@ -46,7 +39,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-pushpin show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-thumb-tack show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Unique</div>
@@ -57,7 +50,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-time show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-clock-o show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Minutes</div>
@@ -68,7 +61,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-map-marker show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-map-marker show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Places</div>
@@ -79,7 +72,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-user show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-group show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">with</div>
@@ -99,7 +92,7 @@
                     <div class="col-sm-6">
                          <div class="info-box text-center">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-tasks show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-tasks show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Total</div>
@@ -110,7 +103,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-cloud-download show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-cloud-download show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Synced</div>
@@ -121,7 +114,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-pushpin show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-thumb-tack show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Unique</div>
@@ -132,7 +125,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-time show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-clock-o show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Minutes</div>
@@ -143,7 +136,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-map-marker show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-map-marker show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">Places</div>
@@ -154,7 +147,7 @@
                     <div class="col-sm-6">
                          <div class="info-box">
                              <span class="info-box-icon">
-                                 <span class="glyphicon glyphicon-user show-dashboard-glyphicon" aria-hidden="true"></span>
+                                 <span class="fa fa-group show-dashboard-glyphicon" aria-hidden="true"></span>
                              </span>
                              <div class="info-box-content text-center">
                                  <div class="info-box-title">with</div>
@@ -176,7 +169,7 @@
     </div>
     <div class="col-xs-12 dashboardWrapper">
         <div class="box box-transparent col-md-6 blue-black">
-            <div class="box-header no-margin-top blueNavy" data-original-title>
+            <div class="box-header no-margin-top" data-original-title>
                 <h2 class="text-center"><i class="halflings-icon star white"></i><span class="break"></span>Latest 10 Activities</h2>
             </div>
             <div class="box-content">
@@ -227,7 +220,7 @@
                     <div class="dashboardTitle text-center">Category Breakdown of Last 7 Days (by Instance)</div>
                     {% for category, category_data in period_category_data.items %}
                     <div class=" col-sm-4 circleStatsContainer ">
-                        <a href="{% url 'analytics-activities' %}">
+                        <a>
                             <div class="circleStatsItemBox {{ category_data.color }}">
                                 <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
                                 <span class="percent">percent</span>
@@ -262,7 +255,7 @@
                     </div>
                     {% for category, category_data in period_category_data.items %}
                     <div class=" col-sm-4 circleStatsContainer ">
-                        <a href="{% url 'analytics-activities' %}">
+                        <a>
                             <div class="circleStatsItemBox {{ category_data.color }}">
                                 <div class="header"><i class="activicon-{{ category_data.icon }}"></i>{{ category|shorten }}</div>
                                 <span class="percent">percent</span>

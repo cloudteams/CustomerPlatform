@@ -193,7 +193,7 @@ def assignDurationInterval(duration):
 def getAppManagementDomValues(status, provider):
     if status == "Not Connected":
         return {
-            'buttonIcon': 'circle-arrow-right',
+            'buttonIcon': 'sign-in',
             'buttonText': 'Connect',
             'statusText': 'App not Connected',
             'statusIcon': 'fa fa-times-circle-o',
@@ -220,7 +220,7 @@ def getAppManagementDomValues(status, provider):
         }
     else:
         return {
-            'buttonIcon': 'trash',
+            'buttonIcon': 'trash-o',
             'buttonText': 'De-Authorize',
             'statusText': 'App connected',
             'statusIcon': 'fa fa-check-circle-o',

@@ -1,0 +1,38 @@
+td img {
+    height: 25px;
+    width: 25px;
+}
+
+td .connected-app-text {
+    font-weight: 400;
+}
+
+.btn {
+    background: white;
+    padding: 5px 25px;
+}
+
+.btn:hover {
+    background: #7d3c8c;
+}
+
+i.fa {
+    color: #7d3c8c;
+}
+
+.btn:hover i.fa {
+    color: white;
+}
+
+tr:not(:last-child) {
+    border-bottom: 10px solid transparent;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 300;
+    font-family: sans-serif;
+}
+
+.row {
+	margin-top: 25px;
+}

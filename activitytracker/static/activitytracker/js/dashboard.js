@@ -187,5 +187,6 @@ $('#carousel-providers.carousel').one('slid.bs.carousel', function() {
 $('#showActivityModal').on("loaded.bs.modal", function(e) {
     $('#editactivity').addClass('hidden');
     $('#deleteactivity').addClass('hidden');
+    initializeShowMap()
 });
 
