@@ -1,0 +1,111 @@
+{% load staticfiles %}
+
+{% with profile=request.user.profile %}
+	<aside class="dashboard-side-menu dashboard-side-menu-user col-lg-3">
+		<header>
+			<div class="vertical-align">
+				<div class="middle">
+					<h1 class="header-small">Dashboard</h1>
+					<p class="page-subtitle">&lt; Fold back</p>
+				</div>
+			</div>
+		</header>
+
+		<div class="member">
+			<div class="row">
+				<div class="vertical-align">
+						<div class="profile-picture col-xs-4 middle">
+							<div class="profile-avatar" {% if profile.avatar %}style="background-image:url({{ profile.avatar }}); height: 50px;"{% endif %}></div>
+						</div>
+
+						<div class="information col-xs-8 middle">
+							<ul>
+								<li class="meta big">{{ profile.get_display_name }}</li>
+								<li><a href="{% url 'start-profile-wizard' %}">Edit profile</a></li>
+							</ul>
+						</div>
+				</div>
+			</div>
+		</div>
+
+		<nav class="side-menu">
+			<ul>
+				<li class="active">
+					<a href="{% url 'followed-projects' %}">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-projects.svg" %}">
+						Projects
+					</a>
+				</li>
+
+				<li>
+					<a href="user-dashboard-campaigns.php">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-campaigns.svg" %}">
+						Campaigns
+					</a>
+				</li>
+
+				<li>
+					<a href="{% url 'notifications' %}" class="incoming">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
+						Notifications
+					</a>
+				</li>
+
+				<li>
+					<a href="{% url 'all-projects' %}">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-explore.svg" %}">
+						All projects
+					</a>
+				</li>
+			</ul>
+		</nav>
+
+		<div class="bottom">
+			<div class="profile-completion">
+				<h2 class="header-sidebar">Profile completion</h2>
+
+				{% with progress=profile.get_completion_progress %}
+					<div class="progress-container">
+						<div class="progress-wrap" data-progress-percent="0.{{ progress }}">
+							<div class="progress-bar"></div>
+						</div>
+						<p class="percentage bold">{{ progress }}/100</p>
+					</div>
+				{% endwith %}
+
+				<p class="update-profile">Update your profile</p>
+			</div>
+
+			<div class="profile-information">
+				<h2 class="header-sidebar">Profile information</h2>
+				<ul>
+					<li>
+						<img class="icon filled svg" src="{% static "img/icons/icon-city.svg" %}">
+						{% if request.user.location %}{{ request.user.location }}{% else %}-{% endif %}
+					</li>
+
+					<li>
+						<img class="icon filled svg" src="{% static "img/icons/icon-work.svg" %}">
+						{% if profile.business_sector %}{{ profile.business_sector }}{% else %}-{% endif %}
+					</li>
+
+					<li>
+						<img class="icon filled svg" src="{% static "img/icons/icon-location.svg" %}">
+						{% if profile.work_position %}{{ profile.work_position }}{% else %}-{% endif %}
+					</li>
+
+					<li>
+						<img class="icon filled svg" src="{% static "img/icons/icon-gender.svg" %}">
+						{% if request.user.gender == 'M' %}
+							Male
+						{% elif request.user.gender == 'F' %}
+							Female
+						{% else %}
+							-
+						{% endif %}
+					</li>
+				</ul>
+			</div>
+		</div>
+	</aside>
+{% endwith %}
