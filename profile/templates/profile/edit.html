@@ -7,7 +7,16 @@
     <link href="{% static 'profile/css/chosen.min.css' %}" rel="stylesheet" />
 {% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
+    <header class="main-header">
+        <div class="vertical-align">
+            <div class="middle">
+                <img class="svg" src="{% static "img/icons/icon-profile.svg" %}">
+                <h1 class="header-large">Edit profile</h1>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -19,15 +28,6 @@
                     {% with p=form.instance %}
                         <div class="wizard-page-container">
                             <ul class="profile-wizard-paginator">
-                                <li>
-                                    <div id="intro">
-                                        <h2>Intoduction</h2>
-                                        <div class="text-center">
-                                            <p>In this page you can complete information about you, your work and the relatioship you have with different technologies.</p>
-                                            <p>Feel free leave empty any information you don't want to send us.</p>
-                                        </div>
-                                    </div>
-                                </li>
                                 <li>
                                     <div class="step" id="basic-info-step">
                                         {% include "profile/steps/basic-info.html" %}

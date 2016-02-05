@@ -1,16 +1,16 @@
 /* My profile view */
 .profile-view {
     margin-top: 20px;
+    color: #b1b1b1;
+}
+
+.profile-view a:hover {
+    color: #fff;
 }
 
 .profile-view .profile-avatar {
-    position: relative;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     height: 150px;
     width: 150px;
-    border-radius: 50%;
 }
 
 .profile-view .personal-info {
@@ -71,8 +71,7 @@ ul.main-menu i {
 }
 
 .create-profile-form {
-    /*height: calc(100vh - 280px);
-    overflow-y: scroll;*/
+    color: #b1b1b1;
 }
 
 /* Slider */
@@ -132,7 +131,6 @@ ul.main-menu i {
 
 .wizard-page-container li {
     list-style: none;
-    color: #424242;
 }
 
 .wizard-page-container li h2 {
@@ -143,6 +141,10 @@ ul.main-menu i {
 
 .wizard-page-container li:first-of-type h2 {
     border-top: none;
+}
+
+.profile-save-msg {
+    color: #fff;
 }
 
 /* Intro & avatar */

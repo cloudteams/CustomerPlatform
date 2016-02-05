@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
@@ -120,3 +122,13 @@ def opinion_about(request):
         UserBrandOpinion.objects.create(user=request.user, brand=brand, opinion=opinion)
 
     return HttpResponse('')
+
+
+def notifications(request):
+    # TODO implement notifications page
+    ctx = {'notifications': [{
+        'message': 'This is a test message',
+        'created': datetime.now(),
+    }]}
+
+    return render(request, 'profile/notification/all.html', ctx)

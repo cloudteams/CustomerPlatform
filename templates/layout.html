@@ -31,15 +31,16 @@
 	<body>
 		{% include "util/menu.html" %}
 
-		<section class="page public-page {% block section_class %}{% endblock %}">
-			<div class="content">
-				<main>
-					{% block pre_content %}
-					{% endblock %}
+		<section class="page {% block class_public_page %}public-page {% endblock %}{% block section_class %}{% endblock %}">
 
+			{% block pre_content %}
+			{% endblock %}
+
+			<div {% block wrapper %}class="container"{% endblock %}>
+				<div class="content">
 					{% block content %}
 					{% endblock %}
-				</main>
+				</div>
 			</div>
 		</section>
 

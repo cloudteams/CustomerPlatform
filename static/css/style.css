@@ -6,8 +6,16 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover, a:not(
     color: #38173f;
 }
 
-.global-nav a:hover {
+.global-nav a:hover, aside a:hover {
     color: #fff !important;
+}
+
+.profile-avatar {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
 }
 
 .coming-soon {
@@ -38,3 +46,10 @@ h1 {
     display: none;
 }
 
+.social-media li:first-of-type {
+    display: block;
+}
+.social-media li {
+    padding-right: 20px;
+    display: inline-block;
+}

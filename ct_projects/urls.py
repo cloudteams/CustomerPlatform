@@ -6,7 +6,7 @@ __author__ = 'dipap'
 urlpatterns = [
     # projects lists
     url(r'^$', views.list_projects, name='all-projects'),
-    url(r'^followed-projects/$', views.followed_projects, name='followed-projects'),
+    url(r'^followed/$', views.followed_projects, name='followed-projects'),
 
     # ideas
     url(r'^(?P<pk>[\w-]+)/post-idea/$', views.post_idea, name='post-idea'),

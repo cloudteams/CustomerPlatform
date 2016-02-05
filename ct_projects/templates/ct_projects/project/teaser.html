@@ -1,7 +1,7 @@
 {% load url from future %}
 {% load staticfiles %}
 
-<article class="project public-project col-lg-4 col-md-6 col-xs-12 block-line-half">
+<article class="project public-project {% if not two_columns %}col-lg-4{% endif %} col-md-6 col-xs-12 block-line-half">
 	<div class="background">
         {% if project.logo %}
             <div class="background-image" style="background-image: url({{ project.logo }});">
@@ -17,7 +17,7 @@
 				<div class="custom-tooltip">
 					<ul>
 						<li>
-							<a href="{% url 'project-details' project.pk %}">More about this project</a>
+							<a href="{% url 'project-details' project.pk %}">More about this</a>
 						</li>
 						<li><a href="#nowhere">Follow project</a></li>
 					</ul>

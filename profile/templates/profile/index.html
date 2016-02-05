@@ -8,13 +8,50 @@
     <link href="{% static 'profile/css/chosen.min.css' %}" rel="stylesheet" />
 {% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
+    <header class="main-header">
+        <div class="vertical-align">
+            <div class="middle">
+                <img class="svg" src="{% static "img/icons/icon-profile.svg" %}">
+                <h1 class="header-large">Profile</h1>
+            </div>
+        </div>
+    </header>
+
+    <section class="user-profile-content">
+        <header class="information">
+            <div class="vertical-align">
+                <div class="profile-picture col-xs-4 middle">
+                    <div class="profile-avatar" {% if profile.profile_picture %}style="background-image:url({{profile.avatar}}); height: 100px;"{% endif %}></div>
+                </div>
+
+                <div class="information col-xs-8 middle">
+                    <ul>
+                        <li class="meta big">
+                            <h2 class="header-large secondary">{{ profile.get_display_name }}</h2>
+                        </li>
+
+                        <li>
+                            {{ request.user.email }}
+                        </li>
+
+                        <li>
+                            <div class="progress-container">
+                                <div class="progress-wrap" data-progress-percent="0.75">
+                                    <div class="progress-bar" style="width: 75%;"></div>
+                                </div>
+                                <p class="percentage bold">48/100</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
         <div class="container profile-view">
 
             <div class="row">
-                <div class="col-md-3">
-                    <div class="profile-avatar" {% if profile.profile_picture %}style="background-image:url(/media/{{profile.profile_picture}});"{% endif %}></div>
-
+                <div class="col-md-4">
                     <div class="row">
                         <p class="col-md-12">
                             <h4>You & tech</h4>
@@ -79,7 +116,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="personal-info">
                         <p class="name-age">
                             {{ profile.first_name }} {% if profile.last_name_initial %} {{ profile.last_name_initial }} {% endif %}.
@@ -114,28 +151,9 @@
 
                     {% include "profile/brand-opinion/feedback.html" %}
                 </div>
-
-                <div class="col-md-3">
-                    <div class="opinions-container opinions-like">
-                        <h4>Brands you like</h4>
-                        {% for brand in liked_brands %}
-                            <img src="{{brand|get_brand_icon}}" width="{{brand|get_icon_width}}" class="brand-icon" title="{{brand|lower}}"/>
-                        {% empty %}
-                            <p>No brands you like found.</p>
-                        {% endfor %}
-                    </div>
-                    <div class="opinions-container opinions-dislike">
-                        <h4>Brands you dislike</h4>
-                        {% for brand in disliked_brands %}
-                            <img src="{{brand|get_brand_icon}}" width="{{brand|get_icon_width}}" class="brand-icon" title="{{brand|lower}}"/>
-                        {% empty %}
-                            <p>No brands you dislike found.</p>
-                        {% endfor %}
-                    </div>
-                </div>
             </div>
-
         </div>
+    </section>
 {% endblock %}
 
 {% block js %}

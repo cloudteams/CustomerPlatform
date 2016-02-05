@@ -35,14 +35,15 @@ def followed_projects(request):
     """
     q = request.GET.get('q', '')
 
+    n_of_followed = ProjectFollowing.objects.filter(user=request.user).count()
     projects = [f.project for f in ProjectFollowing.objects.filter(user=request.user)]
 
     context = {
         'projects': projects,
-        'q': q,
+        'n_of_followed': n_of_followed,
     }
 
-    return render(request, 'ct_projects/project/followed.html', context)
+    return render(request, 'ct_projects/project/dashboard.html', context)
 
 
 @login_required

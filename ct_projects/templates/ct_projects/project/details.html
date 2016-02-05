@@ -4,8 +4,10 @@
 {% load staticfiles %}
 {% block title %}{{ project.title }}{% endblock %}
 {% block section_class %}page-public-project-overview{% endblock %}
+{% block wrapper %}{% endblock %}
 
 {% block content %}
+    <main>
         <section class="public-project-overview-content">
             <header class="main-header" {% if project.logo %}style="background-image: url({{project.logo}});"{% endif %}>
                 <div class="vertical-align">
@@ -15,7 +17,6 @@
                     </div>
                 </div>
             </header>
-
             <div class="submenu">
                 <div class="container">
                     <ul class="menu-subpage public">
@@ -203,6 +204,7 @@
                 {% endif %}
             </section>
         </section>
+    </main>
 {% endblock %}
 
 {% block extra_js %}

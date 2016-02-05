@@ -26,9 +26,9 @@
 						<li>
 							<div class="vertical-align">
 								<div class="middle">
-									<a href="{% url 'all-projects' %}">
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-projects.svg" %}">
-										Projects
+									<a href="{% url 'followed-projects' %}">
+										<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
+										Dashboard
 									</a>
 								</div>
 							</div>
@@ -37,7 +37,7 @@
 						<li>
 							<div class="vertical-align">
 								<div class="middle">
-									<a href="/notifications/">
+									<a href="{% url 'notifications' %}">
 										<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
 										Notifications
 									</a>

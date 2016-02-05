@@ -14,33 +14,34 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <section class="public-projects-logged-in-content">
-            <header>
-                <h2 class="header-large public">Latest projects</h2>
-                <p class="header-small action-text"><a href="#nowhere">See all</a></p>
+    <main>
+        <div class="container">
+            <section class="public-projects-logged-in-content">
+                <header>
+                    <h2 class="header-large public">Latest projects</h2>
+                    <p class="header-small action-text"><a href="#nowhere">See all</a></p>
 
-                <div class="filter-container">
-                    <label for="filter-projects">Filter projects</label>
-                    <div class="select-dropdown">
-                        <i class="fa fa-angle-down"></i>
-                        <select name="filter-projects" id="filter-projects" onchange="" size="1">
-                            <option value="all-projects" selected>All projects</option>
-                            <option value="filter-1">Filter 2</option>
-                            <option value="filter-2">Filter 3</option>
-                            <option value="filter-3">Filter 4</option>
-                        </select>
+                    <div class="filter-container">
+                        <label for="filter-projects">Filter projects</label>
+                        <div class="select-dropdown">
+                            <i class="fa fa-angle-down"></i>
+                            <select name="filter-projects" id="filter-projects" onchange="" size="1">
+                                <option value="all-projects" selected>All projects</option>
+                                <option value="/projects/followed-projects/">Followed projects</option>
+                                <option value="/projects/trending-projects/">Trending projects</option>
+                            </select>
+                        </div>
                     </div>
+                </header>
+
+                <div class="row">
+                    {% with projects=page_obj.object_list %}
+                        {% include "ct_projects/project/list.html" %}
+                    {% endwith %}
                 </div>
-            </header>
 
-            <div class="row">
-                {% with projects=page_obj.object_list show_new=True %}
-                    {% include "ct_projects/project/list.html" %}
-                {% endwith %}
-            </div>
-
-            {% include "ct_projects/util/paginator.html" %}
-        </section>
-    </div>
+                {% include "ct_projects/util/paginator.html" %}
+            </section>
+        </div>
+    </main>
 {% endblock %}

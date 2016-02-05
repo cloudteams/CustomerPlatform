@@ -11,4 +11,7 @@ urlpatterns = [
     # Brand opinions
     url(r'^get-brand-opinion$', views.get_brand_opinion, name='get-brand-opinion'),
     url(r'^opinion-about$', views.opinion_about, name='opinion-about'),
+
+    # Notification
+    url(r'^notifications/$', views.notifications, name='notifications')
 ]

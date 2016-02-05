@@ -41,6 +41,25 @@ class UserProfile(models.Model):
     def get_display_name(self):
         return '%s %s.' % (self.first_name, self.last_name_initial)
 
+    def get_display_name(self):
+        if self.first_name and self.last_name_initial:
+            return '%s %s.' % (self.first_name, self.last_name_initial)
+        else:
+            return self.user.username
+
+    def get_completion_progress(self):
+        """
+        :return: A two digit percentage ("00" - "99") indicating how much of the profile info has been completed
+        """
+        # TODO implement profile complete calculation logic
+        return "65"
+
+    def avatar(self):
+        if not self.profile_picture:
+            return None
+        else:
+            return '/media/avatars/' + self.profile_picture.name.split('/')[-1]
+
 
 class Influence(models.Model):
     user = models.ForeignKey(User, related_name='influences')
