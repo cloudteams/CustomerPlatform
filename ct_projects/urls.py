@@ -24,8 +24,9 @@ urlpatterns = [
     url(r'^comments/posted/$', views.comment_posted),
     url(r'^comments/', include('django_comments.urls')),
 
-    # campaigns
+    # campaigns, polls & documents
     url(r'^(?P<project_pk>[\w-]+)/campaigns/(?P<pk>\d+)$', views.campaign_details, name='campaign-details'),
+    url(r'^(?P<project_pk>[\w-]+)/polls/(?P<pk>\d+)/token/$', views.request_poll_token, name='request-poll-token'),
 
     # project API
     url(r'^api/all/$', project_api.project_list),

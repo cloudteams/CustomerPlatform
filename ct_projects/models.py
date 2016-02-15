@@ -3,6 +3,7 @@ import json
 import datetime
 import requests
 from django.contrib.contenttypes import generic
+from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -214,6 +215,9 @@ class Poll(models.Model):
     campaign = models.ForeignKey(Campaign, related_name='polls')
     name = models.CharField(max_length=255)
     description = models.TextField()
+
+    def request_token_link(self):
+        return reverse('request-poll-token', args=(self.campaign.project.pk, self.pk))
 
     def get_poll_token_link(self, user):
         # get or create the link/user/persona combination

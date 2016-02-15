@@ -8,7 +8,7 @@ from django.views.generic import DetailView
 from django_comments.forms import CommentForm
 from django_comments.models import Comment
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea, Project, Campaign
+from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken
 
 
 def list_projects(request):
@@ -205,3 +205,9 @@ class CampaignDetailView(DetailView):
         return ctx
 
 campaign_details = CampaignDetailView.as_view()
+
+
+@login_required
+def request_poll_token(request, project_pk, pk):
+    poll = get_object_or_404(Poll, pk=pk)
+    return redirect(poll.get_poll_token_link(request.user))

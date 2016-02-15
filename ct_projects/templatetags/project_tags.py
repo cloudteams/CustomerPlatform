@@ -1,5 +1,5 @@
 from django import template
-from ct_projects.models import ProjectFollowing
+from ct_projects.models import ProjectFollowing, PollToken
 
 __author__ = 'dipap'
 
@@ -50,7 +50,11 @@ def join(lst, sep):
 
 @register.filter
 def get_poll_token_link(poll, user):
-    return poll.get_poll_token_link(user)
+    try:
+        token = PollToken.objects.get(poll=poll, user=user)
+        return token.get_absolute_url()
+    except PollToken.DoesNotExist:
+        return poll.request_token_link()
 
 
 @register.filter
