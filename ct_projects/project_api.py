@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ct_projects.forms import ProjectForm
-from ct_projects.models import Project
+from ct_projects.models import Project, PollToken
 
 __author__ = 'dipap'
 
@@ -59,3 +59,24 @@ def project(request, pk):
     else:
         # invalid/unsupported HTTP method
         return JsonResponse({'error': 'Method %s not allowed on project' % request.method}, status=403)
+
+
+@csrf_exempt
+def update_poll_token(request, nonce):
+    # 7b02a52969fefe6c5c469efddeddd42c6cfa93e6
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=400)
+
+    if not nonce:
+        return JsonResponse({'error': '`nonce` field is required'}, status=400)
+
+    try:
+        poll_token = PollToken.objects.get(token_link__endswith='?nonce=' + nonce)
+    except PollToken.DoesNotExist:
+        return JsonResponse({'error': 'token for this nonce was not found'}, status=404)
+
+    # update the token & return OK
+    poll_token.status = 'USED'
+    poll_token.save()
+
+    return JsonResponse({}, status=200)

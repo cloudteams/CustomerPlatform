@@ -16,6 +16,7 @@ from Activitytracker_Project.settings import ANONYMIZER_URL
 from activitytracker.models import User
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
+from ct_projects.lists import POLL_TOKEN_STATES
 
 
 class Project(models.Model):
@@ -248,6 +249,7 @@ class PollToken(models.Model):
     poll = models.ForeignKey(Poll, related_name='tokens')
     user = models.ForeignKey(User, related_name='poll_tokens')
     persona_id = models.IntegerField(blank=True, null=True)
+    status = models.CharField(max_length=8, choices=POLL_TOKEN_STATES, default='OPEN')
 
     def get_absolute_url(self):
         result = self.token_link

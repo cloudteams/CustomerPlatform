@@ -211,3 +211,4 @@ campaign_details = CampaignDetailView.as_view()
 def request_poll_token(request, project_pk, pk):
     poll = get_object_or_404(Poll, pk=pk)
     return redirect(poll.get_poll_token_link(request.user))
+
