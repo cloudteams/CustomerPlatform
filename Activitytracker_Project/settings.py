@@ -30,7 +30,9 @@ ALLOWED_HOSTS = ['*']
 
 SECRET_KEY = 'o2gyhpz9aodq95f#*=jj#(sb@0c&ss&07+8-p3k&97mhqcx349'
 
-
+# Check if we're on development or production
+# Not the same as DEBUG since right now we're on DEBUG=True on production as well
+PRODUCTION = os.path.isfile(os.path.join(BASE_DIR, 'production.txt'))
 
 # Application definition
 

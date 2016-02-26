@@ -10,9 +10,11 @@ from django.db import models
 
 # The project is not a typical Django model as it's not saved on the CloudTeams community site but on BSCW
 from django.db.models import Sum
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django_comments.models import Comment
 
-from Activitytracker_Project.settings import ANONYMIZER_URL
+from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION
 from activitytracker.models import User
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
@@ -64,6 +66,9 @@ class Project(models.Model):
         else:
             return None
 
+    def on_project_create(self):
+        requests.post(ANONYMIZER_URL + '/persona-builder/api/init-project/', data={'project': self.pk})
+
     def to_json(self):
         return {
             'id': self.pk,
@@ -81,6 +86,17 @@ class Project(models.Model):
             'ideas': [idea.to_json() for idea in self.ideas.all()],
             'campaigns': [campaign.to_json() for campaign in self.campaigns.all()],
         }
+
+
+@receiver(post_save, sender=Project)
+def on_project_create(sender, instance, created, **kwargs):
+    # Only on production
+    if not PRODUCTION:
+        return
+
+    # Only when instance was created
+    if created:
+        instance.on_project_create()
 
 
 class ProjectFollowing(models.Model):
