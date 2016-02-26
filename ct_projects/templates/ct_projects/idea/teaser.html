@@ -9,7 +9,15 @@
 <article class="idea block">
 	<div class="idea-container">
 		<header>
-			<h3 class="header-medium secondary">{{idea.title}}</h3>
+			<h3 class="header-medium secondary clearfix">
+				{{ idea.title }}
+
+				<span class="pull-right" style="color: rgba(0, 0, 0, 0.5); font-size: 80%;">
+					{% with author=idea.user %}
+						Posted by {{ idea.project|get_anonymized_username:author }}
+					{% endwith %}
+				</span>
+			</h3>
 		</header>
 
 		<i class="fa fa-angle-right"></i>
@@ -17,7 +25,16 @@
 		<div class="content">
 			<p>{{idea.description|linebreaksbr}}</p>
 
-            {% render_comment_list for idea %}
+            {% for comment in idea.comments.all %}
+				<div class="comment">
+					<span class="info">
+						{% with comment_author=comment.user %}
+							{{ idea.project|get_anonymized_username:comment_author }} - {{ comment.submit_date }}
+						{% endwith %}
+					</span>
+					<p>{{ comment.comment }}</p>
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 

@@ -72,3 +72,9 @@ def is_liked_by(idea, user):
         return False
 
     return idea.ratings.filter(user=user).exists()
+
+
+@register.filter
+def get_anonymized_username(item, user):
+    return item.get_anonymized_username(user)
+

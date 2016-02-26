@@ -68,6 +68,7 @@ class Project(models.Model):
 
     def get_anonymized_username(self, user):
             u = self.anonymize(user)
+            return '%s %s' % (u['first_name'], u['last_name'])
 
     def on_project_create(self):
         requests.post(ANONYMIZER_URL + '/persona-builder/api/init-project/', data={'project': self.pk})

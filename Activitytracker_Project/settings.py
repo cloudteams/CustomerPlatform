@@ -223,6 +223,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-
-ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr:8000'
+if PRODUCTION:
+    ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr:8000'
+else:
+    ANONYMIZER_URL = 'http://localhost:8000'
 
