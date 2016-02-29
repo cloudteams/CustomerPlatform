@@ -1,53 +1,65 @@
-{% extends "base_non_authenticated.html" %}
+{% extends "layout.html" %}
+{% load url from future %}
+{% load project_tags %}
 {% load staticfiles %}
-{% load custom_templates %}
+{% block title %}Login{% endblock %}
+{% block section_class %}page-login{% endblock %}
+{% block wrapper %}{% endblock %}
+
+{% block menu %}{% endblock %}
 {% block content %}
-    <div class="login-box col-md-offset-4 col-md-4">
+    <main>
+        <form action="{% url 'login' %}" method="POST"  >
+			<header class="main-header login">
+				<div class="container">
+					<h1 class="header-extra-large public">Welcome</h1>
+					<p class="public-page-subtitle">Please log in or register to continue</p>
+				</div>
+			</header>
 
-        <div class="row">
-            <div class="col-xs-offset-3 col-xs-6">
-                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
-            </div>
-        </div>
-        <form class="form-horizontal" action="{% url 'login' %}" method="post" name="loginForm" id="loginForm">
-            {% csrf_token %}
-            <fieldset>
+			<section class="public-projects-logged-in-content">
+                <div class="container">
+                    <div class="row">
 
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    <input name="username" id="username" type="text" class="form-control input-lg" placeholder="Username or Email" />
+                        <div class="col-md-offset-3 col-md-6">
+
+                            <div class="content form-section">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <label for="username" class="header-medium secondary">Username</label>
+
+                                    <div class="input-container">
+                                        <i class="icon icon-edit"></i>
+                                        <input type="text" id="username" name="username" placeholder="Hans">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <label for="password" class="header-medium secondary">Password</label>
+
+                                    <div class="input-container">
+                                        <i class="icon icon-edit"></i>
+                                        <input type="password" id="password" name="password" placeholder="Secret">
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                    <input name="password" id="password" type="password" class="form-control input-lg" placeholder="Password" />
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="button-end">
+                                <button type="submit" class="btn big">Log in</button>
+                                <p>Not sure which account is right for you? <a href="#nowhere">Learn more</a></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <h3 id="messageParagraph" class="text-center"></h3>
-
-                <div class="text-center login-margin">
-                    <button type="submit" class="btn btn-large btn-blueNavy">Login</button>
-                </div>
-            </fieldset>
+            </section>
         </form>
-        <div class="social-login text-center">
-            <img src="{% static 'activitytracker/img/facebook-login.png' %}" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
-            <img src="{% static 'activitytracker/img/google-login.png' %}" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
-        </div>
-        <div class="container-fluid">
-            <h3 class="row">
-                <a class="col-xs-12 text-center register-margin" href="{% url 'register' %}">Register</a>
-                <a class="col-xs-12 text-center" href="{% url 'passwordforget' %}">Forgot Password</a>
-            </h3>
-        </div>
-
-    </div><!--/span-->
-
-    <div class="modal" id="videoModal">
-        <div class="modal-dialog" >
-            <iframe width="100%" height="100%"
-                src="http://www.youtube.com/embed/pC0-JZceRRk?autoplay=1&controls=0">
-            </iframe>
-        </div>
-    </div>
+    </main>
 {% endblock %}

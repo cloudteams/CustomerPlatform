@@ -1572,6 +1572,9 @@ fieldset[disabled]
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem; }
+  .btn.big, .big.btn-transparent, .big.btn-green, .big.btn-grey, .big.btn-confirm, .big.btn-decline {
+    font-size: 18px;
+    padding: 20px 40px; }
   .btn:focus, .btn-transparent:focus, .btn-green:focus, .btn-grey:focus, .btn-confirm:focus, .btn-decline:focus, .btn.focus, .focus.btn-transparent, .focus.btn-green, .focus.btn-grey, .focus.btn-confirm, .focus.btn-decline, .btn:active:focus, .btn-transparent:active:focus, .btn-green:active:focus, .btn-grey:active:focus, .btn-confirm:active:focus, .btn-decline:active:focus, .btn:active.focus, .btn-transparent:active.focus, .btn-green:active.focus, .btn-grey:active.focus, .btn-confirm:active.focus, .btn-decline:active.focus, .btn.active:focus, .active.btn-transparent:focus, article.blogpost:hover .background-image .btn-transparent.content:focus, .active.btn-green:focus, article.blogpost:hover .background-image .btn-green.content:focus, .active.btn-grey:focus, article.blogpost:hover .background-image .btn-grey.content:focus, .active.btn-confirm:focus, article.blogpost:hover .background-image .btn-confirm.content:focus, .active.btn-decline:focus, article.blogpost:hover .background-image .btn-decline.content:focus, article.blogpost:hover .background-image .btn.content:focus, .btn.active.focus, .active.focus.btn-transparent, article.blogpost:hover .background-image .focus.btn-transparent.content, .active.focus.btn-green, article.blogpost:hover .background-image .focus.btn-green.content, .active.focus.btn-grey, article.blogpost:hover .background-image .focus.btn-grey.content, .active.focus.btn-confirm, article.blogpost:hover .background-image .focus.btn-confirm.content, .active.focus.btn-decline, article.blogpost:hover .background-image .focus.btn-decline.content, article.blogpost:hover .background-image .btn.focus.content {
     outline: thin dotted;
     outline: 5px auto -webkit-focus-ring-color;
@@ -6941,3 +6944,38 @@ footer#footer {
 
 .article-subtitle {
   color: #b1b1b1; }
+
+/* Login */
+section.public-page .choice a:first-child {
+    margin-right: 10px; }
+  section.public-page .button-end {
+    text-align: center;
+    margin: 80px 0; }
+    section.public-page .button-end p {
+      margin-top: 40px;
+      font-size: 18px;
+      letter-spacing: 0.04em; }
+      section.public-page .button-end p a {
+        text-transform: uppercase;
+        font-weight: 700; }
+        section.public-page .button-end p a:hover {
+          color: #884c9b; }
+    section.public-page .button-end.choice {
+      text-align: right; }
+  section.public-page.page-login h1 {
+    text-transform: uppercase; }
+  section.public-page.page-login .role {
+    text-align: center; }
+    section.public-page.page-login .role img {
+      width: 85%; }
+    section.public-page.page-login .role.role-user img {
+      -webkit-transform: rotate(-15deg) translate(0, -40px);
+              transform: rotate(-15deg) translate(0, -40px); }
+    section.public-page.page-login .role.role-developer img {
+      -webkit-transform: rotate(15deg) translate(0, -40px);
+              transform: rotate(15deg) translate(0, -40px); }
+    section.public-page.page-login .role .btn, section.public-page.page-login .role .btn-transparent, section.public-page.page-login .role .btn-green, section.public-page.page-login .role .btn-grey, section.public-page.page-login .role .btn-confirm, section.public-page.page-login .role .btn-decline {
+      margin-top: 20px; }
+    section.public-page.page-login .role .image:hover {
+      -webkit-animation: pop-small 350ms cubic-bezier(0.5, 0.35, 0, 1);
+              animation: pop-small 350ms cubic-bezier(0.5, 0.35, 0, 1); }

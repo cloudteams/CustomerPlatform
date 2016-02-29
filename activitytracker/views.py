@@ -67,13 +67,11 @@ def login(request):
         if request.user.is_authenticated():
             return HttpResponseRedirect(reverse('followed-projects'))
 
-        return render(request,
-                      'activitytracker/login.html',
-                      {'redirect_url': request.GET.get('next',
-                                                       '/projects/followed/'
-                                                       )
-                       }
-                      )
+        ctx = {
+            'redirect_url': request.GET.get('next', '/projects/followed/'),
+            'hide_menu': True,
+        }
+        return render(request, 'activitytracker/login.html', ctx)
 
     username_or_email = request.POST['username']
     password = request.POST['password']
@@ -98,7 +96,7 @@ def login(request):
 
     auth_login(request, user)
 
-    return HttpResponse('Ok')
+    return redirect('/projects/')
 
 
 # Flush Session and redirect
