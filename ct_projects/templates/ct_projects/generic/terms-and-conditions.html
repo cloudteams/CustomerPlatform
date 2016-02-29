@@ -1,0 +1,38 @@
+{% extends "ct_projects/base.html" %}
+{% load url from future %}
+{% load project_tags %}
+{% load staticfiles %}
+{% block title %}Terms and conditions{% endblock %}
+{% block wrapper %}{% endblock %}
+
+{% block content %}
+    <main>
+        <section>
+            <div class="container terms-and-conditions">
+                <h1>Terms and conditions</h1>
+
+                <p>This is an application developed for research purposes by the consortium of the CloudTeams Horizon2020 funded project, that aims to help product development teams and early adopters connect more easily.</p>
+
+                <p>The application collects activity-based information the user has shared manually or through third party applications (RunKeeper, Facebook and more). The emails and names that are stored in the system are only used to interact with the user and are not being used for any commercial or privacy violating purposes. The authorization of the any third-party service will be only be used to retrieve new application data provided by the API of the service, which will be solely collected and used for the purposes of the research and application. Any kind of information not related to the research purposes of the current application will be ignored and not fetched at all.
+                Protection of Certain Personally-Identifying Information.</p>
+
+                <p>The application discloses potentially personally-identifying and personally-identifying information only to those of its research team, partners, researchers and affiliated organizations that (i) need to know that information in order to validate the research results, and (ii) that have agreed not to disclose it to others. Some of those employees, partners, researchers and affiliated organizations may be located outside of your home country; by using the application, you consent to the transfer of such information to them. The consortium takes all measures reasonably necessary to protect against the unauthorized access, use, alteration or destruction of potentially personally-identifying and personally-identifying information. The consortium may process your personal data to improve its own analytics and further increase the added value given. The outcome of this process will not be available to any third-party entity.
+                Internet Protocol (IP) Address, WAN Data and Cookie processing.</p>
+
+                <p>No data of IP Addresses, WAN data and cookies will be processed by the application. Any such data unavoidably recognized for technical reasons will be deleted as soon as possible.</p>
+
+                <h3>Ads</h3>
+
+                <p>Data will not be given and used for any advertising purpose.</p>
+
+                <h3>Privacy Policy Changes</h3>
+
+                <p>The application may change its Privacy Policy from time to time. We advice the users to constantly check the privacy policy of the application</p>
+
+                <h3>Leaving the application</h3>
+
+                <p>By deleting your account in the application, all of your data including personal information, authorization keys and any sort of inserted data is automatically deleted and permanently removed from the system.</p>
+            </div>
+        </section>
+    </main>
+{% endblock %}

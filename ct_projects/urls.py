@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^api/all/$', project_api.project_list),
     url(r'^api/(?P<pk>\d+)/$', project_api.project),
     url(r'^api/tokens/(?P<nonce>[\w-]+)/mark-as-used/$', project_api.update_poll_token),
+    url(r'^api/(?P<pk>\d+)/notify-users/$', project_api.notify_users),
 ]

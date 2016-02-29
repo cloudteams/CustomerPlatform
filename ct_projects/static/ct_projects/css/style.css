@@ -131,3 +131,12 @@ section.user-dashboard-projects-content {
 .campaign-poll .article-header {
     margin-bottom: 0 !important;
 }
+
+/* Terms and Conditions */
+.terms-and-conditions {
+    text-align: justify;
+}
+
+.terms-and-conditions h1 {
+    color: #424242;
+}

@@ -20,6 +20,8 @@ from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PAS
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
 from ct_projects.lists import POLL_TOKEN_STATES
 
+from django.db import transaction
+
 
 class Project(models.Model):
     """
@@ -67,8 +69,8 @@ class Project(models.Model):
             return None
 
     def get_anonymized_username(self, user):
-            u = self.anonymize(user)
-            return '%s %s' % (u['first_name'], u['last_name'])
+        u = self.anonymize(user)
+        return '%s %s' % (u['first_name'], u['last_name'])
 
     def on_project_create(self):
         requests.post(ANONYMIZER_URL + '/persona-builder/api/init-project/', data={'project': self.pk})
@@ -196,6 +198,29 @@ class Campaign(models.Model):
         else:
             return (self.expires - datetime.datetime.today()).days
 
+    def get_users(self):
+        # get users to whom this item should be sent
+        users = []
+        req = requests.get(ANONYMIZER_URL + '/persona-builder/api/campaign-users/?campaign=%d' % self.pk)
+        uids = json.loads(req.content)
+        for uid in uids:
+            try:
+                users.append(User.objects.get(pk=uid))
+            except User.DoesNotExist:
+                pass
+
+        return users
+
+    def send(self):
+        # send notifications for all documents & polls
+        users = self.get_users()
+
+        for document in self.documents.all():
+            document.send(users)
+
+        for poll in self.polls.all():
+            poll.send(users)
+
     def to_json(self):
         return {
             'id': self.id,
@@ -222,6 +247,15 @@ class Document(models.Model):
 
     def get_absolute_url(self):
         return self.link
+
+    def send(self, users=None):
+        if not users:
+            users = self.campaign.get_users()
+
+        with transaction.atomic():
+            for user in users:
+                if not Notification.objects.filter(user=user, document=self).exists():
+                    Notification.objects.create(user=user, document=self)
 
 
 class Poll(models.Model):
@@ -259,6 +293,15 @@ class Poll(models.Model):
 
         return token.get_absolute_url()
 
+    def send(self, users=None):
+        if not users:
+            users = self.campaign.get_users()
+
+        with transaction.atomic():
+            for user in users:
+                if not Notification.objects.filter(user=user, poll=self).exists():
+                    Notification.objects.create(user=user, poll=self)
+
 
 class PollToken(models.Model):
     """
@@ -276,3 +319,19 @@ class PollToken(models.Model):
             result += '&persona=%d' % self.persona_id
 
         return result
+
+
+class Notification(models.Model):
+    """
+    A notification regarding documents & polls
+    """
+    user = models.ForeignKey(User, related_name='notifications')
+    document = models.ForeignKey(Document, blank=True, default=None)
+    poll = models.ForeignKey(Poll, blank=True, default=None)
+    seen = models.BooleanField(default=False)
+
+    def to_text(self):
+        if self.document:
+            return self.document
+        else:
+            return self.poll

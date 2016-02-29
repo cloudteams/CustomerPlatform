@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ct_projects.forms import ProjectForm
-from ct_projects.models import Project, PollToken
+from ct_projects.models import Project, PollToken, Campaign, Poll, Document
 
 __author__ = 'dipap'
 
@@ -63,7 +63,6 @@ def project(request, pk):
 
 @csrf_exempt
 def update_poll_token(request, nonce):
-    # 7b02a52969fefe6c5c469efddeddd42c6cfa93e6
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=400)
 
@@ -78,5 +77,19 @@ def update_poll_token(request, nonce):
     # update the token & return OK
     poll_token.status = 'USED'
     poll_token.save()
+
+    return JsonResponse({}, status=200)
+
+
+@csrf_exempt
+def notify_users(request, pk):
+    try:
+        Campaign.objects.get(pk=pk).send()
+    except Campaign.DoesNotExist:
+        Poll.objects.get(pk=pk).send()
+    except Poll.DoesNotExist:
+        Document.objects.get(pk=pk).send()
+    except Document.DoesNotExist:
+        return JsonResponse({'error': 'No campaign, poll or document with ID #%d was found' % pk}, status=404)
 
     return JsonResponse({}, status=200)

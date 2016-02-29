@@ -212,3 +212,7 @@ def request_poll_token(request, project_pk, pk):
     poll = get_object_or_404(Poll, pk=pk)
     return redirect(poll.get_poll_token_link(request.user))
 
+
+# Project generic views
+def terms_and_conditions(request):
+    return render(request, 'ct_projects/generic/terms-and-conditions.html')
