@@ -13,7 +13,7 @@
 			<header class="main-header login">
 				<div class="container">
 					<h1 class="header-extra-large public">Welcome</h1>
-					<p class="public-page-subtitle">Please log in or register to continue</p>
+					<p class="public-page-subtitle">Please log in or <a href="{% url 'register' %}">register</a> to continue</p>
 				</div>
 			</header>
 
@@ -54,6 +54,12 @@
                         <div class="col-xs-12">
                             <div class="button-end">
                                 <button type="submit" class="btn big">Log in</button>
+                                <p>Or use one of your social accounts:</p>
+                                <div class="social-login text-center">
+                                    <img src="{% static 'activitytracker/img/facebook-login.png' %}" style="width:50px; height:50px;" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
+                                    <img src="{% static 'activitytracker/img/google-login.png' %}" style="width:50px; height:50px;" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
+                                </div>
+                                <p>Are you a developer? <a href="https://cloudteams.fit.fraunhofer.de/pub/">Log in here</a></p>
                                 <p>Not sure which account is right for you? <a href="#nowhere">Learn more</a></p>
                             </div>
                         </div>

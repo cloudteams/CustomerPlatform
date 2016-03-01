@@ -1,56 +1,88 @@
-{% extends "base_non_authenticated.html" %}
+{% extends "layout.html" %}
+{% load url from future %}
+{% load project_tags %}
 {% load staticfiles %}
-{% load custom_templates %}
+{% block title %}Register{% endblock %}
+{% block section_class %}page-login{% endblock %}
+{% block wrapper %}{% endblock %}
 
-{% block css %}
-    <link href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}" rel="stylesheet">
-{% endblock %}
-
+{% block menu %}{% endblock %}
 {% block content %}
-    <div class="accountOptions-box col-md-offset-4 col-md-4">
+    <main>
+        <form action="{% url 'register' %}" method="POST"  >
+			<header class="main-header login">
+				<div class="container">
+					<h1 class="header-extra-large public">Welcome</h1>
+					<p class="public-page-subtitle">Please <a href="{% url 'login' %}">log in</a> or register to continue</p>
+				</div>
+			</header>
 
-        <div class="row">
-            <div class="col-xs-offset-3 col-xs-6">
-                <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
-            </div>
-            <h1 class="text-center col-xs-12">Register Below</h1>
-        </div>
-        <hr>
-        <form class="form-horizontal" action="{% url 'register' %}" method="post" name="registerForm" id="registerForm">
-            {% csrf_token %}
-            <fieldset>
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                    <input class="form-control input-lg" name="email" id="email" type="text" placeholder="Email Address"/>
+			<section class="public-projects-logged-in-content">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-md-offset-3 col-md-6">
+
+                            <div class="content form-section">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <label for="username" class="header-medium secondary">Username</label>
+
+                                    <div class="input-container">
+                                        <i class="icon icon-edit"></i>
+                                        <input type="text" id="username" name="username" placeholder="Hans">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <label for="username" class="header-medium secondary">Email</label>
+
+                                    <div class="input-container">
+                                        <i class="icon icon-edit"></i>
+                                        <input type="text" id="email" name="email" placeholder="Hans">
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <label for="password" class="header-medium secondary">Password</label>
+
+                                    <div class="input-container">
+                                        <i class="icon icon-edit"></i>
+                                        <input type="password" id="password" name="password" placeholder="Secret">
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <label for="password" class="header-medium secondary">Password (again)</label>
+
+                                    <div class="input-container">
+                                        <i class="icon icon-edit"></i>
+                                        <input type="password" id="password_repeat" name="password_repeat" placeholder="Secret">
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
-                <h3 class="hidden error-message text-center" id="emailmessage">This email is already in use</h3>
 
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                    <input class="form-control input-lg" name="password" id="password" type="password" placeholder="Password"/>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="button-end">
+                                <button type="submit" class="btn big">Register</button>
+                                <p>Or register with one of your social accounts:</p>
+                                <div class="social-login text-center">
+                                    <img src="{% static 'activitytracker/img/facebook-login.png' %}" style="width:50px; height:50px;" onclick="window.open('{% url 'social:begin' 'facebook' %}', 'newwindow', 'width=500, height=500')">
+                                    <img src="{% static 'activitytracker/img/google-login.png' %}" style="width:50px; height:50px;" onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', 'newwindow', 'width=500, height=500')">
+                                </div>
+                                <p>Are you a developer? <a href="https://cloudteams.fit.fraunhofer.de/pub/">Register here</a></p>
+                                <p>Not sure which account is right for you? <a href="#nowhere">Learn more</a></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="left-inner-addon">
-                    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                    <input class="form-control input-lg" name="password_repeat" id="password_repeat" type="password" placeholder="Password Again"/>
-                </div>
-                <h3 class="hidden error-message text-center" id="passwordmessage" >Passwords don't match each other</h3>
-
-                <div class="col-xs-12"><h3 class='success-message hidden'>Registration Successful! We have sent you an e-mail with a validation link to follow</h3></div>
-
-                <div class="col-xs-4 col-xs-offset-4 account-btn">
-                    <button  type="submit" class="btn btn-blueNavy col-xs-12">Register</button>
-                </div>
-
-                <div class="col-xs-12"><h2 class="text-center">By registering to the service you agree to the <a target="_blank" href="{% url 'terms_and_conditions' %}" >terms and conditions</a></h2></div>
-
-            </fieldset>
+            </section>
         </form>
-
-        <div class="row"><h3 class="text-center">Back to <a href="{% url 'login' %}">Login page</a></h3></div>
-    </div><!--/span-->
-{% endblock %}
-
-{% block js %}
-    <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    </main>
 {% endblock %}
