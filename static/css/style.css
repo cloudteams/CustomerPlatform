@@ -33,6 +33,10 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover, a:not(
     margin-bottom: 0 !important;
 }
 
+body > header .global-nav .container > ul li.profile.login-link:before {
+    background: none;
+}
+
 .breadcrumb {
     background: none;
 }

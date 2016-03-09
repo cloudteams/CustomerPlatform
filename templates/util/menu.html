@@ -23,29 +23,31 @@
 							</div>
 						</li>
 
-						<li>
-							<div class="vertical-align">
-								<div class="middle">
-									<a href="{% url 'followed-projects' %}">
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
-										Dashboard
-									</a>
+						{% if request.user.is_authenticated %}
+							<li>
+								<div class="vertical-align">
+									<div class="middle">
+										<a href="{% url 'followed-projects' %}">
+											<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
+											Dashboard
+										</a>
+									</div>
 								</div>
-							</div>
-						</li>
+							</li>
 
-						<li>
-							<div class="vertical-align">
-								<div class="middle">
-									<a href="{% url 'notifications' %}">
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
-										Notifications
-									</a>
+							<li>
+								<div class="vertical-align">
+									<div class="middle">
+										<a href="{% url 'notifications' %}">
+											<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
+											Notifications
+										</a>
+									</div>
 								</div>
-							</div>
-						</li>
+							</li>
+						{% endif %}
 
-						<li class="profile">
+						<li class="profile{% if not request.user.is_authenticated %} login-link{% endif %}">
 							<div class="vertical-align">
 								<div class="middle">
 									{% if request.user.is_authenticated %}
