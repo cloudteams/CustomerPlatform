@@ -8,6 +8,23 @@ from ct_projects.models import Project, PollToken, Campaign, Poll, Document
 __author__ = 'dipap'
 
 
+def field_translation(post_dict):
+    """
+    :param post_dict: The original request.POST item
+    :return: The request.POST with some modifications due to caller request format
+    """
+    translate = {
+        '__id__': 'id',
+        'name': 'title',
+    }
+
+    for k in translate.keys():
+        if k in post_dict:
+            post_dict[translate[k]] = post_dict[k]
+
+    return post_dict
+
+
 @csrf_exempt
 def project_list(request):
     """
@@ -17,6 +34,9 @@ def project_list(request):
         # list existing projects
         return JsonResponse([p.to_json() for p in Project.objects.all()], safe=False)
     elif request.method == 'POST':
+        # first fix some incompatibilities in naming
+        field_translation(request.POST)
+
         # create a new project
         form = ProjectForm(request.POST)
         if form.is_valid():
@@ -45,6 +65,9 @@ def project(request, pk):
         # return project info
         return JsonResponse(instance.to_json(), safe=False)
     elif request.method == 'POST':
+        # first fix some incompatibilities in naming
+        field_translation(request.POST)
+
         # update project
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
