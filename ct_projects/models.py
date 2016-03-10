@@ -243,7 +243,7 @@ class Document(models.Model):
     campaign = models.ForeignKey(Campaign, related_name='documents')
     name = models.CharField(max_length=255)
     description = models.TextField()
-    link = models.URLField()
+    link = models.URLField(blank=True, null=True)
 
     def get_absolute_url(self):
         return self.link
