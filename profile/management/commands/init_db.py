@@ -77,9 +77,9 @@ class Command(BaseCommand):
                 raise CommandError("Option `--users=...` must be an integer.")
 
         # Remove previous data
-        print('Cleaning database...')
-        User.objects.all().delete()
-        print('Done')
+        # print('Cleaning database...')
+        # User.objects.all().delete()
+        # print('Done')
 
         # Create test users
         print('Creating test users...')
