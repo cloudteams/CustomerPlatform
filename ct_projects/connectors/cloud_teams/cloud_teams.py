@@ -66,7 +66,12 @@ class CloudTeamsConnector:
                     if 'documents' in c_entry:
                         for d_entry in c_entry['documents']:
                             document = Document()
-                            document.id = int(d_entry['__id__'])
+
+                            id_key = '__id__'
+                            if id_key not in d_entry:
+                                id_key = 'id'
+
+                            document.id = int(d_entry[id_key])
                             current = Document.objects.filter(pk=document.id)
                             if current:
                                 document = current[0]
