@@ -31,7 +31,7 @@ class CloudTeamsConnector:
             project.title = entry['name']
             project.description = entry['descr'] if 'descr' in entry else ''
             project.application_type = entry['bscw_cloudteams:p_type']
-            project.logo = entry['logo'] if 'logo' in entry else ''
+            project.logo = entry['logo']['url'] if 'logo' in entry else ''
             project.rewards = entry['rewards'] if 'rewards' in entry else ''
             project.category = entry['bscw_cloudteams:p_category']
             project.managers = ','.join(entry['managers']) if 'managers' in entry else ''
@@ -54,7 +54,7 @@ class CloudTeamsConnector:
                     # fill in campaign info
                     campaign.name = c_entry['name']
                     campaign.description = c_entry['descr'] if 'descr' in c_entry else ''
-                    campaign.logo = c_entry['logo'] if 'logo' in c_entry else ''
+                    campaign.logo = c_entry['logo']['url'] if 'logo' in c_entry else ''
                     campaign.starts = datetime.strptime(c_entry['start'], '%Y-%m-%d %H:%M:%S') if 'start' in c_entry else now()
                     campaign.expires = datetime.strptime(c_entry['end'], '%Y-%m-%d %H:%M:%S') if ('end' in c_entry) and (c_entry['end'] != 'Never') else None
                     campaign.project = project
