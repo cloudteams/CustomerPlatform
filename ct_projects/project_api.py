@@ -59,7 +59,10 @@ def project(request, pk):
     try:
         instance = Project.objects.get(pk=int(pk))
     except ObjectDoesNotExist:
-        return JsonResponse({'error': 'Project #%d not found' % int(pk)}, status=404)
+        if request.method == 'POST':
+            instance = Project.objects.create(pk=int(pk), is_public=True)
+        else:
+            return JsonResponse({'error': 'Project #%d not found' % int(pk)}, status=404)
 
     if request.method == 'GET':
         # return project info
@@ -69,7 +72,11 @@ def project(request, pk):
         field_translation(request.POST)
 
         # update project
-        form = ProjectForm(request.POST, instance=instance)
+        if instance:
+            form = ProjectForm(request.POST, instance=instance)
+        else:
+            form = ProjectForm(request.POST)
+
         if form.is_valid():
             instance = form.save()
             return JsonResponse(instance.to_json(), safe=False)
