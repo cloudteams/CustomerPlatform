@@ -1,26 +1,24 @@
 {% extends "dashboard/base.html" %}
 
 {% load staticfiles %}
-{% block title %}Dashboard - Projects{% endblock %}
+{% block title %}Dashboard - Campaigns{% endblock %}
 {% block dashboard_content %}
     <header class="main-header">
         <div class="vertical-align">
             <div class="middle">
-                <img class="svg" src="{% static "img/icons/icon-projects.svg" %}">
-                <h1 class="header-large">Projects</h1>
+                <img class="svg" src="{% static "img/icons/icon-campaigns.svg" %}">
+                <h1 class="header-large">Running Campaigns</h1>
             </div>
 
             <div class="middle last">
                 <p class="project-counter"><span>{{ n_of_followed }}</span></p>
 
-                <p class="project-counter">Project{% if n_of_followed != 1 %}s{% endif %}</p>
+                <p class="project-counter">Campaign{% if n_of_followed != 1 %}s{% endif %}</p>
             </div>
         </div>
     </header>
 
-    {% with has_new=True two_columns=True %}
-        {% include "ct_projects/project/list.html" %}
-    {% endwith %}
+    {% include "ct_projects/campaign/list.html" %}
 {% endblock %}
 
 {% block extra_js %}

@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^opinion-about$', views.opinion_about, name='opinion-about'),
 
     # Notification
-    url(r'^notifications/$', views.notifications, name='notifications')
+    url(r'^notifications/$', views.notifications, name='notifications'),
+    url(r'^notification/(?P<pk>\d+)/$', views.notification_view, name='notification-view'),
 ]

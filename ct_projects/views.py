@@ -47,6 +47,24 @@ def followed_projects(request):
 
 
 @login_required
+def followed_campaigns(request):
+    """
+    A list of projects in cloud teams that I follow
+    """
+    projects = [f.project for f in ProjectFollowing.objects.filter(user=request.user)]
+    campaigns = []
+    for p in projects:
+        campaigns += p.get_running_campaigns()
+
+    context = {
+        'campaigns': campaigns,
+        'n_of_followed': len(campaigns),
+    }
+
+    return render(request, 'ct_projects/campaign/dashboard.html', context)
+
+
+@login_required
 def follow_project(request, pk):
     # only posts allowed to this method
     if request.method == 'POST':
@@ -61,7 +79,7 @@ def follow_project(request, pk):
 
         # follow & return OK
         ProjectFollowing.objects.create(project=project, user=request.user)
-        return redirect(reverse('all-projects'))
+        return redirect(reverse('project-details', args=(pk, )))
     else:
         return HttpResponse('Only POST allowed', status=400)
 
@@ -82,7 +100,7 @@ def unfollow_project(request, pk):
 
         # unfollow & return OK
         pfs.delete()
-        return redirect(reverse('all-projects'))
+        return redirect(reverse('project-details', args=(pk, )))
     else:
         return HttpResponse('Only POST allowed', status=400)
 

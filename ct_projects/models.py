@@ -10,7 +10,7 @@ from django.db import models
 
 # The project is not a typical Django model as it's not saved on the CloudTeams community site but on BSCW
 from django.db.models import Sum
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django_comments.models import Comment
 
@@ -114,6 +114,30 @@ class ProjectFollowing(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)  # relationship timestamp
 
 
+@receiver(post_save, sender=ProjectFollowing)
+def on_project_following_create(sender, instance, created, **kwargs):
+    # send notifications to the new user
+    for campaign in instance.get_running_campaigns():
+        campaign.send()
+
+    # Only on production
+    if not PRODUCTION:
+        return
+
+    if created:
+        #XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD, verbose=0).set
+        pass
+
+
+@receiver(pre_delete, sender=ProjectFollowing)
+def on_project_following_delete(sender, instance, **kwargs):
+    # Only on production
+    if not PRODUCTION:
+        return
+
+    #XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD, verbose=0).set
+
+
 class Idea(models.Model):
     """
     An idea about a project
@@ -208,6 +232,10 @@ class Campaign(models.Model):
                 users.append(User.objects.get(pk=uid))
             except User.DoesNotExist:
                 pass
+
+        # also add followers
+        followers = [f.user for f in self.project.followed.all()]
+        users += followers
 
         return users
 
@@ -326,12 +354,24 @@ class Notification(models.Model):
     A notification regarding documents & polls
     """
     user = models.ForeignKey(User, related_name='notifications')
-    document = models.ForeignKey(Document, blank=True, default=None)
-    poll = models.ForeignKey(Poll, blank=True, default=None)
+    document = models.ForeignKey(Document, blank=True, null=True, default=None)
+    poll = models.ForeignKey(Poll, blank=True, null=True, default=None)
     seen = models.BooleanField(default=False)
 
-    def to_text(self):
+    def message(self):
         if self.document:
-            return self.document
+            return self.document.name
         else:
-            return self.poll
+            return self.poll.name
+
+    def campaign(self):
+        if self.document:
+            return self.document.campaign
+        else:
+            return self.poll.campaign
+
+    def url(self, user):
+        if self.document:
+            return self.document.get_absolute_url()
+        else:
+            return self.poll.get_poll_token_link(user)

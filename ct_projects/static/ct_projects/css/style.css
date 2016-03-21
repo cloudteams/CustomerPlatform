@@ -140,3 +140,10 @@ section.user-dashboard-projects-content {
 .terms-and-conditions h1 {
     color: #424242;
 }
+
+/* Notifications */
+a.notification-link {
+    margin-bottom: 20px;
+    display: block;
+    color: #424242;
+}

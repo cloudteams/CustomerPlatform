@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from ct_projects.models import Notification
 from profile.forms import UserProfileForm
 from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
 from profile.models import UserBrandOpinion, UserProfile, Influence, DeviceUsage, PlatformUsage
@@ -124,11 +126,27 @@ def opinion_about(request):
     return HttpResponse('')
 
 
+@login_required
 def notifications(request):
-    # TODO implement notifications page
-    ctx = {'notifications': [{
-        'message': 'This is a test message',
-        'created': datetime.now(),
-    }]}
+    ctx = {
+        'notifications': [n for n in Notification.objects.filter(user=request.user)
+                          if not n.campaign().has_expired()]
+    }
 
     return render(request, 'profile/notification/all.html', ctx)
+
+
+@login_required
+def notification_view(request, pk):
+    try:
+        notification = Notification.objects.get(pk=int(pk), user=request.user)
+    except Notification.DoesNotExist:
+        return redirect(reverse('notifications'))
+    except ValueError:
+        return redirect(reverse('notifications'))
+
+    # mark notification as seen
+    notification.seen = True
+    notification.save()
+
+    return redirect(notification.url(user=request.user))

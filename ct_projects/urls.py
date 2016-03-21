@@ -7,6 +7,7 @@ urlpatterns = [
     # projects lists
     url(r'^$', views.list_projects, name='all-projects'),
     url(r'^followed/$', views.followed_projects, name='followed-projects'),
+    url(r'^followed/campaigns$', views.followed_campaigns, name='followed-campaigns'),
 
     # ideas
     url(r'^(?P<pk>[\w-]+)/post-idea/$', views.post_idea, name='post-idea'),

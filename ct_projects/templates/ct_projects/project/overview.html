@@ -4,45 +4,6 @@
 <div class="public-overview-data public-project-overview-data">
 	<div class="container">
 		<div class="vertical-align">
-            {% if request.user.is_authenticated %}
-                {% with is_followed=project|is_followed_by:request.user %}
-                    {% if is_followed %}
-                        <div class="middle">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <img class="icon svg" src="{% static "img/icons/icon-pending.svg" %}">
-                                        <p>My invites</p>
-                                    </td>
-                                    <td>
-                                        <p>-</p>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="icon svg" src="{% static "img/icons/icon-rewards.svg" %}">
-                                        <p>My rewards won</p>
-                                    </td>
-                                    <td>
-                                        <p>-</p>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <img class="icon svg" src="{% static "img/icons/icon-campaign-participated.svg" %}">
-                                        <p>My campaigns answered</p>
-                                    </td>
-                                    <td>
-                                        <p>-</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    {% endif %}
-                {% endwith %}
-            {% endif %}
 
 			<div class="middle">
 				<table>
@@ -76,6 +37,48 @@
 						</td>
 					</tr>
 				</table>
+			</div>
+
+			<div class="middle">
+				{% if request.user.is_authenticated %}
+					{% with is_followed=project|is_followed_by:request.user %}
+						{% if is_followed %}
+
+                            <table>
+                                <tr>
+                                    <td>
+                                        <img class="icon svg" src="{% static "img/icons/icon-pending.svg" %}">
+                                        <p>My invites</p>
+                                    </td>
+                                    <td>
+                                        <p>-</p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img class="icon svg" src="{% static "img/icons/icon-rewards.svg" %}">
+                                        <p>My rewards won</p>
+                                    </td>
+                                    <td>
+                                        <p>-</p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img class="icon svg" src="{% static "img/icons/icon-campaign-participated.svg" %}">
+                                        <p>My campaigns answered</p>
+                                    </td>
+                                    <td>
+                                        <p>-</p>
+                                    </td>
+                                </tr>
+                            </table>
+
+						{% endif %}
+					{% endwith %}
+				{% endif %}
 			</div>
 
 			<div class="middle">
