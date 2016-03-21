@@ -117,7 +117,7 @@ class ProjectFollowing(models.Model):
 @receiver(post_save, sender=ProjectFollowing)
 def on_project_following_create(sender, instance, created, **kwargs):
     # send notifications to the new user
-    for campaign in instance.get_running_campaigns():
+    for campaign in instance.project.get_running_campaigns():
         campaign.send()
 
     # Only on production
