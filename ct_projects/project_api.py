@@ -18,11 +18,13 @@ def field_translation(post_dict):
         'name': 'title',
     }
 
+    # copy dict
+    result = post_dict.copy()
     for k in translate.keys():
         if k in post_dict:
-            post_dict[translate[k]] = post_dict[k]
+            result[translate[k]] = post_dict[k]
 
-    return post_dict
+    return result
 
 
 @csrf_exempt
@@ -35,10 +37,10 @@ def project_list(request):
         return JsonResponse([p.to_json() for p in Project.objects.all()], safe=False)
     elif request.method == 'POST':
         # first fix some incompatibilities in naming
-        field_translation(request.POST)
+        fields = field_translation(request.POST)
 
         # create a new project
-        form = ProjectForm(request.POST)
+        form = ProjectForm(fields)
         if form.is_valid():
             instance = form.save()
             return JsonResponse(instance.to_json(), safe=False)
@@ -69,13 +71,13 @@ def project(request, pk):
         return JsonResponse(instance.to_json(), safe=False)
     elif request.method == 'POST':
         # first fix some incompatibilities in naming
-        field_translation(request.POST)
+        fields = field_translation(request.POST)
 
         # update project
         if instance:
-            form = ProjectForm(request.POST, instance=instance)
+            form = ProjectForm(fields, instance=instance)
         else:
-            form = ProjectForm(request.POST)
+            form = ProjectForm(fields)
 
         if form.is_valid():
             instance = form.save()
