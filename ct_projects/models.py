@@ -1,6 +1,8 @@
 import json
 
 import datetime
+from xmlrpclib import Fault
+
 import requests
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
@@ -75,6 +77,16 @@ class Project(models.Model):
     def on_project_create(self):
         requests.post(ANONYMIZER_URL + '/persona-builder/api/init-project/', data={'project': self.pk})
 
+    def update_number_of_followers(self):
+        # Only on production
+        if not PRODUCTION:
+            return
+
+        try:
+            XMLRPC_Server(SERVER_URL, USER_PASSWD).setfollowers(str(self.id), str(self.followed.all().count()))
+        except Fault:
+            print('Error on updating number of followers for project "%s" (#%d)' % (self.title, self.id))
+
     def to_json(self):
         return {
             'id': self.pk,
@@ -120,22 +132,13 @@ def on_project_following_create(sender, instance, created, **kwargs):
     for campaign in instance.project.get_running_campaigns():
         campaign.send()
 
-    # Only on production
-    if not PRODUCTION:
-        return
-
     if created:
-        #XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD, verbose=0).set
-        pass
+        instance.project.update_number_of_followers()
 
 
 @receiver(pre_delete, sender=ProjectFollowing)
 def on_project_following_delete(sender, instance, **kwargs):
-    # Only on production
-    if not PRODUCTION:
-        return
-
-    #XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD, verbose=0).set
+    instance.project.update_number_of_followers()
 
 
 class Idea(models.Model):
