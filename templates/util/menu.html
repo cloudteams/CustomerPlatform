@@ -51,15 +51,22 @@
 							<div class="vertical-align">
 								<div class="middle">
 									{% if request.user.is_authenticated %}
-                                            <img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
-                                            <a href="/profile/">{{ request.user.username }}</a>
+										<img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
+										<a href="/profile/">{{ request.user.username }}</a>
 
-										    <i class="fa fa-angle-down"></i>
-                                        {% else %}
-                                            <a href="/activitytracker/login/?next=/profile/">Login</a>
-                                        {% endif %}
+										<i class="fa fa-angle-down"></i>
+									{% else %}
+										<a href="/activitytracker/login/?next=/profile/">Login</a>
+									{% endif %}
 								</div>
 							</div>
+
+							{% if request.user.is_authenticated %}
+								<ul class="submenu">
+									<li><a href="{% url 'settings' %}">Settings</a></li>
+									<li><a href="{% url 'logout' %}">Log out</a></li>
+								</ul>
+							{% endif %}
 						</li>
 					</ul>
 				</div>
