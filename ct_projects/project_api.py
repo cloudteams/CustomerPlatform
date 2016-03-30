@@ -19,7 +19,7 @@ def field_translation(post_dict):
     }
 
     # copy dict
-    result = post_dict.copy()
+    result = post_dict.deepcopy()
     for k in translate.keys():
         if k in post_dict:
             result[translate[k]] = post_dict[k]
