@@ -5,6 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 from ct_projects.forms import ProjectForm
 from ct_projects.models import Project, PollToken, Campaign, Poll, Document
 
+from copy import deepcopy
+import json
+
 __author__ = 'dipap'
 
 
@@ -19,10 +22,17 @@ def field_translation(post_dict):
     }
 
     # copy dict
-    result = post_dict.deepcopy()
+    result = deepcopy(post_dict)
+
+    # translate keys
     for k in translate.keys():
         if k in post_dict:
             result[translate[k]] = post_dict[k]
+
+    # fix logo
+    if 'logo' in result:
+        if 'url' in result['logo']:
+            result['logo'] = result['logo']['url']
 
     return result
 
@@ -71,7 +81,7 @@ def project(request, pk):
         return JsonResponse(instance.to_json(), safe=False)
     elif request.method == 'POST':
         # first fix some incompatibilities in naming
-        fields = field_translation(request.POST)
+        fields = field_translation(json.loads(request.body))
 
         # update project
         if instance:
