@@ -69,7 +69,7 @@ def login(request):
 
         ctx = {
             'redirect_url': request.GET.get('next', '/projects/followed/'),
-            'hide_menu': True,
+            'ignore_login_link': True,
         }
         return render(request, 'activitytracker/login.html', ctx)
 
@@ -116,7 +116,9 @@ def register(request):
                   'We have sent you an e-mail with a validation link to follow'
 
     if request.method != 'POST':
-        return render(request, 'activitytracker/register.html')
+        return render(request, 'activitytracker/register.html', {
+            'ignore_login_link': True,
+        })
 
     email = request.POST['email']
     password = request.POST['password']

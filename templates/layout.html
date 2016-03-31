@@ -29,9 +29,7 @@
 	</head>
 
 	<body>
-		{% if not hide_menu %}
-			{% include "util/menu.html" %}
-		{% endif %}
+		{% include "util/menu.html" %}
 
 		<section class="page {% block class_public_page %}public-page {% endblock %}{% block section_class %}{% endblock %}">
 

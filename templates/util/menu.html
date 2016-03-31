@@ -56,7 +56,11 @@
 
 										<i class="fa fa-angle-down"></i>
 									{% else %}
-										<a href="/activitytracker/login/?next=/profile/">Login</a>
+										{% if ignore_login_link %}
+											<a href="/projects/">View project store</a>
+										{% else %}
+											<a href="/activitytracker/login/?next=/profile/">Login</a>
+										{% endif %}
 									{% endif %}
 								</div>
 							</div>
