@@ -16,7 +16,9 @@ def list_projects(request):
     A list of all projects in cloud teams
     """
     q = request.GET.get('q', '')
-    projects = Project.objects.filter(Q(title__icontains=q) | Q(description__icontains=q))
+    projects = Project.objects.filter(Q(title__icontains=q) | Q(description__icontains=q) |
+                                      Q(category__icontains=q)).order_by('-created')
+
     pages = Paginator(projects, 10)
 
     context = {

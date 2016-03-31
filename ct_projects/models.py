@@ -105,6 +105,9 @@ class Project(models.Model):
             'campaigns': [campaign.to_json() for campaign in self.campaigns.all()],
         }
 
+    def __unicode__(self):
+        return self.title
+
 
 @receiver(post_save, sender=Project)
 def on_project_create(sender, instance, created, **kwargs):

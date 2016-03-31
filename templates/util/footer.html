@@ -1,4 +1,5 @@
         {% load staticfiles %}
+		{% load project_tags %}
 
         <footer id="footer" class="footer-dashboard-user">
 			<div class="container">
@@ -23,35 +24,27 @@
 							</ul>
 
 							<ul class="col-xs-3">
-								<li><a href="">Business</a></li>
-								<li><a href="">Development</a></li>
-								<li><a href="">Education</a></li>
-								<li><a href="">Entertainment</a></li>
-								<li><a href="">Finance</a></li>
-								<li><a href="">Food & Drink</a></li>
-								<li><a href="">Games</a></li>
-								<li><a href="">Health & Fitness</a></li>
+								{% with keywords="1"|get_keywords %}
+									{% for keyword in keywords %}
+										<li><a href="/projects/?q={{ keyword|urlencode }}">{{ keyword }}</a></li>
+									{% endfor %}
+								{% endwith %}
 							</ul>
 
 							<ul class="col-xs-3">
-								<li><a href="">Lifestyle</a></li>
-								<li><a href="">Medical</a></li>
-								<li><a href="">Music</a></li>
-								<li><a href="">Navigation</a></li>
-								<li><a href="">News</a></li>
-								<li><a href="">Others</a></li>
-								<li><a href="">Photo & Video</a></li>
-								<li><a href="">Productivity</a></li>
+								{% with keywords="2"|get_keywords %}
+									{% for keyword in keywords %}
+										<li><a href="/projects/?q={{ keyword|urlencode }}">{{ keyword }}</a></li>
+									{% endfor %}
+								{% endwith %}
 							</ul>
 
 							<ul class="col-xs-3">
-								<li><a href="">Reference</a></li>
-								<li><a href="">Research</a></li>
-								<li><a href="">Social Networking</a></li>
-								<li><a href="">Sports</a></li>
-								<li><a href="">Travel</a></li>
-								<li><a href="">Utilities</a></li>
-								<li><a href="">Weather</a></li>
+								{% with keywords="3"|get_keywords %}
+									{% for keyword in keywords %}
+										<li><a href="/projects/?q={{ keyword|urlencode }}">{{ keyword }}</a></li>
+									{% endfor %}
+								{% endwith %}
 							</ul>
 						</div>
 					</div>

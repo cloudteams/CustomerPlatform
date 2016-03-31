@@ -78,3 +78,12 @@ def is_liked_by(idea, user):
 def get_anonymized_username(item, user):
     return item.get_anonymized_username(user)
 
+
+@register.filter
+def get_keywords(column):
+    return [
+        ['Business', 'Development', 'Education', 'Entertainment', 'Finance', 'Food & Drink',
+         'Games', 'Health & Fitness'],
+        ['Lifestyle', 'Medical', 'Music', 'Navigation', 'News', 'Others', 'Photo & Video', 'Productivity'],
+        ['Reference', 'Research', 'Social Networking', 'Sports', 'Travel', 'Utilities', 'Weather'],
+    ][int(column) - 1]

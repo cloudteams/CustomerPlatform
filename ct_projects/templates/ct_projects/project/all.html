@@ -14,34 +14,48 @@
 {% endblock %}
 
 {% block content %}
-    <main>
-        <div class="container">
-            <section class="public-projects-logged-in-content">
-                <header>
-                    <h2 class="header-large public">Latest projects</h2>
-                    <p class="header-small action-text"><a href="#nowhere">See all</a></p>
+    {% with projects=page_obj.object_list %}
+        <main>
+            <div class="container">
+                <section class="public-projects-logged-in-content">
+                    <header>
+                        <h2 class="header-large public">
+                            {% if q %}
+                                Search results for {{ q }}
+                            {% else %}
+                                Latest projects
+                            {% endif %}
+                        </h2>
+                        {% if q %}
+                            <p class="header-small action-text"><a href="/projects/">See all</a></p>
+                        {% endif %}
 
-                    <div class="filter-container">
-                        <label for="filter-projects">Filter projects</label>
-                        <div class="select-dropdown">
-                            <i class="fa fa-angle-down"></i>
-                            <select name="filter-projects" id="filter-projects" onchange="" size="1">
-                                <option value="all-projects" selected>All projects</option>
-                                <option value="/projects/followed-projects/">Followed projects</option>
-                                <option value="/projects/trending-projects/">Trending projects</option>
-                            </select>
-                        </div>
+                        {% if not q %}
+                            <div class="filter-container">
+                                <label for="filter-projects">Filter projects</label>
+                                <div class="select-dropdown">
+                                    <i class="fa fa-angle-down"></i>
+                                    <select name="filter-projects" id="filter-projects" onchange="" size="1">
+                                        <option value="all-projects" selected>All projects</option>
+                                        <option value="/projects/followed-projects/">Followed projects</option>
+                                        <option value="/projects/trending-projects/">Trending projects</option>
+                                    </select>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </header>
+
+                    <div class="row">
+                        {% if q and not projects %}
+                            <p class="col-xs-12">No results</p>
+                        {% else %}
+                            {% include "ct_projects/project/list.html" %}
+                        {% endif %}
                     </div>
-                </header>
 
-                <div class="row">
-                    {% with projects=page_obj.object_list %}
-                        {% include "ct_projects/project/list.html" %}
-                    {% endwith %}
-                </div>
-
-                {% include "ct_projects/util/paginator.html" %}
-            </section>
-        </div>
-    </main>
+                    {% include "ct_projects/util/paginator.html" %}
+                </section>
+            </div>
+        </main>
+    {% endwith %}
 {% endblock %}
