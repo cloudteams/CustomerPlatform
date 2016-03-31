@@ -63,23 +63,26 @@ def login(request):
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
     INVALID_CREDENTIALS_MSG = 'Invalid Username/Email or Password'
 
+    ctx = {
+        'redirect_url': request.GET.get('next', '/projects/followed/'),
+        'ignore_login_link': True,
+    }
+
     if request.method != 'POST':
         if request.user.is_authenticated():
             return HttpResponseRedirect(reverse('followed-projects'))
 
-        ctx = {
-            'redirect_url': request.GET.get('next', '/projects/followed/'),
-            'ignore_login_link': True,
-        }
         return render(request, 'activitytracker/login.html', ctx)
 
     username_or_email = request.POST['username']
     password = request.POST['password']
+    ctx['username'] = username_or_email
 
     if User.objects.filter(username__iexact=username_or_email).count() == 0:
 
         if User.objects.filter(email__iexact=username_or_email).count() == 0:
-            return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
+            ctx['error'] = INVALID_CREDENTIALS_MSG
+            return render(request, 'activitytracker/login.html', ctx)
         else:
             username = User.objects.get(email__iexact=username_or_email).username
 
@@ -89,10 +92,12 @@ def login(request):
     user = authenticate(username=username, password=password)
 
     if user is None:
-        return HttpResponseBadRequest(INVALID_CREDENTIALS_MSG)
+        ctx['error'] = INVALID_CREDENTIALS_MSG
+        return render(request, 'activitytracker/login.html', ctx)
 
     if not user.is_active:
-        return HttpResponseBadRequest(EMAIL_VERIFICATION_MSG)
+        ctx['error'] = EMAIL_VERIFICATION_MSG
+        return render(request, 'activitytracker/login.html', ctx)
 
     auth_login(request, user)
 

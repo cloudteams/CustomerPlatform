@@ -26,12 +26,19 @@
 
                             <div class="content form-section">
                                 {% csrf_token %}
+
+                                {% if error %}
+                                    <div class="has-error">
+                                        <p class="help-block">{{ error }}</p>
+                                    </div>
+                                {% endif %}
+
                                 <fieldset>
-                                    <label for="username" class="header-medium secondary">Username</label>
+                                    <label for="username" class="header-medium secondary">Username or email</label>
 
                                     <div class="input-container">
                                         <i class="icon icon-edit"></i>
-                                        <input type="text" id="username" name="username" placeholder="Hans">
+                                        <input type="text" id="username" name="username" value="{{ username }}" placeholder="Hans">
                                     </div>
                                 </fieldset>
 
