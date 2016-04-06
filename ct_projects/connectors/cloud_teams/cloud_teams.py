@@ -21,9 +21,16 @@ class CloudTeamsConnector:
         :return: Number of projects fetched from CloudTeams team platform
         """
         entries = self.srv.get_projectstore('')
+
+        project_ids = []
+        campaign_ids = []
+        document_ids = []
+        poll_ids = []
+
         for entry in entries:
             project = Project()
             project.id = int(entry['__id__'])
+            project_ids.append(project.id)
             current = Project.objects.filter(pk=project.id)
             if current:
                 project = current[0]
@@ -47,6 +54,7 @@ class CloudTeamsConnector:
                 for c_entry in entry['campaigns']:
                     campaign = Campaign()
                     campaign.id = int(c_entry['__id__'])
+                    campaign_ids.append(campaign.id)
                     current = Campaign.objects.filter(pk=campaign.id)
                     if current:
                         campaign = current[0]
@@ -72,6 +80,7 @@ class CloudTeamsConnector:
                                 id_key = 'id'
 
                             document.id = int(d_entry[id_key])
+                            document_ids.append(document.id)
                             current = Document.objects.filter(pk=document.id)
                             if current:
                                 document = current[0]
@@ -90,6 +99,7 @@ class CloudTeamsConnector:
                         for p_entry in c_entry['polls']:
                             poll = Poll()
                             poll.id = int(p_entry['__id__'])
+                            poll_ids.append(poll.id)
                             current = Poll.objects.filter(pk=poll.id)
                             if current:
                                 poll = current[0]
@@ -101,5 +111,11 @@ class CloudTeamsConnector:
 
                             # save the poll in the database
                             poll.save()
+
+        # deleting objects not found in Team Platform
+        Project.objects.all().exclude(id__in=project_ids).delete()
+        Campaign.objects.all().exclude(id__in=campaign_ids).delete()
+        Document.objects.all().exclude(id__in=document_ids).delete()
+        Poll.objects.all().exclude(id__in=poll_ids).delete()
 
         return len(entries)
