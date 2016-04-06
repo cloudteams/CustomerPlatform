@@ -193,6 +193,26 @@ class Idea(models.Model):
             'created': comment.submit_date,
         }
 
+    def on_idea_create(self):
+        message = self.title
+        if self.description:
+            message += ': ' + self.description
+        try:
+            XMLRPC_Server(SERVER_URL, USER_PASSWD).add_post(str(self.project.id), message)
+        except Fault:
+            print('Could not post idea to team platform')
+
+
+@receiver(post_save, sender=Idea)
+def on_idea_posted(sender, instance, created, **kwargs):
+    # Only on production
+    if not PRODUCTION:
+        return
+
+    # Only when idea was created
+    if created:
+        instance.on_idea_create()
+
 
 class IdeaRating(models.Model):
     """
