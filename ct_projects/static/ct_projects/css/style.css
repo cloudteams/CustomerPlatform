@@ -75,8 +75,9 @@ section.user-dashboard-projects-content {
 }
 
 .project .background .background-image {
-    background-size: cover;
+    background-size: 100%;
     background-repeat: no-repeat;
+    background-position: center;
     height: 200px;
     z-index: 0;
     border-radius: 5px 5px 0 0;

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
@@ -16,15 +16,24 @@ def list_projects(request):
     A list of all projects in cloud teams
     """
     q = request.GET.get('q', '')
-    projects = Project.objects.filter(Q(title__icontains=q) | Q(description__icontains=q) |
-                                      Q(category__icontains=q)).order_by('-created')
+    qs = Project.objects.filter(Q(title__icontains=q) | Q(description__icontains=q) |
+                                Q(category__icontains=q))
 
-    pages = Paginator(projects, 10)
+    # ordering
+    order = request.GET.get('order', 'latest')
+    if order == 'most-popular':
+        qs = qs.annotate(num_followers=Count('followed')).order_by('-num_followers')
+    else:
+        order = 'latest'
+    qs = qs.order_by('-created')
+
+    pages = Paginator(qs, 10)
 
     context = {
         'n_of_projects': Project.objects.all().count(),
         'page_obj': pages.page(int(request.GET.get('page', '1'))),
         'q': q,
+        'order': order
     }
 
     return render(request, 'ct_projects/project/all.html', context)

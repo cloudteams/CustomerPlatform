@@ -77,6 +77,10 @@ class Project(models.Model):
     def on_project_create(self):
         requests.post(ANONYMIZER_URL + '/persona-builder/api/init-project/', data={'project': self.pk})
 
+    @property
+    def number_of_followers(self):
+        return self.followed.all().count()
+
     def update_number_of_followers(self):
         # Only on production
         if not PRODUCTION:
@@ -100,7 +104,7 @@ class Project(models.Model):
             'rewards': self.rewards,
             'logo': self.logo,
             'is_public': self.is_public,
-            'number_of_followers': self.followed.all().count(),
+            'number_of_followers': self.number_of_followers,
             'ideas': [idea.to_json() for idea in self.ideas.all()],
             'campaigns': [campaign.to_json() for campaign in self.campaigns.all()],
         }

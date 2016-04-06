@@ -32,14 +32,13 @@
 
                         {% if not q %}
                             <div class="filter-container">
-                                <label for="filter-projects">Filter projects</label>
+                                <label for="filter-projects">Sort projects</label>
                                 <div class="select-dropdown">
                                     <i class="fa fa-angle-down"></i>
-                                    <select name="filter-projects" id="filter-projects" onchange="" size="1">
-                                        <option value="all-projects" selected>All projects</option>
-                                        <option value="/projects/followed-projects/">Followed projects</option>
-                                        <option value="/projects/trending-projects/">Trending projects</option>
-                                    </select>
+                                    <select name="order-projects" id="order-projects" size="1">
+                                        <option value="latest" {% if order == 'latest' %}selected="selected"{% endif %}>Latest</option>
+                                        <option value="most-popular" {% if order == 'most-popular' %}selected="selected"{% endif %}>Most popular</option>
+\                                    </select>
                                 </div>
                             </div>
                         {% endif %}
@@ -58,4 +57,15 @@
             </div>
         </main>
     {% endwith %}
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(function() {
+            $('#order-projects').on('change', function() {
+                console.log('la!');
+                window.location.href = '/projects/?order=' + $(this).val();
+            });
+        });
+    </script>
 {% endblock %}
