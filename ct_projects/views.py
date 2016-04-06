@@ -22,10 +22,10 @@ def list_projects(request):
     # ordering
     order = request.GET.get('order', 'latest')
     if order == 'most-popular':
-        qs = qs.annotate(num_followers=Count('followed')).order_by('-num_followers')
+        qs = qs.annotate(num_followers=Count('followed')).order_by('-num_followers', '-created')
     else:
         order = 'latest'
-    qs = qs.order_by('-created')
+        qs = qs.order_by('-created')
 
     pages = Paginator(qs, 10)
 
