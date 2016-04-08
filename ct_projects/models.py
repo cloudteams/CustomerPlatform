@@ -198,7 +198,7 @@ class Idea(models.Model):
         if self.description:
             message += ': ' + self.description
         try:
-            XMLRPC_Server(SERVER_URL, USER_PASSWD).add_post(str(self.project.id), message)
+            XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).add_post(str(self.project.id), message)
         except Fault:
             print('Could not post idea to team platform')
 
