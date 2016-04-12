@@ -64,8 +64,7 @@ def project_list(request):
     else:
         # invalid/unsupported HTTP method
         # do not support PUT/DELETE on project list by default to avoid accidents
-        return JsonResponse({'error': 'Method %s not allowed on project list' % request.method},
-status=403)
+        return JsonResponse({'error': 'Method %s not allowed on project list' % request.method}, status=403)
 
 
 def fetch_all():
@@ -77,11 +76,7 @@ def fetch_all():
     CloudTeamsConnector().fetch_all()
 
     # send campaigns
-    campaigns = Campaign.objects.filter(expires__gt=datetime.datetime.today())
-    for campaign in campaigns:
-        campaign.send()
-
-    print('%d campaign%s sent' % (len(campaigns), '' if len(campaigns) == 1 else 's'))
+    Campaign.send_all()
 
 
 @csrf_exempt
@@ -156,7 +151,6 @@ def notify_users(request, pk):
     except Poll.DoesNotExist:
         Document.objects.get(pk=pk).send()
     except Document.DoesNotExist:
-        return JsonResponse({'error': 'No campaign, poll or document with ID #%d was found' % pk},
-status=404)
+        return JsonResponse({'error': 'No campaign, poll or document with ID #%d was found' % pk}, status=404)
 
     return JsonResponse({}, status=200)

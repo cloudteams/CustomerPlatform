@@ -290,6 +290,14 @@ class Campaign(models.Model):
             'logo': self.logo,
         }
 
+    @staticmethod
+    def send_all():
+        campaigns = Campaign.objects.filter(expires__gt=datetime.datetime.today())
+        for campaign in campaigns:
+            campaign.send()
+
+        print('%d campaign%s sent' % (len(campaigns), '' if len(campaigns) == 1 else 's'))
+
 
 class Document(models.Model):
     """

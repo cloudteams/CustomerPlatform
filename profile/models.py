@@ -1,6 +1,9 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models.signals import post_save
+
 from activitytracker.models import User
+from ct_projects.models import Campaign
 from profile.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS, \
     TECH_LEVELS
 
@@ -80,3 +83,16 @@ class UserBrandOpinion(models.Model):
     user = models.ForeignKey(User, related_name='brand_opinions')
     brand = models.CharField(max_length=16)
     opinion = models.CharField(max_length=1, choices=BRAND_OPINIONS)
+
+
+def on_profile_info_updated(sender, instance, created, **kwargs):
+    # send campaigns
+    Campaign.send_all()
+
+
+# connect with update events
+post_save.connect(on_profile_info_updated, sender=UserProfile)
+post_save.connect(on_profile_info_updated, sender=Influence)
+post_save.connect(on_profile_info_updated, sender=DeviceUsage)
+post_save.connect(on_profile_info_updated, sender=PlatformUsage)
+post_save.connect(on_profile_info_updated, sender=UserBrandOpinion)
