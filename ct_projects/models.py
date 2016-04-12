@@ -81,13 +81,17 @@ class Project(models.Model):
     def number_of_followers(self):
         return self.followed.all().count()
 
-    def update_number_of_followers(self):
+    def update_number_of_followers(self, on_delete=False):
         # Only on production
         if not PRODUCTION:
             return
 
         try:
-            XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).setfollowers(str(self.id), str(self.followed.all().count()))
+            cnt = self.followed.all().count()
+            if on_delete:
+                cnt -= 1
+
+            XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).setfollowers(str(self.id), str(cnt))
         except Fault:
             print('Error on updating number of followers for project "%s" (#%d)' % (self.title, self.id))
 
@@ -145,7 +149,7 @@ def on_project_following_create(sender, instance, created, **kwargs):
 
 @receiver(pre_delete, sender=ProjectFollowing)
 def on_project_following_delete(sender, instance, **kwargs):
-    instance.project.update_number_of_followers()
+    instance.project.update_number_of_followers(on_delete=True)
 
 
 class Idea(models.Model):
