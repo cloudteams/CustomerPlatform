@@ -87,7 +87,7 @@ class Project(models.Model):
             return
 
         try:
-            XMLRPC_Server(SERVER_URL, USER_PASSWD).setfollowers(str(self.id), str(self.followed.all().count()))
+            XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).setfollowers(str(self.id), str(self.followed.all().count()))
         except Fault:
             print('Error on updating number of followers for project "%s" (#%d)' % (self.title, self.id))
 
