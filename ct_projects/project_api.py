@@ -7,6 +7,7 @@ from ct_projects.models import Project, PollToken, Campaign, Poll, Document
 
 from copy import deepcopy
 import json
+import thread
 
 __author__ = 'dipap'
 
@@ -46,6 +47,7 @@ def project_list(request):
         # list existing projects
         return JsonResponse([p.to_json() for p in Project.objects.all()], safe=False)
     elif request.method == 'POST':
+        """
         # first fix some incompatibilities in naming
         fields = field_translation(request.POST)
 
@@ -56,10 +58,30 @@ def project_list(request):
             return JsonResponse(instance.to_json(), safe=False)
         else:
             return JsonResponse({'error': form.errors}, status=400)
+        """
+        thread.start_new_thread(fetch_all, ())
+        return JsonResponse('', safe=False)
     else:
         # invalid/unsupported HTTP method
         # do not support PUT/DELETE on project list by default to avoid accidents
-        return JsonResponse({'error': 'Method %s not allowed on project list' % request.method}, status=403)
+        return JsonResponse({'error': 'Method %s not allowed on project list' % request.method},
+status=403)
+
+
+def fetch_all():
+    from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
+    import time
+
+    # wait for the change to take place
+    time.sleep(5)
+    CloudTeamsConnector().fetch_all()
+
+    # send campaigns
+    campaigns = Campaign.objects.filter(expires__gt=datetime.datetime.today())
+    for campaign in campaigns:
+        campaign.send()
+
+    print('%d campaign%s sent' % (len(campaigns), '' if len(campaigns) == 1 else 's'))
 
 
 @csrf_exempt
@@ -71,15 +93,14 @@ def project(request, pk):
     try:
         instance = Project.objects.get(pk=int(pk))
     except ObjectDoesNotExist:
-        if request.method == 'POST':
-            instance = Project.objects.create(pk=int(pk), is_public=True)
-        else:
+        if request.method != 'POST':
             return JsonResponse({'error': 'Project #%d not found' % int(pk)}, status=404)
 
     if request.method == 'GET':
         # return project info
         return JsonResponse(instance.to_json(), safe=False)
     elif request.method == 'POST':
+        """
         # first fix some incompatibilities in naming
         fields = field_translation(json.loads(request.body))
 
@@ -94,6 +115,9 @@ def project(request, pk):
             return JsonResponse(instance.to_json(), safe=False)
         else:
             return JsonResponse({'error': form.errors}, status=400)
+        """
+        thread.start_new_thread(fetch_all, ())
+        return JsonResponse('', safe=False)
     elif request.method == 'DELETE':
         # delete project
         instance.delete()
@@ -132,6 +156,7 @@ def notify_users(request, pk):
     except Poll.DoesNotExist:
         Document.objects.get(pk=pk).send()
     except Document.DoesNotExist:
-        return JsonResponse({'error': 'No campaign, poll or document with ID #%d was found' % pk}, status=404)
+        return JsonResponse({'error': 'No campaign, poll or document with ID #%d was found' % pk},
+status=404)
 
     return JsonResponse({}, status=200)
