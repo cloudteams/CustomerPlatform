@@ -198,7 +198,7 @@ class Idea(models.Model):
         }
 
     def on_idea_create(self):
-        message = self.title  + '&%&' + self.description
+        message = self.title + '&%&' + self.description
         try:
             XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).add_post(str(self.project.id), message)
         except Fault:
