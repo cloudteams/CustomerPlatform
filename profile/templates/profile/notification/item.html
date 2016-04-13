@@ -1,18 +1,20 @@
 {% load staticfiles %}
 {% load humanize %}
-<a href="{% url 'notification-view' notification.pk %}" class="notification-link"><article class="notification">
-	<div class="vertical-align">
-		<div class="middle">
-			{% if notification.seen %}
-				<img class="icon check svg" src="{% static "img/icons/icon-check-fill.svg" %}">
-			{% endif %}
+<a href="{% url 'notification-view' notification.pk %}" class="notification-link" target="_blank">
+	<article class="notification">
+		<div class="vertical-align">
+			<div class="middle">
+				{% if notification.seen %}
+					<img class="icon check svg" src="{% static "img/icons/icon-check-fill.svg" %}">
+				{% endif %}
 
-			{{ notification.message }}<br />
-			<span class="info">{{ notification.campaign.name }} campaign, {{ notification.campaign.project.title }}</span>
-		</div>
+				{{ notification.message }}<br />
+				<span class="info">{{ notification.campaign.name }} campaign, {{ notification.campaign.project.title }}</span>
+			</div>
 
-		<div class="middle">
-			<p class="meta thin inline-block">{{ notification.campaign.expires|naturaltime }}</p>
+			<div class="middle">
+				<p class="meta thin inline-block">{{ notification.campaign.expires|naturaltime }}</p>
+			</div>
 		</div>
-	</div>
-</article></a>
+	</article>
+</a>
