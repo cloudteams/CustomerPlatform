@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load custom_templates %}
-
+{% block title %}Settings{% endblock %}
 {% block css %}
     <link href="{% static 'activitytracker/css/slider.css' %}" rel="stylesheet">
     <link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
@@ -13,13 +13,6 @@
 
 {% block content %}
 
-    <ul class="breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{% url 'index' %}">Home</a>
-        </li>
-        <li><a href="#">Settings</a></li>
-    </ul>
    <!-- Content begins HERE ------------------------------------------------------------------>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1 dashboardWrapper">
@@ -39,10 +32,12 @@
                                 {% if provider_data.statusText == "App connected" %}
                                 <a class="btn connected-app-button btn-blueNavy" onclick="synchronizeProvider('{{ provider_name }}')" title="Synchronize">
                                     <i class="halflings-icon refresh white" title="Synchronize"></i>
+                                    &#x21bb;
                                 </a>
                                 {% endif %}
                                 <a onclick="appFunctionHandler('{{ provider_name }}', this)" class="btn connected-app-button btn-blueNavy" title="{{ provider_data.buttonText }}">
                                     <i class="halflings-icon {{ provider_data.buttonIcon }} white" title="{{ provider_data.buttonText }}"></i>
+                                    &#10095;
                                 </a>
                             </td>
                         </tr>
