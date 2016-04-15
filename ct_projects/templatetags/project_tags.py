@@ -1,5 +1,6 @@
 from django import template
 from ct_projects.models import ProjectFollowing, PollToken
+import re
 
 __author__ = 'dipap'
 
@@ -87,3 +88,34 @@ def get_keywords(column):
         ['Lifestyle', 'Medical', 'Music', 'Navigation', 'News', 'Others', 'Photo & Video', 'Productivity'],
         ['Reference', 'Research', 'Social Networking', 'Sports', 'Travel', 'Utilities', 'Weather'],
     ][int(column) - 1]
+
+
+@register.filter(name='youtube_embed_url')
+# converts youtube URL into embed HTML
+# value is url
+def youtube_embed_url(value):
+    matches = re.finditer('(http|https)\:\/\/www\.youtube\.com\/watch\?v\=(\w*)(\&(.*))?', value)
+    mv = {}
+    for match in matches:
+        link = value[match.start():match.end()]
+        embed_code = link.split('?v=')[1]
+        mv[link] = '<iframe width="560" height="315" src="https://www.youtube.com/embed/%s" frameborder="0" allowfullscreen></iframe>' % embed_code
+
+    for link in mv.keys():
+        value = value.replace(link, mv[link])
+    return value
+
+
+@register.filter
+def custom_urlize(value):
+    matches = re.finditer('www.(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', value)
+    mv = {}
+    for match in matches:
+        link = value[match.start():match.end()]
+        if 'youtube.com' in link:
+            continue
+        mv[link] = '<a target="_blank" href="http://%s">%s</a>' % (link, link)
+
+    for link in mv.keys():
+        value = value.replace(link, mv[link])
+    return value
