@@ -5,8 +5,8 @@
 		<header>
 			<div class="vertical-align">
 				<div class="middle">
-					<h1 class="header-small">Dashboard</h1>
-					<p class="page-subtitle">&lt; Fold back</p>
+					<h1 class="header-small"><span>Dashboard</span></h1>
+					<p class="page-subtitle minimize-toggle">&lt; Fold back</p>
 				</div>
 			</div>
 		</header>
@@ -33,28 +33,34 @@
 				<li class="active">
 					<a href="{% url 'followed-projects' %}">
 						<img class="icon menu-icon svg" src="{% static "img/icons/icon-projects.svg" %}">
-						Projects
+						<span>Projects</span>
 					</a>
 				</li>
 
 				<li>
 					<a href="{% url 'followed-campaigns' %}">
 						<img class="icon menu-icon svg" src="{% static "img/icons/icon-campaigns.svg" %}">
-						Campaigns
+						<span>Campaigns</span>
 					</a>
 				</li>
 
 				<li>
 					<a href="{% url 'notifications' %}" class="incoming">
 						<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
-						Notifications
+						<span>Notifications</span>
 					</a>
 				</li>
 
 				<li>
 					<a href="{% url 'all-projects' %}">
 						<img class="icon menu-icon svg" src="{% static "img/icons/icon-explore.svg" %}">
-						All projects
+						<span>All projects</span>
+					</a>
+				</li>
+				<li>
+					<a href="/activitytracker/dashboard/">
+						<img class="icon menu-icon svg" src="{% static "img/icons/icon-activities.svg" %}">
+						<span>Activities</span>
 					</a>
 				</li>
 			</ul>

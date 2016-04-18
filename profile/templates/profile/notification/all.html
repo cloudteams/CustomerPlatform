@@ -21,9 +21,11 @@
             <section class="content">
                 {% for notification in notifications %}
                     {% include "profile/notification/item.html" %}
+                {% empty %}
+                    <p>No notifications</p>
                 {% endfor %}
 
-                <a href="#nowhere" class="btn">Load more</a>
+                <!--<a href="#nowhere" class="btn">Load more</a>-->
             </section>
         </section>
 {% endblock %}

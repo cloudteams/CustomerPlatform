@@ -1,21 +1,18 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load custom_templates %}
+{% block title %}My activities{% endblock %}
 {% block css %}
     <link href="{% static 'activitytracker/css/analytics-extra.css' %}" rel="stylesheet">
     <link href="{% static 'activitytracker/css/style-responsive.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <ul class="breadcrumb hidden-xs">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{% url 'index' %}">Home</a>
-        </li>
-        <li>
-            <a href="#">Dashboard</a>
-        </li>
-    </ul>
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 class="header-large public">Your activities</h1>
+        <p class="public-page-subtitle">Activities from external services connected with CloudTeams</p>
+    </div>
+
     <div id="carousel-providers" class="carousel carousel-dashboard slide col-xs-12 dashboardWrapper" data-ride="carousel" data-interval="false">
         <div class="carousel-inner" role="listbox">
             <div class="item active">

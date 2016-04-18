@@ -1,7 +1,7 @@
 /* My profile view */
 .profile-view {
     margin-top: 20px;
-    color: #b1b1b1;
+    color: #ddd;
 }
 
 .profile-view a:hover {
@@ -25,10 +25,28 @@
     display: inline-block;
     vertical-align: top;
 }
+.profile-view a {
+    color: #aaa;
+}
 .profile-view .inline-edit {
     display: inline-block;
-    color: #777;
+    color: #aaa;
     text-decoration: none;
+}
+.profile-view h5 {
+    margin: 20px 0;
+}
+.profile-view h4 {
+    margin-top: 30px;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+.profile-view .inline-edit:hover,
+.profile-view a:hover {
+    color: whitesmoke !important;
 }
 
 .profile-view .geek-level {

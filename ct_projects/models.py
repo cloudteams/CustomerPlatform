@@ -52,8 +52,15 @@ class Project(models.Model):
         return [c for c in self.campaigns.all() if c.has_expired()]
 
     def get_related(self):
-        # TODO implement related projects algorithm
-        return Project.objects.all()[:3]
+        related = Project.objects.filter(category=self.category).exclude(pk=self.pk)[:3]
+
+        if not related:
+            related = Project.objects.filter(application_type=self.application_type).exclude(pk=self.pk)[:3]
+
+        if not related:
+            related = Project.objects.all().exclude(pk=self.pk)[:3]
+
+        return related
 
     def anonymize(self, user):
         """

@@ -62,3 +62,16 @@ h1 {
 .connected-app img {
     width: 100px;
 }
+
+/* Aside */
+section.dashboard-page > .container > .content > .row > aside .show-minimized {
+    display: none; }
+  section.dashboard-page.minimized > .container > .content > .row > aside .hide-minimized {
+    display: none; }
+  section.dashboard-page.minimized > .container > .content > .row > aside .show-minimized {
+    display: block; }
+  section.dashboard-page.minimized > .container > .content > .row > aside .minimize-sidepanel {
+    text-align: center;
+    margin: 10px auto; }
+        .dashboard-page.minimized aside li span {
+      display: none; }
