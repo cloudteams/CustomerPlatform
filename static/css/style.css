@@ -2,16 +2,24 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     transition: color 0.3s ease-in-out;
 }
 
-a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download), a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
-    color: #ddd !important;
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
+    color: #ddd;
 }
 
-a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover, a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):focus {
-    color: whitesmoke !important;
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):focus {
+    color: whitesmoke;
 }
 
-.global-nav a:hover, aside a:hover {
-    color: #fff !important;
+.public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
+.public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
+    color: #7d3c8c;
+}
+
+.public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
+.public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover {
+    color: #38173f;
 }
 
 .profile-avatar {
