@@ -2,8 +2,12 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     transition: color 0.3s ease-in-out;
 }
 
+a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download), a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
+    color: #ddd !important;
+}
+
 a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover, a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):focus {
-    color: #38173f;
+    color: whitesmoke !important;
 }
 
 .global-nav a:hover, aside a:hover {

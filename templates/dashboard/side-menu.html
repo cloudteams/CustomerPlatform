@@ -14,10 +14,11 @@
 		<div class="member">
 			<div class="row">
 				<div class="vertical-align">
+					{% if profile.avatar %}
 						<div class="profile-picture col-xs-4 middle">
-							<div class="profile-avatar" {% if profile.avatar %}style="background-image:url({{ profile.avatar }}); height: 50px;"{% endif %}></div>
+							<div class="profile-avatar" style="background-image:url({{ profile.avatar }}); height: 50px;"></div>
 						</div>
-
+					{% endif %}
 						<div class="information col-xs-8 middle">
 							<ul>
 								<li class="meta big">{{ profile.get_display_name }}</li>
