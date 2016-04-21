@@ -65,6 +65,7 @@ class CloudTeamsConnector:
                     campaign.logo = c_entry['logo']['url'] if 'logo' in c_entry else ''
                     campaign.starts = datetime.strptime(c_entry['start'], '%Y-%m-%d %H:%M:%S') if 'start' in c_entry else now()
                     campaign.expires = datetime.strptime(c_entry['end'], '%Y-%m-%d %H:%M:%S') if ('end' in c_entry) and (c_entry['end'] != 'Never') else None
+                    campaign.rewards = c_entry['rewards'] if 'rewards' in c_entry else ''
                     campaign.project = project
 
                     # save the campaign in the database

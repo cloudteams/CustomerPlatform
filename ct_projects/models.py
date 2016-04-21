@@ -62,6 +62,9 @@ class Project(models.Model):
 
         return related
 
+    def has_rewards(self):
+        return self.campaigns.all().exclude(rewards='').exclude(rewards=None).exists()
+
     def anonymize(self, user):
         """
         :param user: A user account in the CloudTeams Customer platform
