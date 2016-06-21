@@ -2,21 +2,25 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     transition: color 0.3s ease-in-out;
 }
 
-a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
-a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
+body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
+header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
+header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     color: #ddd;
 }
 
-a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
-a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):focus {
+body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
+body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
+body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):focus {
     color: whitesmoke;
 }
 
+main a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
 .public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
 .public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     color: #7d3c8c;
 }
 
+main a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
 .public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
 .public-project-overview-content .container a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover {
     color: #38173f;
