@@ -15,7 +15,7 @@ $(function() {
     if ($('aside .bottom').position().top < 380) {
         $('aside .bottom').attr('style', 'top: 380px;');
     }
-    
+
     //trigger file selection
     $('#trigger-avatar-upload').click(function() {
         $('#id_profile_picture').click();
