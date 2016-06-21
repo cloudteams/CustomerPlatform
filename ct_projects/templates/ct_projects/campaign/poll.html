@@ -29,7 +29,7 @@
 
 		<footer>
             {% if request.user.is_authenticated %}
-			    <a href="{{poll|get_poll_token_link:request.user}}"
+			    <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
                    class="btn">Participate in this poll<</a>
             {% else %}
                 <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
