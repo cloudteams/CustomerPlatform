@@ -10,7 +10,7 @@
 
 {% block content %}
     <main>
-        <form action="{% url 'login' %}" method="POST"  >
+        <form action="{% url 'login' %}?next={{ redirect_url }}" method="POST"  >
 			<header class="main-header login">
 				<div class="container">
 					<h1 class="header-extra-large public">Welcome</h1>
@@ -38,7 +38,7 @@
 
                                     <div class="input-container">
                                         <i class="icon icon-edit"></i>
-                                        <input type="text" id="username" name="username" value="{{ username }}" placeholder="Hans">
+                                        <input type="text" id="username" name="username" value="{{ username }}" placeholder="You">
                                     </div>
                                 </fieldset>
 

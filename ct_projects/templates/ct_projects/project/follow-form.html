@@ -8,5 +8,5 @@
                     </form>
                 {% endwith %}
             {% else %}
-                <a href="{% url 'index' %}" class="btn btn-success follow-button">Follow</a>
+                <a href="/activitytracker/login/?next={% url 'project-details' project.pk %}" class="btn btn-success follow-button">Follow</a>
             {% endif %}

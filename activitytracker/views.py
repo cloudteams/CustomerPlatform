@@ -63,8 +63,9 @@ def login(request):
     EMAIL_VERIFICATION_MSG = 'You need to verify your E-mail in order to log in'
     INVALID_CREDENTIALS_MSG = 'Invalid Username/Email or Password'
 
+    redirect_url = request.GET.get('next', '/projects/')
     ctx = {
-        'redirect_url': request.GET.get('next', '/projects/followed/'),
+        'redirect_url': redirect_url,
         'ignore_login_link': True,
     }
 
@@ -101,7 +102,7 @@ def login(request):
 
     auth_login(request, user)
 
-    return redirect('/projects/')
+    return redirect(redirect_url)
 
 
 # Flush Session and redirect
