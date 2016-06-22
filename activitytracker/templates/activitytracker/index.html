@@ -20,41 +20,45 @@
     </ul>
 
     <!-- Start: Calendar ---------------------------------------------->
-    <div class="col-xs-12 no-padding">
-        <div class="box-content">
-            <div id="main_calendar" class="dashboardWrapper wrapperPadding col-xs-12"></div>
+    <div class="row padding-horizontal-3 padding-vertical-5 margin-bottom-3">
+        <div class="col-xs-12 padding-0">
+        <div class="box-content pull-left">
+            <div id="main_calendar" class="col-xs-12 padding-0"></div>
         </div>
     </div>
+    </div>
     <!-- End: Calendar ------------------------------------------------>
-    <div class="col-xs-12 no-padding dashboardWrapper" id="activitylist">
+    <div class="col-xs-12 padding-0" id="activitylist">
         <div class="row">
             <div class="col-lg-6">
-                <div class='grid-options'>
+                <div class='grid-options col-xs-12 margin-bottom-5 padding-0'>
 
                     <form id="groupForm" action="{% url 'getgroupedactivities' %}" method="POST">
                         {% csrf_token %}
-                        <div class='grid-options-container col-lg-8 col-lg-offset-2'>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" id="groupcheckbox" name="group-activities" checked onChange="GroupUngroupSort()"/>Group common </label>
-                                </div>
+                        <div class='grid-options-container col-xs-12 margin-top-4'>
+                            <div class="checkbox margin-right-1 margin-top-1" style="display:inline-block;">
+                                <label><input type="checkbox" id="groupcheckbox" name="group-activities" checked onChange="GroupUngroupSort()"/>Group common </label>
+                            </div>
+                            <div style="display: inline-block" class="margin-top-1">
                                 <label for="sortdropdown">  | Sort by   </label>
                                 <select name="sort-activities" id="sortdropdown" onchange="GroupUngroupSort()" >
                                     <option value="Activity">Activity</option>
                                     <option value="Category">Category</option>
                                     <option value="Time">Time</option>
                                 </select>
+                            </div>
                         </div>
                     </form>
                 </div>
-                <div class='row'><!--content for 1st row--></div>
-                <div class='row'><!--content for 2nd row--></div>
-                <div class='row'><!--content for 3rd row--></div>
+                <div class='row padding-3'><!--content for 1st row--></div>
+                <div class='row padding-3'><!--content for 2nd row--></div>
+                <div class='row padding-3'><!--content for 3rd row--></div>
             </div>
 
             <!--- Chart -->
             <div class="col-lg-6" style="height:561px">
-                <div class="box-custom-header">
-                    <h2 class="text-center"><i class="halflings-icon tasks white"></i><span class="break" ></span>Activity Type Overview</h2>
+                <div class="box-custom-header margin-top-4">
+                    <h4 class="text-center padding-2"><i class="fa fa-tasks white margin-right-3"></i><span class="break" ></span>Activity Type Overview</h4>
                 </div>
                 <div class="box-content" id="donut-canvas">
                      <div id="donutchart" ></div>
@@ -72,9 +76,9 @@
 
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header box-header blueNavy">
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                    <h2><i class="halflings-icon list-alt white"></i><span class="break" ></span>New activity details</h2>
+                <div class="modal-header box-header">
+                    <button type="button" class="close pull-right" data-dismiss="modal">×</button>
+                    <h2 class="text-center"><i class="fa fa-list-alt white margin-right-3"></i><span class="break" ></span>New activity details</h2>
                 </div>
                 <form action="{% url 'addactivity' %}" method="post" name="addForm" id="addForm">
                     {% csrf_token %}
@@ -93,23 +97,23 @@
                                 </select>
                             </div>
                             <div class="left-inner-addon col-sm-6">
-                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                <span class="fa fa-calendar" aria-hidden="true"></span>
                                 <input placeholder="  Start date" type="text" name="start_date" data-provide='datepicker' data-date-container='#addActivityModal' class="datepicker form-control input-lg" >
                             </div>
                             <div class="left-inner-addon col-sm-6">
-                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                <span class="fa fa-calendar" aria-hidden="true"></span>
                                 <input placeholder="  End date" type="text" name="end_date" data-provide='datepicker' data-date-container='#addActivityModal' class="datepicker form-control input-lg">
                             </div>
                             <div class="left-inner-addon col-sm-6">
-                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                <span class="fa fa-clock-o" aria-hidden="true"></span>
                                 <input id="start_time" name="start_time" class="clockpicker input-lg form-control" data-autoclose="true" size="16" type="text" placeholder="Start Time">
                             </div>
                             <div class="left-inner-addon col-sm-6">
-                                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                                <span class="fa fa-clock-o" aria-hidden="true"></span>
                                 <input id="end_time" name="end_time" class="input-lg form-control clockpicker" data-autoclose="true" size="16" type="text" placeholder="End Time">
                             </div>
                             <div class="left-inner-addon col-sm-12">
-                                <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                                <span class="fa fa-flag" aria-hidden="true"></span>
                                 <input placeholder="Any goal at all?" type="text" name="goal" autocomplete='off' id="goalinput" class="input-lg form-control">
                                 <div id="goalstatus" class="hidden">
                                     <label class='radio-inline radio-form' style='color:green'><input type="radio" name="goalstatus" value="Reached" id="Reached"/>Reached</label>
@@ -118,27 +122,27 @@
                                 </div>
                             </div>
                             <div class="left-inner-addon col-sm-12">
-                                <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                <span class="fa fa-check-circle-o" aria-hidden="true"></span>
                                 <input placeholder="What did it result into?" type="text" name="result" autocomplete='off' id="result" class="input-lg form-control">
                             </div>
                             <div class="left-inner-addon col-sm-12">
-                                 <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                                 <span class="fa fa-tag" aria-hidden="true"></span>
                                  <input id="friends" type='text' class="input-lg form-control tokenfield" name="friends" placeholder="With whom where you with?">
                             </div>
                             <div class="left-inner-addon col-sm-12">
-                                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+                                <span class="fa fa-wrench" aria-hidden="true"></span>
                                 <input id="tools" type='text' class="input-lg form-control tokenfield" name="tools" placeholder="What did you use?" data-tokens="Activitytracker">
                             </div>
                             <div class="left-inner-addon col-sm-12">
-                                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                <span class="fa fa-map-marker" aria-hidden="true"></span>
                                 <input id="places-input" class="input-lg form-control" name="location" type="text" placeholder="Search for Places">
                             </div>
-                            <div id="map-canvas" class="col-xs-offset-1 col-xs-10 map-canvas"></div>
+                            <div id="map-canvas" class="col-xs-10 map-canvas"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="#" class="btn btn-blueNavy" data-dismiss="modal">Close</a>
-                        <input type="button" class="btn btn-blueNavy" value="Add Activity" id="addActivityModalSubmit"/>
+                        <input type="button" class="btn btn-primary btn-at" value="Add Activity" id="addActivityModalSubmit"/>
+                        <a href="#" class="btn btn-transparent btn-at margin-left-2" data-dismiss="modal">Close</a>
                     </div>
                 </form>
             </div>

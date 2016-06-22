@@ -232,7 +232,7 @@ function drawActivity(e) {
 		}
 		catch (err) {
 			var divN = document.createElement('div');
-			divN.className = 'row';
+			divN.className = 'row padding-3';
 			divN.id = rowId;
 			divN.appendChild(new_activity);
 			var father = document.getElementById('content-rest');
