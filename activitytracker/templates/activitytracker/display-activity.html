@@ -1,4 +1,3 @@
-<html>
 {% load staticfiles %}
 {% load custom_templates %}
 
@@ -85,11 +84,11 @@
         </span>
     </div>
     {% if instance.location_address %}
-        <div id="map-canvas-show" class="col-xs-offset-1 col-xs-10 map-canvas"></div>
+        <div id="map-canvas-show" class="col-xs-12 map-canvas"></div>
     {% endif %}
 </div>
 <div class="modal-footer">
-     <a  class="showactivityheaderedit btn btn-transparent margin-right-1" id="editactivity" href="{% url 'editactivity' instance.id %}"  data-dismiss='modal' data-toggle="modal" data-target="#editActivityModal">
+     <a class="showactivityheaderedit btn btn-transparent margin-right-1" id="editactivity">
         <i class="fa fa-edit"></i> Edit
      </a>
      <a class="showactivityheaderdelete btn btn-transparent margin-left-1" id="deleteactivity" onclick="handleActivityDelete('{% url 'deleteactivity' instance.id %}')">
@@ -100,6 +99,16 @@
 
 
 <script>
+
+    $('#editactivity').click(function(e) {
+        e.preventDefault();
+		e.stopPropagation();
+        $('#showActivityModal').modal('hide');
+		$('#editActivityModal').modal({
+		  remote: "{% url 'editactivity' instance.id %}"
+	   });
+    });
+
     var mapShow;
     function initializeShowMap() {
         var mapCanvas = document.getElementById('map-canvas-show');
@@ -115,5 +124,3 @@
         marker.setMap(mapShow);
     }
 </script>
-
-</html>

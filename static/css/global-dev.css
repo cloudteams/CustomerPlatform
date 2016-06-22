@@ -7620,8 +7620,8 @@ section.public-page .choice a:first-child {
     min-height: 0;
 }
 
-.btn-at {
-  width: auto;
+.btn.btn-at {
+  width: auto !important;
 }
 
 .quick-button {

@@ -240,7 +240,14 @@ function drawActivity(e) {
 		}
 
 	}
-	return;
+
+	$(new_activity).click(function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$('#showActivityModal').modal({
+		  remote: remote_url
+	   });
+	})
 }
 /* Draws the Grouped or Ungrouped Data */
 function DrawGroupUngroupSort(id_list) {
