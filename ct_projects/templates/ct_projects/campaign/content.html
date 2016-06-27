@@ -85,7 +85,22 @@
             <div class="still-running">
                 <div class="vertical-align">
                     <div class="middle">
-                        <h3 class="header-medium secondary">This campaign is still running</h3>
+
+                        {% if campaign.has_expired %}
+                            {% if campaign.polls.exists %}
+                                {% with poll=campaign.polls.all|first %}
+                                    {% if request.user.is_authenticated %}
+                                        <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
+                                           class="btn">View campaign results<</a>
+                                    {% else %}
+                                        <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
+                                           class="btn">View campaign results<</a>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        {% else %}
+                            <h3 class="header-medium secondary">This campaign is still running</h3>
+                        {% endif %}
                     </div>
                 </div>
             </div>
