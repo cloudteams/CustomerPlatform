@@ -7753,6 +7753,9 @@ section.public-page .choice a:first-child {
 .quick-button.metro p {
 	text-align: center;
     padding-bottom: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .quick-button.metro:hover {
@@ -8263,7 +8266,7 @@ form {
     text-align: center;
     font-size: 45px;
     line-height: 85px;
-    background:rgba(29, 82, 77, 0.9);
+    background: rgb(125, 60, 140);
 }
 
 .info-box-content .info-box-text {
@@ -8290,4 +8293,9 @@ form {
 .range_inputs button {
   font-size: 10px;
     padding: 8px 15px;
+}
+
+.show-dashboard-glyphicon {
+  color: white;
+  font-size: 30px;
 }
