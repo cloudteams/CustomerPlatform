@@ -8299,3 +8299,8 @@ form {
   color: white;
   font-size: 30px;
 }
+
+.connected-app img {
+    width: 55px !important;
+    padding: 10px;
+}
