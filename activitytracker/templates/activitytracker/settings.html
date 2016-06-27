@@ -16,13 +16,12 @@
    <!-- Content begins HERE ------------------------------------------------------------------>
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1 dashboardWrapper">
-            <div class="box-header blueNavy" data-original-title>
-                <h2 class="text-center"><i class="fa fa-cloud white"></i><span class="break"></span>Available Providers</h2>
+            <div class="box-header" data-original-title>
+                <h2 class="text-center padding-4"><i class="fa fa-cloud white margin-right-2"></i><span class="break"></span>Available Providers</h2>
             </div>
             <div class="box-content row">
                 <table id=ProvidersTable" class="col-xs-12 text-center user-providers">
                     <tbody>
-
                         {% for provider_name,provider_data in providerDomValues.items %}
                         <tr class="connected-app {{ provider_name }}">
                             <td ><img src="{% static 'activitytracker/img/'|add:provider_name|add:'.png' %}"/></td>

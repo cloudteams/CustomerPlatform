@@ -232,7 +232,7 @@ function drawActivity(e) {
 		}
 		catch (err) {
 			var divN = document.createElement('div');
-			divN.className = 'row';
+			divN.className = 'row padding-3';
 			divN.id = rowId;
 			divN.appendChild(new_activity);
 			var father = document.getElementById('content-rest');
@@ -240,7 +240,14 @@ function drawActivity(e) {
 		}
 
 	}
-	return;
+
+	$(new_activity).click(function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$('#showActivityModal').modal({
+		  remote: remote_url
+	   });
+	})
 }
 /* Draws the Grouped or Ungrouped Data */
 function DrawGroupUngroupSort(id_list) {

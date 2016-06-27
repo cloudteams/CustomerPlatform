@@ -1,32 +1,32 @@
 @font-face {
 	font-family: 'activicon';
-	src:url('../fonts/activicon.eot?-iau8kd');
-	src:url('../font/activicon.eot?#iefixiau8kd') format('embedded-opentype'),
-		url('../font/activicon.woff?-iau8kd') format('woff'),
-		url('../font/activicon.ttf?-iau8kd') format('truetype'),
-		url('../font/activicon.svg?-iau8kd#activicon') format('svg');
+	src:url('../fonts/activitytracker/activicon.eot?-iau8kd');
+	src:url('../fonts/activitytracker/activicon.eot?#iefixiau8kd') format('embedded-opentype'),
+		url('../fonts/activitytracker/activicon.woff?-iau8kd') format('woff'),
+		url('../fonts/activitytracker/activicon.ttf?-iau8kd') format('truetype'),
+		url('../fonts/activitytracker/activicon.svg?-iau8kd#activicon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'activicon2';
-	src:url('../font/activicon2.eot?-3tz3n8');
-	src:url('../font/activicon2.eot?#iefix-3tz3n8') format('embedded-opentype'),
-		url('../font/activicon2.ttf?-3tz3n8') format('truetype'),
-		url('../font/activicon2.woff?-3tz3n8') format('woff'),
-		url('../font/activicon2.svg?-3tz3n8#activicon') format('svg');
+	src:url('../fonts/activitytracker/activicon2.eot?-3tz3n8');
+	src:url('../fonts/activitytracker/activicon2.eot?#iefix-3tz3n8') format('embedded-opentype'),
+		url('../fonts/activitytracker/activicon2.ttf?-3tz3n8') format('truetype'),
+		url('../fonts/activitytracker/activicon2.woff?-3tz3n8') format('woff'),
+		url('../fonts/activitytracker/activicon2.svg?-3tz3n8#activicon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: 'activicon3';
-	src:url('../font/activicon3.eot?-xri80b');
-	src:url('../font/activicon3.eot?#iefix-xri80b') format('embedded-opentype'),
-		url('../font/activicon3.ttf?-xri80b') format('truetype'),
-		url('../font/activicon3.woff?-xri80b') format('woff'),
-		url('../font/activicon3.svg?-xri80b#activicon') format('svg');
+	src:url('../fonts/activitytracker/activicon3.eot?-xri80b');
+	src:url('../fonts/activitytracker/activicon3.eot?#iefix-xri80b') format('embedded-opentype'),
+		url('../fonts/activitytracker/activicon3.ttf?-xri80b') format('truetype'),
+		url('../fonts/activitytracker/activicon3.woff?-xri80b') format('woff'),
+		url('../fonts/activitytracker/activicon3.svg?-xri80b#activicon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
