@@ -1,4 +1,18 @@
 @charset "UTF-8";
+
+/*@font-face {
+  font-family: "cloudteams-icons";
+  src: url(/static/fonts/cloudteams-icons.eot);
+  src: url(/static/fonts/cloudteams-icons.eot?#iefix) format("embedded-opentype"), url(/static/fonts/cloudteams-icons.woff) format("woff"), url(/static/fonts/cloudteams-icons.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal; }*/
+
+@font-face {
+  font-family: 'cloudteams-icons';
+  src: url(../fonts/cloudteams-icons.eot);
+  src: url(../fonts/cloudteams-icons.eot?#iefix) format("embedded-opentype"), url(../fonts/cloudteams-icons.woff) format("woff"), url(../fonts/cloudteams-icons.ttf) format("truetype");}
+
+
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
   font-family: sans-serif;
@@ -5986,6 +6000,22 @@ select {
   select:not(.projects-dropdown):hover, select:not(.projects-dropdown):focus {
     border-color: #7d3c8c; }
 
+.icon {
+  font-family: "cloudteams-icons";
+  font-size: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  font-weight: normal;
+  font-style: normal;
+  speak: none;
+  text-decoration: inherit;
+  text-transform: none;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+
 .input-container {
   position: relative; }
   .input-container .svg path {
@@ -5998,7 +6028,19 @@ select {
     display: none; }
   .input-container.display-none .edit-action {
     display: block; }
-
+  .input-container .icon {
+    position: absolute;
+    top: 10px;
+    right: 4px;
+    padding: 3px 4px 4px;
+    transition: all 350ms cubic-bezier(0.5, 0.35, 0, 1);
+    border-radius: 50%;
+    background-color: transparent; }
+  .input-container.active .icon, article.blogpost:hover .background-image .input-container.content .icon, .input-container.focused .icon {
+    color: #ffffff;
+    background-color: #7d3c8c;
+    -webkit-transform: translate3d(0, -19px, 0);
+            transform: translate3d(0, -19px, 0); }
 .select-dropdown {
   position: relative; }
   .select-dropdown.hover .fa-angle-down {
