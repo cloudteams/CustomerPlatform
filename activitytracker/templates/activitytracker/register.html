@@ -9,7 +9,7 @@
 {% block menu %}{% endblock %}
 {% block content %}
     <main>
-        <!--<form action="{% url 'register' %}" method="POST"  >
+        <form action="{% url 'register' %}" method="POST"  >
 			<header class="main-header login">
 				<div class="container">
 					<h1 class="header-extra-large public">Welcome</h1>
@@ -30,7 +30,7 @@
 
                                     <div class="input-container">
                                         <i class="icon icon-edit"></i>
-                                        <input type="text" id="username" name="username" placeholder="Hans">
+                                        <input type="text" id="username" name="username" placeholder="You">
                                     </div>
                                 </fieldset>
 
@@ -39,7 +39,7 @@
 
                                     <div class="input-container">
                                         <i class="icon icon-edit"></i>
-                                        <input type="text" id="email" name="email" placeholder="Hans">
+                                        <input type="text" id="email" name="email" placeholder="you@test.com">
                                     </div>
                                 </fieldset>
 
@@ -82,21 +82,6 @@
                     </div>
                 </div>
             </section>
-        </form>-->
-        <header class="main-header login">
-				<div class="container">
-					<h1 class="header-extra-large public">We're almost there...</h1>
-					<p class="public-page-subtitle">Registration is not available yet as the CloudTeams platform is still under development.</p>
-
-				</div>
-        </header>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <p style="text-align: center; height: calc(100vh - 520px); padding: 100px 0; font-size: 150%;">If you're interested in CloudTeams learn more on our <a href="http://www.cloudteams.eu/">website</a>
-                        or follow us on <a href="https://www.facebook.com/CloudTeamsEU/"><i class="fa fa-facebook"></i></a> or <a href="https://twitter.com/CloudTeamsEU"><i class="fa fa-twitter"></i></a></p>
-                </div>
-            </div>
-        </div>
+        </form>
     </main>
 {% endblock %}
