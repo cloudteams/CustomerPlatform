@@ -20,6 +20,7 @@
 .project-search input {
     vertical-align: top;
     color: #b1b1b1;
+    padding-right: 40px;
 }
 
 .project-search input[type="search"] {
@@ -152,4 +153,10 @@ a.notification-link {
 /* Completed campaigns - fix #125 */
 .completed-campaigns {
     font-size: 15px;
+}
+
+/* Search term header - fix #153 */
+.search-term-header {
+    word-wrap: break-word;
+    width: 100%;
 }
