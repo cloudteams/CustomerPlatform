@@ -25,12 +25,21 @@
 
                             <div class="content form-section">
                                 {% csrf_token %}
+
+                                {% if errors %}
+                                    <div class="has-error">
+                                        {% for error in errors %}
+                                            <p class="help-block">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
                                 <fieldset>
                                     <label for="username" class="header-medium secondary">Username</label>
 
                                     <div class="input-container">
                                         <i class="icon icon-edit"></i>
-                                        <input type="text" id="username" name="username" placeholder="You">
+                                        <input type="text" id="username" name="username" placeholder="You" value="{{ username }}">
                                     </div>
                                 </fieldset>
 
@@ -39,7 +48,7 @@
 
                                     <div class="input-container">
                                         <i class="icon icon-edit"></i>
-                                        <input type="text" id="email" name="email" placeholder="you@test.com">
+                                        <input type="text" id="email" name="email" placeholder="you@test.com" value="{{ email }}">
                                     </div>
                                 </fieldset>
 

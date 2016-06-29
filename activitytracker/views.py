@@ -115,29 +115,41 @@ def logout(request):
 # Check and Register the User
 def register(request):
 
-    EMAIL_EXISTS_MSG = 'EmailExists'
-    EMPTY_FIELDS_MSG = 'EmptyFields'
-    PASSWORD_ERROR = 'PasswordMismatch'
-    SUCCESS_MSG = 'Registration Successful! ' \
-                  'We have sent you an e-mail with a validation link to follow'
+    USERNAME_EXISTS_MSG = 'This username is already used'
+    EMAIL_EXISTS_MSG = 'A user with this email address already exists'
+    EMPTY_FIELDS_MSG = 'All fields are required'
+    PASSWORD_ERROR = 'The passwords should match each other'
 
     if request.method != 'POST':
         return render(request, 'activitytracker/register.html', {
             'ignore_login_link': True,
         })
 
+    username = request.POST['username']
     email = request.POST['email']
     password = request.POST['password']
     repeated_password = request.POST['password_repeat']
 
+    ctx = {
+        'username': username,
+        'email': email,
+        'errors': []
+    }
+
+    if User.objects.filter(username__iexact=username).exists():
+        ctx['errors'].append(USERNAME_EXISTS_MSG)
+
     if User.objects.filter(email__iexact=email).exists():
-        return HttpResponseBadRequest(EMAIL_EXISTS_MSG)
+        ctx['errors'].append(EMAIL_EXISTS_MSG)
 
     if password != repeated_password:
-        return HttpResponseBadRequest(PASSWORD_ERROR)
+        ctx['errors'].append(PASSWORD_ERROR)
 
     if '' in (email, password, repeated_password):
-        return HttpResponseBadRequest(EMPTY_FIELDS_MSG)
+        ctx['errors'].append(EMPTY_FIELDS_MSG)
+
+    if ctx['errors']:
+        return render(request, 'activitytracker/register.html', ctx)
 
     username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists() else email
 
@@ -167,7 +179,7 @@ def register(request):
 
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
 
-    return HttpResponse(SUCCESS_MSG)
+    return render(request, 'activitytracker/registration-success.html')
 
 
 # Produce new random pass and send it with e-mail
