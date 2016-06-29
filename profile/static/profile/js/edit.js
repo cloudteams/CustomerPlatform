@@ -92,11 +92,11 @@ $(function() {
         }
     };
 
-    $('.create-profile-form input').on('focusout', ProfileFormManager.post_profile);
+    $('.create-profile-form input:not(#id_year_of_birth, #id_years_experience)').on('focusout', ProfileFormManager.post_profile);
     $('.create-profile-form select').on('change', ProfileFormManager.post_profile);
     $('body').on('click', '.save-error-retry', ProfileFormManager.post_profile);
 
-    //preview avatar image
+    // preview avatar image
     $("#id_profile_picture").change(function(){
         if (this.files && this.files[0]) {
             if (this.files[0].size/1024/1024 >= 2) { // images larger than 2 MB should not be accepted
@@ -119,4 +119,30 @@ $(function() {
 
     // the preview should only accept images
     $("#id_profile_picture").attr('accept', 'image/*')
+
+    // birthday validation
+    $('#id_year_of_birth').change(function() {
+        var year = $(this).val();
+        if (year !== "") {
+            if ((year < 1900) || (year > new Date().getFullYear())) {
+                alert('Invalid birth year');
+                return;
+            }
+        }
+
+        ProfileFormManager.post_profile();
+    });
+
+    // years of experience validation
+    $('#id_years_experience').change(function() {
+        var yearsXP = $(this).val();
+        if (yearsXP !== "") {
+            if ((yearsXP < 0) || (yearsXP > 100)) {
+                alert('Invalid years of experience');
+                return;
+            }
+        }
+
+        ProfileFormManager.post_profile();
+    });
 });
