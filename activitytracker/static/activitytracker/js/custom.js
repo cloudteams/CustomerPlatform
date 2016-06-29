@@ -334,7 +334,7 @@ function CalendarDaterange(viewInstance){
 		return {mode:mode, month:month, year:year}
 	}
 	else{
-		if (period.length <= 17){ //same month
+		if (period.length <= 18){ //same month
 			range = period.split("-");
 			month = (range[0].split(" "))[0];
 			day = (range[0].split(" "))[1];
@@ -348,7 +348,7 @@ function CalendarDaterange(viewInstance){
 			}
 			return{ mode:mode, day: day, month: month, year:year, day2: day2, month2:month, year2:year}
 		}
-		else if (period.length == 19) { //between months & same year
+		else if (period.length <= 20) { //between months & same year
 			var range = period.split("-");
 			month = (range[0].split(" "))[0];
 			day = (range[0].split(" "))[1];
