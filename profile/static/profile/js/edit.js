@@ -99,6 +99,12 @@ $(function() {
     //preview avatar image
     $("#id_profile_picture").change(function(){
         if (this.files && this.files[0]) {
+            if (this.files[0].size/1024/1024 >= 2) { // images larger than 2 MB should not be accepted
+                alert('Images larger than 2MB are not accepted.')
+                $('#id_profile_picture').val('');
+                return
+            }
+
             var reader = new FileReader();
 
             reader.onload = function (e) {
@@ -110,4 +116,7 @@ $(function() {
             ProfileFormManager.post_profile();
         }
     });
+
+    // the preview should only accept images
+    $("#id_profile_picture").attr('accept', 'image/*')
 });
