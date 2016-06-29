@@ -149,3 +149,7 @@ a.notification-link {
     color: #424242;
 }
 
+/* Completed campaigns - fix #125 */
+.completed-campaigns {
+    font-size: 15px;
+}
