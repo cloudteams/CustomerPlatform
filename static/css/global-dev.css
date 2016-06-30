@@ -4648,7 +4648,9 @@ table {
   letter-spacing: 1px;
   margin: 0; }
   .legend-item:last-child {
-    float: right; }
+    float: right;
+    margin-right: 100px;
+    }
   .legend-item .icon.legend-icon {
     height: 20px;
     width: 20px; }
@@ -4781,7 +4783,9 @@ table {
   .meta.thin {
     font-weight: 400; }
   .meta.inline-block {
-    display: inline-block; }
+    display: inline-block;
+    margin-right: 10px;
+    }
 
 .bold {
   font-weight: 700; }
@@ -6560,9 +6564,16 @@ article.campaign {
     margin-bottom: 5px; }
 
 .notification {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  border-radius: 0;
+  background: none;
+      padding: 20px;
+    border-bottom: 1px solid #a076ab;
+  }
   .notification:last-child {
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    border-bottom: none;
+    }
   .notification .middle:last-child {
     text-align: right; }
   .notification p {
