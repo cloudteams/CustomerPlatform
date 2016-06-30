@@ -5353,7 +5353,9 @@ table {
               animation: fadeIn 350ms cubic-bezier(0.785, 0.135, 0.15, 0.86) 1 normal forwards;
       display: block; }
   .public-project-overview-content .submenu {
-    position: relative; }
+    position: relative;
+    background: #f7f6f6;
+    }
     .public-project-overview-content .submenu:after {
       background: #ebebeb;
       bottom: 0;
@@ -5861,12 +5863,8 @@ section.dashboard-page {
         color: #b1b1b1; }
 
 .dashboard-side-menu.dashboard-side-menu-user .bottom {
-  bottom: 0;
-  left: 0;
-  padding-right: 20px;
-  padding-left: 20px;
-  position: absolute;
-  width: 100%; }
+    margin-top: 2em;
+    }
   .dashboard-side-menu.dashboard-side-menu-user .bottom .profile-completion {
     border-bottom: 1px solid #54345c;
     border-top: 1px solid #54345c;
@@ -6341,7 +6339,8 @@ section.public-page {
   background: #f7f6f6;
   margin-bottom: 50px;
   padding-top: 30px;
-  padding-bottom: 30px; }
+  padding-bottom: 30px;
+  }
   .public-overview-data .vertical-align {
     margin-right: -15px;
     margin-left: -15px; }
@@ -7874,7 +7873,7 @@ section.public-page .container {
 
 section.public-page .container,
 .dashboardWrapper {
-  background: white;
+  /* background: white; */
   border-radius: 5px;
 }
 

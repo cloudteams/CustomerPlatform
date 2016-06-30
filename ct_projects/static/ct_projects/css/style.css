@@ -19,7 +19,7 @@
 
 .project-search input {
     vertical-align: top;
-    color: #b1b1b1;
+    color: #ddd;
     padding-right: 40px;
 }
 
@@ -46,6 +46,15 @@ form.ct_projects_form input[type="text"], form.ct_projects_form textarea {
 }
 
 /* Profile overview */
+
+.custom-tooltip a {
+    color: #ddd !important;
+}
+
+.custom-tooltip a:hover, .custom-tooltip a:focus {
+    color: whitesmoke !important;
+}
+
 .public-overview-data .vertical-align .middle table tr td {
     width: 50% !important;
 }

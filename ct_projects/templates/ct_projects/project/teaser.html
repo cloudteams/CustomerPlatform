@@ -4,13 +4,17 @@
 <article class="project public-project {% if not two_columns %}col-lg-4{% endif %} col-md-6 col-xs-12 block-line-half">
 	<div class="background">
         {% if project.logo %}
-            <div class="background-image" style="background-image: url({{ project.logo }});">
-                <img class="square svg" src="{% static "img/icon-folders-8d39bbb3.svg" %}">
-            </div>
+            <a href="{{ project.get_absolute_url }}">
+                <div class="background-image" style="background-image: url({{ project.logo }});">
+                    <img class="square svg" src="{% static "img/icon-folders-8d39bbb3.svg" %}">
+                </div>
+            </a>
         {% endif %}
 
 		<header>
-			<h3 class="header-medium secondary">{{ project.title }}</h3>
+            <a href="{{ project.get_absolute_url }}">
+			    <h3 class="header-medium secondary">{{ project.title }}</h3>
+            </a>
 
 			<div class="tooltip-container">
 				<a href="#nowhere" class="open-tooltip-button"><img class="more-options svg" src="{% static "img/icon-more-options-fbdbd735.svg" %}"></a>
