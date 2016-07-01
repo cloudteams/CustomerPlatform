@@ -8356,3 +8356,9 @@ form {
     width: 55px !important;
     padding: 10px;
 }
+
+.funding {
+    margin-top: 10px;
+    opacity: 1.0;
+    color: #afa7b0;
+}
