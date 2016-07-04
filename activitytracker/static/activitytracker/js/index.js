@@ -82,17 +82,17 @@
                 data: data,
                 cache: false,
                 url: BASE_URL + 'activity/add/',
-                dataType: "text",
+                dataType: "json",
                 error: function (xhr, status, error) {
                     Done();
-                    alert(xhr.responseText);
+                 $('#end_time').parent().after("<div class='col-xs-12 margin-bottom-4 text-center' id='date-error' style='color:#7d3c8c; '>Activity can\'t end sooner than it began!</div>")
                 },
-                success: function (response) {
-                    var data = jQuery.parseJSON(response);
+                success: function (data) {
                     $('#main_calendar').fullCalendar('refetchEvents'); // re-render events
                     var viewInstance = $('#main_calendar').fullCalendar('getView');
                     RenderViewActivities(viewInstance); // redraws activities based on view
                     $('#addActivityModal').modal('hide');
+                    $('#date-error').remove();
                     Done();
                     document.getElementById("addForm").reset();
                     $('#name_of_activity').val('').trigger('chosen:updated');
