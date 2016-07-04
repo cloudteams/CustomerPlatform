@@ -1,4 +1,6 @@
-from django.conf.urls import include, url
+import os
+
+from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from django.views.generic import RedirectView
 from django.conf import settings

@@ -22,7 +22,7 @@
             <div class="col-md-12">
                 <div class="profile-save-msg pull-right"></div>
 
-                <form class="create-profile-form" action="." method="POST" enctype="multipart/form-data">
+                <form class="create-profile-form clearfix" action="." method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {% with p=form.instance %}

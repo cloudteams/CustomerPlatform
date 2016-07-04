@@ -4648,7 +4648,9 @@ table {
   letter-spacing: 1px;
   margin: 0; }
   .legend-item:last-child {
-    float: right; }
+    float: right;
+    margin-right: 100px;
+    }
   .legend-item .icon.legend-icon {
     height: 20px;
     width: 20px; }
@@ -4781,7 +4783,9 @@ table {
   .meta.thin {
     font-weight: 400; }
   .meta.inline-block {
-    display: inline-block; }
+    display: inline-block;
+    margin-right: 10px;
+    }
 
 .bold {
   font-weight: 700; }
@@ -5353,7 +5357,9 @@ table {
               animation: fadeIn 350ms cubic-bezier(0.785, 0.135, 0.15, 0.86) 1 normal forwards;
       display: block; }
   .public-project-overview-content .submenu {
-    position: relative; }
+    position: relative;
+    background: #f7f6f6;
+    }
     .public-project-overview-content .submenu:after {
       background: #ebebeb;
       bottom: 0;
@@ -5861,12 +5867,8 @@ section.dashboard-page {
         color: #b1b1b1; }
 
 .dashboard-side-menu.dashboard-side-menu-user .bottom {
-  bottom: 0;
-  left: 0;
-  padding-right: 20px;
-  padding-left: 20px;
-  position: absolute;
-  width: 100%; }
+    margin-top: 2em;
+    }
   .dashboard-side-menu.dashboard-side-menu-user .bottom .profile-completion {
     border-bottom: 1px solid #54345c;
     border-top: 1px solid #54345c;
@@ -6341,7 +6343,8 @@ section.public-page {
   background: #f7f6f6;
   margin-bottom: 50px;
   padding-top: 30px;
-  padding-bottom: 30px; }
+  padding-bottom: 30px;
+  }
   .public-overview-data .vertical-align {
     margin-right: -15px;
     margin-left: -15px; }
@@ -6561,9 +6564,16 @@ article.campaign {
     margin-bottom: 5px; }
 
 .notification {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  border-radius: 0;
+  background: none;
+      padding: 20px;
+    border-bottom: 1px solid #a076ab;
+  }
   .notification:last-child {
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    border-bottom: none;
+    }
   .notification .middle:last-child {
     text-align: right; }
   .notification p {
@@ -7874,7 +7884,7 @@ section.public-page .container {
 
 section.public-page .container,
 .dashboardWrapper {
-  background: white;
+  /* background: white; */
   border-radius: 5px;
 }
 
@@ -8345,6 +8355,12 @@ form {
 .connected-app img {
     width: 55px !important;
     padding: 10px;
+}
+
+.funding {
+    margin-top: 10px;
+    opacity: 1.0;
+    color: #afa7b0;
 }
 
 ul.breadcrumb li:hover a,
