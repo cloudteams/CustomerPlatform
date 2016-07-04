@@ -8346,3 +8346,8 @@ form {
     width: 55px !important;
     padding: 10px;
 }
+
+ul.breadcrumb li:hover a,
+ul.breadcrumb li a:hover {
+  color: black !important;
+}
