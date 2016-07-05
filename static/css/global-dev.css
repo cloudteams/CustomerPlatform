@@ -8362,3 +8362,8 @@ form {
     opacity: 1.0;
     color: #afa7b0;
 }
+
+ul.breadcrumb li:hover a,
+ul.breadcrumb li a:hover {
+  color: black !important;
+}

@@ -794,7 +794,10 @@ def updateactivity(request, performs_id):
                                            )
 
     except ValueError:
-        return HttpResponseBadRequest(FIELD_ERROR_MSG)
+        return HttpResponseBadRequest({
+            'code': 'DATE_ERROR_MSG',
+            'msg': 'Activity cannot end sooner than it started'
+        })
 
     return HttpResponse(
         json.dumps(
