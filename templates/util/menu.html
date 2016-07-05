@@ -23,6 +23,17 @@
 							</div>
 						</li>
 
+						<li>
+							<div class="vertical-align">
+								<div class="middle">
+									<a href="{% url 'all-projects' %}">
+										<img class="icon menu-icon svg" src="{% static "img/icons/icon-projects.svg" %}">
+										All projects
+									</a>
+								</div>
+							</div>
+						</li>
+
 						{% if request.user.is_authenticated %}
 							<li>
 								<div class="vertical-align">
@@ -56,9 +67,7 @@
 
 										<i class="fa fa-angle-down"></i>
 									{% else %}
-										{% if ignore_login_link %}
-											<a href="/projects/">View project store</a>
-										{% else %}
+										{% if not ignore_login_link %}
 											<a href="/activitytracker/login/?next=/profile/">Login</a>
 										{% endif %}
 									{% endif %}
