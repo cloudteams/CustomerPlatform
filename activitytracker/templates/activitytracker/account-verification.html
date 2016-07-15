@@ -10,8 +10,10 @@
             <div class="col-xs-offset-3 col-xs-6">
                 <img src="{% static 'activitytracker/img/cloudteams-logo.svg' %}" alt="Cloudteams Logo" class="img-responsive center-block">
             </div>
-
-            <h1 class="text-center col-xs-12">
+        </div>
+        <hr>
+        <div class="row">
+            <h1 class="text-center col-xs-12 {% if not verification_successful %}error-message{% endif %}">
                 Verification
                 {% if verification_successful %}
                     Successful
@@ -19,11 +21,9 @@
                     Failed
                 {% endif %}
             </h1>
-        </div>
-        <hr>
-        <div class="row">
+
             {% if verification_successful %}
-                <h3 class="success-message">You have successfully verified your e-mail address! You will be redirected in a jiffy</h3>
+                <h3>You have successfully verified your e-mail address! You will be redirected in a jiffy</h3>
                 <script>setTimeout(function(){ window.location = '{% url 'login' %}'; }, 4000);</script>
             {% else %}
                 <h3 class="error-message">Verification failed. Make sure you have visited the correct URL.</h3>
