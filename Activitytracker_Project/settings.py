@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = False
 
@@ -228,7 +228,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.youtube.YoutubeOAuth2',
     'social.backends.googlefit.GoogleFitOAuth2',
     'social.backends.gmail.GmailOAuth2',
-    'social.backends.fitbit.FitbitOAuth',
+    'social.backends.fitbit.FitbitOAuth1',
     'social.backends.foursquare.FoursquareOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
