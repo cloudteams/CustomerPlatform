@@ -46,7 +46,7 @@
 				</li>
 
 				<li>
-					<a href="{% url 'notifications' %}" class="incoming">
+					<a href="{% url 'notifications' %}" {% if request.user.unread_notifications %}class="incoming"{% endif %}>
 						<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
 						<span>Notifications</span>
 					</a>

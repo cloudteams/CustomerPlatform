@@ -22,7 +22,7 @@
                 {% for notification in notifications %}
                     {% include "profile/notification/item.html" %}
                 {% empty %}
-                    <p>No notifications</p>
+                    <p class="empty-dashboard">You have no notifications</p>
                 {% endfor %}
 
                 <!--<a href="#nowhere" class="btn">Load more</a>-->

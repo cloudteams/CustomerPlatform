@@ -159,6 +159,12 @@ a.notification-link {
     color: #424242;
 }
 
+.empty-dashboard {
+    color: #777;
+    letter-spacing: 2px;
+    font-weight: 300;
+}
+
 /* Completed campaigns - fix #125 */
 .completed-campaigns {
     font-size: 15px;
