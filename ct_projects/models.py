@@ -422,6 +422,7 @@ class Notification(models.Model):
     poll = models.ForeignKey(Poll, blank=True, null=True, default=None)
     text = models.TextField(default='')
     seen = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
 
     def message(self):
         if self.document:

@@ -130,7 +130,7 @@ def opinion_about(request):
 @login_required
 def notifications(request):
     ctx = {
-        'notifications': [n for n in Notification.objects.filter(user=request.user)
+        'notifications': [n for n in Notification.objects.filter(user=request.user).order_by('-created')
                           if (not n.campaign()) or (not n.campaign().has_expired())]
     }
 
