@@ -34,6 +34,7 @@ def start_wizard(request):
     profile = request.user.profile
     params = {
         'profile': profile,
+        'profile_edit': True,
     }
 
     if request.method == 'GET':

@@ -5,15 +5,14 @@
 {% block section_class %}page-user-dashboard-projects dashboard-page user-dashboard-page message{% endblock %}
 
     {% block pre_content %}
-        <div class="complete-profile active">
-            <div class="container">
-                <img class="icon menu-icon svg" src="{% static "img/icons/icon-check.svg" %}">
-                <p>Tell us more about yourself and complete your profile <a href="{% url 'start-profile-wizard' %}">Go to your profile page</a></p>
-                <div class="close-message">
-                    <img class="icon close-item svg" src="{% static "img/icons/icon-close.svg" %}">
+        {% if profile.get_completion_progress < 20 and not profile_edit %}
+            <div class="complete-profile active">
+                <div class="container">
+                    <img class="icon menu-icon svg" src="{% static "img/icons/icon-check.svg" %}">
+                    <p>Tell us more about yourself and complete your profile <a href="{% url 'start-profile-wizard' %}">Go to your profile page</a></p>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endblock %}
 
 {% block content %}
