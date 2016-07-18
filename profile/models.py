@@ -55,7 +55,45 @@ class UserProfile(models.Model):
         :return: A two digit percentage ("00" - "99") indicating how much of the profile info has been completed
         """
         # TODO implement profile complete calculation logic
-        return "65"
+        points = 0
+
+        if self.profile_picture:
+            points += 5
+
+        if self.first_name:
+            points += 4
+
+        if self.last_name_initial:
+            points += 1
+
+        if self.year_of_birth:
+            points += 5
+
+        if self.business_sector:
+            points += 3
+
+        if self.work_location:
+            points += 5
+
+        if self.years_experience:
+            points += 2
+
+        if self.tech_level:
+            points += 10
+
+        if self.user.influences.all():
+            points += 15
+
+        if self.user.devices.all():
+            points += 20
+
+        if self.user.platforms.all():
+            points += 20
+
+        if self.user.brand_opinions.all():
+            points += 10
+
+        return points
 
     def avatar(self):
         if not self.profile_picture:

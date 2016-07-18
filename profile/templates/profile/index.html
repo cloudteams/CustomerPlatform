@@ -45,12 +45,14 @@
                         {% endif %}
 
                         <li>
-                            <div class="progress-container">
-                                <div class="progress-wrap" data-progress-percent="0.75">
-                                    <div class="progress-bar" style="width: 75%;"></div>
+                            {% with progress=profile.get_completion_progress %}
+                                <div class="progress-container">
+                                    <div class="progress-wrap" data-progress-percent="0.{{ progress }}">
+                                        <div class="progress-bar" style="width: {{ progress }}%;"></div>
+                                    </div>
+                                    <p class="percentage bold">{{ progress }}/100</p>
                                 </div>
-                                <p class="percentage bold">65/100</p>
-                            </div>
+                            {% endwith %}
                         </li>
                     </ul>
                 </div>
