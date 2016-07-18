@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load profile_tags %}
 
 {% with profile=request.user.profile %}
 	<aside class="dashboard-side-menu dashboard-side-menu-user col-lg-3">
@@ -73,7 +74,7 @@
 
 				{% with progress=profile.get_completion_progress %}
 					<div class="progress-container">
-						<div class="progress-wrap" data-progress-percent="0.{{ progress }}">
+						<div class="progress-wrap" data-progress-percent="{{ progress|to_percent }}">
 							<div class="progress-bar"></div>
 						</div>
 						<p class="percentage bold">{{ progress }}/100</p>

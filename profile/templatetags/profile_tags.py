@@ -32,3 +32,8 @@ def choice_to_str(option, field):
             return o[1]
 
     return option
+
+
+@register.filter
+def to_percent(progress):
+    return progress/100.0

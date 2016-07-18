@@ -47,7 +47,7 @@
                         <li>
                             {% with progress=profile.get_completion_progress %}
                                 <div class="progress-container">
-                                    <div class="progress-wrap" data-progress-percent="0.{{ progress }}">
+                                    <div class="progress-wrap" data-progress-percent="{{ progress|to_percent }}">
                                         <div class="progress-bar" style="width: {{ progress }}%;"></div>
                                     </div>
                                     <p class="percentage bold">{{ progress }}/100</p>
