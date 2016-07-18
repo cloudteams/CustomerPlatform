@@ -22,12 +22,15 @@
 		</header>
 
 		<div class="content dates">
-			<img class="icon menu-icon svg" src="{% static "img/icons/icon-date-start.svg" %}"">
-			<p><time datetime="{{ campaign.starts|date:"Y-m-d" }}">{{ campaign.starts|date:"d-m-Y" }}</time></p>
-
+			<div>
+				<img class="icon menu-icon svg" src="{% static "img/icons/icon-date-start.svg" %}"">
+				<p><time datetime="{{ campaign.starts|date:"Y-m-d" }}">{{ campaign.starts|date:"d-m-Y" }}</time></p>
+			</div>
             {% if campaign.expires %}
-                <img class="icon menu-icon svg" src="{% static "img/icons/icon-date-end.svg" %}"">
-                <p><time datetime="{{ campaign.expires|date:"Y-m-d" }}">{{ campaign.expires|date:"d-m-Y" }}</time></p>
+				<div>
+                	<img class="icon menu-icon svg" src="{% static "img/icons/icon-date-end.svg" %}"">
+                	<p><time datetime="{{ campaign.expires|date:"Y-m-d" }}">{{ campaign.expires|date:"d-m-Y" }}</time></p>
+				</div>
             {% endif %}
 		</div>
 
