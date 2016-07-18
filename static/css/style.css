@@ -141,3 +141,13 @@ section.dashboard-page > .container > .content > .row > aside .show-minimized {
     width: 30px;
     margin: 0 auto;
 }
+
+/* Login */
+.social-login > img {
+    opacity: 0.75;
+    cursor: pointer;
+}
+
+.social-login > img:hover {
+    opacity: 1;
+}
