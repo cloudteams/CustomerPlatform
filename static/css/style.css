@@ -38,6 +38,10 @@ section.public-page {
     border-radius: 50%;
 }
 
+header .input-search {
+    color: #ddd;
+}
+
 .coming-soon {
     text-transform: uppercase;
     font-size: .8em;

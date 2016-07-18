@@ -1,5 +1,5 @@
-console.log('in!')
 $(function() {
+    /* Dashboard folding back */
     $('.minimize-toggle').click(function() {
         $('.dashboard-side-menu').toggleClass('minimized');
         if ($('.dashboard-side-menu').hasClass('minimized')) {
@@ -7,5 +7,11 @@ $(function() {
         } else {
             $(this).find('.arrow').html('❮')
         }
+    })
+
+    /* Search field on image click submit */
+    $('body').on('click', 'header form.project-search svg', function() {
+        console.log('in!')
+        $(this).closest('form.project-search').submit();
     })
 })
