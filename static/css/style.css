@@ -95,3 +95,37 @@ section.dashboard-page > .container > .content > .row > aside .show-minimized {
     margin: 10px auto; }
         .dashboard-page.minimized aside li span {
       display: none; }
+
+
+/* Minimized aside */
+.minimize-toggle:hover {
+    color: white !important;
+    cursor: pointer;
+}
+
+.dashboard-side-menu.minimized {
+  width: auto;
+}
+
+.dashboard-side-menu.minimized h1.header-small,
+.dashboard-side-menu.minimized .minimize-toggle .fold-back,
+.dashboard-side-menu.minimized .member .information,
+.dashboard-side-menu.minimized .side-menu ul li a span,
+.dashboard-side-menu.minimized .bottom {
+   display: none;
+}
+
+.dashboard-side-menu.minimized .minimize-toggle {
+    padding-top: 10px;
+}
+
+.dashboard-side-menu.minimized .profile-picture {
+    padding: 0;
+    width: auto;
+}
+
+.dashboard-side-menu.minimized .profile-avatar {
+    height: 30px !important;
+    width: 30px;
+    margin: 0 auto;
+}

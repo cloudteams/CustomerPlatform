@@ -93,6 +93,14 @@ ul.main-menu i {
     padding-bottom: 2em;
 }
 
+.complete-profile.active.hide-all {
+    background: #411f48 !important;
+}
+
+.complete-profile.active.hide-all * {
+    visibility: hidden !important;
+}
+
 /* Slider */
 
 .page-container {

@@ -24,7 +24,7 @@
 			<link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}" rel="stylesheet">
 			<link href="{% static 'bower_components/chosen/chosen.min.css' %}" rel="stylesheet">
 			<link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
-			<link href="{% static 'css/style.css' %}" rel="stylesheet">
+			<link href="{% static 'css/style.css' %}?v=20160718.1" rel="stylesheet">
 		{% endcompress %}
 		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css" />
 		{% block css %}
@@ -54,6 +54,8 @@
         {% endblock %}
 		<script type="text/javascript" src="{% static "js/global-dev.js" %}"></script>
 		<script type="text/javascript" src="{% static "js/common-dev.js" %}"></script>
+		<script type="text/javascript" src="{% static "js/minimize-menu.js" %}"></script>
+
 		{% compress js %}
             <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 			<script src="{% static 'bower_components/jquery-ui/jquery-ui.min.js' %}"></script>
