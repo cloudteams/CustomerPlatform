@@ -2,31 +2,18 @@
 {% load url from future %}
 {% load project_tags %}
 
+{% block title %}Post an idea{% endblock %}
 {% block content %}
 {% autoescape off %}
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home"></i>
-            <a href="{% url 'all-projects' %}">Projects</a>
-        </li>
-        <i class="icon-angle-right"></i>
-        <li>
-            <a href="{% url 'project-details' project.pk %}">{{project.title}}</a>
-        </li>
-        <i class="icon-angle-right"></i>
-         <li>
-            <a href="{% url 'post-idea' project.pk %}">Post an idea</a>
-        </li>
-    </ul>
 
-    <h1>{{project.title}} | Post an idea</h1>
+    <h2>{{project.title}} | Post an idea</h2>
 
-    <form action="." method="POST" class="ct_projects_form">{% csrf_token %}
+    <form action="." method="POST" class="ct_projects_form form-post-idea form-full">{% csrf_token %}
         {{form.as_p}}
 
         <div class="clearfix">
             <input type="submit" class="btn btn-primary pull-left" value="Post idea" />
-            <a href="{% url 'project-details' project.pk %}" class="btn pull-right">Back to project</a>
+            <a href="{% url 'project-details' project.pk %}" class="btn pull-right btn-transparent">Back to project</a>
         </div>
     </form>
 {% endautoescape %}

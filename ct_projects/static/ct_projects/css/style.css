@@ -175,3 +175,12 @@ a.notification-link {
     word-wrap: break-word;
     width: 100%;
 }
+
+/* Fixed #209 */
+.form-post-idea.form-full input[type="submit"] {
+    width: calc(100% - 195px);
+}
+
+.form-post-idea.form-full .btn.pull-right {
+    border-radius: 0 5px 5px 0;
+}
