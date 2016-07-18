@@ -1,17 +1,19 @@
 {% extends "ct_projects/base.html" %}
 
 {% load staticfiles %}
+{% load profile_tags %}
 {% block class_public_page %}{% endblock %}
 {% block section_class %}page-user-dashboard-projects dashboard-page user-dashboard-page message{% endblock %}
 
     {% block pre_content %}
-
-            <div class="complete-profile active {% if profile.get_completion_progress > 20 or not profile_edit %}hide-all{% endif %}">
+        {% with profile=profile|default:request.user.profile profile_edit=profile_edit|default:False %}
+            <div class="complete-profile active{% if not profile|show_tell_more_link:profile_edit %} hide-all{% endif %}">
                 <div class="container">
                     <img class="icon menu-icon svg" src="{% static "img/icons/icon-check.svg" %}">
                     <p>Tell us more about yourself and complete your profile <a href="{% url 'start-profile-wizard' %}">Go to your profile page</a></p>
                 </div>
             </div>
+        {% endwith %}
     {% endblock %}
 
 {% block content %}

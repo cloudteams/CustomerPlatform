@@ -37,3 +37,8 @@ def choice_to_str(option, field):
 @register.filter
 def to_percent(progress):
     return progress/100.0
+
+
+@register.filter
+def show_tell_more_link(profile, edit_page):
+    return profile.get_completion_progress() < 20 and not edit_page

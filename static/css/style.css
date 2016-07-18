@@ -83,6 +83,14 @@ h1 {
     width: 100px;
 }
 
+.complete-profile.active.hide-all {
+    background: #411f48 !important;
+}
+
+.complete-profile.active.hide-all * {
+    visibility: hidden !important;
+}
+
 /* Aside */
 section.dashboard-page > .container > .content > .row > aside .show-minimized {
     display: none; }
