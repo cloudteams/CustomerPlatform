@@ -18,7 +18,15 @@
         </div>
     </header>
 
-    {% include "ct_projects/campaign/list.html" %}
+    {% if campaigns %}
+        {% include "ct_projects/campaign/list.html" %}
+    {% else %}
+        <section class="user-dashboard-projects-content">
+            <div class="row">
+                <p class="empty-dashboard">Your dashboard seems empty... Follow more projects to discover and participate in new, interesting campaigns!</p>
+            </div>
+        </section>
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}

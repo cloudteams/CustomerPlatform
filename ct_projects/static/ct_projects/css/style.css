@@ -160,9 +160,13 @@ a.notification-link {
 }
 
 .empty-dashboard {
-    color: #777;
+    color: whitesmoke;
     letter-spacing: 2px;
     font-weight: 300;
+}
+
+.empty-dashboard a {
+    text-decoration: underline;
 }
 
 /* Completed campaigns - fix #125 */

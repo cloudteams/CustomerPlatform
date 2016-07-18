@@ -18,9 +18,17 @@
         </div>
     </header>
 
-    {% with has_new=True two_columns=True %}
-        {% include "ct_projects/project/list.html" %}
-    {% endwith %}
+    {% if projects %}
+        {% with has_new=True two_columns=True %}
+            {% include "ct_projects/project/list.html" %}
+        {% endwith %}
+    {% else %}
+        <section class="user-dashboard-projects-content">
+            <div class="row">
+                <p class="empty-dashboard">Your dashboard seems empty... Discover the <a href="{% url 'all-projects' %}">latest projects</a> on CloudTeams!</p>
+            </div>
+        </section>
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}
