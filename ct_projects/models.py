@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 
 import datetime
@@ -136,6 +137,19 @@ def on_project_create(sender, instance, created, **kwargs):
     # Only when instance was created
     if created:
         instance.on_project_create()
+
+
+@receiver(pre_delete, sender=Project)
+def on_project_delete(sender, instance, *args, **kwargs):
+    """
+    Notifies customers following the project it was deleted
+    Fixed issue https://github.com/cloudteams/CloudTeams_Issues/issues/195
+    """
+    followers = User.objects.filter(pk__in=instance.followed.all().values_list('user_id', flat=True))
+    with transaction.atomic():
+        for follower in followers:
+            Notification.objects.create(user=follower,
+                                        text='Project «%s» was unpublished from CloudTeams' % instance.title)
 
 
 class ProjectFollowing(models.Model):
@@ -406,22 +420,29 @@ class Notification(models.Model):
     user = models.ForeignKey(User, related_name='notifications')
     document = models.ForeignKey(Document, blank=True, null=True, default=None)
     poll = models.ForeignKey(Poll, blank=True, null=True, default=None)
+    text = models.TextField(default='')
     seen = models.BooleanField(default=False)
 
     def message(self):
         if self.document:
             return self.document.name
-        else:
+        elif self.poll:
             return self.poll.name
+        else:
+            return self.text
 
     def campaign(self):
         if self.document:
             return self.document.campaign
-        else:
+        elif self.poll:
             return self.poll.campaign
+        else:
+            return None
 
     def url(self, user):
         if self.document:
             return self.document.get_absolute_url()
-        else:
+        elif self.poll:
             return self.poll.get_poll_token_link(user)
+        else:
+            return reverse('notifications')

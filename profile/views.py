@@ -130,7 +130,7 @@ def opinion_about(request):
 def notifications(request):
     ctx = {
         'notifications': [n for n in Notification.objects.filter(user=request.user)
-                          if not n.campaign().has_expired()]
+                          if (not n.campaign()) or (not n.campaign().has_expired())]
     }
 
     return render(request, 'profile/notification/all.html', ctx)
