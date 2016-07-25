@@ -77,6 +77,7 @@
 							{% if request.user.is_authenticated %}
 								<ul class="submenu">
 									<li><a href="{% url 'settings' %}">Settings</a></li>
+									<li><a href="{% url 'password-change' %}">Change password</a></li>
 									<li><a href="{% url 'logout' %}">Log out</a></li>
 								</ul>
 							{% endif %}

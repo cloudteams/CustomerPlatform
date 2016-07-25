@@ -6843,7 +6843,7 @@ body > header {
             fill: #b1b1b1; }
         body > header .global-nav .container > ul li.profile {
           padding-left: 15px;
-          position: relative; }
+          position: relative;     min-width: 180px; }
           body > header .global-nav .container > ul li.profile:before {
             background: #b1b1b1;
             content: "";

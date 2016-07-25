@@ -151,3 +151,30 @@ def notification_view(request, pk):
     notification.save()
 
     return redirect(notification.url(user=request.user))
+
+
+@login_required
+def password_change(request):
+    ctx = {}
+
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password', '')
+        new_password_repeat = request.POST.get('new_password_repeat', '')
+
+        if not request.user.check_password(request.POST.get('current_password', '')):
+            ctx['error'] = 'Invalid password'
+        elif new_password != new_password_repeat:
+            ctx['error'] = 'Passwords should match'
+        elif len(new_password) < 6:
+            ctx['error'] = 'Password must be at least 6 characters long'
+        else:
+            user = request.user
+
+            # update password & save
+            user.set_password(new_password)
+            user.save()
+
+            # show success message
+            ctx['password_change_success'] = True
+
+    return render(request, 'profile/password-change.html', ctx)
