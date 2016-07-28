@@ -1,14 +1,17 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 
+from activitytracker.models import User
 from ct_projects.models import Notification
 from profile.forms import UserProfileForm
 from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
-from profile.models import UserBrandOpinion, UserProfile, Influence, DeviceUsage, PlatformUsage
+from profile.models import UserBrandOpinion, UserProfile, Influence, DeviceUsage, PlatformUsage, PlatformInvitation
 from profile.templatetags.profile_tags import get_brand_icon
 
 
@@ -151,6 +154,46 @@ def notification_view(request, pk):
     notification.save()
 
     return redirect(notification.url(user=request.user))
+
+
+@login_required
+def send_invitation(request):
+    if request.method == 'POST':
+        email = request.POST.get('invited_email', '')
+        name = request.POST.get('invited_name', '')
+
+        # validation
+        if not email or not name:
+            return HttpResponse('Both email and name are required', status=400)
+
+        if User.objects.filter(email=email).exists():
+            return HttpResponse('%s is already on CloudTeams!' % name, status=400)
+
+        if PlatformInvitation.objects.filter(email=email).exists():
+            return HttpResponse('This email has already been invited to CloudTeams.', status=400)
+
+        # create the invitation
+        inv = PlatformInvitation.objects.create(user=request.user, name=name, email=email)
+
+        # render the email
+        from_name = request.user.profile.get_display_name()
+        title = 'Invitation from %s: Join CloudTeams.eu today!' % from_name
+
+        ctx = {
+            'title': title,
+            'name': name,
+            'from_name': from_name,
+            'ref_id': inv.pk,
+        }
+
+        plain_content = render_to_string('profile/emails/invitation-plaintext.txt', ctx)
+        html_content = render_to_string('profile/emails/invitation.html', ctx)
+
+        # send the email
+        send_mail(subject=title, message=plain_content, html_message=html_content, from_email='webmasters@cloudteams.eu',
+                  recipient_list=[email], fail_silently=False)
+
+    return HttpResponse('')
 
 
 @login_required

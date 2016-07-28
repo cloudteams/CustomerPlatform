@@ -14,7 +14,10 @@ urlpatterns = [
 
     # Notification
     url(r'^notifications/$', views.notifications, name='notifications'),
-    url(r'^notification/(?P<pk>\d+)/$', views.notification_view, name='notification-view'),
+    url(r'^send-invitation/$', views.send_invitation, name='send-invitation'),
+
+    # Send an invitation
+    url(r'^password-change/$', views.password_change, name='password-change'),
 
     # Change password
     url(r'^password-change/$', views.password_change, name='password-change'),

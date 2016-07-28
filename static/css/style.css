@@ -74,6 +74,10 @@ h1 {
     display: none;
 }
 
+.errorlist li {
+    color: #b80303;
+}
+
 .social-media li:first-of-type {
     display: block;
 }
@@ -95,7 +99,23 @@ h1 {
     visibility: hidden !important;
 }
 
+/* Modals */
+.modal-default.in {
+    display: block;
+    left: calc(50% - 250px);
+    width: 500px;
+    top: 100px;
+    border-radius: 10px;
+    padding-right: 0 !important;
+    bottom: auto;
+    background: white;
+}
+
 /* Aside */
+.dashboard-side-menu .btn-invite {
+    margin: 20px 0 0 0;
+}
+
 section.dashboard-page > .container > .content > .row > aside .show-minimized {
     display: none; }
   section.dashboard-page.minimized > .container > .content > .row > aside .hide-minimized {
@@ -123,8 +143,13 @@ section.dashboard-page > .container > .content > .row > aside .show-minimized {
 .dashboard-side-menu.minimized .minimize-toggle .fold-back,
 .dashboard-side-menu.minimized .member .information,
 .dashboard-side-menu.minimized .side-menu ul li a span,
+.dashboard-side-menu.minimized .btn-invite span,
 .dashboard-side-menu.minimized .bottom {
    display: none;
+}
+
+.dashboard-side-menu.minimized .btn-invite {
+    padding: 10px 5px 10px 10px;
 }
 
 .dashboard-side-menu.minimized .minimize-toggle {

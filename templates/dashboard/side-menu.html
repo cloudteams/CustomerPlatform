@@ -68,7 +68,51 @@
 			</ul>
 		</nav>
 
+		<div data-toggle="modal" data-id="invitation-popup" class="btn btn-invite" title="Invite people to CloudTeams">
+			<i class="fa fa-envelope"></i>
+			<span class="hidden-xs">Invite a friend</span>
+		</div>
+
+		<div class="modal modal-default hide" id="invitation-popup">
+		 	<div class="modal-header">
+				<button class="close" data-dismiss="modal">×</button>
+				<h3>Invite your friends to CloudTeams!</h3>
+		  	</div>
+			<div class="modal-body">
+				<p>Do you enjoy your time on CloudTeams? We bet your friends will, too!</p>
+				<p>You can send an invitation to people you think want to participate in our platform using the form bellow:</p>
+
+				<form class="invitation-form" action="/profile/send-invitation/" method="POST">
+					{% csrf_token %}
+
+					<label for="id_invited-name">Name</label>
+					<input type="text" name="invited_name" id="id_invited-name" value="" required="required" placeholder="John S."/>
+
+					<label for="id_invited-email">Email address</label>
+					<input type="email" name="invited_email" id="id_invited-email" value="" required="required" placeholder="someone@test.com"/>
+
+					<button type="submit" class="btn btn-transparent pull-right" style="margin: 20px 0"><i class="fa fa-envelope"></i> <span>Send invitation</span></button>
+				</form>
+
+			</div>
+		</div>
+
+		<div class="modal modal-default hide" id="invitation-success">
+		 	<div class="modal-header">
+				<button class="close" data-dismiss="modal">×</button>
+				<h3>Invitation sent</h3>
+		  	</div>
+			<div class="modal-body">
+				<p>An invitation to <b class="to-email"></b> has been sent.</p>
+				<p>Thank you for inviting your friends to CloudTeams!</p>
+			</div>
+			<div class="modal-footer">
+				<div class="btn btn-transparent" data-dismiss="modal" aria-label="OK">OK</div>
+			</div>
+		</div>
+
 		<div class="bottom">
+
 			<div class="profile-completion">
 				<h2 class="header-sidebar">Profile completion</h2>
 

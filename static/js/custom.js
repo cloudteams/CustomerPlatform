@@ -27,4 +27,9 @@ $(function() {
         })
 
     })
+
+    /* Modals */
+    $('[data-toggle="modal"]').click(function() {
+        $('#' + $(this).data('id')).modal('show')
+    })
 })

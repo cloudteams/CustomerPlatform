@@ -42,9 +42,6 @@ class UserProfile(models.Model):
     has_been_saved = models.BooleanField(default=False, editable=False)
 
     def get_display_name(self):
-        return '%s %s.' % (self.first_name, self.last_name_initial)
-
-    def get_display_name(self):
         if self.first_name and self.last_name_initial:
             return '%s %s.' % (self.first_name, self.last_name_initial)
         else:
@@ -134,3 +131,12 @@ post_save.connect(on_profile_info_updated, sender=Influence)
 post_save.connect(on_profile_info_updated, sender=DeviceUsage)
 post_save.connect(on_profile_info_updated, sender=PlatformUsage)
 post_save.connect(on_profile_info_updated, sender=UserBrandOpinion)
+
+
+class PlatformInvitation(models.Model):
+    """
+    An invitation from a CloudTeams user no an email
+    """
+    user = models.ForeignKey(User)
+    name = models.CharField(max_length=255)
+    email = models.EmailField()

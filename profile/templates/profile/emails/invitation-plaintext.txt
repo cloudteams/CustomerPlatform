@@ -1,0 +1,8 @@
+Dear {{ name }},
+
+{{ from_name }} has invited you to join CloudTeams.eu, a new platform that brings together the software development community and potential end users.
+CloudTeams aims to create a link between the creators of technology and the people who add meaning to it, like you!
+Follow this link to join CloudTeams now: http://cloudteams.epu.ntua.gr:8008/activitytracker/account/register/?ref_id={{ ref_id }}
+
+Best,
+The CloudTeams team

@@ -324,3 +324,13 @@ ul.main-menu i {
 .brand-opinions-field {
     margin-top: 2em;
 }
+
+/* Invitation form */
+.invitation-form label {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.invitation-form input {
+    margin-bottom: 20px;
+}
