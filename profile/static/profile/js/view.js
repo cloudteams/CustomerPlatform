@@ -18,7 +18,7 @@ $(function() {
             email = $form.find('input[name="invited_email"]').val();
 
         // prevent multiple submissions
-        if ($btn.hasAttr('disabled')) {
+        if ($btn.is('[disabled="disabled"]')) {
             e.preventDefault()
             return false
         }
