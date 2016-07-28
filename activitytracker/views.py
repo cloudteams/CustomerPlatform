@@ -32,6 +32,8 @@ from FacebookActivityClass import FacebookActivity
 from datetime import datetime
 from django.db.models import Q
 
+from profile.models import PlatformInvitation
+
 colourDict = {'black': "rgba(1, 1, 1, 0.8)",
               'blue': "#578EBE",
               'greenLight': "#99B433",
@@ -121,9 +123,25 @@ def register(request):
     PASSWORD_ERROR = 'The passwords should match each other'
 
     if request.method != 'POST':
-        return render(request, 'activitytracker/register.html', {
+        ctx = {
             'ignore_login_link': True,
-        })
+            'username': '',
+            'email': '',
+        }
+
+        # auto-complete invitation registrations
+        if 'ref_id' in request.GET:
+            try:
+                invitation = PlatformInvitation.objects.get(pk=int(request.GET.get('ref_id')))
+
+                ctx['email'] = invitation.email
+                ctx['username'] = invitation.email.split('@')[0]
+            except PlatformInvitation.DoesNotExist:
+                pass
+            except ValueError:
+                pass
+
+        return render(request, 'activitytracker/register.html', ctx)
 
     username = request.POST['username']
     email = request.POST['email']
