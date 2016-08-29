@@ -69,7 +69,7 @@
 
                                 {% if project.description %}
                                     <h3 class="header-extra-small">Description</h3>
-                                    <p>{{ project.description|youtube_embed_url|custom_urlize|safe }}</p>
+                                    <p>{{ project.description|youtube_embed_url|custom_urlize|safe|linebreaks }}</p>
                                 {% else %}
                                     <p>No project description</p>
                                 {% endif %}
