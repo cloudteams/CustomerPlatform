@@ -98,7 +98,7 @@ DATABASES = {
     }
 }
 
-EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
 EMAIL_HOST = 'smtp.transip.email'
 EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = 'webmasters@cloudteams.eu'
