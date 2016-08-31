@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
+
+from Activitytracker_Project.settings import DEFAULT_FROM_EMAIL
 from activitytracker.models import *
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
@@ -189,8 +191,8 @@ def register(request):
     )
     verification_instance.save()
 
-    email = "Activitytracker.app@gmail.com"
-    mail_title = "Activity Tracker Account Verification"
+    email = DEFAULT_FROM_EMAIL
+    mail_title = "CloudTeams account verification"
     recipient = [user.email.encode('utf8')]
     mail_message = 'Hello user %s. In order to verify your account click the following link: %s' \
                    % (user.get_username(), verification_url)
@@ -236,8 +238,8 @@ def passwordforget(request):
     )
     passwordforget_instance.save()
 
-    email = "Activitytracker.app@gmail.com"
-    mail_title = "Activity Tracker Password Reset"
+    email = DEFAULT_FROM_EMAIL
+    mail_title = "CloudTeams password reset"
     recipient = [user.email.encode('utf8')]
     mail_message = 'Hello user %s. You have recently requested a password reset. Please follow this link in order to ' \
                    'start the process: %s' % (user.get_username(), passwordforget_url)

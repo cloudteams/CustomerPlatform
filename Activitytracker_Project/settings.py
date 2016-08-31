@@ -98,16 +98,13 @@ DATABASES = {
     }
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/dev/topics/i18n/
-"""
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.transip.email'
 EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = 'webmasters@cloudteams.eu'
-DEFAULT_TO_EMAIL = 'to user'
+DEFAULT_TO_EMAIL = 'to email'
 EMAIL_HOST_USER = 'webmasters@cloudteams.eu'
-EMAIL_HOST_PASSWORD = 'RM3z\S~2~7XxfVFF'
+EMAIL_HOST_PASSWORD = 'RM3z\\S~2~7XxfVFF'
 """
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -116,7 +113,10 @@ DEFAULT_FROM_EMAIL = 'Activitytracker.app@gmail.com'
 DEFAULT_TO_EMAIL = 'to email'
 EMAIL_HOST_USER = 'Activitytracker.app@gmail.com'
 EMAIL_HOST_PASSWORD = 'Activitytrackerpassword'
+"""
 
+# Internationalization
+# https://docs.djangoproject.com/en/dev/topics/i18n/
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Athens'
