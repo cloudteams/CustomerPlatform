@@ -24,6 +24,7 @@
 			<link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}" rel="stylesheet">
 			<link href="{% static 'bower_components/chosen/chosen.min.css' %}" rel="stylesheet">
 			<link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
+			<link href="{% static 'gamification/css/style.css' %}" rel="stylesheet">
 			<link href="{% static 'css/style.css' %}?v=20160728.1" rel="stylesheet">
 		{% endcompress %}
 		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css" />
@@ -32,6 +33,7 @@
 	</head>
 
 	<body>
+		{% include "ct_projects/util/inline-notifications.html" %}
 		{% include "util/menu.html" %}
 
 		<section class="page {% block class_public_page %}public-page {% endblock %}{% block section_class %}{% endblock %}">
@@ -64,6 +66,7 @@
             <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
             <script src="{% static 'bower_components/clockpicker/dist/bootstrap-clockpicker.min.js' %}"></script>
             <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+			<script src="{% static 'js/jquery.noty.min.js' %}"></script>
             <script type="text/javascript"
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf_gsxRLZWfI5AueDRydB2s0v5uAgTp3M&?v=3.exp&signed_in=true&libraries=places">
             </script>
@@ -76,6 +79,24 @@
 
 			  	ga('create', 'UA-48936961-8', 'auto');
 			  	ga('send', 'pageview');
+			</script>
+			<script>
+				$(function() {
+					$.each($('#inline-notification-list .inline-notification-element'), function(idx, item) {
+						var $item = $(item);
+						var n = noty({
+							text: $item.text(),
+							animation: {
+								open: {height: 'toggle'}, // jQuery animate function property object
+								close: {height: 'toggle'}, // jQuery animate function property object
+								easing: 'swing', // easing
+								speed: 500 // opening & closing animation speed
+							}
+						});
+
+						n.setTimeout(7000);
+					})
+				});
 			</script>
 		{% block js %}
 		{% endblock %}

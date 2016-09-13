@@ -1,0 +1,9 @@
+{% if request.user.is_authenticated %}
+    <div id="inline-notification-list" style="display: none;">
+        {% for notification in request.user.inline_notifications %}
+            <div class="inline-notification-element">
+                {{ notification.text }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

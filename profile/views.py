@@ -133,7 +133,7 @@ def opinion_about(request):
 @login_required
 def notifications(request):
     ctx = {
-        'notifications': [n for n in Notification.objects.filter(user=request.user).order_by('-created')
+        'notifications': [n for n in Notification.objects.filter(user=request.user, persistent=True).order_by('-created')
                           if (not n.campaign()) or (not n.campaign().has_expired())]
     }
 
@@ -143,7 +143,7 @@ def notifications(request):
 @login_required
 def notification_view(request, pk):
     try:
-        notification = Notification.objects.get(pk=int(pk), user=request.user)
+        notification = Notification.objects.get(pk=int(pk), user=request.user, persistent=True)
     except Notification.DoesNotExist:
         return redirect(reverse('notifications'))
     except ValueError:

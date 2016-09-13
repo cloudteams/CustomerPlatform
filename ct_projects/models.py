@@ -423,6 +423,7 @@ class Notification(models.Model):
     text = models.TextField(default='')
     seen = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    persistent = models.BooleanField(default=True)
 
     def message(self):
         if self.document:

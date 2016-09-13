@@ -250,3 +250,8 @@ BRAND_OPINIONS = (
     ('N', 'Negative'),
 )
 
+
+INVITATION_STATUS = (
+    ('PENDING', 'Pending'),
+    ('ACCEPTED', 'Accepted'),
+)

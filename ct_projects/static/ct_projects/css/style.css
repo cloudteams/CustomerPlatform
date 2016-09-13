@@ -188,3 +188,15 @@ a.notification-link {
 .form-post-idea.form-full .btn.pull-right {
     border-radius: 0 5px 5px 0;
 }
+
+/* Noty */
+#noty_top_layout_container > li {
+    background: rgba(22, 160, 133, 0.8) !important;
+    box-shadow: none  !important;
+    border: 1px solid #aaa  !important;
+}
+
+#noty_top_layout_container > li .noty_message {
+    font-size: 18px  !important;
+    color: white  !important;
+}

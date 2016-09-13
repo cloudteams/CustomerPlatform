@@ -1,0 +1,10 @@
+.gamification-info {
+    color: #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #aaa;
+}
+
+.gamification-info .progress-container .progress-wrap .progress-bar {
+    background: white;
+}

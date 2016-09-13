@@ -5,7 +5,6 @@ EVENTS = (
     ('DISCONNECT_SERVICE', 'Disconnect a connected service'),
     ('NEW_IDEA', 'Propose a new idea'),
     ('PROJECT_FOLLOW', 'Follow a project'),
-    ('PROJECT_FOLLOW', 'Follow a project'),
     ('INVITATION_ACCEPTED', 'Invite a friend who joins the CloudTeams platform'),
     ('CAMPAIGN_RESPONSE', 'Participate in a project task, complete it'),
     ('REDEEM_POINTS', 'Redeem your points on a reward'),

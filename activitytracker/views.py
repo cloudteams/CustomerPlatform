@@ -1,3 +1,4 @@
+from django.dispatch import Signal
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate
 
@@ -480,6 +481,8 @@ def placestojson(request):
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 
 
+visited_activity_tracker_home = Signal(providing_args=["user"])
+
 
 # Basic View, Gets called on "History" page load
 @login_required
@@ -505,8 +508,10 @@ def index(request, new_user=False):
         user.logged_in_before = True
         user.save()
 
-    return render(request, 'activitytracker/index.html', context)
+    # send signal that signifies the user visited the activity tracker
+    visited_activity_tracker_home.send(sender=User, user=request.user)
 
+    return render(request, 'activitytracker/index.html', context)
 
 
 # Gets called on "Group common" click, to return grouped activities

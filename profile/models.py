@@ -1,11 +1,13 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
+from django.dispatch import Signal
+from django.dispatch import receiver
 
 from activitytracker.models import User
 from ct_projects.models import Campaign
 from profile.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS, \
-    TECH_LEVELS
+    TECH_LEVELS, INVITATION_STATUS
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
@@ -135,8 +137,24 @@ post_save.connect(on_profile_info_updated, sender=UserBrandOpinion)
 
 class PlatformInvitation(models.Model):
     """
-    An invitation from a CloudTeams user no an email
+    An invitation from a CloudTeams user to an email
     """
     user = models.ForeignKey(User)
     name = models.CharField(max_length=255)
     email = models.EmailField()
+    status = models.CharField(max_length=15, choices=INVITATION_STATUS, default='PENDING')
+
+platform_invitation_accepted = Signal(providing_args=["invitation"])
+
+
+@receiver(post_save, sender=User)
+def on_user_signup(sender, instance, created, **kwargs):
+    # check if the signup is from a user who was invited
+    if created and PlatformInvitation.objects.filter(email=instance.email, status='PENDING').exists():
+        invitation = PlatformInvitation.objects.get(email=instance.email, status='PENDING')
+        invitation.status = 'ACCEPTED'
+        invitation.save()
+
+        # send the signal
+        platform_invitation_accepted.send(sender=PlatformInvitation, invitation=invitation)
+

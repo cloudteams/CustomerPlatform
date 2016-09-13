@@ -1,3 +1,8 @@
 from django.contrib import admin
+from profile.models import *
 
-# Register your models here.
+
+class PlatformInvitationAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(PlatformInvitation, PlatformInvitationAdmin)

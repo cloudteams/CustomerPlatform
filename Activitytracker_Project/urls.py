@@ -20,6 +20,9 @@ urlpatterns = [
     # user profile wizard
     url(r'^profile/', include('profile.urls')),
 
+    # gamification
+    url(r'^gamification/', include('gamification.urls')),
+
     # cloudteams terms & conditions
     url(r'^terms-and-conditions/$', ct_projects.views.terms_and_conditions, name='terms-and-conditions'),
 
