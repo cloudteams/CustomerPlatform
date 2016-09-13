@@ -61,6 +61,9 @@ INSTALLED_APPS = (
 
     # Profile wizard app - allows customers to quickly setup their profile
     'profile',
+
+    # Gamification app
+    'gamification',
 )
 
 MIDDLEWARE_CLASSES = (
