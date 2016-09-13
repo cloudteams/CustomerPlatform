@@ -51,9 +51,8 @@ class UserProfile(models.Model):
 
     def get_completion_progress(self):
         """
-        :return: A two digit percentage ("00" - "99") indicating how much of the profile info has been completed
+        :return: A percentage ("00" - "100") indicating how much of the profile info has been completed
         """
-        # TODO implement profile complete calculation logic
         points = 0
 
         if self.profile_picture:

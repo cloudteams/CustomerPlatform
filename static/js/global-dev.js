@@ -5485,10 +5485,13 @@
 		}
 
 		function moveProgressBar() {
-			var getPercent = $('.progress-wrap').attr('data-progress-percent');
-			var getPercentWhole = (Number(getPercent) * 100).toFixed(0);
+			$.each($('.progress-wrap'), function(idx, wrap) {
+				var $wrap = $(wrap)
+				var getPercent = $wrap.attr('data-progress-percent');
+				var getPercentWhole = (Number(getPercent) * 100).toFixed(0);
 
-			$('.progress-bar').css('width', getPercentWhole + '%');
+				$wrap.find('.progress-bar').css('width', getPercentWhole + '%');
+			});
 		}
 
 		function openCloseTooltip(element) {

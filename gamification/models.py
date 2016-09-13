@@ -13,7 +13,7 @@ class XPRule(Model):
     active = BooleanField(default=True)
 
     def __str__(self):
-        return 'XP Rule #%d' % self.pk
+        return 'XP Rule #%d - %s' % (self.pk, self.event)
 
 
 class XPRuleApplication(Model):

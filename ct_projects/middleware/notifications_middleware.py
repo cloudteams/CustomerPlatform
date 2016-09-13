@@ -6,8 +6,9 @@ class NotificationsMiddleware(object):
             # get persistent notifications
             request.user.unread_notifications = list(request.user.notifications.filter(seen=False, persistent=True))
 
-            # get inline notifications
-            qs = request.user.notifications.filter(persistent=False, seen=False)
-            notifications = list(qs)
-            qs.update(seen=True)
-            request.user.inline_notifications = notifications
+            # get inline notifications (if not an ajax request)
+            if not request.is_ajax():
+                qs = request.user.notifications.filter(persistent=False, seen=False)
+                notifications = list(qs)
+                qs.update(seen=True)
+                request.user.inline_notifications = notifications

@@ -42,10 +42,31 @@ def apply_xp_rule(user, event):
 
 # register events
 
+# RULE R1 #
+
 @receiver(post_save, sender=User)
 def on_user_signup(sender, instance, created, **kwargs):
     if created:
         apply_xp_rule(instance, 'SIGNUP')
+
+# RULE R2 #
+
+
+@receiver(post_save, sender=UserProfile)
+def on_user_profile_updated(sender, instance, created, **kwargs):
+    if instance.get_completion_progress() == 100:
+        apply_xp_rule(instance.user, 'PROFILE_COMPLETE')
+
+
+@receiver(post_save, sender=Influence)
+@receiver(post_save, sender=DeviceUsage)
+@receiver(post_save, sender=PlatformUsage)
+@receiver(post_save, sender=UserBrandOpinion)
+def on_user_profile_m2m_updated(sender, instance, created, **kwargs):
+    if instance.user.profile.get_completion_progress() == 100:
+        apply_xp_rule(instance.user, 'PROFILE_COMPLETE')
+
+# RULE R3 #
 
 
 @receiver(post_save, sender=UserSocialAuth)
@@ -53,10 +74,14 @@ def on_activity_tracker_service_add(sender, instance, created, **kwargs):
     if created:
         apply_xp_rule(instance.user, 'CONNECT_SERVICE')
 
+# RULE R4 #
+
 
 @receiver(pre_delete, sender=UserSocialAuth)
 def on_activity_tracker_service_remove(sender, instance, **kwargs):
     apply_xp_rule(instance.user, 'DISCONNECT_SERVICE')
+
+# RULE R5 #
 
 
 @receiver(post_save, sender=Idea)
@@ -64,16 +89,25 @@ def on_idea_created(sender, instance, created, **kwargs):
     if created:
         apply_xp_rule(instance.user, 'NEW_IDEA')
 
+# RULE R6 #
+
 
 @receiver(post_save, sender=ProjectFollowing)
 def on_project_following_created(sender, instance, created, **kwargs):
     if created:
         apply_xp_rule(instance.user, 'PROJECT_FOLLOW')
 
+# RULE R7 #
+
 
 @receiver(platform_invitation_accepted, sender=PlatformInvitation)
 def on_platform_invitation_accepted(sender, invitation, **kwargs):
     apply_xp_rule(invitation.user, 'INVITATION_ACCEPTED')
+
+# TODO IMPLEMENT RULE R8 #
+# TODO IMPLEMENT RULE R9 #
+
+# RULE R10 #
 
 
 @receiver(visited_activity_tracker_home, sender=User)
