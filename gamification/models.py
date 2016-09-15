@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db.models import *
 from gamification.lists import *
 from activitytracker.models import *
@@ -7,7 +8,7 @@ class XPRule(Model):
     """
     A rule that rewards or punishes with an amount of XP points on a certain event
     """
-    event = CharField(max_length=255, choices=EVENTS)
+    event = CharField(max_length=255, choices=XP_EVENTS)
     recurring = BooleanField(default=True)
     reward = IntegerField()
     active = BooleanField(default=True)
@@ -25,12 +26,45 @@ class XPRuleApplication(Model):
     created = DateTimeField(auto_now_add=True)
 
 
+class Badge(Model):
+    """
+    A badge, probably with some level variations
+    """
+    title = CharField(max_length=255)
+    rule = CharField(max_length=255, choices=BADGE_RULES)
+    active = BooleanField(default=True)
+    levels = ArrayField(base_field=SmallIntegerField())
+
+    def get_description(self, level=0):
+        title = self.get_rule_display()
+
+        # the title may contain a counter based on
+        if level:
+            title = title.replace('-X-', self.levels[level])
+
+        return title
+
+    def __str__(self):
+        return 'Badge #%d - %s' % (self.pk, self.get_rule_display())
+
+
+class BadgeReward(Model):
+    """
+    A badge was awarded to a user (optionally at a certain level)
+    """
+    user = ForeignKey(User)
+    badge = ForeignKey(Badge)
+    level = SmallIntegerField(default=0)
+    created = DateTimeField(auto_now_add=True)
+
+
 class GamificationProfile(Model):
     """
     Gamification information of a specific user
     """
     user = ForeignKey(User)
     xp_points = IntegerField(default=0)
+    number_of_badges = IntegerField(default=0)
 
     @property
     def next_level_points(self):
@@ -47,6 +81,10 @@ class GamificationProfile(Model):
     @property
     def progress_to_next_level(self):
         return round((self.extra_points + 0.0) / self.next_level_points, 4)
+
+    @property
+    def badges(self):
+        return self.user
 
 
 @property
