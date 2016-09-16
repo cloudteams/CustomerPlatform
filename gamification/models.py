@@ -30,7 +30,8 @@ class Badge(Model):
     """
     A badge, probably with some level variations
     """
-    title = CharField(max_length=255)
+    name = CharField(max_length=255)
+    slogan = CharField(max_length=255)
     rule = CharField(max_length=255, choices=BADGE_RULES)
     active = BooleanField(default=True)
     levels = ArrayField(base_field=SmallIntegerField())
@@ -39,13 +40,12 @@ class Badge(Model):
         title = self.get_rule_display()
 
         # the title may contain a counter based on
-        if level:
-            title = title.replace('-X-', self.levels[level])
+        title = title.replace('-X-', str(self.levels[level]))
 
         return title
 
     def __str__(self):
-        return 'Badge #%d - %s' % (self.pk, self.get_rule_display())
+        return 'Badge #%d: %s - %s' % (self.pk, self.name, self.get_rule_display())
 
 
 class BadgeReward(Model):

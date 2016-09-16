@@ -84,14 +84,18 @@
 				$(function() {
 					$.each($('#inline-notification-list .inline-notification-element'), function(idx, item) {
 						var $item = $(item);
+						var text = $.trim($item.text());
+						var type = text.charAt(1);
+						var message = text.substr(3);
 						var n = noty({
-							text: $item.text(),
+							text: message,
 							animation: {
 								open: {height: 'toggle'}, // jQuery animate function property object
 								close: {height: 'toggle'}, // jQuery animate function property object
 								easing: 'swing', // easing
 								speed: 500 // opening & closing animation speed
-							}
+							},
+							template:  '<div class="noty_message emotion-' + type + '"><span class="noty_text"></span><div class="noty_close"></div></div>'
 						});
 
 						n.setTimeout(7000);

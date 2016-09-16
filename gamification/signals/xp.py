@@ -34,7 +34,13 @@ def apply_xp_rule(user, event):
 
         # create an on-the-fly notification
         if rule.reward >= 0:
-            message = '[P]+%d XP points added to your profile!' % rule.reward
+            # check if level up
+            if gp.extra_points < rule.reward:
+                lvl_message = 'Level UP! You\'re now a level <b>#%d</b> customer!' % gp.level
+            else:
+                remaining_xp = gp.next_level_points - gp.extra_points % gp.next_level_points
+                lvl_message = '%d more XP points for level %d' % (remaining_xp, gp.level + 1)
+            message = '[P]+%d XP points added to your profile!<br />%s' % (rule.reward, lvl_message)
         else:
             message = '[N]-%d XP points lost from your profile...' % abs(rule.reward)
 
@@ -78,7 +84,7 @@ def on_activity_tracker_service_add(sender, instance, created, **kwargs):
 # RULE XP4 #
 
 
-@receiver(pre_delete, sender=UserSocialAuth)
+@receiver(post_delete, sender=UserSocialAuth)
 def on_activity_tracker_service_remove(sender, instance, **kwargs):
     apply_xp_rule(instance.user, 'DISCONNECT_SERVICE')
 

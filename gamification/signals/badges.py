@@ -1,3 +1,5 @@
+from django.db.models.signals import post_delete
+
 from activitytracker.views import visited_activity_tracker_home
 from gamification.models import *
 
@@ -54,6 +56,8 @@ def apply_badge_rule(user, badge_rule, counter):
                 num_diff = +1
                 # definitely an upgrade
                 diff = +1
+                # crete the reward
+                br = BadgeReward.objects.create(user_id=user.pk, badge_id=badge.pk, level=0)
         else:  # doesn't have badge
             try:
                 br = BadgeReward.objects.get(user_id=user.pk, badge_id=badge.pk)
@@ -65,7 +69,7 @@ def apply_badge_rule(user, badge_rule, counter):
 
                 # definitely a downgrade
                 diff = -1
-            except BadgeReward:
+            except BadgeReward.DoesNotExist:
                 # nothing changed
                 pass
 
@@ -79,16 +83,16 @@ def apply_badge_rule(user, badge_rule, counter):
         if diff != 0:
             if diff >= 0:
                 if br.level == 0:
-                    message = '[P]New badge: %s!<br />%s' % (br.title, br.badge.get_description(level=br.level))
+                    message = '[P]<p>New badge!</p><p><b>%s</b>: %s</p>' % \
+                              (br.badge.name, br.badge.get_description(level=br.level))
                 else:
-                    message = '[P]Badge %s upgraded to %s!<br />%s' % (br.title, BADGE_LEVELS[br.level],
-                                                                       br.badge.get_description(level=br.level))
+                    message = '[P]<p>Badge upgraded to %s!</p><p><b>%s</b>: %s</p>' % \
+                              (br.badge.name, BADGE_LEVELS[br.level], br.badge.get_description(level=br.level))
             else:
                 if del_badge:
-                    message = '[N]Lost badge %s...' % del_badge.title
+                    message = '[N]Lost badge %s...' % del_badge.name
                 else:
-                    message = '[P]Badge %s downgraded to %s...<br />%s' % (br.title, BADGE_LEVELS[br.level],
-                                                                           br.badge.get_description(level=br.level))
+                    message = '[P]Badge %s downgraded to %s...<br />' % (br.badge.name, BADGE_LEVELS[br.level])
 
             Notification.objects.create(user=user, text=message, persistent=False)
 
@@ -107,7 +111,7 @@ def on_project_following_create(sender, instance, created, **kwargs):
         on_project_following_change(instance.user)
 
 
-@receiver(pre_delete, sender=ProjectFollowing)
+@receiver(post_delete, sender=ProjectFollowing)
 def on_project_following_delete(sender, instance, **kwargs):
     on_project_following_change(instance.user)
 
@@ -124,7 +128,7 @@ def on_activity_tracker_service_add(sender, instance, created, **kwargs):
         on_connected_services_change(instance.user)
 
 
-@receiver(pre_delete, sender=UserSocialAuth)
+@receiver(post_delete, sender=UserSocialAuth)
 def on_activity_tracker_service_remove(sender, instance, **kwargs):
     on_connected_services_change(instance.user)
 
@@ -154,6 +158,10 @@ def on_user_profile_updated(sender, instance, created, **kwargs):
 @receiver(post_save, sender=DeviceUsage)
 @receiver(post_save, sender=PlatformUsage)
 @receiver(post_save, sender=UserBrandOpinion)
+@receiver(post_delete, sender=Influence)
+@receiver(post_delete, sender=DeviceUsage)
+@receiver(post_delete, sender=PlatformUsage)
+@receiver(post_delete, sender=UserBrandOpinion)
 def on_user_profile_m2m_updated(sender, instance, created, **kwargs):
     if instance.user.profile.get_completion_progress() == 100:
         counter = 1

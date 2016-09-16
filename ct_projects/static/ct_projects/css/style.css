@@ -191,12 +191,16 @@ a.notification-link {
 
 /* Noty */
 #noty_top_layout_container > li {
-    background: rgba(22, 160, 133, 0.8) !important;
     box-shadow: none  !important;
     border: 1px solid #aaa  !important;
 }
 
 #noty_top_layout_container > li .noty_message {
+    background: rgba(22, 160, 133, 0.8) !important;
     font-size: 18px  !important;
     color: white  !important;
+}
+
+#noty_top_layout_container > li .noty_message.emotion-N {
+    background: rgba(231, 76, 60, 0.8) !important;
 }
