@@ -1,0 +1,12 @@
+<p>You have been rewarded {{ badge_rewards|length}} out of {{ badges|length }} badges in total:</p>
+
+<div class="row">
+    {% for badge in badges %}
+        <div class="col-lg-3 col-md-6 col-xs-12 badge {% if badge.rewarded %}badge-rewarded{% if badge.rewarded.reward_type %} badge-{{ badge.rewarded.reward_type|lower }}{% endif %}{% endif %}">
+            <div class="badge-content">
+                <i class="fa fa-trophy"></i>
+                <span class="name">{{ badge.name }}</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>

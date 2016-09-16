@@ -11,12 +11,15 @@
 }
 
 /* Leaderboard */
-#leaderboard-popup .modal-header {
+#leaderboard-popup .modal-header,
+#badge-collection-popup .modal-header {
     background: #3f1e47;
 }
 
 #leaderboard-popup .modal-header h3,
-#leaderboard-popup .modal-header button.close {
+#badge-collection-popup .modal-header h3,
+#leaderboard-popup .modal-header button.close,
+#badge-collection-popup .modal-header button.close {
     color: #eee;
 }
 
@@ -26,4 +29,40 @@
 
 .leaderboard-table > tbody > tr.my-profile > td {
     font-weight: 600;
+}
+
+/* Badge collection */
+.badge {
+    padding-top: 30px;
+}
+
+.badge > .badge-content {
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    height: 95px;
+    width: 95px;
+    text-align: center;
+}
+
+.badge > .badge-content .fa-trophy {
+    position: absolute;
+    font-size: 40px;
+    color: #ddd;
+    left: calc(50% - 19px);
+    top: calc(50% - 20px);
+}
+
+.badge > .badge-content .name {
+    margin-top: 50px;
+    display: block;
+    color: #777;
+}
+
+.badge.badge-rewarded > .badge-content {
+    background: #3f1e47;
+}
+
+.badge.badge-rewarded > .badge-content .name,
+.badge.badge-rewarded > .badge-content .fa-trophy {
+    color: white;
 }

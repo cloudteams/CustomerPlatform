@@ -5,4 +5,5 @@ __author__ = 'dipap'
 
 urlpatterns = [
     url(r'^leaderboard/$', views.leaderboard, name='leaderboard'),
+    url(r'^badge-collection/$', views.badge_collection, name='badge-collection'),
 ]

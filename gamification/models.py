@@ -57,6 +57,13 @@ class BadgeReward(Model):
     level = SmallIntegerField(default=0)
     created = DateTimeField(auto_now_add=True)
 
+    def reward_type(self):
+        # no variant levels
+        if len(self.badge.levels) == 1:
+            return None
+
+        return BADGE_LEVELS[self.level]
+
 
 class GamificationProfile(Model):
     """
