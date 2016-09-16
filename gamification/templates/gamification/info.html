@@ -1,11 +1,16 @@
 {% with profile=user.gamification_profile %}
     <div class="gamification-info">
-        Level <span class="current-level">#{{ profile.level }}</span><br />
+        <p class="gamification-info"># <b>{{ profile.number_of_badges }}</b> badges
+        <span data-toggle="modal" data-id="badge-collection-popup" class="btn">View collection</span></p>
+        Level <span class="current-level">#<b>{{ profile.level }}</b></span>
+        <span data-toggle="modal" data-id="leaderboard-popup" class="btn">View Leaderboard</span><br />
         <div>Level up progress:
-            <div class="percentage">{{ profile.extra_points }}/{{ profile.next_level_points }}</div>
-            <div class="progress-container">
-                <div class="progress-wrap" data-progress-percent="{{ profile.progress_to_next_level }}">
-                    <div class="progress-bar" style="width: {{ profile.progress_to_next_level }}%;"></div>
+            <div class="row">
+                <div class="percentage col-xs-6">{{ profile.extra_points }}/{{ profile.next_level_points }}</div>
+                <div class="progress-container col-xs-6" style="padding: 0;">
+                    <div class="progress-wrap" data-progress-percent="{{ profile.progress_to_next_level }}">
+                        <div class="progress-bar" style="width: {{ profile.progress_to_next_level }}%;"></div>
+                    </div>
                 </div>
             </div>
         </div>

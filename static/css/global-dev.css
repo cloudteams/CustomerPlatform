@@ -6794,15 +6794,15 @@ body > header {
         padding-right: 15px;
         position: relative; }
         body > header .global-nav .container > ul li ul.submenu {
-          background: #7d3c8c;
-          left: 0;
-          opacity: 0;
-          padding: 0 15px 15px;
-          position: absolute;
-          text-align: left;
-          visibility: hidden;
-          width: 100%;
-          z-index: 99; }
+             background: #7d3c8c;
+            right: 0;
+            opacity: 0;
+            padding: 0 15px 15px;
+            position: absolute;
+            text-align: left;
+            visibility: hidden;
+            width: 250px;
+            z-index: 99; }
           body > header .global-nav .container > ul li ul.submenu li {
             display: block; }
         body > header .global-nav .container > ul li:hover ul.submenu {

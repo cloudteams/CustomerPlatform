@@ -1,0 +1,36 @@
+<table class="table leaderboard-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>XP</th>
+            <th>user</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for profile in leaderboard %}
+            {% if forloop.first and profile.ranking > 1 %}
+                <tr>
+                    <td></td>
+                    <td>...</td>
+                    <td></td>
+                </tr>
+            {% endif %}
+            <tr {% if profile.user_id == request.user.pk %}class="my-profile"{% endif %}>
+                <td>{{ profile.ranking }}</td>
+                <td>{{ profile.xp_points }}</td>
+                <td>{% if profile.user_id == request.user.pk %}You{% else %}---{% endif %}</td>
+            </tr>
+            {% if forloop.last %}
+                <tr>
+                    <td></td>
+                    <td>...</td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="clearfix">
+    <button class="btn btn-transparent pull-right" data-dismiss="modal">OK</button>
+</div>

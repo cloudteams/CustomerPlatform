@@ -1,3 +1,4 @@
+/* Generic gamification info */
 .gamification-info {
     color: #eee;
     padding-bottom: 10px;
@@ -6,5 +7,23 @@
 }
 
 .gamification-info .progress-container .progress-wrap .progress-bar {
-    background: white;
+    background: #27ae60;
+}
+
+/* Leaderboard */
+#leaderboard-popup .modal-header {
+    background: #3f1e47;
+}
+
+#leaderboard-popup .modal-header h3,
+#leaderboard-popup .modal-header button.close {
+    color: #eee;
+}
+
+.leaderboard-table > thead > tr > th {
+    border-top: none;
+}
+
+.leaderboard-table > tbody > tr.my-profile > td {
+    font-weight: 600;
 }

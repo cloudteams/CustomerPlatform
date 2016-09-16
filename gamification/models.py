@@ -86,6 +86,33 @@ class GamificationProfile(Model):
     def badges(self):
         return self.user
 
+    def xp_leaderboard(self):
+        around = 5  # users over and below self
+        leaders = GamificationProfile.objects.values_list('id', flat=True).order_by('-xp_points')
+
+        # first pass - find user's position
+        for idx, gp_id in enumerate(leaders):
+            if gp_id == self.pk:
+                pos = idx
+                break
+
+        # fetch profiles
+        start_pos = pos - around
+        if start_pos < 0:
+            start_pos = 0
+        end_pos = pos + around + 1
+
+        leader_profiles = GamificationProfile.objects.all().order_by('-xp_points')[start_pos:end_pos]
+
+        # second pass - add profiles
+        for idx, gp in enumerate(leader_profiles):
+            gp.ranking = start_pos + idx + 1  # one based
+
+        return leader_profiles
+
+    def __str__(self):
+        return '%s: %d XP, %d badges' % (self.user.username, self.xp_points, self.number_of_badges)
+
 
 @property
 def gamification_profile(self):
