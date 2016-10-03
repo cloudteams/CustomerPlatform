@@ -34,7 +34,12 @@
 
 	<body>
 		{% include "ct_projects/util/inline-notifications.html" %}
-		{% include "util/menu.html" %}
+
+		{% if light_menu %}
+			{% include "util/menu-light.html" %}
+		{% else %}
+			{% include "util/menu.html" %}
+		{% endif %}
 
 		<section class="page {% block class_public_page %}public-page {% endblock %}{% block section_class %}{% endblock %}">
 
@@ -54,6 +59,7 @@
 
 
         {% endblock %}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script type="text/javascript" src="{% static 'js/global-dev.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/common-dev.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/custom.js' %}?v=20160718.1"></script>

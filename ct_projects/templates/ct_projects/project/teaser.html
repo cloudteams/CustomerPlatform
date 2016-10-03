@@ -6,7 +6,7 @@
         {% if project.logo %}
             <a href="{{ project.get_absolute_url }}">
                 <div class="background-image" style="background-image: url({{ project.logo }});">
-                    <img class="square svg" src="{% static "img/icon-folders-8d39bbb3.svg" %}">
+                    <i class="icon icon-square"></i>
                 </div>
             </a>
         {% endif %}
@@ -17,7 +17,7 @@
             </a>
 
 			<div class="tooltip-container">
-				<a href="#nowhere" class="open-tooltip-button"><img class="more-options svg" src="{% static "img/icon-more-options-fbdbd735.svg" %}"></a>
+				<a href="#nowhere" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
 				<div class="custom-tooltip">
 					<ul>
 						<li>
@@ -34,7 +34,7 @@
                 <table>
                     <tr class="row">
                         <td class="col-xs-5">
-                            <img class="icon menu-icon svg" src="{% static "img/icon-followers-654741d3.svg" %}">
+                            <i class="icon icon-follower"></i>
                             <p>Followers</p>
                         </td>
                         <td class="col-xs-7">
@@ -44,7 +44,7 @@
 
                     <tr class="row">
                         <td class="col-xs-5">
-                            <img class="icon menu-icon svg" src="{% static "img/icon-campaigns-96784c9b.svg" %}">
+                            <i class="icon icon-campaign"></i>
                             <p>Running campaigns</p>
                         </td>
                         <td class="col-xs-7">
@@ -54,7 +54,7 @@
 
                     <tr class="row">
                         <td class="col-xs-5">
-                            <img class="icon menu-icon svg" src="{% static "img/icon-rewards-f6d4d815.svg" %}">
+                            <i class="icon icon-reward"></i>
                             <p>Rewards</p>
                         </td>
                         <td class="col-xs-7">
@@ -64,11 +64,11 @@
                 </table>
             </div>
 
-            <div class="content last">
+            <!--<div class="content last">
                 <table>
                     <tr class="row">
                         <td class="col-xs-5">
-                            <img class="icon menu-icon svg" src="{% static "img/icon-pending-accepted-a9421b1c.svg" %}">
+                            <i class="icon icon-pending-accepted"></i>
                             <p>Invites</p>
                         </td>
                         <td class="col-xs-7">
@@ -78,7 +78,7 @@
 
                     <tr class="row">
                         <td class="col-xs-5">
-                            <img class="icon menu-icon svg" src="{% static "img/icon-campaign-participated-79a84226.svg" %}">
+                            <i class="icon icon-campaign-participated"></i>
                             <p class="completed-campaigns">Completed campaigns</p>
                         </td>
                         <td class="col-xs-7">
@@ -86,7 +86,7 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </div>-->
         {% endwith %}
 
 		<footer>

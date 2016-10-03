@@ -2,11 +2,11 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     transition: color 0.3s ease-in-out;
 }
 
-body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
+/* body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
 header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
 header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     color: #ddd;
-}
+} */
 
 body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
 body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,

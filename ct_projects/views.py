@@ -33,7 +33,8 @@ def list_projects(request):
         'n_of_projects': Project.objects.all().count(),
         'page_obj': pages.page(int(request.GET.get('page', '1'))),
         'q': q,
-        'order': order
+        'order': order,
+        'light_menu': not request.user.is_authenticated(),
     }
 
     return render(request, 'ct_projects/project/all.html', context)

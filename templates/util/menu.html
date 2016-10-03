@@ -18,7 +18,7 @@
 							<div class="vertical-align">
 								<form class="project-search middle" action="/projects/" method="GET">
 									<input name="q" class="input-search" type="text" placeholder="Search projects" value="{{ q }}" autocomplete="false" />
-									<img src="{% static "img/icons/icon-search.svg" %}" class="icon-search svg" alt="Search icon">
+									<i class="icon icon-search"></i>
 								</form>
 							</div>
 						</li>
@@ -27,7 +27,7 @@
 							<div class="vertical-align">
 								<div class="middle">
 									<a href="{% url 'all-projects' %}">
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-projects.svg" %}">
+										<i class="icon icon-project"></i>
 										All projects
 									</a>
 								</div>
@@ -39,7 +39,7 @@
 								<div class="vertical-align">
 									<div class="middle">
 										<a href="{% url 'followed-projects' %}">
-											<img class="icon menu-icon svg" src="{% static "img/icons/icon-dashboard.svg" %}">
+											<i class="icon icon-dashboard"></i>
 											Dashboard
 										</a>
 									</div>
@@ -50,7 +50,7 @@
 								<div class="vertical-align">
 									<div class="middle">
 										<a href="{% url 'notifications' %}">
-											<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
+											<i class="icon icon-notifications"></i>
 											Notifications
 										</a>
 									</div>

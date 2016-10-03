@@ -1,0 +1,18 @@
+        {% load staticfiles %}
+
+        <header class="no-menu">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<a href="/" alt="home">
+							<img src="{% static "img/logo-purple.svg" %}" class="logo svg" alt="Cloudteams logo">
+						</a>
+						{% if register_button %}
+							<a href="{% url 'register' %}" alt="log in" class="btn login secondary">Register</a>
+						{% else %}
+							<a href="{% url 'login' %}" alt="log in" class="btn login secondary">Log in</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</header>

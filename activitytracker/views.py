@@ -72,6 +72,8 @@ def login(request):
     ctx = {
         'redirect_url': redirect_url,
         'ignore_login_link': True,
+        'light_menu': True,
+        'register_button': True,
     }
 
     if request.method != 'POST':

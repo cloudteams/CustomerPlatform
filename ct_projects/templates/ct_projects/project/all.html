@@ -5,12 +5,9 @@
 {% block title %}Projects{% endblock %}
 {% block section_class %}page-public-projects-logged-in{% endblock %}
 {% block pre_content %}
-    <header class="main-header">
-        <div class="container">
-            <h1 class="header-extra-large public">Cloudteams</h1>
-            <p class="public-page-subtitle">Collect rewards for giving feedback</p>
-        </div>
-    </header>
+    {% if not request.user.is_authenticated %}
+        {% include 'ct_projects/project/non-logged-in.html' %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -32,19 +29,18 @@
 
                         {% if not q %}
                             <div class="filter-container">
-                                <label for="filter-projects">Sort projects</label>
+                                <label for="filter-projects">Filter projects</label>
                                 <div class="select-dropdown">
-                                    <i class="fa fa-angle-down"></i>
-                                    <select name="order-projects" id="order-projects" size="1">
+                                    <select name="order-projects" id="filter-projects" size="1">
                                         <option value="latest" {% if order == 'latest' %}selected="selected"{% endif %}>Latest</option>
                                         <option value="most-popular" {% if order == 'most-popular' %}selected="selected"{% endif %}>Most popular</option>
-\                                    </select>
+                                    </select>
                                 </div>
                             </div>
                         {% endif %}
                     </header>
 
-                    <div class="row">
+                    <div class="row" id="browse-projects">
                         {% if q and not projects %}
                             <p class="col-xs-12">No results</p>
                         {% else %}
