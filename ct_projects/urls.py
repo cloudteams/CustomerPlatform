@@ -29,6 +29,9 @@ urlpatterns = [
     url(r'^(?P<project_pk>[\w-]+)/campaigns/(?P<pk>\d+)$', views.campaign_details, name='campaign-details'),
     url(r'^(?P<project_pk>[\w-]+)/polls/(?P<pk>\d+)/token/$', views.request_poll_token, name='request-poll-token'),
 
+    # generic
+    url(r'^how-it-works$', views.how_it_works, name='how-it-works'),
+
     # project API
     url(r'^api/all/$', project_api.project_list),
     url(r'^api/(?P<pk>\d+)/$', project_api.project),

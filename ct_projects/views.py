@@ -11,6 +11,13 @@ from ct_projects.forms import IdeaForm, IdeaRatingForm
 from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken
 
 
+
+def how_it_works(request):
+    return render(request, 'ct_projects/how-it-works.html', {
+        'light_menu': True,
+    })
+
+
 def list_projects(request):
     """
     A list of all projects in cloud teams
