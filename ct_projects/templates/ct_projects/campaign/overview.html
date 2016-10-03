@@ -8,17 +8,17 @@
                     <table>
                         <tr>
                             <td>
-                                <img class="icon svg" src="{% static "img/icons/icon-activities.svg" %}">
+                                <i class="icon icon-activity"></i>
                                 <p>Status</p>
                             </td>
                             <td>
-                                <p>{% if expired %}closed{% else %}open{% endif %}</p>
+                                <p>{% if expired %}Closed{% else %}Open{% endif %}</p>
                             </td>
                         </tr>
     
                         <tr>
                             <td>
-                                <img class="icon svg" src="{% static "img/icons/icon-pending-accepted.svg" %}">
+                                <i class="icon icon-add-member"></i>
                                 <p>Participated</p>
                             </td>
                             <td>
@@ -28,7 +28,7 @@
     
                         <tr>
                             <td>
-                                <img class="icon svg" src="{% static "img/icons/icon-date-start.svg" %}">
+                                <i class="icon icon-start"></i>
                                 <p>Date opened</p>
                             </td>
                             <td>
@@ -38,7 +38,7 @@
     
                         <tr>
                             <td>
-                                <img class="icon svg" src="{% static "img/icons/icon-date-end.svg" %}">
+                                <i class="icon icon-close2"></i>
                                 <p>Date {% if expired %}closed{% else %}closing{% endif %}</p>
                             </td>
                             <td>
@@ -51,7 +51,7 @@
                 <div class="middle">
                     <a href="#nowhere" class="btn-grey">
                         {% if expired %}
-                            <img class="icon svg delete" src="{% static "img/icons/icon-delete.svg" %}">
+                            <i class="icon icon-delete"></i>
                             Closed
                         {% else %}
                             <i class="fa fa-check green-text"></i>

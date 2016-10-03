@@ -14,7 +14,6 @@
                 <label>Select an other campaign</label>
 
                 <div class="select-dropdown">
-                    <i class="fa fa-angle-down"></i>
                     <select name="visable-to" id="visable-to" onchange="" size="1">
                         {% for campaign in campaign.project.campaigns.all %}
                             <option value="{{ campaign.pk }}">{{ campaign.name }}</option>

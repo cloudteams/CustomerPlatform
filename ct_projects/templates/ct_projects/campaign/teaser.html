@@ -9,7 +9,7 @@
 			<p class="highlight bold">{{campaign.project.title}}</p>
 
 			<div class="tooltip-container">
-				<a href="#nowhere" class="open-tooltip-button"><img class="more-options svg" src="{% static "img/icons/icon-more-options.svg" %}""></a>
+				<a href="#nowhere" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
 				<div class="custom-tooltip">
 					<ul>
 						<li>
@@ -23,12 +23,12 @@
 
 		<div class="content dates">
 			<div>
-				<img class="icon menu-icon svg" src="{% static "img/icons/icon-date-start.svg" %}"">
+				<i class="icon icon-start"></i>
 				<p><time datetime="{{ campaign.starts|date:"Y-m-d" }}">{{ campaign.starts|date:"d-m-Y" }}</time></p>
 			</div>
             {% if campaign.expires %}
 				<div>
-                	<img class="icon menu-icon svg" src="{% static "img/icons/icon-date-end.svg" %}"">
+                	<i class="icon icon-close2"></i>
                 	<p><time datetime="{{ campaign.expires|date:"Y-m-d" }}">{{ campaign.expires|date:"d-m-Y" }}</time></p>
 				</div>
             {% endif %}
@@ -38,7 +38,7 @@
 			<table>
 				<tr class="row">
 					<td class="col-xs-5">
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-pending-accepted.svg" %}"">
+						<i class="icon icon-add-member"></i>
 						<p>Participants</p>
 					</td>
 					<td class="col-xs-7">
@@ -48,7 +48,7 @@
 
 				<tr class="row">
 					<td class="col-xs-5">
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-time.svg" %}"">
+						<i class="icon icon-time"></i>
 						<p>Days left</p>
 					</td>
 					<td class="col-xs-7">
@@ -59,7 +59,7 @@
 		</div>
 
 		<footer>
-			<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}" class="btn">See all info</a>
+			<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}" class="btn-transparent">See all info</a>
 		</footer>
 	</div>
 </article>

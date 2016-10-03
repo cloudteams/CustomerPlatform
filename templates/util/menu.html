@@ -50,7 +50,7 @@
 								<div class="vertical-align">
 									<div class="middle">
 										<a href="{% url 'notifications' %}">
-											<i class="icon icon-notifications"></i>
+											<i class="icon icon-notification"></i>
 											Notifications
 										</a>
 									</div>
@@ -62,7 +62,7 @@
 							<div class="vertical-align">
 								<div class="middle">
 									{% if request.user.is_authenticated %}
-										<img class="icon menu-icon svg" src="{% static "img/icons/icon-profile.svg" %}">
+										<i class="icon icon-user"></i>
 										<a href="/profile/">{{ request.user.username }}</a>
 
 										<i class="fa fa-angle-down"></i>
@@ -81,9 +81,10 @@
 											{% include 'gamification/info.html' %}
 										{% endwith %}
 									</li>
-									<li><a href="{% url 'settings' %}">Settings</a></li>
-									<li><a href="{% url 'password-change' %}">Change password</a></li>
-									<li><a href="{% url 'logout' %}">Log out</a></li>
+									<li><a href="/profile/edit/"><i class="icon icon-profile"></i> Edit profile</a></li>
+									<li><a href="{% url 'settings' %}"><i class="icon icon-settings"></i> Settings</a></li>
+									<li><a href="{% url 'password-change' %}"><i class="icon icon-locked"></i> Change password</a></li>
+									<li><a href="{% url 'logout' %}"><i class="icon icon-sign-out"></i> Log out</a></li>
 								</ul>
 							{% endif %}
 						</li>
