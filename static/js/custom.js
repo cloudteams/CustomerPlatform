@@ -34,7 +34,7 @@ $(function() {
         $('#' + $(this).data('id')).modal('show')
     });
 
-        // Invitations
+    /* Invitations */
     $('form.invitation-form').on('submit', function(e) {
         var $form = $(this),
             $btn = $form.find('button[type="submit"]');
