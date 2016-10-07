@@ -23,7 +23,13 @@
 						<div class="information col-xs-12 middle">
 							<ul>
 								<li class="meta big">{{ profile.get_display_name }}</li>
-								<li><a href="#" id="trigger-avatar-upload">Upload avatar</a></li>
+								<li>
+                                    {% if profile_page %}
+                                        <a href="#" id="trigger-avatar-upload">Upload avatar</a>
+                                    {% else %}
+                                        <a href="/profile/">Edit profile</a>
+                                    {% endif %}
+                                </li>
 							</ul>
 						</div>
 				</div>

@@ -107,11 +107,13 @@ section.dashboard-page.user-dashboard-page.no-profile-edit-bar.message:after {
 .modal-default.in {
     display: block;
     left: calc(50% - 250px);
+    height: auto;
     width: 500px;
     top: 100px;
     border-radius: 10px;
     padding-right: 0 !important;
     bottom: auto;
+    opacity: 1;
     background: white;
 }
 
@@ -179,4 +181,20 @@ section.dashboard-page > .container > .content > .row > aside .show-minimized {
 
 .social-login > img:hover {
     opacity: 1;
+}
+
+/* Invitation form */
+.invitation-form label {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.invitation-form input {
+    margin-bottom: 20px;
+}
+
+.invitation-form button.btn-transparent[disabled] > span {
+    vertical-align: top;
+    margin-top: 15px;
+    display: inline-block;
 }

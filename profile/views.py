@@ -20,6 +20,7 @@ def view_my_profile(request):
     # load profile
     profile = request.user.profile
     params = {
+        'profile_page': True,
         'profile': profile,
         'form': UserProfileForm(instance=profile),
         'all_platforms': PLATFORMS,
