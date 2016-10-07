@@ -231,10 +231,10 @@ BROWSERS = (
 )
 
 TECH_LEVELS = (
-    ('Beginner', 'Beginner'),
+    ('Beginner', 'Newbie'),
     ('Intermediate', 'Intermediate'),
-    ('Expert', 'Expert'),
-    ('Geek', 'gEEk'),
+    ('Expert', 'Skilled'),
+    ('Geek', 'Expert'),
 )
 DEFAULT_BRANDS = (
     ('Facebook', 'Facebook'),

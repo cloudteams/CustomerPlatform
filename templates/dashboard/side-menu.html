@@ -20,10 +20,10 @@
 							<div class="profile-avatar" style="background-image:url({{ profile.avatar }}); height: 50px;"></div>
 						</div>
 					{% endif %}
-						<div class="information col-xs-8 middle">
+						<div class="information col-xs-12 middle">
 							<ul>
 								<li class="meta big">{{ profile.get_display_name }}</li>
-								<li><a href="{% url 'start-profile-wizard' %}">Edit profile</a></li>
+								<li><a href="#" id="trigger-avatar-upload">Upload avatar</a></li>
 							</ul>
 						</div>
 				</div>

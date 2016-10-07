@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from activitytracker.models import User
 from ct_projects.models import Notification
 from profile.forms import UserProfileForm
-from profile.lists import DEFAULT_BRANDS, BRAND_OPINIONS
+from profile.lists import *
 from profile.models import UserBrandOpinion, UserProfile, Influence, DeviceUsage, PlatformUsage, PlatformInvitation
 from profile.templatetags.profile_tags import get_brand_icon
 
@@ -21,6 +21,10 @@ def view_my_profile(request):
     profile = request.user.profile
     params = {
         'profile': profile,
+        'form': UserProfileForm(instance=profile),
+        'all_platforms': PLATFORMS,
+        'all_devices': DEVICES,
+        'all_tech_levels': TECH_LEVELS,
         'liked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='P')],
         'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
     }

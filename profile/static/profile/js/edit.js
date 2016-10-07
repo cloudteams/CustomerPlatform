@@ -1,7 +1,7 @@
 $(function() {
     //chosen
     $('select:not(#id_platforms, #id_devices, #id_influences, #id_tech_level)').chosen();
-
+    $('select:not(#id_platforms, #id_devices, #id_influences, #id_tech_level)').closest('.select-dropdown').addClass('chosen-dropdown')
     //nice options
     NiceOpts.init('#id_platforms, #id_devices');
     NiceOpts.init('#id_influences', {break_after: [2]});
@@ -74,15 +74,15 @@ $(function() {
         avatar_updated: false,
 
         post_profile: function() {
-            $('.profile-save-msg').html('Saving... <i class="fa fa-spinner fa-pulse"></i>')
+            $('.profile-save-msg').html('<i class="loader-general loader-general-gray"></i>')
             $.ajax({
-                url: '.',
+                url: '/profile/edit/',
                 method: 'POST',
                 data: new FormData($('.create-profile-form')[0]),
                 contentType: false,
                 processData: false,
                 success: function(data) {
-                    $('.profile-save-msg').html('Saved <i class="fa fa-check"></i>');
+                    $('.profile-save-msg').find('.loader-general').addClass('complete');
                     ProfileFormManager.avatar_updated = false;
                 },
                 error: function() {

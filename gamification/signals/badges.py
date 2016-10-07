@@ -162,7 +162,7 @@ def on_user_profile_updated(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=DeviceUsage)
 @receiver(post_delete, sender=PlatformUsage)
 @receiver(post_delete, sender=UserBrandOpinion)
-def on_user_profile_m2m_updated(sender, instance, created, **kwargs):
+def on_user_profile_m2m_updated(sender, instance, **kwargs):
     if instance.user.profile.get_completion_progress() == 100:
         counter = 1
     else:

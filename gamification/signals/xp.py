@@ -69,7 +69,7 @@ def on_user_profile_updated(sender, instance, created, **kwargs):
 @receiver(post_save, sender=DeviceUsage)
 @receiver(post_save, sender=PlatformUsage)
 @receiver(post_save, sender=UserBrandOpinion)
-def on_user_profile_m2m_updated(sender, instance, created, **kwargs):
+def on_user_profile_m2m_updated(sender, instance, **kwargs):
     if instance.user.profile.get_completion_progress() == 100:
         apply_xp_rule(instance.user, 'PROFILE_COMPLETE')
 

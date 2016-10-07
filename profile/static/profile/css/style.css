@@ -1,4 +1,12 @@
 /* My profile view */
+.chosen-container-single .chosen-single div {
+    display: none !important;
+}
+
+.chosen-dropdown .icon {
+    right: 7px;
+}
+
 .profile-view {
     margin-top: 20px;
     color: #ddd;
@@ -74,7 +82,7 @@
 }
 
 .chosen-single span {
-    padding: 5px 15px !important;
+    padding: 10px 15px !important;
     font-size: 16px;
     color: #b1b1b1;
 }
@@ -86,11 +94,6 @@
 ul.main-menu i {
     min-width: 20px;
     text-align: center;
-}
-
-.create-profile-form {
-    color: #b1b1b1;
-    padding-bottom: 2em;
 }
 
 /* Slider */
@@ -163,7 +166,16 @@ ul.main-menu i {
 }
 
 .profile-save-msg {
-    color: #fff;
+    padding: 5px;
+}
+
+.gray-text {
+    color: #afa7b0;
+}
+
+.profile-save-msg .loader-general {
+    position: relative;
+    top: -5px;
 }
 
 /* Intro & avatar */
@@ -226,12 +238,6 @@ ul.main-menu i {
 #avatar-container {
     height: 200px;
     border: 1px dotted #aaa;
-}
-
-#trigger-avatar-upload {
-    width: 100%;
-    padding-left: 18px;
-    border-radius: 0 0 5px 5px !important;
 }
 
 /* Brand opinions */

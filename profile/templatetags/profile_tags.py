@@ -48,3 +48,15 @@ def is_profile_incomplete(profile):
 def nand(a, b):
     return a and not b
 
+
+@register.filter
+def get_year_options(_):
+    years = []
+    year = date.today().year
+
+    idx = 0
+    while idx < 100:
+        years.append(year - idx)
+        idx += 1
+
+    return years

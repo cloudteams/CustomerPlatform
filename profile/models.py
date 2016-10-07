@@ -99,6 +99,11 @@ class UserProfile(models.Model):
         else:
             return '/media/avatars/' + self.profile_picture.name.split('/')[-1]
 
+    def list_platforms(self):
+        return [platform.platform for platform in self.user.platforms.all()]
+
+    def list_devices(self):
+        return [device.device for device in self.user.devices.all()]
 
 class Influence(models.Model):
     user = models.ForeignKey(User, related_name='influences')
