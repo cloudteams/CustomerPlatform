@@ -29,7 +29,7 @@
 			</div>
 		</header>
 
-        {% with idea_count=project.ideas.count campaign_count=project.campaigns.all.count followed_count=project.followed.all.count %}
+        {% with idea_count=project.ideas.count campaign_count=project.get_running_campaigns|length followed_count=project.followed.all.count %}
             <div class="content">
                 <table>
                     <tr class="row">

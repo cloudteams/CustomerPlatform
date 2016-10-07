@@ -2,10 +2,11 @@ $(function() {
     /* Dashboard folding back */
     $('.minimize-toggle').click(function() {
         $('.dashboard-side-menu').toggleClass('minimized');
+        $('section.page').toggleClass('minimized');
         if ($('.dashboard-side-menu').hasClass('minimized')) {
-            $(this).find('.arrow').html('❯')
+            $(this).find('.icon').removeClass('icon-arrow-left').addClass('icon-arrow-right')
         } else {
-            $(this).find('.arrow').html('❮')
+            $(this).find('.icon').addClass('icon-arrow-left').removeClass('icon-arrow-right')
         }
     })
 

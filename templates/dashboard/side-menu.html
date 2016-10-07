@@ -7,7 +7,7 @@
 			<div class="vertical-align">
 				<div class="middle">
 					<h1 class="header-small"><span>Dashboard</span></h1>
-					<p class="page-subtitle minimize-toggle"><span class="arrow">❮</span><span class="fold-back"> Fold back</span></p>
+					<p class="page-subtitle minimize-panel minimize-toggle"><i class="icon icon-arrow-left"></i><span class="fold-back"> Fold back</span></p>
 				</div>
 			</div>
 		</header>
@@ -34,34 +34,34 @@
 			<ul>
 				<li class="active">
 					<a href="{% url 'followed-projects' %}">
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-projects.svg" %}">
+						<i class="icon icon-project"></i>
 						<span>Projects</span>
 					</a>
 				</li>
 
 				<li>
 					<a href="{% url 'followed-campaigns' %}">
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-campaigns.svg" %}">
+						<i class="icon icon-campaign"></i>
 						<span>Campaigns</span>
 					</a>
 				</li>
 
 				<li>
 					<a href="{% url 'notifications' %}" {% if request.user.unread_notifications %}class="incoming"{% endif %}>
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-notifications.svg" %}">
+						<i class="icon icon-notification"></i>
 						<span>Notifications</span>
 					</a>
 				</li>
 
 				<li>
 					<a href="{% url 'all-projects' %}">
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-explore.svg" %}">
+						<i class="icon icon-all-projects"></i>
 						<span>All projects</span>
 					</a>
 				</li>
 				<li>
 					<a href="/activitytracker/index/">
-						<img class="icon menu-icon svg" src="{% static "img/icons/icon-activities.svg" %}">
+						<i class="icon icon-activity"></i>
 						<span>Activities</span>
 					</a>
 				</li>
@@ -132,22 +132,22 @@
 				<h2 class="header-sidebar">Profile information</h2>
 				<ul>
 					<li>
-						<img class="icon filled svg" src="{% static "img/icons/icon-city.svg" %}">
+						<i class="icon icon-city"></i>
 						{% if request.user.location %}{{ request.user.location }}{% else %}-{% endif %}
 					</li>
 
 					<li>
-						<img class="icon filled svg" src="{% static "img/icons/icon-work.svg" %}">
+						<i class="icon icon-work"></i>
 						{% if profile.business_sector %}{{ profile.business_sector }}{% else %}-{% endif %}
 					</li>
 
 					<li>
-						<img class="icon filled svg" src="{% static "img/icons/icon-location.svg" %}">
+						<i class="icon icon-location"></i>
 						{% if profile.work_position %}{{ profile.work_position }}{% else %}-{% endif %}
 					</li>
 
 					<li>
-						<img class="icon filled svg" src="{% static "img/icons/icon-gender.svg" %}">
+						<i class="icon icon-gender"></i>
 						{% if request.user.gender == 'M' %}
 							Male
 						{% elif request.user.gender == 'F' %}

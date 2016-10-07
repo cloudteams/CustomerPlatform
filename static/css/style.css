@@ -71,7 +71,7 @@ h1 {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .errorlist li {
@@ -89,6 +89,10 @@ h1 {
 /* Hotfix - settings */
 .connected-app img {
     width: 100px;
+}
+
+section.dashboard-page.user-dashboard-page.no-profile-edit-bar.message:after {
+    top: 70px;
 }
 
 .complete-profile.active.hide-all {
@@ -136,7 +140,7 @@ section.dashboard-page > .container > .content > .row > aside .show-minimized {
 }
 
 .dashboard-side-menu.minimized {
-  width: auto;
+  width: 8.333% !important;
 }
 
 .dashboard-side-menu.minimized h1.header-small,

@@ -40,5 +40,11 @@ def to_percent(progress):
 
 
 @register.filter
-def show_tell_more_link(profile, edit_page):
-    return profile.get_completion_progress() < 20 and not edit_page
+def is_profile_incomplete(profile):
+    return profile.get_completion_progress() < 50
+
+
+@register.filter
+def nand(a, b):
+    return a and not b
+

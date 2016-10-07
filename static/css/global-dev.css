@@ -10797,10 +10797,10 @@ section.dashboard-page.user-dashboard-page .complete-profile .close-message {
 .dashboard-side-menu.dashboard-side-menu-user .bottom {
     bottom: 0;
     left: 0;
-    padding-right: 20px;
-    padding-left: 20px;
-    position: absolute;
-    width: 100%
+    /* padding-right: 20px; */
+    /* padding-left: 20px; */
+    /* position: absolute; */
+    width: 100%;
 }
 
 .dashboard-side-menu.dashboard-side-menu-user .bottom .profile-completion {
