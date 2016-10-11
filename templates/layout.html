@@ -15,17 +15,17 @@
 		<link rel="icon" href="{% static 'favicon.ico' %}">
 		<link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link rel="stylesheet" href="{% static "css/activicon.css" %}">
-		<link rel="stylesheet" href="{% static "css/global-dev.css" %}?v=20160916.1">
+		<link rel="stylesheet" href="{% static "css/global-dev.css" %}?v=20161011.1">
 		{% compress css %}
 			<link href="{% static 'activitytracker/css/googlemaps.css' %}" rel="stylesheet">
 			<link href="{% static 'bower_components/clockpicker/dist/bootstrap-clockpicker.min.css' %}" rel="stylesheet">
 			<link href="{% static 'bower_components/datatables/media/css/dataTables.bootstrap.css' %}" rel="stylesheet">
 			<link href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.css' %}" rel="stylesheet">
-			<link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}" rel="stylesheet">
-			<link href="{% static 'bower_components/chosen/chosen.min.css' %}" rel="stylesheet">
-			<link href="{% static 'activitytracker/css/romanos.css' %}" rel="stylesheet">
-			<link href="{% static 'gamification/css/style.css' %}" rel="stylesheet">
-			<link href="{% static 'css/style.css' %}?v=20160728.1" rel="stylesheet">
+			<link href="{% static 'activitytracker/css/bootstrap-chosen.css' %}?v=20161011.1" rel="stylesheet">
+			<link href="{% static 'bower_components/chosen/chosen.min.css' %}?v=20161011.1" rel="stylesheet">
+			<link href="{% static 'activitytracker/css/romanos.css' %}?v=20161011.1" rel="stylesheet">
+			<link href="{% static 'gamification/css/style.css' %}?v=20161011.1" rel="stylesheet">
+			<link href="{% static 'css/style.css' %}?v=20161011.1" rel="stylesheet">
 		{% endcompress %}
 		<link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css" />
 		{% block css %}
@@ -60,10 +60,10 @@
 
         {% endblock %}
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script type="text/javascript" src="{% static 'js/global-dev.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/common-dev.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/custom.js' %}?v=20160718.1"></script>
-		<script type="text/javascript" src="{% static 'gamification/js/actions.js' %}?v=20160718.1"></script>
+		<script type="text/javascript" src="{% static 'js/global-dev.js' %}?v=20161011.1"></script>
+		<script type="text/javascript" src="{% static 'js/common-dev.js' %}?v=20161011.1"></script>
+		<script type="text/javascript" src="{% static 'js/custom.js' %}?v=20161011.1"></script>
+		<script type="text/javascript" src="{% static 'gamification/js/actions.js' %}?v=20161011.1"></script>
 
 		{% compress js %}
             <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>

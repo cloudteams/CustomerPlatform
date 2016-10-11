@@ -295,6 +295,9 @@ class Campaign(models.Model):
 
         return users
 
+    def count_participants(self):
+        return PollToken.objects.filter(poll__campaign=self).count()
+
     def send(self):
         # send notifications for all documents & polls
         users = self.get_users()

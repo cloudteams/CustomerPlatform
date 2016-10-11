@@ -11,7 +11,6 @@ from ct_projects.forms import IdeaForm, IdeaRatingForm
 from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken
 
 
-
 def how_it_works(request):
     return render(request, 'ct_projects/how-it-works.html', {
         'light_menu': True,
@@ -27,7 +26,7 @@ def list_projects(request):
                                 Q(category__icontains=q))
 
     # ordering
-    order = request.GET.get('order', 'latest')
+    order = request.GET.get('order', 'most-popular')
     if order == 'most-popular':
         qs = qs.annotate(num_followers=Count('followed')).order_by('-num_followers', '-created')
     else:
