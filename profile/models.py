@@ -106,6 +106,9 @@ class UserProfile(models.Model):
     def list_devices(self):
         return [device.device for device in self.user.devices.all()]
 
+    def list_interests(self):
+        return [interest.interest for interest in self.user.interests.all()]
+
 
 class Influence(models.Model):
     user = models.ForeignKey(User, related_name='influences')
@@ -120,6 +123,11 @@ class DeviceUsage(models.Model):
 class PlatformUsage(models.Model):
     user = models.ForeignKey(User, related_name='platforms')
     platform = models.CharField(max_length=255, choices=PLATFORMS)
+
+
+class UserInterest(models.Model):
+    user = models.ForeignKey(User, related_name='interests')
+    interest = models.CharField(max_length=255, choices=INTERESTS)
 
 
 class UserBrandOpinion(models.Model):

@@ -7,11 +7,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
-from activitytracker.models import User
 from ct_projects.models import Notification
 from profile.forms import UserProfileForm
-from profile.lists import *
-from profile.models import UserBrandOpinion, UserProfile, Influence, DeviceUsage, PlatformUsage, PlatformInvitation
+from profile.models import *
 from profile.templatetags.profile_tags import get_brand_icon
 
 
@@ -28,6 +26,7 @@ def view_my_profile(request):
         'all_platforms': PLATFORMS,
         'all_devices': DEVICES,
         'all_tech_levels': TECH_LEVELS,
+        'all_interests': INTERESTS,
         'liked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='P')],
         'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
     }
@@ -81,6 +80,14 @@ def start_wizard(request):
             for platform_usage in PlatformUsage.objects.filter(user=profile.user):
                 if platform_usage.platform not in form.cleaned_data['platforms']:
                     platform_usage.delete()
+
+            for interest in form.cleaned_data['interests']:
+                if UserInterest.objects.filter(user=profile.user, interest=interest).count() == 0:
+                    UserInterest.objects.create(user=profile.user, interest=interest)
+
+            for user_interest in UserInterest.objects.filter(user=profile.user):
+                if user_interest.interest not in form.cleaned_data['interests']:
+                    user_interest.delete()
 
             # update user
             gender = request.POST.get('gender')

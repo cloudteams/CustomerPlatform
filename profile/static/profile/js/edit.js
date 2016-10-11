@@ -35,21 +35,12 @@ $(function() {
                 },
                 success: function(data) {
                     var options = data['_embedded']['city:search-results'];
-                    /*for (var i=0; i < options.length; i++) {
-                        console.log(options[i].matching_full_name)
-                        $('.work-city-select').append('<li class="active-result">' + options[i].matching_full_name + '</li>');
-                    }*/
                     response($.map( options, function(item) {
                         return {
                             label: item.matching_full_name,
                             value: item.matching_full_name,
                         };
                     }));
-
-                    var inp = $(that)[0].element;
-                    $('.city-select').css('display', 'block');
-                    $('.city-select').css('left', $(inp).offset().left);
-                    $('.city-select').css('top', $(inp).offset().top + $(inp).outerHeight() - 1);
                 }
             });
         }

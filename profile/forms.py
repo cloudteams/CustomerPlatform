@@ -1,6 +1,6 @@
 from django import forms
 
-from profile.lists import INFLUENCES, DEVICES, PLATFORMS
+from profile.lists import *
 from profile.models import UserProfile
 
 __author__ = 'dipap'
@@ -18,9 +18,10 @@ class UserProfileForm(forms.ModelForm):
     # Influences
     influences = forms.MultipleChoiceField(choices=INFLUENCES, required=False)
 
-    # Devices & platforms
+    # Devices, platforms & interests
     devices = forms.MultipleChoiceField(choices=DEVICES, required=False)
     platforms = forms.MultipleChoiceField(choices=PLATFORMS, required=False)
+    interests = forms.MultipleChoiceField(choices=INTERESTS, required=False)
 
     class Meta:
         model = UserProfile
@@ -50,3 +51,4 @@ class UserProfileForm(forms.ModelForm):
         self.initial['influences'] = [influence.influence for influence in self.instance.user.influences.all()]
         self.initial['platforms'] = [platform_usages.platform for platform_usages in self.instance.user.platforms.all()]
         self.initial['devices'] = [device_usage.device for device_usage in self.instance.user.devices.all()]
+        self.initial['interests'] = [user_interest.interest for user_interest in self.instance.user.interests.all()]

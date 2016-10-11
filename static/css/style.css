@@ -122,6 +122,10 @@ section.dashboard-page.user-dashboard-page.no-profile-edit-bar.message:after {
     margin: 20px 0 0 0;
 }
 
+.dashboard-side-menu .update-profile a {
+    color: #afa7b0;
+}
+
 section.dashboard-page > .container > .content > .row > aside .show-minimized {
     display: none; }
   section.dashboard-page.minimized > .container > .content > .row > aside .hide-minimized {

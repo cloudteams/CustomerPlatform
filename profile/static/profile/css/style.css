@@ -88,7 +88,17 @@
 }
 
 .chosen-container {
-    min-width: 300px !important;
+    min-width: 310px !important;
+}
+
+.chosen-container .chosen-search input[type="text"] {
+    box-shadow: none !important;
+}
+
+.chosen-container li.active-result.highlighted,
+.chosen-container li.active-result.result-selected {
+    background: #884c9b !important;
+    color: white;
 }
 
 ul.main-menu i {

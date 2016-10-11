@@ -54,7 +54,7 @@
 
         <div class="content">
             <article class="block-line large">
-                <header class="row" style="margin: 0;">
+                <header class="row" style="margin: 0; padding: 0;">
                     <ul class="menu-subpage col-xs-9 public">
                         <li id="link-to-subpage-1" class="link-to-subpage active">Basic information</li>
                         <li id="link-to-subpage-2" class="link-to-subpage">Work & education</li>
@@ -308,78 +308,16 @@
                                 <label class="header-medium secondary">Which categories fit you best?</label>
 
                                 <div class="input-container">
-                                    <label for="interest-business"><input type="checkbox" name="interests"
-                                                                          value="interest-business"
-                                                                          id="interest-business"><span></span>Business</label>
-
-                                    <label for="interest-education"><input type="checkbox" name="interests"
-                                                                           value="interest-education"
-                                                                           id="interest-education"><span></span>Education</label>
-
-                                    <label for="interest-entertainment"><input type="checkbox" name="interests"
-                                                                               value="interest-entertainment"
-                                                                               id="interest-entertainment"><span></span>Entertainment</label>
-
-                                    <label for="interest-finance"><input type="checkbox" name="interests"
-                                                                         value="interest-finance" id="interest-finance"><span></span>Finance</label>
-
-                                    <label for="interest-food-and-drinks"><input type="checkbox" name="interests"
-                                                                                 value="interest-food-and-drinks"
-                                                                                 id="interest-food-and-drinks"><span></span>Food
-                                        &amp; Drinks</label>
-
-                                    <label for="interest-health-and-fitness"><input type="checkbox" name="interests"
-                                                                                    value="interest-health-and-fitness"
-                                                                                    id="interest-health-and-fitness"><span></span>Health
-                                        &amp; Fitness</label>
-
-                                    <label for="interest-lifestyle"><input type="checkbox" name="interests"
-                                                                           value="interest-lifestyle"
-                                                                           id="interest-lifestyle"><span></span>Lifestyle</label>
-
-                                    <label for="interest-medical"><input type="checkbox" name="interests"
-                                                                         value="interest-medical" id="interest-medical"><span></span>Medical</label>
-
-                                    <label for="interest-music"><input type="checkbox" name="interests"
-                                                                       value="interest-music"
-                                                                       id="interest-music"><span></span>Music</label>
-
-                                    <label for="interest-navigation"><input type="checkbox" name="interests"
-                                                                            value="interest-navigation"
-                                                                            id="interest-navigation"><span></span>Navigation</label>
-
-                                    <label for="interest-news"><input type="checkbox" name="interests"
-                                                                      value="interest-news"
-                                                                      id="interest-news"><span></span>News</label>
-
-                                    <label for="interest-photo-and-video"><input type="checkbox" name="interests"
-                                                                                 value="interest-photo-and-video"
-                                                                                 id="interest-photo-and-video"><span></span>Photo
-                                        &amp; Video</label>
-
-                                    <label for="interest-productivity"><input type="checkbox" name="interests"
-                                                                              value="interest-productivity"
-                                                                              id="interest-productivity"><span></span>Productivity</label>
-
-                                    <label for="interest-social-networking"><input type="checkbox" name="interests"
-                                                                                   value="interest-social-networking"
-                                                                                   id="interest-social-networking"><span></span>Social
-                                        Networking</label>
-
-                                    <label for="interest-sports"><input type="checkbox" name="interests"
-                                                                        value="interest-sports"
-                                                                        id="interest-sports"><span></span>Sports</label>
-
-                                    <label for="interest-travel"><input type="checkbox" name="interests"
-                                                                        value="interest-travel"
-                                                                        id="interest-travel"><span></span>Travel</label>
-
-                                    <label for="interest-utilities"><input type="checkbox" name="interests"
-                                                                           value="interest-utilities"
-                                                                           id="interest-utilities"><span></span>Utilities</label>
-
-                                    <label for="interest-weather"><input type="checkbox" name="interests"
-                                                                         value="interest-weather" id="interest-weather"><span></span>Weather</label>
+                                    {% for interest in all_interests %}
+                                        <label><input type="checkbox"
+                                               name="interests"
+                                               {% if interest.0 in profile.list_interests %}
+                                                      checked="checked"
+                                               {% endif %}
+                                               value="{{ interest.0 }}">
+                                            <span></span>{{ interest.1 }}
+                                        </label>
+                                    {% endfor %}
                                 </div>
                             </fieldset>
                         </div>

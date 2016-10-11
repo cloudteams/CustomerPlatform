@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load project_tags %}
 
-<article class="campaign public-campaign block-line-half col-lg-4 col-md-6 clear-3">
+<article class="campaign public-campaign block-line-half col-lg-6 col-md-6 col-sm-12 clear-3">
 	<div class="background">
 		<header class="article-header">
 			<h3 class="header-medium secondary">{{campaign.name}}</h3>
@@ -15,7 +15,6 @@
 						<li>
 							<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}">More about this campaign</a>
 						</li>
-						<li><a href="#nowhere">Participate</a></li>
 					</ul>
 				</div>
 			</div>
@@ -60,6 +59,26 @@
 
 		<footer>
 			<a href="{% url 'campaign-details' campaign.project.pk campaign.pk %}" class="btn-transparent">See all info</a>
+
+            {% for poll in campaign.polls.all %}
+                {% if request.user.is_authenticated %}
+                    <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
+                       class="btn">Participate in poll</a>
+                {% else %}
+                    <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
+                       class="btn">Participate in poll</a>
+                {% endif %}
+            {% endfor %}
+
+            {% for document in campaign.documents.all %}
+                {% if request.user.is_authenticated %}
+                    <a href="{{ document.link }}" target="_blank"
+                       class="btn">View document</a>
+                {% else %}
+                    <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
+                       class="btn">View document</a>
+                {% endif %}
+            {% endfor %}
 		</footer>
 	</div>
 </article>

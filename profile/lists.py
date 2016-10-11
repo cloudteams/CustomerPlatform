@@ -251,6 +251,28 @@ TECH_LEVELS = (
     ('Expert', 'Skilled'),
     ('Geek', 'Expert'),
 )
+
+INTERESTS = (
+    ('Business', 'Business'),
+    ('Education', 'Education'),
+    ('Entertainment', 'Entertainment'),
+    ('Finance', 'Finance'),
+    ('Food & Drinks', 'Food & Drinks'),
+    ('Health & Fitness', 'Health & Fitness'),
+    ('Lifestyle', 'Lifestyle'),
+    ('Medical', 'Medical'),
+    ('Music', 'Music'),
+    ('Navigation', 'Navigation'),
+    ('News', 'News'),
+    ('Photo & Video', 'Photo & Video'),
+    ('Productivity', 'Productivity'),
+    ('Social Networking', 'Social Networking'),
+    ('Sports', 'Sports'),
+    ('Travel', 'Travel'),
+    ('Utilities', 'Utilities'),
+    ('Weather', 'Weather'),
+)
+
 DEFAULT_BRANDS = (
     ('Facebook', 'Facebook'),
     ('Twitter', 'Twitter'),
