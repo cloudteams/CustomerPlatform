@@ -6,8 +6,7 @@ from django.dispatch import receiver
 
 from activitytracker.models import User
 from ct_projects.models import Campaign
-from profile.lists import BUSINESS_SECTORS, WORK_POSITIONS, INFLUENCES, DEVICES, PLATFORMS, BRAND_OPINIONS, \
-    TECH_LEVELS, INVITATION_STATUS
+from profile.lists import *
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
@@ -32,6 +31,8 @@ class UserProfile(models.Model):
     # -- location is in main model -> asume it to be home location
 
     # Business info
+    education = models.CharField(max_length=127, blank=True, default='', choices=EDUCATION_LEVELS)
+    employment_status = models.CharField(max_length=127, blank=True, default='', choices=EMPLOYMENT_STATUS_OPTIONS)
     business_sector = models.CharField(max_length=127, blank=True, default='', choices=BUSINESS_SECTORS)
     work_position = models.CharField(max_length=127, blank=True, default='', choices=WORK_POSITIONS)
     work_location = models.CharField(max_length=255, blank=True, default='')
@@ -104,6 +105,7 @@ class UserProfile(models.Model):
 
     def list_devices(self):
         return [device.device for device in self.user.devices.all()]
+
 
 class Influence(models.Model):
     user = models.ForeignKey(User, related_name='influences')

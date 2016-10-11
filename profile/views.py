@@ -23,6 +23,8 @@ def view_my_profile(request):
         'profile_page': True,
         'profile': profile,
         'form': UserProfileForm(instance=profile),
+        'education_levels': EDUCATION_LEVELS,
+        'employment_status_options': EMPLOYMENT_STATUS_OPTIONS,
         'all_platforms': PLATFORMS,
         'all_devices': DEVICES,
         'all_tech_levels': TECH_LEVELS,
@@ -81,6 +83,8 @@ def start_wizard(request):
                     platform_usage.delete()
 
             # update user
+            gender = request.POST.get('gender')
+            profile.user.gender = gender if gender else None
             profile.user.location = form.cleaned_data['location']
             profile.user.save()
 

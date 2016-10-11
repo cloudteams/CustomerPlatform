@@ -125,16 +125,17 @@
                                 <label for="gender-female" class="header-medium secondary">Gender</label>
 
                                 <div class="input-container">
-                                    <label for="gender-female"><input type="radio" name="gender" value="gender-female"
-                                                                      id="gender-female" required=""><span></span>Female</label>
+                                    <label for="gender-female"><input type="radio" name="gender" value="F"
+                                                                      id="gender-female"
+                                                                      required="" {% if profile.user.gender == 'F' %} checked="checked"{% endif %}><span></span>Female</label>
 
-                                    <label for="gender-male"><input type="radio" name="gender" value="gender-male"
+                                    <label for="gender-male"><input type="radio" name="gender" value="M"
                                                                     id="gender-male"
-                                                                    required=""><span></span>Male</label>
+                                                                    required=""{% if profile.user.gender == 'M' %} checked="checked"{% endif %}><span></span>Male</label>
 
                                     <label for="gender-undefined"><input type="radio" name="gender"
-                                                                         value="gender-undefined" id="gender-undefined"
-                                                                         required=""><span></span>I prefer not to
+                                                                         value="" id="gender-undefined"
+                                                                         required=""{% if profile.user.gender == '' %} checked="checked"{% endif %}><span></span>I prefer not to
                                         say</label>
                                 </div>
                             </fieldset>
@@ -159,24 +160,16 @@
                                 <label for="education-elementary" class="form-title">Education</label>
 
                                 <div class="input-container">
-                                    <label for="education-elementary"><input type="radio" name="education"
-                                                                             value="education-elementary"
-                                                                             id="education-elementary"
-                                                                             required=""><span></span>Elementary</label>
-
-                                    <label for="education-secondary"><input type="radio" name="education"
-                                                                            value="education-secondary"
-                                                                            id="education-secondary"
-                                                                            required=""><span></span>Secondary</label>
-
-                                    <label for="education-higher"><input type="radio" name="education"
-                                                                         value="education-higher" id="education-higher"
-                                                                         required=""><span></span>Secondary</label>
-
-                                    <label for="education-undefined"><input type="radio" name="education"
-                                                                            value="education-undefined"
-                                                                            id="education-undefined"
-                                                                            required=""><span></span>I prefer not to say</label>
+                                   {% for education in education_levels %}
+                                        <label><input type="radio"
+                                               name="education"
+                                               {% if education.0 == profile.education %}
+                                                      checked="checked"
+                                               {% endif %}
+                                               value="{{ education.0 }}">
+                                            <span></span>{{ education.1 }}
+                                        </label>
+                                    {% endfor %}
                                 </div>
                             </fieldset>
 
@@ -184,36 +177,16 @@
                                 <label for="employment-elementary" class="form-title">Employment</label>
 
                                 <div class="input-container">
-                                    <label for="employment-student"><input type="radio" name="employment"
-                                                                           value="employment-student"
-                                                                           id="employment-student"
-                                                                           required=""><span></span>Student</label>
-
-                                    <label for="employment-unemployed"><input type="radio" name="employment"
-                                                                              value="employment-unemployed"
-                                                                              id="employment-unemployed"
-                                                                              required=""><span></span>Unemployed</label>
-
-                                    <label for="employment-employed"><input type="radio" name="employment"
-                                                                            value="employment-employed"
-                                                                            id="employment-employed"
-                                                                            required=""><span></span>Employed</label>
-
-                                    <label for="employment-selfemployed"><input type="radio" name="employment"
-                                                                                value="employment-selfemployed"
-                                                                                id="employment-selfemployed"
-                                                                                required=""><span></span>Self-employed</label>
-
-                                    <label for="employment-pensioner"><input type="radio" name="employment"
-                                                                             value="employment-pensioner"
-                                                                             id="employment-pensioner"
-                                                                             required=""><span></span>Pensioner</label>
-
-                                    <label for="employment-undefined"><input type="radio" name="employment"
-                                                                             value="employment-undefined"
-                                                                             id="employment-undefined"
-                                                                             required=""><span></span>I prefer not to
-                                        say</label>
+                                   {% for employment_status in employment_status_options %}
+                                        <label><input type="radio"
+                                               name="employment_status"
+                                               {% if employment_status.0 == profile.employment_status %}
+                                                      checked="checked"
+                                               {% endif %}
+                                               value="{{ employment_status.0 }}">
+                                            <span></span>{{ employment_status.1 }}
+                                        </label>
+                                    {% endfor %}
                                 </div>
                             </fieldset>
 
@@ -238,6 +211,18 @@
                                         <div class="select-dropdown">
                                             <i class="icon icon-arrow-down"></i>
                                             {{ form.work_position }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="id_location" class="header-medium secondary">Work location</label>
+                                        <div class="select-dropdown">
+                                            <i class="icon icon-arrow-down"></i>
+                                            {{ form.work_location }}
                                         </div>
                                     </div>
                                 </div>

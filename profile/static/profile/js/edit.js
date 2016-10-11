@@ -22,8 +22,8 @@ $(function() {
     });
 
     //autocomplete cities
-    $('.work-city input, #id_location').attr('autocomplete', 'false')
-    $('.work-city input, #id_location').autocomplete({
+    $('#id_work_location, #id_location').attr('autocomplete', 'false')
+    $('#id_work_location, #id_location').autocomplete({
         source: function( request, response ) {
             var that = this;
             $.ajax({

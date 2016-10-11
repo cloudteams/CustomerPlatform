@@ -7,7 +7,14 @@ __author__ = 'dipap'
 
 
 class UserProfileForm(forms.ModelForm):
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('', 'I prefer not to say'),
+    )
+    gender = forms.RadioSelect(choices=GENDER_CHOICES)
     location = forms.CharField(required=False)
+
     # Influences
     influences = forms.MultipleChoiceField(choices=INFLUENCES, required=False)
 
@@ -18,6 +25,9 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ('user', 'has_been_saved',)
+        widgets = {
+            'employment_status': forms.widgets.RadioSelect,
+        }
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -33,6 +43,9 @@ class UserProfileForm(forms.ModelForm):
 
         if self.instance.user.location:
             self.initial['location'] = self.instance.user.location
+
+        if self.instance.user.gender:
+            self.initial['gender'] = self.instance.user.gender
 
         self.initial['influences'] = [influence.influence for influence in self.instance.user.influences.all()]
         self.initial['platforms'] = [platform_usages.platform for platform_usages in self.instance.user.platforms.all()]

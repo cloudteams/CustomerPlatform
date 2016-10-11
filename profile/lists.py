@@ -1,5 +1,20 @@
 __author__ = 'dipap'
 
+EDUCATION_LEVELS = (
+    ('Elementary', 'Elementary'),
+    ('Secondary', 'Secondary'),
+    ('Tertiary', 'Tertiary'),
+    ('I prefer not to say', 'I prefer not to say'),
+)
+
+EMPLOYMENT_STATUS_OPTIONS = (
+    ('Student', 'Student'),
+    ('Unemployed', 'Unemployed'),
+    ('Employed', 'Employed'),
+    ('Self-employed', 'Self-employed'),
+    ('Pensioner', 'Pensioner'),
+    ('I prefer not to say', 'I prefer not to say'),
+)
 
 BUSINESS_SECTORS = (
     ('', ''),
