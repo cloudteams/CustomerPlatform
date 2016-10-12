@@ -238,6 +238,10 @@ AUTHENTICATION_BACKENDS = (
 
 if PRODUCTION:
     ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr:8000'
+
+    # Secure cookies
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 else:
     ANONYMIZER_URL = 'http://localhost:8000'
 
