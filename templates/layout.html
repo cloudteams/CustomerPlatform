@@ -32,7 +32,7 @@
         {% endblock %}
 	</head>
 
-	<body>
+	<body class="{% block bodyclass %}{% endblock %}">
 		{% include "ct_projects/util/inline-notifications.html" %}
 
 		{% if light_menu %}

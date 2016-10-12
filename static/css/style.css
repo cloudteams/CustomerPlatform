@@ -269,7 +269,7 @@ section.dashboard-page > .container > .content > .row > aside .show-minimized {
 	text-align: right;
 }
 
-.task .time .date {
+body.activitytracker-page .task .time .date {
 	font-size: 18px;
 	margin-bottom: 5px;
 }
@@ -509,7 +509,7 @@ input[name='range-logger'] {
 
 }
 
-.underlined-link {
+body.activitytracker-page .underlined-link {
 	margin:10px 0;
 	top:17px;
 	position:relative;
@@ -521,7 +521,7 @@ input[name='range-logger'] {
 	padding-bottom:10px;
 }
 
-form {
+body.activitytracker-page form {
 	margin-bottom: 0;
 }
 
@@ -538,11 +538,11 @@ form {
 
 }
 
-.chosen-container.chosen-container-single {
+body.activitytracker-page .chosen-container.chosen-container-single {
 	width: 100% !important;
 }
 
-.modal-body .chosen-container.chosen-container-single a {
+body.activitytracker-page .modal-body .chosen-container.chosen-container-single a {
 	height: 46px;
 	font-size: 18px;
 	padding: 10px 16px;
@@ -579,7 +579,7 @@ form {
 	top: 20px
 }
 
-.info-box {
+body.activitytracker-page .info-box {
     display: block;
     min-height: 85px;
     background: #fff;
@@ -622,7 +622,7 @@ form {
 	margin-top:5px
 }
 
-.vertical-margin {
+body.activitytracker-page .vertical-margin {
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
@@ -636,7 +636,7 @@ form {
     padding: 8px 15px;
 }
 
-.btn.btn-at {
+body.activitytracker-page .btn.btn-at {
     width: auto !important;
 }
 
@@ -1233,42 +1233,42 @@ form {
  }
 
 
- .modal-body .chosen-container {
+ body.activitytracker-page .modal-body .chosen-container {
    width: 100% !important;
    padding: 0;
    margin-bottom: 2em;
  }
 
- .modal-body .chosen-container a.chosen-single {
+ body.activitytracker-page .modal-body .chosen-container a.chosen-single {
    background: white;
    height: 38px;
  }
 
- .modal-body .chosen-container a.chosen-single > *{
+ body.activitytracker-page .modal-body .chosen-container a.chosen-single > *{
    margin-top: 6px;
    color: #666 !important;
  }
 
- .modal-body .chosen-container .chosen-results li.group-result {
+ body.activitytracker-page .modal-body .chosen-container .chosen-results li.group-result {
     color: #222;
  }
 
- .modal-body .chosen-container .chosen-results li.group-option {
+ body.activitytracker-page .modal-body .chosen-container .chosen-results li.group-option {
     color: #555;
  }
 
- .modal-body .left-inner-addon > span.fa {
+ body.activitytracker-page .modal-body .left-inner-addon > span.fa {
      position: absolute;
      margin-top: 12px;
      margin-left: 15px;
  }
 
- .modal-body .left-inner-addon div.tokenfield {
+ body.activitytracker-page .modal-body .left-inner-addon div.tokenfield {
      padding-left: 40px;
      min-height: 0;
  }
 
- .btn-at {
+ body.activitytracker-page .btn-at {
    width: auto;
  }
 
@@ -1470,15 +1470,15 @@ form {
  	height:404px !important;
  }
 
- section.public-page {
+ body.activitytracker-page section.public-page {
    background: #f5f5f5;
  }
 
- section.public-page .container {
+ body.activitytracker-page section.public-page .container {
    padding: 0 30px;
  }
 
- section.public-page .container,
+ body.activitytracker-page section.public-page .container,
  .dashboardWrapper {
    background: white;
    border-radius: 5px;
@@ -1521,21 +1521,21 @@ form {
     font-size: 30px;
 }
 
-input:not(.input-search):hover,
-input:not(.input-search):focus,
-textarea:not(.input-search):hover,
-textarea:not(.input-search):focus,
-.tokenfield.focus {
+body.activitytracker-page input:not(.input-search):hover,
+body.activitytracker-page input:not(.input-search):focus,
+body.activitytracker-page textarea:not(.input-search):hover,
+body.activitytracker-page textarea:not(.input-search):focus,
+body.activitytracker-page .tokenfield.focus {
      border-color: #7d3c8c !important;
      box-shadow: none !important;
  }
 
-ul.breadcrumb li:hover a,
-ul.breadcrumb li a:hover {
+body.activitytracker-page  ul.breadcrumb li:hover a,
+body.activitytracker-page  ul.breadcrumb li a:hover {
     color: black !important;
 }
 
-.modal-body .chosen-container a.chosen-single > span {
+body.activitytracker-page .modal-body .chosen-container a.chosen-single > span {
     margin: -4px !important;
 }
 
