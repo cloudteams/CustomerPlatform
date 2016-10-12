@@ -1534,3 +1534,11 @@ ul.breadcrumb li:hover a,
 ul.breadcrumb li a:hover {
     color: black !important;
 }
+
+.modal-body .chosen-container a.chosen-single > span {
+    margin: -4px !important;
+}
+
+div.modal {
+    z-index: 1050;
+}
