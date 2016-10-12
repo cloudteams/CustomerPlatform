@@ -231,7 +231,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.youtube.YoutubeOAuth2',
     'social.backends.googlefit.GoogleFitOAuth2',
     'social.backends.gmail.GmailOAuth2',
-    'social.backends.fitbit.FitbitOAuth',
+    'social.backends.fitbit.FitbitOAuth1',
     'social.backends.foursquare.FoursquareOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
