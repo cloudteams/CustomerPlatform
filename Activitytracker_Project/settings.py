@@ -238,16 +238,6 @@ AUTHENTICATION_BACKENDS = (
 
 if PRODUCTION:
     ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr:8000'
-
-    # Force https
-    # Must be first middleware
-    MIDDLEWARE_CLASSES = (
-        'sslify.middleware.SSLifyMiddleware',
-    ) + MIDDLEWARE_CLASSES
-
-    # Secure cookies
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
 else:
     ANONYMIZER_URL = 'http://localhost:8000'
 
