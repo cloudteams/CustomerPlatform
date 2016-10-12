@@ -26,3 +26,6 @@ pygeocoder==1.2.5
 
 # Database
 psycopg2
+
+# https
+django-sslify==0.2.7
