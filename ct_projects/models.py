@@ -71,7 +71,7 @@ class Project(models.Model):
         :param user: A user account in the CloudTeams Customer platform
         :return: The (first) persona user in which the user belongs in the context of this project
         """
-        req = requests.get(ANONYMIZER_URL + '/persona-builder/api/find-user/?project=%d&user=%d' % (self.pk, user.pk))
+        req = requests.get(ANONYMIZER_URL + '/team-ideation-tools/api/find-user/?project=%d&user=%d' % (self.pk, user.pk))
         if req.status_code == 200:
             resp = json.loads(req.content)
             if 'persona' in resp:
@@ -86,7 +86,7 @@ class Project(models.Model):
         return '%s %s' % (u['first_name'], u['last_name'])
 
     def on_project_create(self):
-        requests.post(ANONYMIZER_URL + '/persona-builder/api/init-project/', data={'project': self.pk})
+        requests.post(ANONYMIZER_URL + '/team-ideation-tools/api/init-project/', data={'project': self.pk})
 
     @property
     def number_of_followers(self):
@@ -281,7 +281,7 @@ class Campaign(models.Model):
     def get_users(self):
         # get users to whom this item should be sent
         users = []
-        req = requests.get(ANONYMIZER_URL + '/persona-builder/api/campaign-users/?campaign=%d' % self.pk)
+        req = requests.get(ANONYMIZER_URL + '/team-ideation-tools/api/campaign-users/?campaign=%d' % self.pk)
         uids = json.loads(req.content)
         for uid in uids:
             try:
