@@ -1,0 +1,68 @@
+[  
+    {  
+        "fields":{  
+            "active":true,
+            "levels":"[\"1\"]",
+            "slogan":"Follow your first project!",
+            "name":"Newbie",
+            "rule":"PROJECT_FOLLOW"
+        },
+        "model":"gamification.badge",
+        "pk":1
+    },
+    {  
+        "fields":{  
+            "active":true,
+            "levels":"[\"3\"]",
+            "slogan":"Get synchronized!",
+            "name":"Connected",
+            "rule":"CONNECT_SERVICE"
+        },
+        "model":"gamification.badge",
+        "pk":2
+    },
+    {  
+        "fields":{  
+            "active":true,
+            "levels":"[\"5\", \"25\", \"50\", \"100\"]",
+            "slogan":"Bring them in!",
+            "name":"Promoter",
+            "rule":"INVITATION_ACCEPTED"
+        },
+        "model":"gamification.badge",
+        "pk":3
+    },
+    {  
+        "fields":{  
+            "active":true,
+            "levels":"[\"5\", \"25\", \"50\", \"100\"]",
+            "slogan":"Let\u2019s mix \u2018em!",
+            "name":"Mixologist",
+            "rule":"NUMBER_OF_PROJECTS_WITH_CONTRIBUTIONS"
+        },
+        "model":"gamification.badge",
+        "pk":4
+    },
+    {  
+        "fields":{  
+            "active":true,
+            "levels":"[\"1\", \"5\", \"25\", \"50\"]",
+            "slogan":"We are on air!",
+            "name":"Aviator",
+            "rule":"NUMBER_OF_PUBLIC_PROJECTS_WITH_CONTRIBUTIONS"
+        },
+        "model":"gamification.badge",
+        "pk":5
+    },
+    {  
+        "fields":{  
+            "active":true,
+            "levels":"[\"1\"]",
+            "slogan":"Go high-profiled!",
+            "name":"Fulfilled",
+            "rule":"PROFILE_COMPLETE"
+        },
+        "model":"gamification.badge",
+        "pk":6
+    }
+]
