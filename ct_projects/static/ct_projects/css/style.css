@@ -112,7 +112,7 @@ section.user-dashboard-projects-content {
 }
 
 .form-post-idea input[type="submit"] {
-    width: calc(100% - 115px);
+    width: calc(100% - 120px);
     border-radius: 5px 0 0 5px;
 }
 

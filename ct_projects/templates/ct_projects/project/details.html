@@ -138,7 +138,11 @@
                     <div class="content about">
                         <header>
                             <h2 class="header-large secondary">Customer ideas</h2>
-                            <div class="btn show-idea-form">Send idea</div>
+                            {% if request.user.is_authenticated %}
+                                <div class="btn show-idea-form">Send idea</div>
+                            {% else %}
+                                <a class="btn" href="{% url 'login' %}?next=/projects/{{ project.id }}/">Login to share an idea</a>
+                            {% endif %}
                             <form action="{% url 'post-idea' project.pk %}" method="POST" class="form-post-idea" style="display: none;">{% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6">
