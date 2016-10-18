@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load project_tags %}
 
-<article class="campaign campaign-poll public-campaign block-line-half col-lg-4 col-md-6 clear-3">
+<article class="campaign campaign-poll public-campaign block-line-half col-lg-4 col-md-6">
 	<div class="background">
 		<header class="article-header">
 			<h3 class="header-medium secondary">{{ poll.name }}</h3>
@@ -12,8 +12,12 @@
 				<div class="custom-tooltip">
 					<ul>
 						<li>
-							<a href="#nowhere">Participate</a>
-						</li>
+                            {% if request.user.is_authenticated %}
+                                <a href="{{poll|get_poll_token_link:request.user}}" target="_blank">Participate</a>
+                            {% else %}
+                                <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}">Participate</a>
+                            {% endif %}
+                        </li>
 					</ul>
 				</div>
 			</div>
@@ -21,20 +25,27 @@
 
 		<div class="content data">
 			{% if poll.description %}
-                {{poll.description}}
+                {{ poll.description|urlize }}
             {% else %}
                 No poll description
             {% endif %}
 		</div>
 
-		<footer>
-            {% if request.user.is_authenticated %}
-			    <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
-                   class="btn">Participate in this poll<</a>
-            {% else %}
-                <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
-                   class="btn">Participate in this poll<</a>
+
+        <footer {% if poll.campaign.has_expired %}class="empty"{% endif %}>
+            {% if not poll.campaign.has_expired %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        {% if request.user.is_authenticated %}
+                            <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
+                               class="btn">Participate in this poll</a>
+                        {% else %}
+                            <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
+                               class="btn">Participate in this poll</a>
+                        {% endif %}
+                    </div>
+                </div>
             {% endif %}
-		</footer>
+        </footer>
 	</div>
 </article>

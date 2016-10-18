@@ -124,9 +124,9 @@ section.user-dashboard-projects-content {
     width: calc(100% - 25px);
 }
 
-.campaign footer .btn {
-    /*width: calc(100% - 10px);
-    padding: 10px;*/
+.campaign footer.empty {
+    padding: 0;
+    border-bottom: none !important;
 }
 
 /* Polls & documents */
@@ -141,6 +141,10 @@ section.user-dashboard-projects-content {
 
 .campaign-poll .article-header {
     margin-bottom: 0 !important;
+}
+
+.campaign .content.data a {
+    word-wrap: break-word;
 }
 
 /* Terms and Conditions */
