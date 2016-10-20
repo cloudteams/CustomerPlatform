@@ -149,7 +149,7 @@ def on_project_delete(sender, instance, *args, **kwargs):
     with transaction.atomic():
         for follower in followers:
             Notification.objects.create(user=follower,
-                                        text='Project «%s» was unpublished from CloudTeams' % instance.title)
+                                        text='Project %s was unpublished from CloudTeams' % instance.title)
 
 
 class ProjectFollowing(models.Model):

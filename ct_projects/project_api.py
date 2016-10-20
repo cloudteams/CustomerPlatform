@@ -135,7 +135,7 @@ def set_poll_token_status(request, nonce, status):
         return JsonResponse({'error': 'token for this nonce was not found'}, status=404)
 
     # set the token status & return OK
-    poll_token.status = 'USED'
+    poll_token.status = status
     poll_token.save()
 
     return JsonResponse({}, status=200)
