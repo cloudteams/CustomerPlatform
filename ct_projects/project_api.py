@@ -122,8 +122,7 @@ def project(request, pk):
         return JsonResponse({'error': 'Method %s not allowed on project' % request.method}, status=403)
 
 
-@csrf_exempt
-def update_poll_token(request, nonce):
+def set_poll_token_status(request, nonce, status):
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method is allowed'}, status=400)
 
@@ -135,11 +134,21 @@ def update_poll_token(request, nonce):
     except PollToken.DoesNotExist:
         return JsonResponse({'error': 'token for this nonce was not found'}, status=404)
 
-    # update the token & return OK
+    # set the token status & return OK
     poll_token.status = 'USED'
     poll_token.save()
 
     return JsonResponse({}, status=200)
+
+
+@csrf_exempt
+def update_poll_token(request, nonce):
+    return set_poll_token_status(request, nonce, 'USED')
+
+
+@csrf_exempt
+def mark_token_as_completed(request, nonce):
+    return set_poll_token_status(request, nonce, 'DONE')
 
 
 @csrf_exempt
