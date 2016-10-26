@@ -12,12 +12,12 @@
         {% endif %}
 
 		<header>
-            <a href="{{ project.get_absolute_url }}">
-			    <h3 class="header-medium secondary">{{ project.title }}</h3>
+            <a href="{% url 'project-details' project.pk %}">
+			    <h3 class="header-medium secondary" title="{{ project.title }}">{{ project.title }} <span class="fadeout"></span></h3>
             </a>
 
 			<div class="tooltip-container">
-				<a href="#nowhere" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
+				<a href="#" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
 				<div class="custom-tooltip">
 					<ul>
 						<li>
