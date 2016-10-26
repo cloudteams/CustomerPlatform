@@ -11,5 +11,5 @@
                     </form>
                 {% endwith %}
             {% else %}
-                <a href="/activitytracker/login/?next={% url 'project-details' project.pk %}" class="btn btn-success follow-button">Follow</a>
+                <a href="/activitytracker/login/?next={% url 'project-details' project.pk %}" class="btn {% if link_style %}btn-link{% else %}btn-success follow-button{% endif %}">Follow</a>
             {% endif %}
