@@ -23,7 +23,11 @@
 						<li>
 							<a href="{% url 'project-details' project.pk %}">More about this</a>
 						</li>
-						<li><a href="#nowhere">Follow project</a></li>
+						<li>
+                            {% with link_style=True %}
+                                {% include 'ct_projects/project/follow-form.html' %}
+                            {% endwith %}
+                        </li>
 					</ul>
 				</div>
 			</div>

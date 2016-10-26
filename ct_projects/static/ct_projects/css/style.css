@@ -184,6 +184,15 @@ a.notification-link {
     width: 100%;
 }
 
+.btn.btn-link {
+    margin: 0;
+    padding: 0;
+    text-transform: none;
+    font-weight: 300;
+    border: none !important;
+    background: none !important;
+}
+
 /* Fixed #209 */
 .form-post-idea.form-full input[type="submit"] {
     width: calc(100% - 195px);
