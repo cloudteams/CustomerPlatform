@@ -73,8 +73,8 @@
                         {% for document in campaign.documents.all %}
                             <a href="{% if request.user.is_authenticated %}{{ document.link }}{% else %}/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}{% endif %}"
                                target="_blank"
-                               class="btn col-xs-12"
-                               title="View document {{ document.name }}">View document {{ document.name }}</a>
+                               class="btn col-xs-12" style="padding: 10px;"
+                               title="View document {{ document.name }}"><i class="icon icon-document"></i> {{ document.name }}</a>
                         {% endfor %}
                     {% endif %}
                 </div>
