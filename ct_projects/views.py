@@ -33,7 +33,7 @@ def list_projects(request):
         order = 'latest'
         qs = qs.order_by('-created')
 
-    pages = Paginator(qs, 10)
+    pages = Paginator(qs, 12)
 
     context = {
         'n_of_projects': Project.objects.all().count(),
