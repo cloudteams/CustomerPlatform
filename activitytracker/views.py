@@ -2939,7 +2939,6 @@ def delete_account(request):
     if request.method == 'POST':
 
         # delete user and profile
-        request.user.profile.delete()
         request.user.delete()
 
         return redirect('/')
