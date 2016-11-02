@@ -63,7 +63,7 @@
 								<div class="middle">
 									{% if request.user.is_authenticated %}
 										<i class="icon icon-user"></i>
-										<a href="/profile/">{{ request.user.username }}</a>
+										<a href="/profile/">{{ request.user.profile.get_display_name }}</a>
 
 										<i class="fa fa-angle-down"></i>
 									{% else %}

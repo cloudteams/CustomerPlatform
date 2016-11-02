@@ -220,7 +220,10 @@ def rate_idea(request, project_pk, pk):
 
     if request.method == 'POST':
         if idea.ratings.filter(user=request.user):
-            return HttpResponseForbidden('You can not rate more than once')
+            # unlike
+            idea.ratings.filter(user=request.user).delete()
+
+            return redirect(reverse('project-details', args=(idea.project.pk,)) + '?tab=ideas')
 
         # save the rating
         form = IdeaRatingForm(request.POST)

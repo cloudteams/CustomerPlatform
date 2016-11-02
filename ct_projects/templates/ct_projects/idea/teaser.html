@@ -14,7 +14,12 @@
 
 				<span class="pull-right" style="color: rgba(0, 0, 0, 0.5); font-size: 80%;">
 					{% with author=idea.user %}
-						Posted by {{ idea.project|get_anonymized_username:author }}
+						Posted by
+                        {% if author == request.user %}
+                            {{ request.user.profile.get_display_name }}
+                        {% else %}
+                            {{ idea.project|get_anonymized_username:author }}
+                        {% endif %}
 					{% endwith %}
 				</span>
 			</h3>
@@ -55,10 +60,12 @@
                 <input type="number" name="value" value="1" class="hidden" />
                 <input type="submit" class="hidden" value="Submit rating" />
 
-                <p class="like-button {% if idea|is_liked_by:request.user %}active{% endif %}">
-                    <button type="submit"><i class="icon icon-like-fill"></i>
-                    Like</button>
-                </p>
+                {% with is_liked=idea|is_liked_by:request.user %}
+                    <p class="like-button {% if is_liked %}active{% endif %}">
+                        <button type="submit" {% if is_liked %}Click to unlike idea{% else %}Click to like idea{% endif %}><i class="icon icon-like-fill"></i>
+                        Like{% if idea|is_liked_by:request.user %}d{% endif %}</button>
+                    </p>
+                {% endwith %}
             </form>
 		</div>
 	</div>
