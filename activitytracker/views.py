@@ -2936,13 +2936,14 @@ def routineSettings(request, setting='show'):
 
 @login_required
 def delete_account(request):
-    # Delete the account of the signed in user
-    if request.method == 'GET':
-        # confirmation page
-        return render(request, 'activitytracker/delete-account.html')
-    elif request.method == 'POST':
+    if request.method == 'POST':
+
+        # delete user and profile
+        request.user.profile.delete()
         request.user.delete()
+
         return redirect('/')
+
 
 def updateallroutinecharts(request):
 

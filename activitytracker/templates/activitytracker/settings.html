@@ -47,9 +47,37 @@
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-4 col-xs-12 vertical-margin text-center alert-success hidden" id="success-msg"></div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="pull-right" style="margin: 60px 0;">
+                        <em>Click <a href="#" data-toggle="modal" data-id="delete-account-popup">here</a> if you want to delete your CloudTeams account.</em>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div class="modal modal-default hide" id="delete-account-popup">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Delete your CloudTeams Account</h3>
+        </div>
+        <div class="modal-body">
+            <p>If you delete your CloudTeams account, all of your data such as profile information, project preferences
+                and external activities will be deleted. <em>This action can not be reverted.</em></p>
+            <p>Please note that content you have provided to teams such as customer ideas you may have posted or
+                questionnaires you have responded can not be withdrawn.</p>
+            <p>Type <b>DELETE</b> in the box below and click the OK button to delete your account:</p>
+
+            <form class="delete-account-form" action="/activitytracker/account/delete/" method="POST">
+                {% csrf_token %}
+
+                <input type="text" name="delete_confirm" id="id_delete_confirm" value="" required="required" placeholder="Type DELETE to condirm"/>
+                <button type="submit" class="btn btn-transparent pull-right" style="margin: 20px 0"><i class="fa fa-trash-o"></i> <span>OK</span></button>
+            </form>
+
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -60,4 +88,5 @@
     <script src="{% static 'activitytracker/js/bootstrap-slider.js' %}"></script>
     <script src="{% static 'activitytracker/js/custom.js' %}"></script>
     <script src="{% static 'activitytracker/js/settings.js' %}"></script>
+    <script src="{% static 'activitytracker/js/delete-account.js' %}"></script>
 {% endblock %}
