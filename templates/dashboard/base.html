@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load profile_tags %}
 {% block class_public_page %}{% endblock %}
+{% block footer_class %}footer-dashboard-user{% endblock %}
 
 {% with profile=profile|default:request.user.profile profile_edit=profile_edit|default:False %}
     {% with incomplete_profile=profile|is_profile_incomplete %}

@@ -1,3 +1,6 @@
+/* Footer class */
+$('#footer').attr('class', $('#footer_class').text());
+
 $(function() {
     /* Dashboard folding back */
     $('.minimize-toggle').click(function() {
