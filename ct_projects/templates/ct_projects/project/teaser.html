@@ -4,7 +4,7 @@
 <article class="project public-project {% if not two_columns %}col-lg-4{% endif %} col-md-6 col-xs-12 block-line-half">
 	<div class="background">
         {% if project.logo %}
-            <a href="{{ project.get_absolute_url }}">
+            <a href="{% url 'project-details' project.pk %}">
                 <div class="background-image" style="background-image: url({{ project.logo }});">
                     <i class="icon icon-square"></i>
                 </div>
