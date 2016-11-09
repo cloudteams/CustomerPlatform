@@ -64,6 +64,9 @@ INSTALLED_APPS = (
 
     # Gamification app
     'gamification',
+
+    # cookies
+    'cookielaw',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -244,4 +247,3 @@ if PRODUCTION:
     CSRF_COOKIE_SECURE = True
 else:
     ANONYMIZER_URL = 'http://localhost:8000'
-

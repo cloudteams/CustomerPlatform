@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load url from future %}
 {% load compress %}
+{% load cookielaw_tags %}
 
 <!doctype html>
 <html lang="en">
@@ -25,7 +26,7 @@
 			<link href="{% static 'bower_components/chosen/chosen.min.css' %}?v=20161011.1" rel="stylesheet">
 			<link href="{% static 'activitytracker/css/romanos.css' %}?v=20161011.1" rel="stylesheet">
 			<link href="{% static 'gamification/css/style.css' %}?v=20161011.1" rel="stylesheet">
-			<link href="{% static 'css/style.css' %}?v=20161102.1" rel="stylesheet">
+			<link href="{% static 'css/style.css' %}?v=20161109.1" rel="stylesheet">
 		{% endcompress %}
 		<link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.css" />
 		{% block css %}
@@ -33,6 +34,8 @@
 	</head>
 
 	<body class="{% block bodyclass %}{% endblock %}">
+        {% cookielaw_banner %}
+
 		{% include "ct_projects/util/inline-notifications.html" %}
 
 		{% if light_menu %}
@@ -79,6 +82,7 @@
         {% endcompress %}
 
 			<script src="{% static 'js/jquery.noty.min.js' %}"></script>
+            <script src="{% static "cookielaw/js/cookielaw.js" %}"></script>
 			<script>
 			  	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			  	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

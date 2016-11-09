@@ -1555,3 +1555,26 @@ body.activitytracker-page .modal-body .chosen-container a.chosen-single > span {
 div.modal {
     z-index: 1050;
 }
+
+/* Cookie law */
+
+#CookielawBanner {
+	background: #411f48;
+    color: white;
+    padding: 10px;
+}
+
+#CookielawBanner h6 {
+	text-align: center;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+#CookielawBanner a.btn {
+	margin-left: 20px;
+}
+
+#CookielawBanner p {
+	text-align: justify;
+	font-size: 14px;
+}
