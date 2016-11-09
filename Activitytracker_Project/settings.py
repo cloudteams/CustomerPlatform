@@ -21,9 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
@@ -33,6 +30,9 @@ SECRET_KEY = 'o2gyhpz9aodq95f#*=jj#(sb@0c&ss&07+8-p3k&97mhqcx349'
 # Check if we're on development or production
 # Not the same as DEBUG since right now we're on DEBUG=True on production as well
 PRODUCTION = os.path.isfile(os.path.join(BASE_DIR, 'production.txt'))
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = not PRODUCTION
 
 # Application definition
 
@@ -139,9 +139,10 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'activitytracker/static'
-#STATIC_ROOT = '/home/user/aggelos/final/activity-tracker/activitytracker/static/'
-
+if PRODUCTION:
+    STATIC_ROOT = 'staticfiles/'
+else:
+    STATIC_ROOT = 'activitytracker/static'
 
 # Files uploaded by users (e.g avatars)
 MEDIA_ROOT = 'media'
@@ -242,6 +243,9 @@ AUTHENTICATION_BACKENDS = (
 if PRODUCTION:
     ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr'
 
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+	
     # Secure cookies
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
