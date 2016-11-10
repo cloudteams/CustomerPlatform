@@ -84,15 +84,27 @@
                 url: BASE_URL + 'activity/add/',
                 dataType: "json",
                 error: function (xhr, status, error) {
+                    $('.addactivity-error').remove();
+                    
+                    var msg = xhr.responseText;
+                    var $error = $("<div class='col-xs-12 margin-bottom-4 text-center addactivity-error' style='color:#7d3c8c; '>" + msg + "</div>");
+
+                    var $fieldId = $([]);
+                    if ( (msg.indexOf('sooner')  > -1) || (msg.indexOf('date and time') > -1) ) {
+                        $fieldId = $('#end_time');
+                    } else if ( msg.indexOf('activity') > -1 ) {
+                        $fieldId = $('#name_of_activity');
+                    }
+
                     Done();
-                 $('#end_time').parent().after("<div class='col-xs-12 margin-bottom-4 text-center' id='date-error' style='color:#7d3c8c; '>Activity can\'t end sooner than it began!</div>")
+                    $fieldId.parent().after( $error );
                 },
                 success: function (data) {
                     $('#main_calendar').fullCalendar('refetchEvents'); // re-render events
                     var viewInstance = $('#main_calendar').fullCalendar('getView');
                     RenderViewActivities(viewInstance); // redraws activities based on view
                     $('#addActivityModal').modal('hide');
-                    $('#date-error').remove();
+                    $('.addactivity-error').remove();
                     Done();
                     document.getElementById("addForm").reset();
                     $('#name_of_activity').val('').trigger('chosen:updated');

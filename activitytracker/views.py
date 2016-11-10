@@ -580,16 +580,18 @@ def getgroupedactivities(request):
 # Gets called each time an activity is added
 def addactivity(request):
 
-    FIELD_ERROR = 'Please fill up at least date and time fields correctly'
-    DATE_ERROR = 'Activity cant end sooner than it began'
-
+    DATE_FILL_ERROR = 'Please fill up date and time fields correctly'
+    ACTIVITY_FILL_ERROR = 'You must select an activity'
+    DATE_ERROR = 'Activity can\'t end sooner than it began'
+    print request.POST
     if '' in (request.POST['start_date'],
               request.POST['end_date'],
               request.POST['start_time'],
               request.POST['end_time'],
-              request.POST['name_of_activity']
               ):
-        return HttpResponseBadRequest(FIELD_ERROR)
+        return HttpResponseBadRequest(DATE_FILL_ERROR)
+    if not request.POST['name_of_activity']:
+        return HttpResponseBadRequest(ACTIVITY_FILL_ERROR)
 
     user = request.user
     activity = Activity.objects.get(activity_name=request.POST['name_of_activity'])

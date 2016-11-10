@@ -35,7 +35,7 @@
 					type: "post",
 					data: {csrfmiddlewaretoken: getCookie('csrftoken')},
 					cache: false,
-					url: '/disconnect/' + provider,
+					url: '/disconnect/' + provider + '/',
 					dataType: "text",
 					error: function (xhr, status, error) {
 						alert("Couldn't disconnect, try again")
