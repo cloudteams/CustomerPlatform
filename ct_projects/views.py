@@ -259,3 +259,7 @@ def request_poll_token(request, project_pk, pk):
 # Project generic views
 def terms_and_conditions(request):
     return render(request, 'ct_projects/generic/terms-and-conditions.html')
+
+
+def privacy_policy(request):
+    return render(request, 'ct_projects/generic/privacy-policy.html')

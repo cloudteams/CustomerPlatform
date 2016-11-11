@@ -1,0 +1,160 @@
+{% extends "ct_projects/base.html" %}
+{% load url from future %}
+{% load project_tags %}
+{% load staticfiles %}
+{% block title %}Privacy Policy{% endblock %}
+{% block wrapper %}{% endblock %}
+
+{% block content %}
+    <style>
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 1.75em;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: #777;
+        }
+
+        main ul {
+            margin-bottom: 10px;
+            padding-left: 30px;
+        }
+
+        main ul > li {
+            color: #333;
+            list-style: circle;
+        }
+    </style>
+
+    <main>
+        <section>
+            <div class="container">
+                <h1>Privacy Policy</h1>
+
+                <h2>Gathering of Personally-Identifying Information</h2>
+                <p>Certain visitors to CloudTeams website choose to interact with CloudTeams in ways that require CloudTeams to gather personally-identifying information.
+                    The amount and type of information that CloudTeams gathers depends on the nature of the interaction.
+                    For example, we ask visitors who sign up for an account on http://cloudteams.eu to provide a username and email address.
+                    In each case, CloudTeams collects such information only insofar as is necessary or appropriate to fulfill the purpose of the visitor's interaction with CloudTeams.
+                    CloudTeams does not disclose personally-identifying information other than as described below.
+                    Visitors can always refuse to supply personally-identifying information,
+                    with the caveat that it may prevent them from engaging in certain website-related activities, and no change in the platform operation and service experience.</p>
+
+                <h2>Connected Sources</h2>
+                <p>Your CloudTeams profile is enriched by the services you connect to it. The CloudTeams service offers various  integrations and is constantly adding more.
+                    The more services you connect, the more data we can have about you and the richer your profile page will be,
+                    as well as the recommendations for specific projects are expected to be more accurate.</p>
+                <p>Each type of account has different content and various amounts of personally-identifiable information,
+                    so you may be comfortable with connecting some and not others, upon your preferences.</p>
+                <p>We don’t read the content of the data we collect; we collect only what you see in your application,
+                    and you may find your media content only if you follow the link to the external resource.
+                    For example, we don’t collect, nor do we analyse the text from your Facebook status and Tweets, or your Instagram photos, and we store only the reference (URL) to this content;
+                    if you remove the content from the relevant platform, it is not anymore available to CloudTeams.</p>
+                <p>We use the authorization from your accounts only to read the information we need,
+                    which is described to you together with the purpose of its collection prior to confirming the connection,
+                    and never to write or modify your data in any way. In most cases, we only ask for read-only access,
+                    unless that is not an available option.</p>
+                <p>We load data once when your account is first connected, and then periodically to keep your account up to date.
+                    When you disconnect an account, we also delete all of the associated data that was imported from that specific account.</p>
+                <p>The following is a list of the services we integrate with and the data that can come from it:</p>
+
+                <h3>FACEBOOK</h3>
+                <p>We load the metadata of your uploaded videos, photos and posts, with reference to the real content.</p>
+                <h3>FITBIT</h3>
+                <p>We load your count of daily steps, and how far you ran, walked or climbed stairs.</p>
+                <h3>FOURSQUARE</h3>
+                <p>We load a list of the places you've been to. From Foursquare, these consist of checkins at a point in time.
+                    These can contain latitude/longitude coordinates and addresses of locations.</p>
+                <h3>INSTAGRAM</h3>
+                <p>We connect to Instagram and load metadata and links of all of the photos and videos you have posted.
+                    We don’t store the media content, we refer to it only through a link to Instagram.</p>
+                <h3>RUNKEEPER</h3>
+                <p>Runs, swims, walks, biking and other types of physical activity.
+                    The details we get include the start time, duration, pace, calories, etc.
+                    If available, we also load the latitude/longitude coordinates to plot it on a map.</p>
+                <h3>TWITTER</h3>
+                <p>We connect to Twitter to load metadata and URLs to your latest tweets, retweets,
+                    favorites, your image uploads, as well as the interactions towards your content.</p>
+                <h3>YOUTUBE</h3>
+                <p>We connect to YouTube and get the views, likes and uploads on videos.
+                    No media is stored, only a link to the real content in YouTube.</p>
+
+                <h2>Who can see your content?</h2>
+                <p>By default, your account is set to private and you are the only one who can see your profile.
+                    There is one visibility option: Only Private. There are no social connections on CloudTeams</p>
+                <p>In case you choose to reveal your profile to a Software Team, the team’s members will be able to see a screen with your profile photo, name, surname, year of birth and gender.
+                    This information will be solely visible to that specific Software Team.</p>
+                <p>Your profile data are anonymised and then aggregated and grouped with the data of other users,
+                    to generate the called “personas” in CloudTeams and help software teams develop better software.
+                    Thus, no direct exposure of your data or your profile is possible. When your profile matches the search terms of a Software Team,
+                    an anonymized profile is revealed, with a nickname and a range of values, not directly presenting the exact values of your profile.
+                    If the Software Team decides to run a campaign for the selected persona, you might get an invitation, as well as all the other profiles that are under a persona.
+                    The fake persona that includes your profile will not be shown to the Software Team  if there is not an adequate number of others user corresponding to similar research  terms,
+                    in order to protect you from revealing your identity as a consequence of being the sole entity in that persona</p>
+                <p>We only use your data to power your profile page, and will never share or sell your details to any 3<sup>rd</sup> parties.</p>
+
+                <h2>Aggregated Statistics</h2>
+                <p>CloudTeams may collect statistics about the behavior of visitors to its websites.
+                    CloudTeams may display this information publicly or provide it to others.
+                    However, CloudTeams does not disclose personally-identifying information other than as described below.</p>
+                <p>Cookies are used to improve your experience through the CloudTeams platform, and do not track your activity outside CloudTeams.
+                    You also need to agree on the relative Cookies Policy the first time you visit the platform.</p>
+
+                <h2>Protection of Certain Personally-Identifying Information</h2>
+                <p>CloudTeams discloses potentially personally-identifying and personally-identifying information only to those of its employees,
+                    contractors and affiliated organizations that (i) need to know that information in order to process
+                    it on CloudTeams's behalf or to provide services available at CloudTeams's websites, and (ii) that have agreed not to disclose it to others.
+                    Some of those employees, contractors and affiliated organizations may be located outside of your home country; by using CloudTeams's websites,
+                    you consent to the transfer of such information to them. CloudTeams will not rent or sell potentially personally-identifying and personally-identifying information to anyone.
+                    Other than to its employees, contractors and affiliated organizations, as described above,
+                    CloudTeams discloses potentially personally-identifying and personally-identifying information only when required to do so by law,
+                    or when CloudTeams believes in good faith that disclosure is reasonably necessary to protect the property or rights of CloudTeams,
+                    third parties or the public at large. If you are a registered user of a CloudTeams website and have supplied your email address,
+                    CloudTeams may occasionally send you an email to tell you about new features, solicit your feedback, or just keep you up to date with what's going on with CloudTeams and our products.
+                    We primarily use our various product blogs to communicate this type of information, so we expect to keep this type of email to a minimum.
+                    If you send us a request (for example via a support email or via one of our feedback mechanisms),
+                    we reserve the right to publish it in order to help us clarify or respond to your request or to help us support other users,
+                    without however disclosing any personal information about you. CloudTeams takes all measures reasonably necessary to protect against the unauthorized access,
+                    use, alteration or destruction of potentially personally-identifying and personally-identifying information.
+                    CloudTeams may process your personal data to increase accuracy on project recommendations.
+                    The outcome of this process will not be available to any third-party entity.</p>
+
+                <h2>Internet Protocol (IP) Address, WAN Data and Cookie processing</h2>
+                <p>No data of IP Addresses, WAN data and cookies will be processed by the CloudTeams service.
+                    Any such data unavoidably recognized for technical reasons will be deleted as soon as possible.</p>
+
+                <h2>Ads</h2>
+                <p>No Ads apply to the CloudTeams platform.
+                    Projects hosted on the platform may, however, be promoted to potential contributors as “editors’ choice” or “trending” without any fee during the project period.</p>
+
+                <h2>Privacy Policy Changes</h2>
+                <p>Although most changes are likely to be minor, CloudTeams may change its Privacy Policy from time to time, and in CloudTeams's sole discretion, after acceptance by the consortium,
+                    the EAB and the responsible national agencies. CloudTeams will inform users for any such change, asking for their acceptance, in order to continue using of the platform.
+                    User’s that have not accepted the revised policies will be put into a “frozen” state, meaning that their data will not be shared anymore until they decide to accept or reject the new policies.
+                    Rejecting them, would mean that user’s data will be treated using the previous policy, while users will also be able to choose to delete their account and remove their data from the platform.</p>
+
+                <h2>Leaving the service</h2>
+                <p>Any time you decide to leave the service, you can delete your account and remove all your related data from the platform.
+                    Your data will be lost forever and cannot be retrieved by any means,
+                    while it may be impossible to retrieve your previous username if you decide to return to the platform.</p>
+                <p>Nevertheless, the information that you provided to Software Teams through interactions will not be removed, e.g. the reports the generated based on the persona you applied,
+                    or the questionnaires you answered, as those activities have been concluded,
+                    you have been rewarded for taking them, and such an approach would break the functionality of the service.</p>
+
+                <h2>Contact us</h2>
+                <p>If you wish to obtain information on your personal data, or want us to correct or erase such data,
+                    or if you have any other questions concerning the use of personal data held by us,
+                    please contact the <b>CloudTeams Data Protection Officer</b> via e-mail:
+
+                <p style="text-align: center;"><a href="mailto:cloudteams-privacy@fit.fraunhofer.de">cloudteams-privacy(at)fit.fraunhofer.de</a></p>
+            </div>
+        </section>
+    </main>
+{% endblock %}

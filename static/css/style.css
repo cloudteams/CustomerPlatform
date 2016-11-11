@@ -1578,3 +1578,21 @@ div.modal {
 	text-align: justify;
 	font-size: 14px;
 }
+
+/* BETA mark */
+.beta {
+    position: absolute;
+    left: 170px;
+    top: 49px;
+    color: #f3cff3;
+    font-size: 8.25px;
+    font-weight: 600;
+    letter-spacing: 0.3rem;
+}
+
+.beta.beta-dark {
+	color: #777;
+    top: 60px;
+    font-size: 9.5px;
+    left: 155px;
+}

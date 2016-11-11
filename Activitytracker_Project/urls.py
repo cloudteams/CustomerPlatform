@@ -23,8 +23,9 @@ urlpatterns = [
     # gamification
     url(r'^gamification/', include('gamification.urls')),
 
-    # cloudteams terms & conditions
+    # terms & conditions and privacy policy
     url(r'^terms-and-conditions/$', ct_projects.views.terms_and_conditions, name='terms-and-conditions'),
+    url(r'^privacy-policy/$', ct_projects.views.privacy_policy, name='privacy-policy'),
 
     # home page redirect
     url(r'^$', RedirectView.as_view(url='projects/', permanent=True)),
