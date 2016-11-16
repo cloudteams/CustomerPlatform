@@ -35,7 +35,7 @@ from FacebookActivityClass import FacebookActivity
 from datetime import datetime
 from django.db.models import Q
 
-from profile.models import PlatformInvitation
+from profile.models import PlatformInvitation, TeamInvitation
 
 colourDict = {'black': "rgba(1, 1, 1, 0.8)",
               'blue': "#578EBE",
@@ -138,6 +138,17 @@ def register(request):
         if 'ref_id' in request.GET:
             try:
                 invitation = PlatformInvitation.objects.get(pk=int(request.GET.get('ref_id')))
+
+                ctx['email'] = invitation.email
+                ctx['username'] = invitation.email.split('@')[0]
+            except PlatformInvitation.DoesNotExist:
+                pass
+            except ValueError:
+                pass
+        # auto-complete invitation registrations
+        elif 'team_ref_id' in request.GET:
+            try:
+                invitation = TeamInvitation.objects.get(pk=int(request.GET.get('team_ref_id')))
 
                 ctx['email'] = invitation.email
                 ctx['username'] = invitation.email.split('@')[0]
