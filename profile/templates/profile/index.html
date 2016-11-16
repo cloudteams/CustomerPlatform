@@ -65,7 +65,7 @@
                     </div>
                 </header>
 
-                <form action="." class="create-profile-form" method="POST" enctype="multipart/form-data">
+                <form action="/profile/edit/" class="create-profile-form" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <section id="subpage-1" class="subpage active">
@@ -328,6 +328,12 @@
                             {% include "profile/brand-opinion/feedback.html" %}
                         </div>
                     </section>
+
+                    <div class="row" style="padding: 20px 10px;">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-transparent pull-right"><i class="fa fa-save"></i> Save</button>
+                        </div>
+                    </div>
                 </form>
             </article>
 

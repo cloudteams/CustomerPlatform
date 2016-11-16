@@ -95,10 +95,10 @@ def start_wizard(request):
             profile.user.location = form.cleaned_data['location']
             profile.user.save()
 
-            return redirect(reverse('start-profile-wizard'))
+            return redirect('/profile/')
 
     params['form'] = form
-    return render(request, 'profile/edit.html', params)
+    return HttpResponse('Some error occurred', status=400)
 
 
 @login_required
