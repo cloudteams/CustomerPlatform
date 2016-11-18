@@ -53,7 +53,7 @@
 				</li>
 
 				<li>
-					<a href="{% url 'notifications' %}" {% if request.user.unread_notifications %}class="incoming"{% endif %}>
+					<a href="{% url 'notifications' %}" {% if request.user.unread_notifications and not request.path == '/profile/notifications/' %}class="incoming"{% endif %}>
 						<i class="icon icon-notification"></i>
 						<span>Notifications</span>
 					</a>
