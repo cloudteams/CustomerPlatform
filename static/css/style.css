@@ -107,6 +107,11 @@ h1 {
 	color: #b7b7b7;
 }
 
+.profile-picture .img-circle {
+	background-size: cover;
+    background-position: center;
+}
+
 /* Hotfix - settings */
 .connected-app img {
     width: 100px;
