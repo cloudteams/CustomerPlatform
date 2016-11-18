@@ -1,8 +1,8 @@
 {% load staticfiles %}
 {% load humanize %}
 
-{% with c=notification.campaign %}
-	<a href="{{ notification.url }}" class="notification-link" {% if c %}target="_blank"{% endif %}>
+{% with c=notification.campaign link=notification.url %}
+	{% if link %}<a href="link" {% if c %}target="_blank"{% endif %} {% else  %}<div {% endif %}class="notification-link">
 		<article class="notification">
 			<div class="vertical-align">
 				<div class="middle">
@@ -20,9 +20,12 @@
 					{% if c %}
 						<p class="meta thin inline-block">{{ c.expires|naturaltime }}</p>
 					{% endif %}
-					<i class="fa fa-external-link fa-2x pull-right"></i>
+
+                    {% if link %}
+					    <i class="fa fa-external-link fa-2x pull-right"></i>
+                    {% endif %}
 				</div>
 			</div>
 		</article>
-	</a>
+	{% if link %}</a>{% else %}</div>{% endif %}
 {% endwith %}

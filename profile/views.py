@@ -31,10 +31,7 @@ def view_my_profile(request):
         'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
     }
 
-    if profile.has_been_saved:  # proceed to details page
-        return render(request, 'profile/index.html', params)
-    else:
-        return redirect(reverse('start-profile-wizard'))
+    return render(request, 'profile/index.html', params)
 
 
 @login_required

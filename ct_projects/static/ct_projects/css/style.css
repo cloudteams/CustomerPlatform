@@ -157,7 +157,8 @@ section.user-dashboard-projects-content {
 }
 
 /* Notifications */
-a.notification-link {
+a.notification-link,
+div.notification-link {
     margin-bottom: 20px;
     display: block;
     color: #424242;
