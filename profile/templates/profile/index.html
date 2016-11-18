@@ -85,7 +85,7 @@
                                     <div class="col-sm-6">
                                         <div class="input-container">
                                             <i class="icon icon-edit"></i>
-                                            <input id="id-first_name" type="text" name="first_name" value="{{ profile.first_name }}"
+                                            <input id="id-first_name" type="text" name="first_name" value="{{ profile.first_name|default:"" }}"
                                                    placeholder="First name">
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@
                                     <div class="col-sm-6">
                                         <div class="input-container">
                                             <i class="icon icon-edit"></i>
-                                            <input id="id-last_name_initial" type="text" name="last_name_initial" value="{{ profile.last_name_initial }}"
+                                            <input id="id-last_name_initial" type="text" name="last_name_initial" value="{{ profile.last_name_initial|default:"" }}"
                                                    placeholder="Last name">
                                         </div>
                                     </div>
