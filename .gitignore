@@ -8,14 +8,13 @@
 
 config.py
 
-# Bower Components
-activitytracker/static/bower_components
-
 # CACHED CSS/JS
 static/CACHE
 
 # user avatars
 avatars/*
+activitytracker/static/*
+media/avatars/*
 
 # passwords
 passwords.py
