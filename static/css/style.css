@@ -26,6 +26,10 @@ main a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
     color: #38173f;
 }
 
+body > header .global-nav .container > ul li ul.submenu {
+	width: 250px;
+}
+
 section.public-page {
     min-height: calc(100vh - 520px);
 }
