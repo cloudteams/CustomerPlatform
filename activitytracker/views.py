@@ -208,7 +208,7 @@ def register(request):
     email = DEFAULT_FROM_EMAIL
     mail_title = "CloudTeams account verification"
     recipient = [user.email.encode('utf8')]
-    mail_message = 'Hello user %s. In order to verify your account click the following link: %s' \
+    mail_message = 'Hello %s. In order to verify your account click the following link: %s' \
                    % (user.get_username(), verification_url)
 
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
@@ -255,7 +255,7 @@ def passwordforget(request):
     email = DEFAULT_FROM_EMAIL
     mail_title = "CloudTeams password reset"
     recipient = [user.email.encode('utf8')]
-    mail_message = 'Hello user %s. You have recently requested a password reset. Please follow this link in order to ' \
+    mail_message = 'Hello %s. You have recently requested a password reset. Please follow this link in order to ' \
                    'start the process: %s' % (user.get_username(), passwordforget_url)
 
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
