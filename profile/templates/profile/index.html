@@ -22,10 +22,10 @@
         <header class="information">
             <div class="row vertical-align" style="margin: 20px 0;">
                 <div class="profile-picture col-xs-4 middle">
-                    <div class="img-circle" style="background-image: url({{ profile.avatar }})"></div>
+                    <div class="img-circle" style="background-image: url({{ profile.avatar }}); {% if profile.avatar %}height: 200px;{% endif %}"></div>
                 </div>
 
-                <div class="information col-xs-8 middle">
+                <div class="information col-xs-8 middle" {% if profile.avatar %}style="margin-top: 60px;"{% endif %}>
                     <ul>
                         <li class="meta big">
                             <h2 class="header-large secondary" style="color: white;">
