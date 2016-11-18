@@ -20,7 +20,7 @@
 
     <section class="user-profile-content">
         <header class="information">
-            <div class="row vertical-align">
+            <div class="row vertical-align" style="margin: 20px 0;">
                 <div class="profile-picture col-xs-4 middle">
                     <div class="img-circle" style="background-image: url({{ profile.avatar }})"></div>
                 </div>
@@ -28,9 +28,13 @@
                 <div class="information col-xs-8 middle">
                     <ul>
                         <li class="meta big">
-                            <h2 class="header-large secondary">
-                                {{ profile.first_name }} {% if profile.last_name_initial %}
-                                    {{ profile.last_name_initial }} {% endif %}.</h2>
+                            <h2 class="header-large secondary" style="color: white;">
+                                {% if profile.first_name %}
+                                    {{ profile.first_name }} {% if profile.last_name_initial %}
+                                        {{ profile.last_name_initial }} {% endif %}.</h2>
+                                {% else %}
+                                    {{ profile.user.username }}
+                                {% endif %}
                         </li>
 
                         <li>
