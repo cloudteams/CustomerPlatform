@@ -30,6 +30,10 @@ body > header .global-nav .container > ul li ul.submenu {
 	width: 250px;
 }
 
+body > header .global-nav .container > ul li ul.submenu li {
+	display: block;
+}
+
 section.public-page {
     min-height: calc(100vh - 520px);
 }
