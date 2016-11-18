@@ -1,5 +1,8 @@
 /* Footer class */
 $('#footer').attr('class', $('#footer_class').text());
+if ($('#footer_class').text() == 'footer-public') {
+    $('#footer').find('.cloudteams-logo').attr('src', '/static/img/logo-purple-beta.svg');
+}
 
 $(function() {
     /* Dashboard folding back */
@@ -15,7 +18,6 @@ $(function() {
 
     /* Search field on image click submit */
     $('body').on('click', 'header form.project-search svg', function() {
-        console.log('in!')
         $(this).closest('form.project-search').submit();
     })
 

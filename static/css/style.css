@@ -112,6 +112,26 @@ h1 {
     background-position: center;
 }
 
+.modal-header h2 {
+	text-transform: uppercase;
+}
+
+footer#footer.footer-public .cloudteams-logo {
+	opacity: 1;
+}
+
+footer#footer .brand {
+	padding-bottom: 20px;
+}
+
+footer#footer .eu-commission-logo {
+	opacity: 1.0 !important;
+    display: block;
+    margin: 0 auto;
+	width: 100px;
+    height: auto !important;
+}
+
 /* Hotfix - settings */
 .connected-app img {
     width: 100px;
