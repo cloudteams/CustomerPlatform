@@ -151,6 +151,13 @@ def project_details(request, pk):
         return HttpResponse('Only GET allowed', status=400)
 
 
+def handler_404(request):
+    return render(request, '404.html', {
+        'light_menu': True,
+        'register': False,
+    })
+
+
 @login_required
 def post_idea(request, pk):
     """

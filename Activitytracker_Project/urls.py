@@ -8,6 +8,8 @@ from django.conf.urls.static import static
 
 import ct_projects
 
+handler404 = 'ct_projects.views.handler_404'
+
 urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),

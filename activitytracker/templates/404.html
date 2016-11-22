@@ -1,19 +1,38 @@
-{% extends "ct_projects/base.html" %}
+{% extends "layout.html" %}
 {% load url from future %}
 {% load project_tags %}
 {% load staticfiles %}
-{% block title %}Page not found{% endblock %}
+{% block title %}Page not found | CloudTeams{% endblock %}
 {% block section_class %}page-login{% endblock %}
 {% block wrapper %}{% endblock %}
 
 {% block menu %}{% endblock %}
+
 {% block content %}
     <div class="container">
-        <main>
-            <h2>404 / Not Found</h2>
-            <p>This seems to be a broken link.<br>
-            But hey, don't worry! We have many pages for you!</p>
-            <p>Here's <a href="/projects/">a link to our projects</a>. They're fun!</p>
+        <main style="min-height: 650.222px;">
+            <header class="main-header login">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-offset-3 col-md-6">
+							<img src="{% static 'img/a1ae6b6e.svg' %}">
+						</div>
+					</div>
+					<h1 class="header-extra-large public">Oh no!</h1>
+					<p class="public-page-subtitle">The page you're looking for doesn't exist</p>
+				</div>
+			</header>
+            <section>
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="button-end">
+								<p>Go back to <a href="/">the homepage</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
         </main>
     </div>
 {% endblock %}
