@@ -217,9 +217,6 @@ def invite_customers(request, pk):
             # accept the invitation
             invitation.status = 'ACCEPTED'
             invitation.save()
-
-            # send the signal
-            team_invitation_accepted.send(sender=TeamInvitation, invitation=invitation)
         else:
             # send an email
             invitation.send_email()

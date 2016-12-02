@@ -207,8 +207,6 @@ class TeamInvitation(models.Model):
 
         super(TeamInvitation, self).save(*args, **kwargs)
 
-team_invitation_accepted = Signal(providing_args=["invitation"])
-
 
 @receiver(post_save, sender=User)
 def on_user_signup(sender, instance, created, **kwargs):
@@ -229,18 +227,3 @@ def on_user_signup(sender, instance, created, **kwargs):
             invitation.status = 'ACCEPTED'
             invitation.save()
 
-            # send the signal
-            team_invitation_accepted.send(sender=TeamInvitation, invitation=invitation)
-
-
-@receiver(team_invitation_accepted)
-def on_team_invitation_accepted(sender, invitation, **kwargs):
-    # get user
-    user = User.objects.get(email=invitation.email)
-
-    # get project
-    project = Project.objects.get(id=invitation.project_id)
-
-    # automatically follow project
-    if not ProjectFollowing.objects.filter(project=project, user=user).exists():
-        ProjectFollowing.objects.create(project=project, user=user)
