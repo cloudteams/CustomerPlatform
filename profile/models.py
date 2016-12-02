@@ -192,6 +192,21 @@ class TeamInvitation(models.Model):
                   from_email='webmasters@cloudteams.eu',
                   recipient_list=[self.email], fail_silently=False)
 
+    def save(self, *args, **kwargs):
+        if self.status == 'ACCEPTED':
+            # get invited user
+            user = User.objects.get(email=self.email)
+
+            # create following relationship to project
+            try:
+                if not user.follows.filter(project_id=self.project_id).exists():
+                    ProjectFollowing.objects.create(user=user, project_id=Project.objects.get(id=self.project_id))
+            except Project.DoesNotExist:
+                # project might have been deleted in the meanwhile
+                pass
+
+        super(TeamInvitation, self).save(*args, **kwargs)
+
 team_invitation_accepted = Signal(providing_args=["invitation"])
 
 
