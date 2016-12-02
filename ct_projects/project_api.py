@@ -12,7 +12,7 @@ from copy import deepcopy
 import json
 import thread
 
-from profile.models import TeamInvitation, team_invitation_accepted
+from profile.models import TeamInvitation
 
 __author__ = 'dipap'
 
