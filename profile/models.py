@@ -200,7 +200,7 @@ class TeamInvitation(models.Model):
             # create following relationship to project
             try:
                 if not user.follows.filter(project_id=self.project_id).exists():
-                    ProjectFollowing.objects.create(user=user, project_id=Project.objects.get(id=self.project_id))
+                    ProjectFollowing.objects.create(user=user, project=Project.objects.get(id=self.project_id))
             except Project.DoesNotExist:
                 # project might have been deleted in the meanwhile
                 pass
