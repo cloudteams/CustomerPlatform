@@ -24,7 +24,7 @@
 								<li><h2 class="header-small public">Projects</h2></li>
 							</ul>
 
-							<ul class="col-xs-3">
+							<ul class="col-xs-4">
 								{% with keywords="1"|get_keywords %}
 									{% for keyword in keywords %}
 										<li><a href="/projects/?q={{ keyword|urlencode }}">{{ keyword }}</a></li>
@@ -32,7 +32,7 @@
 								{% endwith %}
 							</ul>
 
-							<ul class="col-xs-3">
+							<ul class="col-xs-4">
 								{% with keywords="2"|get_keywords %}
 									{% for keyword in keywords %}
 										<li><a href="/projects/?q={{ keyword|urlencode }}">{{ keyword }}</a></li>
@@ -40,7 +40,7 @@
 								{% endwith %}
 							</ul>
 
-							<ul class="col-xs-3">
+							<ul class="col-xs-4">
 								{% with keywords="3"|get_keywords %}
 									{% for keyword in keywords %}
 										<li><a href="/projects/?q={{ keyword|urlencode }}">{{ keyword }}</a></li>
