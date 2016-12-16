@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% load url from future %}
+{% load project_tags %}
+{% load staticfiles %}
+{% block title %}Who are you{% endblock %}
+{% block section_class %}page-login{% endblock %}
+{% block wrapper %}{% endblock %}
+
+{% block menu %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <p>Redirecting you to CloudTeams team platform registration page...</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        setTimeout(function() {
+            window.location = 'https://teams.cloudteams.eu/pub/bscw.cgi/?op=rmail&username=&passwd=&register=Register'
+        }, 500);
+    </script>
+{% endblock %}

@@ -32,6 +32,9 @@ urlpatterns = [
     # home page redirect
     url(r'^$', RedirectView.as_view(url='projects/', permanent=True)),
 
+    # developer registration cookie redirect page
+    url(r'^developer/account/register', ct_projects.views.developer_registration),
+
     # media URL
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': settings.MEDIA_ROOT}),

@@ -20,7 +20,7 @@ def how_it_works(request):
 def who_are_you(request, next_page):
     if next_page.lower() == 'register':
         customer_next = '/activitytracker/account/register/'
-        developer_next = 'https://teams.cloudteams.eu/pub/bscw.cgi/?op=rmail&username=&passwd=&register=Register'
+        developer_next = '/developer/account/register'
     else:
         customer_next = '/activitytracker/account/login/'
         developer_next = 'https://teams.cloudteams.eu/pub/'
@@ -31,6 +31,13 @@ def who_are_you(request, next_page):
 
         'customer_next': customer_next,
         'developer_next': developer_next,
+    })
+
+
+def developer_registration(request):
+    return render(request, 'ct_projects/register-developer.html', {
+        'light_menu': True,
+        'login_button': True,
     })
 
 
