@@ -79,6 +79,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'activitytracker.middleware.SocialAuthExceptionMiddleware',
+    'activitytracker.middleware.PreferredRoleCookieMiddleWare',
     'ct_projects.middleware.notifications_middleware.NotificationsMiddleware',
 )
 

@@ -31,6 +31,7 @@ urlpatterns = [
 
     # generic
     url(r'^how-it-works$', views.how_it_works, name='how-it-works'),
+    url(r'^(?P<next_page>.*)/who-are-you', views.who_are_you, name='who-are-you'),
 
     # project API
     url(r'^api/all/$', project_api.project_list),

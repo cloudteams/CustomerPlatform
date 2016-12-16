@@ -17,6 +17,23 @@ def how_it_works(request):
     })
 
 
+def who_are_you(request, next_page):
+    if next_page.lower() == 'register':
+        customer_next = '/activitytracker/account/register/'
+        developer_next = 'https://teams.cloudteams.eu/pub/bscw.cgi/?op=rmail&username=&passwd=&register=Register'
+    else:
+        customer_next = '/activitytracker/account/login/'
+        developer_next = 'https://teams.cloudteams.eu/pub/'
+
+    return render(request, 'ct_projects/who-are-you.html', {
+        'light_menu': True,
+        'login_button': True,
+
+        'customer_next': customer_next,
+        'developer_next': developer_next,
+    })
+
+
 def list_projects(request):
     """
     A list of all projects in cloud teams

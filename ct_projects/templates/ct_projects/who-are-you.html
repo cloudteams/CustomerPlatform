@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% load url from future %}
+{% load project_tags %}
+{% load staticfiles %}
+{% block title %}Who are you{% endblock %}
+{% block section_class %}page-login{% endblock %}
+{% block wrapper %}{% endblock %}
+
+{% block menu %}{% endblock %}
+
+{% block content %}
+    <main style="min-height: 864px;">
+            <header class="main-header login">
+                <div class="container">
+                    <h1 class="header-extra-large public">Who are you</h1>
+                    <p class="public-page-subtitle">Please pick your role</p>
+                </div>
+            </header>
+
+            <section class="public-projects-logged-in-content">
+
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-offset-1 col-md-5">
+                        <div class="role role-user">
+                            <div class="image">
+                                <a href="{{ customer_next }}"><img src="{% static 'ct_projects/img/who-are-you/user.svg' %}"></a>
+                            </div>
+                            <a href="{{ customer_next }}" class="btn big">User</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="role role-developer">
+                            <div class="image">
+                                <a href="{{ developer_next }}"><img src="{% static 'ct_projects/img/who-are-you/developer.svg' %}"></a>
+                            </div>
+                            <a href="{{ developer_next }}" class="btn big">Developer</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="button-end">
+                            <p>Not sure which account is right for you? <a href="https://about.cloudteams.eu">Learn more</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+{% endblock %}
