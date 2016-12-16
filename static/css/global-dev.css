@@ -12432,14 +12432,18 @@ section.public-page.page-error .main-header img {
 }
 
 section.public-page .incentive {
-    background-color: #f7f6f6;
-    padding: 30px 0;
+    padding: 80px 0 30px;
     text-align: center;
-    margin: 60px 0 0
+    margin: 0;
 }
 
-section.public-page .incentive p {
-    font-size: 18px
+section.public-page .incentive h2 {
+    color: #7d3c8c;
+}
+
+section.public-page .incentive .icon {
+    padding-top: 20px;
+    color: #7d3c8c;
 }
 
 section.public-page .incentive p a {
@@ -12453,6 +12457,52 @@ section.public-page .incentive p a:active,
 section.public-page .incentive p a:focus,
 section.public-page .incentive p a:hover {
     color: #884c9b
+}
+
+.public-projects-explanation .menu-subpage {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.public-projects-explanation .context .explanation span {
+    padding-bottom: 20px;
+    font-size: 30px;
+    color: #7d3c8c;
+}
+
+.public-projects-explanation .context .explanation h2 {
+    color: #7d3c8c;
+    padding-bottom: 20px;
+}
+
+section.public-page .back-to-top {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    border: 1px solid #7d3c8c;
+    border-radius: 5px;
+    z-index: 999;
+    transition: .35s cubic-bezier(.5,.35,0,1);
+}
+
+section.public-page .back-to-top a {
+    font-size: 30px;
+    color: #7d3c8c;
+}
+section.public-page .call-to-action {
+    background-color: #f7f6f6;
+    padding: 30px 0;
+    text-align: center;
+    margin: 60px 0 0;
+}
+
+section.public-page .call-to-action a {
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #7d3c8c;
+    letter-spacing: .04em;
 }
 
 section.public-page.page-tutorial h2,
@@ -15602,6 +15652,21 @@ body>header.no-menu {
 body>header.no-menu a {
     display: inline-block;
     color: #424242
+}
+
+body>header.no-menu a.how-about {
+    margin-top: 20px;
+    margin-left: 20px;
+    float: right;
+    line-height: 2.5;
+    font-size: 18px;
+    color: #b1b1b1;
+    transition: .35s cubic-bezier(.5, .35, 0, 1);
+    text-transform: lowercase;
+}
+
+body>header.no-menu a.how-about:hover {
+    color: #424242 !important;
 }
 
 body>header.no-menu a.login,

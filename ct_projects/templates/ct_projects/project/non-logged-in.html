@@ -1,27 +1,107 @@
             {% load staticfiles %}
 
             <header class="main-header">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-offset-1 col-md-10">
-							<img src="{% static 'ct_projects/img/project-non-logged-in.svg' %}">
+                <div class="container">
+					<div class="row image-container">
+						<div class="col-md-5">
+							<img src="{% static 'ct_projects/img/for-users.svg' %}">
+							<div class="user-type">
+								<a href="#">For users</a>
+								<p>Collect rewards<br> for giving feedback</p>
+							</div>
 						</div>
-					</div>
-					<h1 class="header-extra-large public">Cloudteams</h1>
-					<p class="public-page-subtitle">Collect rewards for giving feedback</p>
-					<div class="choice">
-						<a href="{% url 'how-it-works' %}" class="btn big secondary">How it works</a>
-						<a href="#browse-projects" class="btn big">Browse projects</a>
-					</div>
-				</div>
-
-				<div class="incentive">
-					<div class="container">
-						<div class="row">
-							<div class="col-xs-12">
-								<p>Are you a developer? <a href="https://teams.cloudteams.eu">Submit your project</a></p>
+						<div class="col-md-2">
+							<img src="{% static 'ct_projects/img/between-devs-users.svg' %}">
+						</div>
+						<div class="col-md-5">
+							<img src="{% static 'ct_projects/img/for-users.svg' %}">
+							<div class="user-type">
+								<a href="#">For developers</a>
+								<p>Find early adopters<br> who will boost your product</p>
 							</div>
 						</div>
 					</div>
+
+					<div class="choice">
+						<a href="/views/log-in/choose/" class="btn big">Join now</a>
+					</div>
 				</div>
 			</header>
+
+            <div class="incentive">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <a href="#browse-projects"><h2 class="header-medium">Browse projects</h2><i class="icon icon-arrow-down"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="public-projects-explanation">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="submenu">
+                                <div class="container">
+                                    <ul class="menu-subpage public">
+                                        <li id="link-to-subpage-1" class="link-to-subpage active">Users</li>
+                                        <li id="link-to-subpage-2" class="link-to-subpage">Developers</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section id="subpage-1" class="subpage active">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 preview"><img src="{% static 'ct_projects/img/dashboard-screenshot.png' %}" alt="User screenshot"></div>
+                            <div class="col-md-4 context">
+                                <div class="explanation">
+                                    <span><i class="icon icon-project"></i></span>
+                                    <h2 class="header-medium">Participate in projects to gain rewards</h2>
+                                    <p>You have your own dashboard where you can see all the projects you are following or invited for.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="subpage-2" class="subpage">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 context">
+                                <div class="explanation">
+                                    <span><i class="icon icon-project"></i></span>
+                                    <h2 class="header-medium">Upload your projects to CloudTeams</h2>
+                                    <p>You can manage your projects or projects uploaded by other members of your team in your project dashboard.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-8 preview"><img src="{% static 'ct_projects/img/dashboard-screenshot.png' %}" alt="User screenshot"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!--<section class="slideshow-navigation">
+                    <nav>
+                        <ul>
+                            <li><i class="icon icon-arrow-left"></i></li>
+                            <li><span></span></li>
+                            <li><span class="active"></span></li>
+                            <li><i class="icon icon-arrow-right"></i></li>
+                        </ul>
+                    </nav>
+                </section>-->
+            </section>
+
+            <div class="call-to-action">
+                <div class="container">
+                    <div class="row">
+                    <div class="col-xs-12">
+                            <p>Are you a developer? <a href="https://teams.cloudteams.eu">SUBMIT YOUR PROJECT</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>

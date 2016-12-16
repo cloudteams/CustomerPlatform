@@ -7,12 +7,11 @@
 						<a href="/" alt="home">
 							<img src="{% static "img/logo-purple-beta.svg" %}" class="logo svg" alt="Cloudteams logo">
 						</a>
-						{% if register_button %}
-							<a href="{% url 'register' %}" alt="log in" class="btn login secondary">Register</a>
-						{% else %}
-							<a href="{% url 'login' %}" alt="log in" class="btn login secondary">Log in</a>
-                            <a href="{% url 'register' %}" alt="log in" class="btn login secondary">Register</a>
-						{% endif %}
+
+                        <a href="{% url 'login' %}" alt="log in" class="btn login secondary">Log in</a>
+                        <a href="{% url 'register' %}" alt="log in" class="btn login secondary">Register</a>
+                        <a href="/projects/how-it-works" class="how-about secondary">how it works</a>
+                        <a href="https://about.cloudteams.eu/" class="how-about secondary">about</a>
 					</div>
 				</div>
 			</div>
