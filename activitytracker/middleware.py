@@ -18,9 +18,11 @@ class PreferredRoleCookieMiddleWare(object):
     """
 
     def process_request(self, request):
-        if request.COOKIES.get('cloudteams.preferredRole') == 'customer':
-            if request.path.lower() == '/projects/login/who-are-you':
+        if request.path.lower() == '/projects/login/who-are-you':
+            if request.COOKIES.get('cloudteams.preferredRole') == 'customer':
                 return redirect('/activitytracker/login/')
+            elif request.COOKIES.get('cloudteams.preferredRole') == 'developer':
+                return redirect('https://teams.cloudteams.eu/')
 
     def process_response(self, request, response):
         if not request.COOKIES.get('cloudteams.preferredRole'):
@@ -29,5 +31,7 @@ class PreferredRoleCookieMiddleWare(object):
                             '/activitytracker/login' in request.path.lower():
 
                 response.set_cookie("cloudteams.preferredRole", 'customer')
+            elif '/developer/account/register' in request.path.lower():
+                response.set_cookie("cloudteams.preferredRole", 'developer')
 
         return response
