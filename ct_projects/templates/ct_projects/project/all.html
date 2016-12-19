@@ -12,15 +12,17 @@
 
 {% block content %}
     {% with projects=page_obj.object_list %}
-        <main>
+        <main id="main-project-list-section">
             <div class="container">
                 <section class="public-projects-logged-in-content">
                     <header>
                         <h2 class="header-large public search-term-header">
                             {% if q %}
                                 Search results for {{ q }}
-                            {% else %}
+                            {% elif order == 'latest' %}
                                 Latest projects
+                            {% else %}
+                                Most popular projects
                             {% endif %}
                         </h2>
                         {% if q %}
@@ -65,7 +67,7 @@
         $(function() {
             $('#order-projects').on('change', function() {
                 console.log('la!');
-                window.location.href = '/projects/?order=' + $(this).val();
+                window.location.href = '/projects/?order=' + $(this).val() + '#main-project-list-section';
             });
         });
     </script>
