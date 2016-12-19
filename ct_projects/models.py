@@ -450,4 +450,4 @@ class Notification(models.Model):
         elif self.poll:
             return self.poll.get_poll_token_link(user)
         else:
-            return reverse('notifications')
+            return None

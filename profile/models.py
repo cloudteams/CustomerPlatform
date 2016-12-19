@@ -1,11 +1,13 @@
+from django.core.mail import send_mail
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import Signal
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 
 from activitytracker.models import User
-from ct_projects.models import Campaign
+from ct_projects.models import Campaign, Project, ProjectFollowing
 from profile.lists import *
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
@@ -163,14 +165,65 @@ class PlatformInvitation(models.Model):
 platform_invitation_accepted = Signal(providing_args=["invitation"])
 
 
+class TeamInvitation(models.Model):
+    """
+    An invitation from a CloudTeams team (project) to an email
+    """
+    project_id = models.IntegerField()
+    email = models.EmailField()
+    status = models.CharField(max_length=15, choices=INVITATION_STATUS, default='PENDING')
+
+    def send_email(self):
+        # render the email
+        project_name = Project.objects.get(id=self.project_id).title
+        title = 'Invitation from %s: Join CloudTeams.eu today!' % project_name
+
+        ctx = {
+            'title': title,
+            'project_name': project_name,
+            'team_ref_id': self.pk,
+        }
+
+        plain_content = render_to_string('profile/emails/invitation-plaintext.txt', ctx)
+        html_content = render_to_string('profile/emails/invitation.html', ctx)
+
+        # send the email
+        send_mail(subject=title, message=plain_content, html_message=html_content,
+                  from_email='webmasters@cloudteams.eu',
+                  recipient_list=[self.email], fail_silently=False)
+
+    def save(self, *args, **kwargs):
+        if self.status == 'ACCEPTED':
+            # get invited user
+            user = User.objects.get(email=self.email)
+
+            # create following relationship to project
+            try:
+                if not user.follows.filter(project_id=self.project_id).exists():
+                    ProjectFollowing.objects.create(user=user, project=Project.objects.get(id=self.project_id))
+            except Project.DoesNotExist:
+                # project might have been deleted in the meanwhile
+                pass
+
+        super(TeamInvitation, self).save(*args, **kwargs)
+
+
 @receiver(post_save, sender=User)
 def on_user_signup(sender, instance, created, **kwargs):
-    # check if the signup is from a user who was invited
-    if created and PlatformInvitation.objects.filter(email=instance.email, status='PENDING').exists():
-        invitation = PlatformInvitation.objects.get(email=instance.email, status='PENDING')
-        invitation.status = 'ACCEPTED'
-        invitation.save()
+    # only on signup
+    if created:
+        # check if the signup is from a user who was invited
+        if PlatformInvitation.objects.filter(email=instance.email, status='PENDING').exists():
+            # accept the invitation
+            invitation = PlatformInvitation.objects.get(email=instance.email, status='PENDING')
+            invitation.status = 'ACCEPTED'
+            invitation.save()
 
-        # send the signal
-        platform_invitation_accepted.send(sender=PlatformInvitation, invitation=invitation)
+            # send the signal
+            platform_invitation_accepted.send(sender=PlatformInvitation, invitation=invitation)
+
+        for invitation in TeamInvitation.objects.filter(email=instance.email, status='PENDING'):
+            # accept the invitation
+            invitation.status = 'ACCEPTED'
+            invitation.save()
 

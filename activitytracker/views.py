@@ -35,7 +35,7 @@ from FacebookActivityClass import FacebookActivity
 from datetime import datetime
 from django.db.models import Q
 
-from profile.models import PlatformInvitation
+from profile.models import PlatformInvitation, TeamInvitation
 
 colourDict = {'black': "rgba(1, 1, 1, 0.8)",
               'blue': "#578EBE",
@@ -145,6 +145,17 @@ def register(request):
                 pass
             except ValueError:
                 pass
+        # auto-complete invitation registrations
+        elif 'team_ref_id' in request.GET:
+            try:
+                invitation = TeamInvitation.objects.get(pk=int(request.GET.get('team_ref_id')))
+
+                ctx['email'] = invitation.email
+                ctx['username'] = invitation.email.split('@')[0]
+            except PlatformInvitation.DoesNotExist:
+                pass
+            except ValueError:
+                pass
 
         return render(request, 'activitytracker/register.html', ctx)
 
@@ -197,7 +208,7 @@ def register(request):
     email = DEFAULT_FROM_EMAIL
     mail_title = "CloudTeams account verification"
     recipient = [user.email.encode('utf8')]
-    mail_message = 'Hello user %s. In order to verify your account click the following link: %s' \
+    mail_message = 'Hello %s. In order to verify your account click the following link: %s' \
                    % (user.get_username(), verification_url)
 
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
@@ -244,7 +255,7 @@ def passwordforget(request):
     email = DEFAULT_FROM_EMAIL
     mail_title = "CloudTeams password reset"
     recipient = [user.email.encode('utf8')]
-    mail_message = 'Hello user %s. You have recently requested a password reset. Please follow this link in order to ' \
+    mail_message = 'Hello %s. You have recently requested a password reset. Please follow this link in order to ' \
                    'start the process: %s' % (user.get_username(), passwordforget_url)
 
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)

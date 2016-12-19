@@ -31,10 +31,7 @@ def view_my_profile(request):
         'disliked_brands': [op.brand for op in profile.user.brand_opinions.filter(opinion='N')],
     }
 
-    if profile.has_been_saved:  # proceed to details page
-        return render(request, 'profile/index.html', params)
-    else:
-        return redirect(reverse('start-profile-wizard'))
+    return render(request, 'profile/index.html', params)
 
 
 @login_required
@@ -95,10 +92,10 @@ def start_wizard(request):
             profile.user.location = form.cleaned_data['location']
             profile.user.save()
 
-            return redirect(reverse('start-profile-wizard'))
+            return redirect('/profile/')
 
     params['form'] = form
-    return render(request, 'profile/edit.html', params)
+    return HttpResponse('Some error occurred', status=400)
 
 
 @login_required

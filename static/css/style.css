@@ -26,6 +26,14 @@ main a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
     color: #38173f;
 }
 
+body > header .global-nav .container > ul li ul.submenu {
+	width: 250px;
+}
+
+body > header .global-nav .container > ul li ul.submenu li {
+	display: block;
+}
+
 section.public-page {
     min-height: calc(100vh - 520px);
 }
@@ -97,6 +105,31 @@ h1 {
 
 #footer.footer-dashboard-user .funding {
 	color: #b7b7b7;
+}
+
+.profile-picture .img-circle {
+	background-size: cover;
+    background-position: center;
+}
+
+.modal-header h2 {
+	text-transform: uppercase;
+}
+
+footer#footer.footer-public .cloudteams-logo {
+	opacity: 1;
+}
+
+footer#footer .brand {
+	padding-bottom: 20px;
+}
+
+footer#footer .eu-commission-logo {
+	opacity: 1.0 !important;
+    display: block;
+    margin: 0 auto;
+	width: 100px;
+    height: auto !important;
 }
 
 /* Hotfix - settings */
@@ -1577,4 +1610,22 @@ div.modal {
 #CookielawBanner p {
 	text-align: justify;
 	font-size: 14px;
+}
+
+/* BETA mark */
+.beta {
+    position: absolute;
+    left: 170px;
+    top: 49px;
+    color: #f3cff3;
+    font-size: 8.25px;
+    font-weight: 600;
+    letter-spacing: 0.3rem;
+}
+
+.beta.beta-dark {
+	color: #777;
+    top: 60px;
+    font-size: 9.5px;
+    left: 155px;
 }
