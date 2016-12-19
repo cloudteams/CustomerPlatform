@@ -51,6 +51,9 @@
                     Login via social community failed.
                     An unknown error has occured that prevented the request from being fullfilled. If this is
                     persistent, please consider registering manually to Activity Tracker.
+                {% elif action == "AuthAlreadyAssociated" %}
+                    The social account you are trying to connect is already tied to a different CloudTeams account. Please
+                     try connecting to this social service using another account.
                 {% else %}
                     Oops! Something must have went wrong, please try to repeat your original action
                 {% endif %}
