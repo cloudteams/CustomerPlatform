@@ -456,7 +456,7 @@ class Notification(models.Model):
 
 def get_participated_campaigns(user, project=None):
     # completed polls
-    ps = PollToken.objects.exclude(poll=None).filter(status='DONE')
+    ps = PollToken.objects.exclude(user=user, poll=None).filter(status='DONE')
     if project:
         ps = ps.filter(poll__campaign__project=project)
 
