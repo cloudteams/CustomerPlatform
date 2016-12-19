@@ -445,10 +445,10 @@ class Notification(models.Model):
         else:
             return None
 
-    def url(self, user):
+    def url(self):
         if self.document:
             return self.document.get_absolute_url()
         elif self.poll:
-            return self.poll.get_poll_token_link(user)
+            return self.poll.get_poll_token_link(self.user)
         else:
             return None
