@@ -95,7 +95,7 @@ def start_wizard(request):
             return redirect('/profile/')
 
     params['form'] = form
-    return HttpResponse('Some error occurred', status=400)
+    return redirect('/profile/')
 
 
 @login_required
