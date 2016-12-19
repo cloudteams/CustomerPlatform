@@ -41,6 +41,7 @@ class CloudTeamsConnector:
             project.logo = entry['logo']['url'] if 'logo' in entry else ''
             project.rewards = entry['rewards'] if 'rewards' in entry else ''
             project.category = entry['bscw_cloudteams:p_category']
+            project.icon = entry['category_icon'] if 'category_icon' in entry else ''
             project.managers = ','.join(entry['managers']) if 'managers' in entry else ''
             project.members = ','.join(entry['members']) if 'members' in entry else ''
             project.is_public = entry['is_public'] if 'is_public' in entry else False

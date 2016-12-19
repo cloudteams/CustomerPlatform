@@ -6,7 +6,7 @@
         {% if project.logo %}
             <a href="{% url 'project-details' project.pk %}">
                 <div class="background-image" style="background-image: url({{ project.logo }});">
-                    <i class="icon icon-square"></i>
+                    <div class="square icon {{ project.icon }}"></div>
                 </div>
             </a>
         {% endif %}

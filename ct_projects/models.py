@@ -41,6 +41,7 @@ class Project(models.Model):
     description = models.TextField(blank=True, null=True, default=None)
     logo = models.URLField(blank=True, null=True, default=None)
     category = models.TextField(blank=True, null=True, default=None)
+    icon = models.TextField(blank=True, null=True, default=None)
     application_type = models.TextField(blank=True, null=True, default=None)
     rewards = models.TextField(blank=True, null=True, default=None)
 
