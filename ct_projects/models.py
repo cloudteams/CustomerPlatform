@@ -452,3 +452,26 @@ class Notification(models.Model):
             return self.poll.get_poll_token_link(self.user)
         else:
             return None
+
+
+def get_participated_campaigns(user, project=None):
+    # completed polls
+    ps = PollToken.objects.exclude(poll=None).filter(status='DONE')
+    if project:
+        ps = ps.filter(poll__campaign__project=project)
+
+    campaign_ids = list(set(ps.values_list('poll__campaign', flat=True)))
+
+    # opened documents
+    """
+    ds = PollToken.objects.exclude(document=None).filter(status='USED')
+    if project:
+        ds = ds.filter(document__campaign__project=project)
+
+    campaign_ids += list(set(ds.values_list('poll__campaign', flat=True)))
+    """
+
+    # return campaign objects
+    return Campaign.objects.filter(id__in=campaign_ids)
+
+User.get_participated_campaigns = get_participated_campaigns

@@ -2,7 +2,7 @@
 {% load humanize %}
 
 {% with c=notification.campaign link=notification.url %}
-	{% if link %}<a href="{{ link }}" {% if c %}target="_blank"{% endif %} {% else  %}<div {% endif %}class="notification-link">
+	{% if link %}<a href="{{ link }}" {% if c %}target="_blank"{% endif %}>{% else  %}<div {% endif %}class="notification-link">
 		<article class="notification">
 			<div class="vertical-align">
 				<div class="middle">

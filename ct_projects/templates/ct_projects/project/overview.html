@@ -5,7 +5,7 @@
 	<div class="container">
 		<div class="vertical-align">
 
-			<div class="middle">
+			<div class="middle" style="width: 30%;">
 				<table>
 					<tr>
 						<td>
@@ -42,12 +42,10 @@
 			<div class="middle">
 				{% if request.user.is_authenticated %}
 					{% with is_followed=project|is_followed_by:request.user %}
-						{% if is_followed %}
-
                             <table>
                                 <tr>
                                     <td>
-                                        <i class="icon icon-pending"></i>
+                                        <i class="icon icon-invite"></i>
                                         <p>My invites</p>
                                     </td>
                                     <td>
@@ -67,16 +65,15 @@
 
                                 <tr>
                                     <td>
-                                        <i class="icon icon-campaign-participated"></i>
+                                        <i class="icon icon-campaign-completed"></i>
                                         <p>My campaigns answered</p>
                                     </td>
                                     <td>
-                                        <p>-</p>
+                                        <p>{{ request.user|participated_campaigns_number:project }}</p>
                                     </td>
                                 </tr>
                             </table>
 
-						{% endif %}
 					{% endwith %}
 				{% endif %}
 			</div>
