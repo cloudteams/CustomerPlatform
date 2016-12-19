@@ -131,15 +131,15 @@
                                 <div class="input-container">
                                     <label for="gender-female"><input type="radio" name="gender" value="F"
                                                                       id="gender-female"
-                                                                      required="" {% if profile.user.gender == 'F' %} checked="checked"{% endif %}><span></span>Female</label>
+                                                                      {% if profile.user.gender == 'F' %} checked="checked"{% endif %}><span></span>Female</label>
 
                                     <label for="gender-male"><input type="radio" name="gender" value="M"
                                                                     id="gender-male"
-                                                                    required=""{% if profile.user.gender == 'M' %} checked="checked"{% endif %}><span></span>Male</label>
+                                                                    {% if profile.user.gender == 'M' %} checked="checked"{% endif %}><span></span>Male</label>
 
                                     <label for="gender-undefined"><input type="radio" name="gender"
                                                                          value="" id="gender-undefined"
-                                                                         required=""{% if profile.user.gender == '' %} checked="checked"{% endif %}><span></span>I prefer not to
+                                                                         {% if profile.user.gender == '' %} checked="checked"{% endif %}><span></span>I prefer not to
                                         say</label>
                                 </div>
                             </fieldset>
