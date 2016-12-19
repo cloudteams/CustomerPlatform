@@ -464,7 +464,7 @@ def get_participated_campaigns(user, project=None):
 
     # opened documents
     """
-    ds = PollToken.objects.exclude(document=None).filter(status='USED')
+    ds = PollToken.objects.exclude(user=user, document=None).filter(status='USED')
     if project:
         ds = ds.filter(document__campaign__project=project)
 
