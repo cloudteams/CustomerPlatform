@@ -22,7 +22,7 @@ def who_are_you(request, next_page):
         customer_next = '/activitytracker/account/register/'
         developer_next = '/developer/account/register'
     else:
-        customer_next = '/activitytracker/account/login/'
+        customer_next = '/activitytracker/login/'
         developer_next = 'https://teams.cloudteams.eu/pub/'
 
     return render(request, 'ct_projects/who-are-you.html', {
