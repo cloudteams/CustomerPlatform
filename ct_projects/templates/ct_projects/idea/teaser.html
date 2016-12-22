@@ -33,7 +33,7 @@
             {% for comment in idea.comments.all %}
 				<div class="comment">
                     <div class="row comment-header">
-                        <div class="col-xs-10">
+                        <div class="col-xs-9">
                             {% if not comment.user %}
                                 {{ comment.user_name }}
                             {% else %}
@@ -46,7 +46,7 @@
                                 {% endwith %}
                             {% endif %}
                         </div>
-                        <div class="col-xs-2 time-info">
+                        <div class="col-xs-3 time-info">
                             {{ comment.submit_date|naturaltime }}
                             <i class="icon icon-time"></i>
                         </div>
