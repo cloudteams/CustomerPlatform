@@ -86,8 +86,12 @@ class CloudTeamsConnector:
 
                             # create new comment
                             if not found:
+                                author_name = c_reply['author']
+                                if 'author_role' in c_reply:
+                                    author_name += ' (' + c_reply['author_role'] + ')'
+
                                 submit_date = datetime.utcfromtimestamp(c_reply['timestamp']).replace(tzinfo=pytz.timezone('CET'))
-                                comment = Comment.objects.create(user_name=c_reply['author'],
+                                comment = Comment.objects.create(user_name=author_name,
                                                                  user_email=c_reply['author_email'],
                                                                  comment=c_reply['title'], content_object=idea,
                                                                  site_id=SITE_ID, submit_date=submit_date)
