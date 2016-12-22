@@ -220,29 +220,13 @@ def post_idea(request, pk):
     return render(request, 'ct_projects/project/post-idea.html', context, status=status)
 
 
-class IdeaDetailView(DetailView):
-    model = Idea
-    template_name = 'ct_projects/idea/details.html'
-    context_object_name = 'idea'
-
-    def get_context_data(self, **kwargs):
-        context = super(DetailView, self).get_context_data(**kwargs)
-
-        idea = context['idea']
-        context['comment_form'] = CommentForm(idea)
-        context['project'] = idea.project
-        return context
-
-idea_details = IdeaDetailView.as_view()
-
-
 def comment_posted(request):
     if request.GET['c']:
         comment_id = request.GET['c']
         comment = Comment.objects.get(pk=comment_id)
         idea = Idea.objects.get(id=comment.object_pk)
         if idea:
-            return redirect(reverse('idea-details', args=(idea.project.pk, idea.pk)))
+            return redirect('/projects/%d/?tab=ideas' % idea.project_id)
 
 
 @login_required

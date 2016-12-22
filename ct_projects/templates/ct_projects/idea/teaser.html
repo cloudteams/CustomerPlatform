@@ -32,15 +32,25 @@
 
             {% for comment in idea.comments.all %}
 				<div class="comment">
-					<span class="info">
-                        {% if not comment.user %}
-                            (Team member) {{ comment.user_name }} - {{ comment.submit_date }}
-                        {% else %}
-                            {% with comment_author=comment.user %}
-                                {{ idea.project|get_anonymized_username:comment_author }} - {{ comment.submit_date }}
-                            {% endwith %}
-                        {% endif %}
-					</span>
+                    <div class="row comment-header">
+                        <div class="col-xs-10">
+                            {% if not comment.user %}
+                                (Team member) {{ comment.user_name }}
+                            {% else %}
+                                {% with comment_author=comment.user %}
+                                    {% if request.user.is_authenticated and request.user == comment_author %}
+                                        {{ request.user.profile.get_display_name }}
+                                    {% else %}
+                                        {{ idea.project|get_anonymized_username:comment_author }}
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-2 time-info">
+                            {{ comment.submit_date|naturaltime }}
+                            <i class="icon icon-time"></i>
+                        </div>
+                    </div>
 					<p>{{ comment.comment }}</p>
 				</div>
 			{% endfor %}
@@ -49,7 +59,9 @@
 
     {% if request.user.is_authenticated %}
         <div class="comment-form">
-            {% include "ct_projects/comments/form.html" %}
+            {% with comment_form=idea|get_comment_form %}
+                {% include "ct_projects/comments/form.html" %}
+            {% endwith %}
         </div>
     {% endif %}
 
@@ -63,9 +75,7 @@
 		<i class="icon icon-time"></i>
 		<p class="highlight">{{ idea.created|naturaltime }}</p>
 
-
-        <!--<a href="{% url 'idea-details' idea.project.pk idea.pk %}">View details</a>-->
-		<div class="right">
+        <div class="right">
             <form class="rating-form" method="POST" action="{% url 'rate-idea' idea.project.pk idea.pk %}">{% csrf_token %}
                 <input type="number" name="value" value="1" class="hidden" />
                 <input type="submit" class="hidden" value="Submit rating" />

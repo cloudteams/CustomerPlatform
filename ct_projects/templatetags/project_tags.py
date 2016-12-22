@@ -1,4 +1,6 @@
 from django import template
+from django_comments.forms import CommentForm
+
 from ct_projects.models import ProjectFollowing, PollToken
 import re
 
@@ -61,6 +63,11 @@ def get_poll_token_link(poll, user):
 @register.filter
 def participated_campaigns_number(user, project=None):
     return user.get_participated_campaigns(project=project).count()
+
+
+@register.filter
+def get_comment_form(idea):
+    return CommentForm(idea)
 
 
 @register.filter

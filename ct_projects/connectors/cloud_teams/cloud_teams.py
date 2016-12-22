@@ -1,4 +1,6 @@
 from datetime import datetime
+
+import pytz
 from django.utils.timezone import now
 from django_comments.models import Comment
 
@@ -86,10 +88,11 @@ class CloudTeamsConnector:
 
                             # create new comment
                             if not found:
+                                submit_date = datetime.utcfromtimestamp(c_reply['timestamp']).replace(tzinfo=pytz.timezone('CET'))
                                 comment = Comment.objects.create(user_name=c_reply['author'],
                                                                  user_email=c_reply['author_email'],
                                                                  comment=c_reply['title'], content_object=idea,
-                                                                 site_id=SITE_ID)
+                                                                 site_id=SITE_ID, submit_date=submit_date)
                                 comments.append(comment)
 
             # get all project campaigns

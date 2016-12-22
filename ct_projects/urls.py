@@ -11,7 +11,6 @@ urlpatterns = [
 
     # ideas
     url(r'^(?P<pk>[\w-]+)/post-idea/$', views.post_idea, name='post-idea'),
-    url(r'^(?P<project_pk>[\w-]+)/ideas/(?P<pk>\d+)$', views.idea_details, name='idea-details'),
     url(r'^(?P<project_pk>[\w-]+)/ideas/(?P<pk>\d+)/rate/$', views.rate_idea, name='rate-idea'),
 
     # project details
