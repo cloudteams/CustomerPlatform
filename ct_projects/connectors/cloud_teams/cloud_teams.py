@@ -65,12 +65,11 @@ class CloudTeamsConnector:
                     if 'desc' not in c_idea:
                         c_idea['desc'] = ''
 
-                    print c_idea
                     # find the idea in the customer platform
                     try:
-                        idea = Idea.objects.get(project_id=project.pk, title=c_idea['title'],
-                                                description=c_idea['desc'])
-                    except Idea.DoesNotExist:
+                        idea = Idea.objects.filter(project_id=project.pk, title=c_idea['title'],
+                                                   description=c_idea['desc'])[0]
+                    except IndexError:
                         print 'Idea "%s" on project %d not found' % (c_idea['title'], project.pk)
                         continue
 
