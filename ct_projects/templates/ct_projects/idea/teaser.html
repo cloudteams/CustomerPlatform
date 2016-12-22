@@ -44,12 +44,14 @@
 					<p>{{ comment.comment }}</p>
 				</div>
 			{% endfor %}
-
-            <div class="comment-form">
-                
-            </div>
 		</div>
 	</div>
+
+    {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            {% include "ct_projects/comments/form.html" %}
+        </div>
+    {% endif %}
 
 	<div class="data">
 		<i class="icon icon-like"></i>
