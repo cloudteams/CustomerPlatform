@@ -70,7 +70,6 @@ class CloudTeamsConnector:
                         idea = Idea.objects.filter(project_id=project.pk, title=c_idea['title'],
                                                    description=c_idea['desc'])[0]
                     except IndexError:
-                        print 'Idea "%s" on project %d not found' % (c_idea['title'], project.pk)
                         continue
 
                     if 'replies' in c_idea:
