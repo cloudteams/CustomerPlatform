@@ -1,8 +1,11 @@
 from datetime import datetime
 from django.utils.timezone import now
+from django_comments.models import Comment
+
+from Activitytracker_Project.settings import SITE_ID
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
-from ct_projects.models import Project, Campaign, Document, Poll
+from ct_projects.models import Project, Campaign, Document, Poll, Idea
 
 __author__ = 'dipap'
 
@@ -21,7 +24,7 @@ class CloudTeamsConnector:
         :return: Number of projects fetched from CloudTeams team platform
         """
         entries = self.srv.get_projectstore('')
-        print entries
+
         project_ids = []
         campaign_ids = []
         document_ids = []
@@ -49,6 +52,45 @@ class CloudTeamsConnector:
 
             # save the project in the database
             project.save()
+
+            # get developer comments
+            if 'customer_ideas' in entry:
+                for c_idea in entry['customer_ideas']:
+                    # validation
+                    if 'title' not in c_idea:
+                        continue
+
+                    if 'desc' not in c_idea:
+                        c_idea['desc'] = ''
+
+                    print c_idea
+                    # find the idea in the customer platform
+                    try:
+                        idea = Idea.objects.get(project_id=project.pk, title=c_idea['title'],
+                                                description=c_idea['desc'])
+                    except Idea.DoesNotExist:
+                        print 'Idea "%s" on project %d not found' % (c_idea['title'], project.pk)
+                        continue
+
+                    if 'replies' in c_idea:
+                        # add or update developer replies
+                        comments = list(idea.comments.all())
+
+                        for c_reply in c_idea['replies']:
+                            # try to find
+                            found = False
+                            for comment in comments:
+                                if comment.comment == c_reply['title'] and comment.user_name == c_reply['author']:
+                                    found = True
+                                    break
+
+                            # create new comment
+                            if not found:
+                                comment = Comment.objects.create(user_name=c_reply['author'],
+                                                                 user_email=c_reply['author_email'],
+                                                                 comment=c_reply['title'], content_object=idea,
+                                                                 site_id=SITE_ID)
+                                comments.append(comment)
 
             # get all project campaigns
             if 'campaigns' in entry:

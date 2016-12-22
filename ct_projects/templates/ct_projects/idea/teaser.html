@@ -25,21 +25,29 @@
 			</h3>
 		</header>
 
-		<i class="fa fa-angle-right"></i>
+		<i class="fa fa-angle-right angle-open"></i>
 
-		<div class="content">
+		<div class="content extended active" style="height: auto;">
 			<p>{{idea.description|linebreaksbr}}</p>
 
             {% for comment in idea.comments.all %}
 				<div class="comment">
 					<span class="info">
-						{% with comment_author=comment.user %}
-							{{ idea.project|get_anonymized_username:comment_author }} - {{ comment.submit_date }}
-						{% endwith %}
+                        {% if not comment.user %}
+                            (Team member) {{ comment.user_name }} - {{ comment.submit_date }}
+                        {% else %}
+                            {% with comment_author=comment.user %}
+                                {{ idea.project|get_anonymized_username:comment_author }} - {{ comment.submit_date }}
+                            {% endwith %}
+                        {% endif %}
 					</span>
 					<p>{{ comment.comment }}</p>
 				</div>
 			{% endfor %}
+
+            <div class="comment-form">
+                
+            </div>
 		</div>
 	</div>
 
