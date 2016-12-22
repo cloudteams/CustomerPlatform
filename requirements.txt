@@ -32,3 +32,6 @@ django-sslify==0.2.7
 
 # cookie banner
 django-cookie-law
+
+# timezones
+pytz
