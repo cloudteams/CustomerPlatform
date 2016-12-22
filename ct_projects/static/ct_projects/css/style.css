@@ -47,11 +47,11 @@
 }
 .comment-form  input[name="comment"] {
     display: inline-block;
-    width: calc(100% - 300px);
+    width: calc(100% - 180px);
     margin-right: 20px;
 }
 .comment-form  input[type="submit"] {
-    width: 200px;
+    width: 100px;
     display: inline-block;
     height: 20px;
     vertical-align: top;
