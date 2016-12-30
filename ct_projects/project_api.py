@@ -210,8 +210,9 @@ def invite_customers(request, pk):
             continue
 
         # create the invitation
-        invitation = TeamInvitation.objects.create(project_id=p.id, email=email)
+        invitation = TeamInvitation.objects.create(project_id=p.id, email=email, auto_accept=user is None)
         new_invitations += 1
+
         # automatically accept if the user exists
         if user is not None:
             # accept the invitation

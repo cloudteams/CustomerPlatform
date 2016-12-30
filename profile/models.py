@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django.template.loader import render_to_string
 
 from activitytracker.models import User
-from ct_projects.models import Campaign, Project, ProjectFollowing
+from ct_projects.models import Campaign, Project, ProjectFollowing, Notification
 from profile.lists import *
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
@@ -171,6 +171,7 @@ class TeamInvitation(models.Model):
     """
     project_id = models.IntegerField()
     email = models.EmailField()
+    auto_accept = models.BooleanField(default=False)
     status = models.CharField(max_length=15, choices=INVITATION_STATUS, default='PENDING')
 
     def send_email(self):
@@ -197,10 +198,20 @@ class TeamInvitation(models.Model):
             # get invited user
             user = User.objects.get(email=self.email)
 
-            # create following relationship to project
             try:
-                if not user.follows.filter(project_id=self.project_id).exists():
-                    ProjectFollowing.objects.create(user=user, project=Project.objects.get(id=self.project_id))
+                project = Project.objects.get(id=self.project_id)
+
+                if self.auto_accept:
+                    # create following relationship to project
+                    if not user.follows.filter(project_id=self.project_id).exists():
+                        ProjectFollowing.objects.create(user=user, project=project)
+                else:
+                    # send notification to user
+                    project_url = '/projects/%d/' % project.id
+                    project_link = '<a href="%s" target="_blank">%s</a>' % (project_url, project.title)
+                    Notification.objects.create(user=user, text='You were invited to follow project %s.' % project_link,
+                                                custom_action='FOLLOW %d' % project.id, custom_action_text='Accept',
+                                                dismiss_action='Reject')
             except Project.DoesNotExist:
                 # project might have been deleted in the meanwhile
                 pass

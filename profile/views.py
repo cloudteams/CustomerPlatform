@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import requests
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -7,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
+from Activitytracker_Project.settings import SERVER_URL
 from ct_projects.models import Notification
 from profile.forms import UserProfileForm
 from profile.models import *
@@ -146,11 +148,45 @@ def opinion_about(request):
 @login_required
 def notifications(request):
     ctx = {
-        'notifications': [n for n in Notification.objects.filter(user=request.user, persistent=True).order_by('-created')
+        'notifications': [n for n in Notification.objects.filter(user=request.user, persistent=True, dismissed=False).order_by('-created')
                           if (not n.campaign()) or (not n.campaign().has_expired())]
     }
 
     return render(request, 'profile/notification/all.html', ctx)
+
+
+@login_required
+def perform_main_notification_action(request, pk):
+    try:
+        notification = Notification.objects.get(user=request.user, pk=pk)
+    except Notification.DoesNotExist:
+        return HttpResponse('Notification does not exist', status=404)
+
+    if not notification.custom_action:
+        return HttpResponse('This action is not permitted', status=403)
+
+    # perform main action
+    notification.perform_custom_action()
+
+    # dismiss notification
+    notification.dismissed = True
+    notification.save()
+
+    return redirect('/profile/notifications/')
+
+
+@login_required
+def dismiss_notification(request, pk):
+    try:
+        notification = Notification.objects.get(user=request.user, pk=pk)
+    except Notification.DoesNotExist:
+        return HttpResponse('Notification does not exist', status=404)
+
+    # dismiss notification
+    notification.dismissed = True
+    notification.save()
+
+    return redirect('/profile/notifications/')
 
 
 @login_required

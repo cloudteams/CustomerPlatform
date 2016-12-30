@@ -183,12 +183,18 @@ section.user-dashboard-projects-content {
 }
 
 /* Notifications */
+.notification form {
+    display: inline-block;
+}
+
 .notification-link {
     margin: 20px 20px 5px 0;
     display: inline-block;
     text-transform: uppercase;
     cursor: pointer;
     color: #7d3c8c;
+    background: none;
+    border: none;
 }
 
 .notification-link > .icon {

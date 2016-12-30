@@ -51,7 +51,7 @@
 									<div class="middle">
 										<a href="{% url 'notifications' %}">
 											<i class="icon icon-notification"></i>
-											{{ notifications|length }}
+											{{ request.user.all_notifications|length }}
 										</a>
 									</div>
 								</div>

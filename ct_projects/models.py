@@ -299,6 +299,9 @@ class Campaign(models.Model):
     def count_participants(self):
         return PollToken.objects.filter(poll__campaign=self).count()
 
+    def has_participated(self, user):
+        return self in user.get_participated_campaigns
+
     def send(self):
         # send notifications for all documents & polls
         users = self.get_users()
@@ -424,8 +427,15 @@ class Notification(models.Model):
     user = models.ForeignKey(User, related_name='notifications')
     document = models.ForeignKey(Document, blank=True, null=True, default=None)
     poll = models.ForeignKey(Poll, blank=True, null=True, default=None)
+
+    # custom notifications
     text = models.TextField(default='')
+    custom_action = models.TextField(default='')
+    custom_action_text = models.TextField(default='')
+    dismiss_action = models.TextField(default='')
+
     seen = models.BooleanField(default=False)
+    dismissed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     persistent = models.BooleanField(default=True)
 
@@ -458,8 +468,31 @@ class Notification(models.Model):
             return 'Open document'
         elif self.poll:
             return 'Participate in poll'
+        elif self.custom_action and self.custom_action_text:
+            return self.custom_action_text
         else:
             return 'OK'
+
+    def dismiss_action_text(self):
+        if self.dismiss_action:
+            return self.dismiss_action
+        elif self.document or self.poll or self.custom_action:
+            return 'Dismiss'
+        else:
+            return 'OK'
+
+    def perform_custom_action(self):
+        if not self.custom_action:
+            return
+
+        if self.custom_action.find('FOLLOW ') == 0:
+            try:
+                project_id = int(self.custom_action.split(' ')[1])
+                project = Project.objects.get(id=project_id)
+                if not self.user.follows.filter(project_id=project_id).exists():
+                    ProjectFollowing.objects.create(user=self.user, project=project)
+            except:
+                pass
 
 
 def get_participated_campaigns(user, project=None):
