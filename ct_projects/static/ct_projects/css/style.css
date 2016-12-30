@@ -183,11 +183,21 @@ section.user-dashboard-projects-content {
 }
 
 /* Notifications */
-a.notification-link,
-div.notification-link {
-    margin-bottom: 20px;
-    display: block;
-    color: #424242;
+.notification-link {
+    margin: 20px 20px 5px 0;
+    display: inline-block;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #7d3c8c;
+}
+
+.notification-link > .icon {
+    margin-top: 1px;
+    vertical-align: top;
+}
+
+.notification-link:hover {
+    color: #424242 !important;
 }
 
 .empty-dashboard {

@@ -14,7 +14,7 @@
 							</div>
 						</li>
 
-						<li class="search">
+						<li class="search desktop-only">
 							<div class="vertical-align">
 								<form class="project-search middle" action="/projects/" method="GET">
 									<input name="q" class="input-search" type="text" placeholder="Search projects" value="{{ q }}" autocomplete="false" />
@@ -28,7 +28,7 @@
 								<div class="middle">
 									<a href="{% url 'all-projects' %}">
 										<i class="icon icon-project"></i>
-										All projects
+										<span class="tablet-only">All projects</span>
 									</a>
 								</div>
 							</div>
@@ -40,7 +40,7 @@
 									<div class="middle">
 										<a href="{% url 'followed-projects' %}">
 											<i class="icon icon-dashboard"></i>
-											Dashboard
+											<span class="tablet-only">Dashboard</span>
 										</a>
 									</div>
 								</div>
@@ -51,7 +51,7 @@
 									<div class="middle">
 										<a href="{% url 'notifications' %}">
 											<i class="icon icon-notification"></i>
-											Notifications
+											{{ notifications|length }}
 										</a>
 									</div>
 								</div>

@@ -117,7 +117,7 @@ def follow_project(request, pk):
 
         # check if already followed
         if ProjectFollowing.objects.filter(project=project, user=request.user):
-            return HttpResponse('You are already following project #%d' % pk, status=403)
+            return HttpResponse('You are already following project #%s' % pk, status=403)
 
         # follow & return OK
         ProjectFollowing.objects.create(project=project, user=request.user)
@@ -133,12 +133,12 @@ def unfollow_project(request, pk):
         # get project
         project = Project.objects.get(pk=pk)
         if not project:
-            return HttpResponse('Project #%d does not exist' % pk, status=404)
+            return HttpResponse('Project #%s does not exist' % pk, status=404)
 
         # check if actually followed
         pfs = ProjectFollowing.objects.filter(project=project, user=request.user)
         if not pfs:
-            return HttpResponse('You are not following project #%d' % pk, status=403)
+            return HttpResponse('You are not following project #%s' % pk, status=403)
 
         # unfollow & return OK
         pfs.delete()
@@ -160,7 +160,7 @@ def project_details(request, pk):
             raise Http404()
 
         if not project:
-            return HttpResponse('Project #%d does not exist' % pk, status=404)
+            return HttpResponse('Project #%s does not exist' % pk, status=404)
 
         context = {
             'project': project,
@@ -190,7 +190,7 @@ def post_idea(request, pk):
     # get project
     project = Project.objects.get(pk=pk)
     if not project:
-        return HttpResponse('Project #%d does not exist' % pk, status=404)
+        return HttpResponse('Project #%s does not exist' % pk, status=404)
 
     context = {
         'project': project

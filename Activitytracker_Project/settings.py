@@ -83,6 +83,11 @@ MIDDLEWARE_CLASSES = (
     'ct_projects.middleware.notifications_middleware.NotificationsMiddleware',
 )
 
+if DEBUG:
+    MIDDLEWARE_CLASSES += (
+        'activitytracker.middleware.NoIfModifiedSinceMiddleware',
+    )
+
 ROOT_URLCONF = 'Activitytracker_Project.urls'
 
 WSGI_APPLICATION = 'Activitytracker_Project.wsgi.application'

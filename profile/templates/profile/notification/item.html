@@ -1,31 +1,37 @@
 {% load staticfiles %}
 {% load humanize %}
 
-{% with c=notification.campaign link=notification.url %}
-	{% if link %}<a href="{{ link }}" {% if c %}target="_blank"{% endif %}{% else  %}<div {% endif %}class="notification-link">
-		<article class="notification">
-			<div class="vertical-align">
-				<div class="middle">
-					{% if notification.seen %}
-						<i class="icon icon-check"></i>
-					{% endif %}
+{% with c=notification.campaign link=notification.url main_action=notification.main_action_text %}
+    <article class="notification">
+        <div class="vertical-align">
+            <div class="middle">
+                {% if notification.seen %}
+                    <i class="icon icon-check"></i>
+                {% endif %}
 
-					{{ notification.message }}<br />
-					{% if c %}
-						<span class="info">{{ c.name }} campaign, {{ c.project.title }}</span>
-					{% endif %}
-				</div>
+                {{ notification.message }}<br />
+                {% if c %}
+                    <span class="info">{{ c.name }} campaign, {{ c.project.title }}</span>
+                {% endif %}
 
-				<div class="middle">
-					{% if c %}
-						<p class="meta thin inline-block">{{ c.expires|naturaltime }}</p>
-					{% endif %}
-
+                <div>
                     {% if link %}
-					    <i class="fa fa-external-link fa-2x pull-right"></i>
+                        <a href="{{ link }}" class="notification-link" {% if c %}target="_blank"{% endif %}>
+                            <i class="icon icon-campaign"></i> {{ main_action }}
+                        </a>
                     {% endif %}
-				</div>
-			</div>
-		</article>
-	{% if link %}</a>{% else %}</div>{% endif %}
+
+                    <div class="notification-link dismiss-notification-link" data-notificationid="{{ notification.pk }}">
+                        <i class="icon {% if link %}icon-close{% else %}icon-check{% endif %}"></i> {% if link %}Dismiss{% else %}OK{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="middle">
+                {% if c %}
+                    <p class="meta thin inline-block">{{ c.expires|naturaltime }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </article>
 {% endwith %}

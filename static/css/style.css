@@ -1629,3 +1629,15 @@ div.modal {
     font-size: 9.5px;
     left: 155px;
 }
+
+@media screen and (max-width: 999px) {
+	.desktop-only {
+		display: none !important;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.tablet-only {
+		display: none !important;
+	}
+}

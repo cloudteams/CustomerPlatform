@@ -453,6 +453,14 @@ class Notification(models.Model):
         else:
             return None
 
+    def main_action_text(self):
+        if self.document:
+            return 'Open document'
+        elif self.poll:
+            return 'Participate in poll'
+        else:
+            return 'OK'
+
 
 def get_participated_campaigns(user, project=None):
     # completed polls

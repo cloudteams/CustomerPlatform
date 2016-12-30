@@ -3,6 +3,12 @@ from django.shortcuts import render, HttpResponseRedirect, redirect
 from social.exceptions import AuthCanceled, AuthAlreadyAssociated
 
 
+class NoIfModifiedSinceMiddleware(object):
+
+    def process_request(self, request):
+        request.META.pop('HTTP_IF_MODIFIED_SINCE', None)
+
+
 class SocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
     def process_exception(self, request, exception):
         if type(exception) == AuthCanceled:
