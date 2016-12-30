@@ -148,8 +148,7 @@ def opinion_about(request):
 @login_required
 def notifications(request):
     ctx = {
-        'notifications': [n for n in Notification.objects.filter(user=request.user, persistent=True, dismissed=False).order_by('-created')
-                          if (not n.campaign()) or (not n.campaign().has_expired())]
+        'notifications': request.user.all_notifications,
     }
 
     return render(request, 'profile/notification/all.html', ctx)

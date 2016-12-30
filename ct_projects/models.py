@@ -495,6 +495,14 @@ class Notification(models.Model):
                 pass
 
 
+@property
+def all_notifications(user):
+    return [n for n in Notification.objects.filter(user=user, persistent=True, dismissed=False).order_by('-created')
+            if (not n.campaign()) or (not n.campaign().has_expired())]
+
+User.all_notifications = all_notifications
+
+
 def get_participated_campaigns(user, project=None):
     # completed polls
     ps = PollToken.objects.filter(user=user).exclude(poll=None).filter(status='DONE')

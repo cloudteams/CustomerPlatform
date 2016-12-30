@@ -4,7 +4,6 @@ class NotificationsMiddleware(object):
     def process_request(self, request):
         if request.user.is_authenticated():
             # get persistent notifications
-            request.user.all_notifications = list(request.user.notifications.filter(persistent=True, dismissed=False))
             request.user.unread_notifications = list(request.user.notifications.filter(seen=False, persistent=True,
                                                                                        dismissed=False))
 
