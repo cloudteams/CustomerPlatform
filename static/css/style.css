@@ -1630,6 +1630,12 @@ div.modal {
     left: 155px;
 }
 
+.profile-picture {
+    width: 70px;
+    padding: 0 10px;
+    display: table-cell;
+}
+
 @media screen and (max-width: 999px) {
 	.desktop-only {
 		display: none !important;

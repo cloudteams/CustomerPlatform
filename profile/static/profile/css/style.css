@@ -68,12 +68,6 @@
     margin-bottom: 20px;
 }
 
-.profile-picture {
-    width: 70px;
-    padding: 0 10px;
-    display: table-cell;
-}
-
 /* Chosen */
 .chosen-single {
     background: none !important;
