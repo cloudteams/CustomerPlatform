@@ -190,6 +190,9 @@ class Idea(models.Model):
 
     comments = generic.GenericRelation(Comment, object_id_field='object_pk')
 
+    class Meta:
+        ordering = ['-created']
+        
     def get_rating_count(self):
         return self.ratings.all().count()
 
