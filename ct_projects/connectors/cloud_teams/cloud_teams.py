@@ -80,7 +80,7 @@ class CloudTeamsConnector:
                             # try to find
                             found = False
                             for comment in comments:
-                                if comment.comment == c_reply['title'] and comment.user_name == c_reply['author']:
+                                if comment.comment == c_reply['title']:
                                     found = True
                                     break
 
