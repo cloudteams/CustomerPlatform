@@ -250,6 +250,9 @@ class BlogPost(models.Model):
     def __unicode__(self):
         return '%s (Posted by %s under "%s")' % (self.title, self.author, self.project.title)
 
+    def get_absolute_url(self):
+        return '/projects/%s/blogs/%s/' % (str(self.project_id), str(self.pk))
+
 
 @receiver(post_save, sender=Idea)
 def on_idea_posted(sender, instance, created, **kwargs):

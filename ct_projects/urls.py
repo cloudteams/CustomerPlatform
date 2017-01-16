@@ -27,6 +27,7 @@ urlpatterns = [
     # campaigns, polls & documents
     url(r'^(?P<project_pk>[\w-]+)/campaigns/(?P<pk>\d+)$', views.campaign_details, name='campaign-details'),
     url(r'^(?P<project_pk>[\w-]+)/polls/(?P<pk>\d+)/token/$', views.request_poll_token, name='request-poll-token'),
+    url(r'^(?P<project_pk>[\w-]+)/blogs/(?P<pk>\d+)/$', views.blog_details, name='blog-details'),
 
     # generic
     url(r'^how-it-works$', views.how_it_works, name='how-it-works'),
