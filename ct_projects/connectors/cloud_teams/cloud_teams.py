@@ -7,7 +7,7 @@ from django_comments.models import Comment
 from Activitytracker_Project.settings import SITE_ID
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
-from ct_projects.models import Project, Campaign, Document, Poll, Idea
+from ct_projects.models import Project, Campaign, Document, Poll, Idea, BlogPost
 
 __author__ = 'dipap'
 
@@ -31,6 +31,7 @@ class CloudTeamsConnector:
         campaign_ids = []
         document_ids = []
         poll_ids = []
+        blogpost_ids = []
 
         for entry in entries:
             project = Project()
@@ -54,6 +55,27 @@ class CloudTeamsConnector:
 
             # save the project in the database
             project.save()
+
+            # save blogs
+            if 'blog' in entry:
+                for b in entry['blog']:
+                    # every blog post must have a title
+                    if 'blogpost_subject' not in b:
+                        continue
+
+                    try:
+                        blog = BlogPost.objects.get(project=project, title=b['blogpost_subject'])
+                    except BlogPost.DoesNotExist:
+                        blog = BlogPost(title=b['blogpost_subject'], project=project)
+
+                    blog.author = b['blogpost_author'] if 'blogpost_author' in b else ''
+                    blog.content = b['blogpost_body'] if 'blogpost_body' in b else ''
+                    blog.image_link = b['blogpost_img_link'] if 'blogpost_img_link' in b else ''
+                    blog.created = datetime.fromtimestamp(int(b['ctime'])) if 'ctime' in b else now()
+                    blog.save()
+
+                    # mark blog as found
+                    blogpost_ids.append(blog.pk)
 
             # get developer comments
             if 'customer_ideas' in entry:
@@ -166,5 +188,6 @@ class CloudTeamsConnector:
         Campaign.objects.all().exclude(id__in=campaign_ids).delete()
         Document.objects.all().exclude(id__in=document_ids).delete()
         Poll.objects.all().exclude(id__in=poll_ids).delete()
+        BlogPost.objects.all().exclude(id__in=blogpost_ids).delete()
 
         return len(entries)

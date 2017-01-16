@@ -192,7 +192,7 @@ class Idea(models.Model):
 
     class Meta:
         ordering = ['-created']
-        
+
     def get_rating_count(self):
         return self.ratings.all().count()
 
@@ -231,6 +231,24 @@ class Idea(models.Model):
             XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).add_post(str(self.project.id), message)
         except Fault:
             print('Could not post idea to team platform')
+
+
+class BlogPost(models.Model):
+    """
+    A blog entry posted by the team for a project
+    """
+    project = models.ForeignKey(Project, related_name='blogs')
+    created = models.DateTimeField()
+    title = models.CharField(max_length=255)
+    image_link = models.CharField(max_length=1024, default='')
+    author = models.CharField(max_length=1024, default='')
+    content = models.TextField()
+
+    class Meta:
+        ordering = ['-created']
+
+    def __unicode__(self):
+        return '%s (Posted by %s under "%s")' % (self.title, self.author, self.project.title)
 
 
 @receiver(post_save, sender=Idea)
