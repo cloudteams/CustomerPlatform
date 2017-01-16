@@ -174,7 +174,17 @@
 
                     <div class="row">
                         <div class="col-xs-12">
-                            <p>No blog posts yet.</p>
+                            {% with blogs=project.blogs.all %}
+                                {% if blogs %}
+                                    <div class="row">
+                                        {% for blog in blogs %}
+                                            {% include 'ct_projects/blogposts/teaser.html' %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p>No blog posts yet.</p>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                 </div>
