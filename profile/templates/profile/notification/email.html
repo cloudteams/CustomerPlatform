@@ -69,20 +69,16 @@ background-color: #f6f6f6;
                                     <td class="content-block" style="text-align: left; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                                         <img src="https://customers.cloudteams.eu/static/img/logo-purple.png" width="200" height="auto" style="width: 200px; height: auto; margin-bottom: 30px;"/>
 
-                                        {% with project_name=notification.poll.project.title project_id=notification.poll.project.pk poll_link=notification.poll|get_poll_token_link:notification.user %}
+                                        {% with project_name=notification.poll.cmpaign.project.title project_id=notification.poll.campaign.project.pk poll_link=notification.poll|get_poll_token_link:notification.user %}
                                             <h1>{{ project_name }} needs YOUR help!</h1>
 
-                                            {% if name %}
-                                                <p>Dear {{ notification.user.profile.get_display_name }}, </p>
-                                            {% else %}
-                                                <p>Hello, </p>
-                                            {% endif %}
+                                            <p>Dear {{ notification.user.profile.get_display_name }}, </p>
 
                                             <p>The <a href="http://customers.cloudteams.eu/projects/{{ project_id }}/">{{ project_name }}</a> project has published a new campaign, <b>{{ notification.poll.campaign.name }}</b>.</p>
                                             <p>Be a part of this project by participating in the campaign today!</p>
 
-                                            <p style="margin: 30px 0; text-align: center;">
-                                                <a href="{{ poll_link }}" style="background: #884c9b; border-color: #884c9b; color: #fff; font-size: 18px; padding: 20px 40px; text-transform: uppercase;">Participate now!</a>
+                                            <p style="margin: 50px 0; text-align: center;">
+                                                <a href="{{ poll_link }}" style="background: #884c9b; border: 2px solid #7d3c8c; border-radius: 5px; color: #fff; font-size: 18px; padding: 15px 30px; text-transform: uppercase; text-decoration: none;">Participate now</a>
                                             </p>
 
                                             <p>Thank you for your participation,<br />
