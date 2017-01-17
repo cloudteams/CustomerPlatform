@@ -69,7 +69,7 @@ background-color: #f6f6f6;
                                     <td class="content-block" style="text-align: left; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                                         <img src="https://customers.cloudteams.eu/static/img/logo-purple.png" width="200" height="auto" style="width: 200px; height: auto; margin-bottom: 30px;"/>
 
-                                        {% with project_name=notification.poll.cmpaign.project.title project_id=notification.poll.campaign.project.pk poll_link=notification.poll|get_poll_token_link:notification.user %}
+                                        {% with project_name=notification.poll.campaign.project.title project_id=notification.poll.campaign.project.pk poll_link=notification.poll|get_poll_token_link:notification.user %}
                                             <h1>{{ project_name }} needs YOUR help!</h1>
 
                                             <p>Dear {{ notification.user.profile.get_display_name }}, </p>
