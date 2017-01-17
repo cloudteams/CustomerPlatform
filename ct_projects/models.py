@@ -533,11 +533,20 @@ class NotificationEmail(models.Model):
 
     @staticmethod
     def send_emails():
+        # get pending notifications
         qs = Notification.objects. \
             exclude(user__email__iendswith='@test.com'). \
             exclude(Q(document=None) & Q(poll=None)). \
             filter(Q(document__campaign__expires__gt=now()) | Q(poll__campaign__expires__gt=now())). \
             filter(emails=None)
+
+        # make sure no user recieves more than one email
+        users = []
+        notifications = []
+        for notification in qs:
+            if notification.user.username not in users:
+                users.append(notification.user.username)
+                notifications.append(notification)
 
         for notification in qs:
             print(notification)
