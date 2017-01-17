@@ -11,5 +11,5 @@ Click the following link to participate:
 
 Thank you for your participation,
 
-The CloudTeams team<
+The CloudTeams team
 {% endwith %}
