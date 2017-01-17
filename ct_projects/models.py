@@ -533,6 +533,9 @@ class Notification(models.Model):
         if NotificationEmail.objects.filter(notification=self).exists():
             return
 
+        from django.utils.translation import activate
+        activate('en')
+
         # send the email
         email = DEFAULT_FROM_EMAIL
         mail_title = "[New CloudTeams Campaign] %s needs YOUR help!" % self.poll.campaign.project.title
