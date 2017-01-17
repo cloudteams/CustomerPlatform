@@ -538,11 +538,14 @@ class Notification(models.Model):
         mail_title = "[New CloudTeams Campaign] %s needs YOUR help!" % self.poll.campaign.project.title
 
         recipient = [self.user.email.encode('utf8')]
-        mail_message = get_template('profile/notification/email.html').render({
+        mail_message = get_template('profile/notification/email.txt').render({
+            'notification': self,
+        })
+        mail_html_message = get_template('profile/notification/email.html').render({
             'notification': self,
         })
 
-        send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
+        send_mail(mail_title, mail_message, email, recipient, html_message=mail_html_message, fail_silently=False)
 
         # mark as sent
         NotificationEmail.objects.create(notification=self)

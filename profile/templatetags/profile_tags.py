@@ -60,3 +60,9 @@ def get_year_options(_):
         idx += 1
 
     return years
+
+
+@register.filter
+def get_poll_token_link(poll, user):
+    return poll.get_poll_token_link(user)
+
