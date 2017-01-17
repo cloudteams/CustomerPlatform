@@ -536,8 +536,8 @@ class NotificationEmail(models.Model):
         # get pending notifications
         qs = Notification.objects. \
             exclude(user__email__iendswith='@test.com'). \
-            exclude(Q(document=None) & Q(poll=None)). \
-            filter(Q(document__campaign__expires__gt=now()) | Q(poll__campaign__expires__gt=now())). \
+            exclude(poll=None). \
+            filter(poll__campaign__expires__gt=now()). \
             filter(emails=None)
 
         # make sure no user receives more than one email
