@@ -6,6 +6,7 @@ from xmlrpclib import Fault
 
 import requests
 from django.contrib.contenttypes import generic
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -16,10 +17,11 @@ from django.db.models import Q
 from django.db.models import Sum
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
+from django.template.loader import get_template
 from django.utils.timezone import now
 from django_comments.models import Comment
 
-from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION
+from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION, DEFAULT_FROM_EMAIL
 from activitytracker.models import User
 from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
@@ -520,6 +522,31 @@ class Notification(models.Model):
             except:
                 pass
 
+    def send_email(self):
+        # validate that email should be sent
+        if not self.poll:
+            return
+
+        if self.poll.campaign.has_expired():
+            return
+
+        if NotificationEmail.objects.filter(notification=self).exists():
+            return
+
+        # send the email
+        email = DEFAULT_FROM_EMAIL
+        mail_title = "[New CloudTeams Campaign] %s needs YOUR help!" % self.poll.campaign.project.title
+
+        recipient = [self.user.email.encode('utf8')]
+        mail_message = get_template('profile/notification/email.html').render({
+            'notification': self,
+        })
+
+        send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
+
+        # mark as sent
+        NotificationEmail.objects.create(notification=self)
+
     def __unicode__(self):
         return 'Notification to %s about "%s"' % (self.user.username, self.message())
 
@@ -532,7 +559,7 @@ class NotificationEmail(models.Model):
     notification = models.ForeignKey(Notification, related_name='emails')
 
     @staticmethod
-    def send_emails():
+    def send_emails(log=True):
         # get pending notifications
         qs = Notification.objects. \
             exclude(user__email__iendswith='@test.com'). \
@@ -549,7 +576,11 @@ class NotificationEmail(models.Model):
                 notifications.append(notification)
 
         for notification in notifications:
-            print(notification)
+            if notification.user.username == 'dimitris':
+                if log:
+                    print(notification)
+
+                notification.send_email()
 
 
 @property
