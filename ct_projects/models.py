@@ -540,7 +540,7 @@ class NotificationEmail(models.Model):
             filter(Q(document__campaign__expires__gt=now()) | Q(poll__campaign__expires__gt=now())). \
             filter(emails=None)
 
-        # make sure no user recieves more than one email
+        # make sure no user receives more than one email
         users = []
         notifications = []
         for notification in qs:
@@ -548,7 +548,7 @@ class NotificationEmail(models.Model):
                 users.append(notification.user.username)
                 notifications.append(notification)
 
-        for notification in qs:
+        for notification in notifications:
             print(notification)
 
 
