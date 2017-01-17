@@ -75,13 +75,13 @@ background-color: #f6f6f6;
                                             <p>Dear {{ notification.user.profile.get_display_name }}, </p>
 
                                             <p>The <a href="http://customers.cloudteams.eu/projects/{{ project_id }}/">{{ project_name }}</a> project has published a new campaign, <b>{{ notification.poll.campaign.name }}</b>.</p>
-                                            <p>Be a part of this project by participating in the campaign today!</p>
+                                            <p>Be a part of this project by participating today!</p>
 
                                             <p style="margin: 50px 0; text-align: center;">
                                                 <a href="{{ poll_link }}" style="background: #884c9b; border: 2px solid #7d3c8c; border-radius: 5px; color: #fff; font-size: 18px; padding: 15px 30px; text-transform: uppercase; text-decoration: none;">Participate now</a>
                                             </p>
 
-                                            <p>Thank you for your participation,<br />
+                                            <p>Thank you for your interest,<br />
                                             <em>The CloudTeams team</em></p>
 
                                             <p style="margin-top: 30px; color: #aaa; font-size: 11px;"><em>This campaign expires in {{ notification.poll.campaign.expires|timeuntil }}.</em></p>

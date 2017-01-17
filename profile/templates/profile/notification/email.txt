@@ -4,12 +4,12 @@ Dear {{ notification.user.profile.get_display_name }},
 
 {% with project_name=notification.poll.project.title project_id=notification.poll.project.pk poll_link=notification.poll|get_poll_token_link:notification.user %}
 The {{ project_name }} project has published a new campaign, {{ notification.poll.campaign.name }}.
-Be a part of this project by participating in the campaign today!
+Be a part of this project by participating today!
 Click the following link to participate:
 
 {{ poll_link }}
 
-Thank you for your participation,
+Thank you for your interest,
 
 The CloudTeams team
 {% endwith %}
