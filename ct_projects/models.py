@@ -12,9 +12,11 @@ from django.db import models
 
 
 # The project is not a typical Django model as it's not saved on the CloudTeams community site but on BSCW
+from django.db.models import Q
 from django.db.models import Sum
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
+from django.utils.timezone import now
 from django_comments.models import Comment
 
 from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION
@@ -517,6 +519,28 @@ class Notification(models.Model):
                     ProjectFollowing.objects.create(user=self.user, project=project)
             except:
                 pass
+
+    def __unicode__(self):
+        return 'Notification to %s about "%s"' % (self.user.username, self.message())
+
+
+class NotificationEmail(models.Model):
+    """
+    A notification was sent by email
+    """
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    notification = models.ForeignKey(Notification, related_name='emails')
+
+    @staticmethod
+    def send_emails():
+        qs = Notification.objects. \
+            exclude(user__email__iendswith='@test.com'). \
+            exclude(Q(document=None) & Q(poll=None)). \
+            filter(Q(document__campaign__expires__gt=now()) | Q(poll__campaign__expires__gt=now())). \
+            filter(emails=None)
+
+        for notification in qs:
+            print(notification)
 
 
 @property
