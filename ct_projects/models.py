@@ -536,11 +536,21 @@ class Notification(models.Model):
     def send_email(self):
         # validate that email should be sent
         if not self.poll:
-            return
+            return None
 
+        # expired
         if self.poll.campaign.has_expired():
-            return
+            return None
 
+        # user has already participated
+        if self.poll.campaign.has_participated(self.user):
+            return None
+
+        # user has disabled notifications
+        if not self.user.profile.email_notifications:
+            return None
+
+        # already sent
         if NotificationEmail.objects.filter(notification=self).exists():
             return
 
@@ -562,7 +572,7 @@ class Notification(models.Model):
         send_mail(mail_title, mail_message, email, recipient, html_message=mail_html_message, fail_silently=False)
 
         # mark as sent
-        NotificationEmail.objects.create(notification=self)
+        return NotificationEmail.objects.create(notification=self)
 
     def __unicode__(self):
         return 'Notification to %s about "%s"' % (self.user.username, self.message())
@@ -585,19 +595,22 @@ class NotificationEmail(models.Model):
             filter(emails=None)
 
         # make sure no user receives more than one email
-        users = []
-        notifications = []
+        users = {}
         for notification in qs:
             if notification.user.username not in users:
-                users.append(notification.user.username)
-                notifications.append(notification)
+                users[notification.user.username] = []
 
-        for notification in notifications:
-            if notification.user.username == 'dimitris':
-                if log:
-                    print(notification)
+            users[notification.user.username].append(notification)
 
-                notification.send_email()
+        for username in users.keys():
+            if username == 'dimitris':
+                for notification in users[username]:
+                    if log:
+                        print(notification)
+
+                    # send at maximum one email
+                    if notification.send_email():
+                        break
 
 
 @property

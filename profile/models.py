@@ -46,6 +46,9 @@ class UserProfile(models.Model):
     # Check if the profile wizard has run at least once
     has_been_saved = models.BooleanField(default=False, editable=False)
 
+    # email notification setting
+    email_notifications = models.BooleanField(default=True)
+
     def get_display_name(self):
         if self.first_name and self.last_name_initial:
             return '%s %s.' % (self.first_name, self.last_name_initial)

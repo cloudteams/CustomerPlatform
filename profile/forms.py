@@ -25,7 +25,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        exclude = ('user', 'has_been_saved',)
+        exclude = ('user', 'has_been_saved', 'email_notifications')
         widgets = {
             'employment_status': forms.widgets.RadioSelect,
         }

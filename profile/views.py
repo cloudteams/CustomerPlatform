@@ -155,6 +155,18 @@ def notifications(request):
 
 
 @login_required
+def update_notification_settings(request):
+    if request.method != 'POST':
+        return HttpResponse('Only POST allowed', status=400)
+
+    # update profile
+    status = request.POST.get('status', 'enabled')
+    UserProfile.objects.filter(pk=request.user.profile.pk).update(email_notifications=status == 'enabled')
+
+    return HttpResponse('', status=200)
+
+
+@login_required
 def perform_main_notification_action(request, pk):
     try:
         notification = Notification.objects.get(user=request.user, pk=pk)

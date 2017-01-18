@@ -18,6 +18,7 @@ urlpatterns = [
         name='perform-main-notification-action'),
     url(r'^notifications/(?P<pk>\d+)/dismiss/$', views.dismiss_notification, name='notification-dismiss'),
     url(r'^notifications/$', views.notifications, name='notifications'),
+    url(r'^settings/email-notifications/$', views.update_notification_settings, name='update-notification-settings'),
     url(r'^send-invitation/$', views.send_invitation, name='send-invitation'),
 
     # Send an invitation

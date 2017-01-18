@@ -54,3 +54,28 @@
 			}
 		}
 
+		/* On email notification settings change */
+		$('#email-notifications-settings').on('change', function() {
+			var $message = $(this).parent().find('.message'),
+				$csrf = $(this).parent().find('input[name="csrfmiddlewaretoken"]'),
+				status = $(this).val();
+
+			$message.html('<div class="loader-general loader-general-gray"></div><span style="vertical-align: top;padding-top: 10px;margin-left: 10px;display: inline-block;color: #aaa;">Updating your settings...</span>');
+
+			/* update settings */
+			$.ajax({
+				url: '/profile/settings/email-notifications/',
+				type: 'POST',
+				data: {
+					csrfmiddlewaretoken: $csrf.val(),
+					status: status
+				},
+				success: function() {
+					$message.html('<i class="fa fa-check"></i> Email notifications are now <b>' + status + '</b>.');
+				},
+				error: function() {
+					$message.html('<i class="fa fa-times"></i> Some error occurred. Please try again later.');
+				}
+			});
+		});
+
