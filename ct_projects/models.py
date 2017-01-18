@@ -49,7 +49,18 @@ class Project(models.Model):
     application_type = models.TextField(blank=True, null=True, default=None)
     rewards = models.TextField(blank=True, null=True, default=None)
 
+    views = models.IntegerField(default=0)
+    trend_factor = models.FloatField(default=0, db_index=True)
     is_public = models.BooleanField(default=False)
+
+    def increase_views(self):
+        Project.objects.filter(pk=self.pk).update(views=self.views + 1)
+
+    def update_trend_factor(self):
+        tf = (self.number_of_followers * 10 + self.ideas.all().count() * 20 + self.views + 1.0) / \
+             ((now() - self.created).days + 1.0)
+
+        Project.objects.filter(pk=self.pk).update(trend_factor=tf)
 
     def get_running_campaigns(self):
         return [c for c in self.campaigns.all() if not c.has_expired()]

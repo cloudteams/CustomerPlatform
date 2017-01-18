@@ -50,8 +50,10 @@ def list_projects(request):
                                 Q(category__icontains=q))
 
     # ordering
-    order = request.GET.get('order', 'most-popular')
-    if order == 'most-popular':
+    order = request.GET.get('order', 'trending')
+    if order == 'trending':
+        qs = qs.order_by('-trend_factor')
+    elif order == 'most-popular':
         qs = qs.annotate(num_followers=Count('followed')).order_by('-num_followers', '-created')
     else:
         order = 'latest'
@@ -169,6 +171,9 @@ def project_details(request, pk):
 
         if request.GET.get('tab', '') == 'ideas':
             context['tab'] = 'ideas'
+
+        # increase project views
+        project.increase_views()
 
         return render(request, 'ct_projects/project/details.html', context)
     else:

@@ -19,6 +19,8 @@
                         <h2 class="header-large public search-term-header">
                             {% if q %}
                                 Search results for {{ q }}
+                            {% elif order == 'trending' %}
+                                Trending projects
                             {% elif order == 'latest' %}
                                 Latest projects
                             {% else %}
@@ -35,6 +37,7 @@
                                 <div class="select-dropdown">
                                     <i class="icon icon-arrow-down"></i>
                                     <select name="order-projects" id="order-projects" size="1">
+                                        <option value="trending" {% if order == 'trending' %}selected="selected"{% endif %}>Trending</option>
                                         <option value="latest" {% if order == 'latest' %}selected="selected"{% endif %}>Latest</option>
                                         <option value="most-popular" {% if order == 'most-popular' %}selected="selected"{% endif %}>Most popular</option>
                                     </select>
