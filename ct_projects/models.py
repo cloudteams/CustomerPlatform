@@ -605,11 +605,13 @@ class NotificationEmail(models.Model):
         for username in users.keys():
             if username == 'dimitris':
                 for notification in users[username]:
-                    if log:
-                        print(notification)
 
                     # send at maximum one email
                     if notification.send_email():
+
+                        if log:
+                            print(notification)
+
                         break
 
 
@@ -619,6 +621,7 @@ def all_notifications(user):
             if (not n.campaign()) or (not n.campaign().has_expired())]
 
 User.all_notifications = all_notifications
+
 
 def get_participated_campaigns(user, project=None):
     # completed polls
