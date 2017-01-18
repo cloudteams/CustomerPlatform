@@ -589,6 +589,7 @@ class NotificationEmail(models.Model):
     def send_emails(log=True):
         # get pending notifications
         qs = Notification.objects. \
+            filter(persistent=True, dismissed=False). \
             exclude(user__email__iendswith='@test.com'). \
             exclude(poll=None). \
             filter(poll__campaign__expires__gt=now()). \
