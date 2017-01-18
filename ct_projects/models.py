@@ -339,7 +339,7 @@ class Campaign(models.Model):
         return PollToken.objects.filter(poll__campaign=self).count()
 
     def has_participated(self, user):
-        return self in user.get_participated_campaigns
+        return self in user.get_participated_campaigns()
 
     def send(self):
         # send notifications for all documents & polls
@@ -543,7 +543,7 @@ class Notification(models.Model):
             return None
 
         # user has already participated
-        if self.poll.campaign.has_participated(self.user):
+        if self.poll.campaign.has_participated(user=self.user):
             return None
 
         # user has disabled notifications
@@ -619,7 +619,6 @@ def all_notifications(user):
             if (not n.campaign()) or (not n.campaign().has_expired())]
 
 User.all_notifications = all_notifications
-
 
 def get_participated_campaigns(user, project=None):
     # completed polls
