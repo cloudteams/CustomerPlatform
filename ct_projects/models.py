@@ -604,16 +604,15 @@ class NotificationEmail(models.Model):
             users[notification.user.username].append(notification)
 
         for username in users.keys():
-            if username == 'dimitris':
-                for notification in users[username]:
+            for notification in users[username]:
 
-                    # send at maximum one email
-                    if notification.send_email():
+                # send at maximum one email
+                if notification.send_email():
 
-                        if log:
-                            print(notification)
+                    if log:
+                        print(notification)
 
-                        break
+                    break
 
 
 @property
