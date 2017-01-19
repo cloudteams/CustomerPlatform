@@ -74,18 +74,21 @@ background-color: #f6f6f6;
 
                                             <p>Dear {{ notification.user.profile.get_display_name }}, </p>
 
-                                            <p>The <a href="http://customers.cloudteams.eu/projects/{{ project_id }}/">{{ project_name }}</a> project has published a new campaign, <b>{{ notification.poll.campaign.name }}</b>.</p>
-                                            <p>Be a part of this project by participating today!</p>
+                                            <p>The <a href="http://customers.cloudteams.eu/projects/{{ project_id }}/"><b>{{ project_name }}</b></a> project has launched a new campaign called {{ notification.poll.campaign.name }}.</p>
+                                            <p>e think that you may be interested in this project!
+                                                Help it by participating in their campaign today!</p>
 
                                             <p style="margin: 50px 0; text-align: center;">
                                                 <a href="{{ poll_link }}" style="background: #884c9b; border: 2px solid #7d3c8c; border-radius: 5px; color: #fff; font-size: 18px; padding: 15px 30px; text-transform: uppercase; text-decoration: none;">Participate now</a>
                                             </p>
 
-                                            <p>Thank you for your interest,<br />
-                                            <em>The CloudTeams team</em></p>
+                                            <p style="margin-bottom: 30px;">We will keep searching for interesting projects for you.</p>
+
+                                            <p>Thank you for your interest,</p>
+                                            <p><em>The CloudTeams team</em></p>
 
                                             <p style="margin-top: 30px; color: #aaa; font-size: 11px;"><em>This campaign expires in {{ notification.poll.campaign.expires|timeuntil }}</em>.</p>
-                                            <p style="color: #aaa; font-size: 11px;">Disable future email notifications from <a href="http://customers.cloudteams.eu/activitytracker/settings/#section-email-notifications">here</a>, or Login to CloudTeams > Settings > Email Notifications.</p>
+                                            <p style="color: #aaa; font-size: 11px;">Disable future email notifications from <a href="http://customers.cloudteams.eu/activitytracker/settings/#section-email-notifications">here</a>, or Login to CloudTeams and change it from Settings > Email Notifications.</p>
                                         {% endwith %}
 									</td>
 								</tr></table></td>
