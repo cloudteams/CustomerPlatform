@@ -3,7 +3,7 @@ __author__ = 'dipap'
 
 from django.core.management.base import BaseCommand
 from ct_projects.models import Campaign
-from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
+from ct_projects.connectors.team_platform.cloud_teams import CloudTeamsConnector
 
 
 class Command(BaseCommand):

@@ -73,7 +73,7 @@ def project_list(request):
 
 
 def fetch_all():
-    from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
+    from ct_projects.connectors.team_platform.cloud_teams import CloudTeamsConnector
     import time
 
     # wait for the change to take place

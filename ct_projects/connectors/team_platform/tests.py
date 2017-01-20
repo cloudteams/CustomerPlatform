@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ct_projects.connectors.cloud_teams.cloud_teams import CloudTeamsConnector
+from ct_projects.connectors.team_platform.cloud_teams import CloudTeamsConnector
 
 __author__ = 'dipap'
 

@@ -1,13 +1,14 @@
 from datetime import datetime
 
 import pytz
+from decimal import Decimal
 from django.utils.timezone import now
 from django_comments.models import Comment
 
 from Activitytracker_Project.settings import SITE_ID
-from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
-from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
-from ct_projects.models import Project, Campaign, Document, Poll, Idea, BlogPost
+from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
+from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
+from ct_projects.models import Project, Campaign, Document, Poll, Idea, BlogPost, ProjectManager
 
 __author__ = 'dipap'
 
@@ -137,6 +138,24 @@ class CloudTeamsConnector:
                     campaign.expires = datetime.strptime(c_entry['end'], '%Y-%m-%d %H:%M:%S') if ('end' in c_entry) and (c_entry['end'] != 'Never') else None
                     campaign.rewards = c_entry['rewards'] if 'rewards' in c_entry else ''
                     campaign.project = project
+
+                    # coins info
+                    if 'cloudcoins_info' in c_entry:
+                        ci = c_entry['cloudcoins_info']
+                        campaign.answer_value = Decimal(ci['answer_value'])
+                        campaign.max_answers = int(ci['answers_max'])
+
+                        # also check manager account
+                        try:
+                            manager = ProjectManager.objects.get(email=ci['manager_account'])
+                        except ProjectManager.DoesNotExist:
+                            manager = ProjectManager.objects.create(email=ci['manager_account'])
+
+                        campaign.manager = manager
+                    else:
+                        campaign.answer_value = None
+                        campaign.manager_account = None
+                        campaign.max_answers = None
 
                     # save the campaign in the database
                     campaign.save()

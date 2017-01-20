@@ -5,6 +5,7 @@ import datetime
 from xmlrpclib import Fault
 
 import requests
+import uuid as uuid
 from django.contrib.contenttypes import generic
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -23,8 +24,8 @@ from django_comments.models import Comment
 
 from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION, DEFAULT_FROM_EMAIL
 from activitytracker.models import User
-from ct_projects.connectors.cloud_teams.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
-from ct_projects.connectors.cloud_teams.xmlrpc_srv import XMLRPC_Server
+from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
+from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
 from ct_projects.lists import POLL_TOKEN_STATES
 
 from django.db import transaction
@@ -291,6 +292,13 @@ class IdeaRating(models.Model):
     value = models.SmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
 
+class ProjectManager(models.Model):
+    """
+    Very basic info for a project manager
+    """
+    email = models.EmailField()
+
+
 class Campaign(models.Model):
     """
     A CloudTeams Campaign
@@ -305,6 +313,11 @@ class Campaign(models.Model):
     expires = models.DateTimeField(blank=True, null=True, default=None)
     rewards = models.TextField(blank=True, null=True, default=None)
     logo = models.URLField(blank=True, null=True, default=None)
+
+    # coins info
+    answer_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=None)
+    manager = models.ForeignKey(ProjectManager, blank=True, null=True, default=None)
+    max_answers = models.IntegerField(blank=True, null=True, default=None)
 
     def has_expired(self):
         if self.expires:
