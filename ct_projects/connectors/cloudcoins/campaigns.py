@@ -104,6 +104,9 @@ class CampaignService(object):
         })
 
         if result.status_code >= 400:
+            if 'user has already answered' in json.loads(result.content)['payload'].lower():
+                raise CloudCoinsAnswerAlreadyExistsError('Answer already provided')
+
             raise CloudCoinsCampaignError('Answer could not be added.')
 
     def stop(self, campaign_id):

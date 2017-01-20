@@ -23,6 +23,10 @@ class CloudCoinsCampaignError(CloudCoinsRequestException):
     pass
 
 
+class CloudCoinsAnswerAlreadyExistsError(CloudCoinsCampaignError):
+    pass
+
+
 class CloudCoinsCommissionError(CloudCoinsRequestException):
     pass
 

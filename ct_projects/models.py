@@ -25,6 +25,7 @@ from django_comments.models import Comment
 from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION, DEFAULT_FROM_EMAIL
 from activitytracker.models import User
 from ct_projects.connectors.cloudcoins import CloudCoinsClient
+from ct_projects.connectors.cloudcoins.util import CloudCoinsAnswerAlreadyExistsError
 from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
 from ct_projects.lists import POLL_TOKEN_STATES
@@ -474,7 +475,11 @@ class PollToken(models.Model):
 
     def update_coins(self):
         if self.status == 'USED':
-            CloudCoinsClient().campaigns.add_answer(campaign_id=self.poll.campaign_id, user_id=self.user_id)
+            try:
+                CloudCoinsClient().campaigns.add_answer(campaign_id=self.poll.campaign_id, user_id=self.user_id)
+            except CloudCoinsAnswerAlreadyExistsError:
+                # here we don't care if answer was already posted
+                pass
 
 
 @receiver(post_save, sender=PollToken)
