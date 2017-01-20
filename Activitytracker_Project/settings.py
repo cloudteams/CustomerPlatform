@@ -260,4 +260,4 @@ if PRODUCTION:
 else:
     SERVER_URL = 'http://127.0.0.1:8008'
     ANONYMIZER_URL = 'http://localhost:8000'
-    CLOUDCOINS_SERVICE_URL = 'http://localhost:8009'
+    CLOUDCOINS_SERVICE_URL = 'http://localhost:8009/cloudcoins'

@@ -54,9 +54,8 @@ class CampaignService(object):
             'project_id': campaign_obj.project.id,
             'id': campaign_obj.id,
             'ends_at': timeformat(campaign_obj.expires),
-            'answer_value': int(campaign_obj.answer_value),
+            'answer_value': int(campaign_obj.answer_value) if campaign_obj.answer_value is not None else None,
             'max_answers': campaign_obj.max_answers,
-            'user_email': campaign_obj.manager.email,
         }
 
         if campaign_obj.manager:
@@ -99,9 +98,9 @@ class CampaignService(object):
 
         return campaign
 
-    def add_answer(self, campaign_id, user_obj):
+    def add_answer(self, campaign_id, user_id):
         result = requests.post('%s%d/add-answer/' % (self.endpoint, campaign_id), data={
-            'user_id': user_obj.pk,
+            'user_id': user_id,
         })
 
         if result.status_code >= 400:

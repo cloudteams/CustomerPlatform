@@ -6,6 +6,7 @@ from django.utils.timezone import now
 from django_comments.models import Comment
 
 from Activitytracker_Project.settings import SITE_ID
+from ct_projects.connectors.cloudcoins import CloudCoinsClient
 from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
 from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
 from ct_projects.models import Project, Campaign, Document, Poll, Idea, BlogPost, ProjectManager
@@ -159,6 +160,10 @@ class CloudTeamsConnector:
 
                     # save the campaign in the database
                     campaign.save()
+
+                    # send the campaign to the CC service
+                    if campaign.answer_value:
+                        CloudCoinsClient().campaigns.create_or_update(campaign.id, campaign)
 
                     # publish campaign to cloudcoins service
                     # add all campaign documents

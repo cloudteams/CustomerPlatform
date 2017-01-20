@@ -24,6 +24,7 @@ from django_comments.models import Comment
 
 from Activitytracker_Project.settings import ANONYMIZER_URL, PRODUCTION, DEFAULT_FROM_EMAIL
 from activitytracker.models import User
+from ct_projects.connectors.cloudcoins import CloudCoinsClient
 from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
 from ct_projects.lists import POLL_TOKEN_STATES
@@ -470,6 +471,17 @@ class PollToken(models.Model):
             result += '&persona=%d' % self.persona_id
 
         return result
+
+    def update_coins(self):
+        if self.status == 'USED':
+            CloudCoinsClient().campaigns.add_answer(campaign_id=self.poll.campaign_id, user_id=self.user_id)
+
+
+@receiver(post_save, sender=PollToken)
+def on_poll_token_saved(sender, instance, created, **kwargs):
+    # when token is used
+    if instance.status == 'USED':
+        instance.update_coins()
 
 
 class Notification(models.Model):
