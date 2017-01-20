@@ -1,3 +1,4 @@
+from Activitytracker_Project.settings import CLOUDCOINS_SERVICE_URL
 from ct_projects.connectors.cloudcoins.campaigns import CampaignService
 from ct_projects.connectors.cloudcoins.commissions import CommissionService
 from ct_projects.connectors.cloudcoins.projects import ProjectService
@@ -5,7 +6,7 @@ from ct_projects.connectors.cloudcoins.users import CustomerService, ProjectMana
 
 
 class CloudCoinsClient(object):
-    endpoint = 'https://customers.cloudteams.eu/cloudcoins/api'
+    endpoint = CLOUDCOINS_SERVICE_URL + '/api'
 
     def __init__(self):
         self.users = CustomerService(self.endpoint)

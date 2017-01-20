@@ -160,6 +160,7 @@ class CloudTeamsConnector:
                     # save the campaign in the database
                     campaign.save()
 
+                    # publish campaign to cloudcoins service
                     # add all campaign documents
                     if 'documents' in c_entry:
                         for d_entry in c_entry['documents']:

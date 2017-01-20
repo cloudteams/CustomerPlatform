@@ -249,6 +249,7 @@ AUTHENTICATION_BACKENDS = (
 if PRODUCTION:
     SERVER_URL = 'https://customers.cloudteams.eu'
     ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr'
+    CLOUDCOINS_SERVICE_URL = 'http://cloudteams.epu.ntua.gr/cloudcoins'
 
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -259,3 +260,4 @@ if PRODUCTION:
 else:
     SERVER_URL = 'http://127.0.0.1:8008'
     ANONYMIZER_URL = 'http://localhost:8000'
+    CLOUDCOINS_SERVICE_URL = 'http://localhost:8009'
