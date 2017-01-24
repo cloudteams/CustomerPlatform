@@ -107,6 +107,9 @@ def dashboard_campaigns(request):
         if c not in campaigns_participated and not c.has_expired():
             campaigns_invited.append(c)
 
+    # unique
+    campaigns_invited = list(set(campaigns_invited))
+
     # find running campaigns where user has not already participated
     campaigns_running = []
     for c in Campaign.objects.all():
