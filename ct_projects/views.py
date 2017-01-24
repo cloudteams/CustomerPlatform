@@ -10,7 +10,7 @@ from django_comments.forms import CommentForm
 from django_comments.models import Comment
 
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken, BlogPost
+from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken, BlogPost, Notification
 
 
 def how_it_works(request):
@@ -93,18 +93,31 @@ def followed_projects(request):
 
 
 @login_required
-def followed_campaigns(request):
+def dashboard_campaigns(request):
     """
     A list of projects in cloud teams that I follow
     """
-    projects = [f.project for f in ProjectFollowing.objects.filter(user=request.user)]
-    campaigns = []
-    for p in projects:
-        campaigns += p.get_running_campaigns()
+    # find participated campaigns
+    campaigns_participated = request.user.get_participated_campaigns()
+
+    # find invited campaigns
+    campaigns_invited = []
+    for n in Notification.objects.filter(user=request.user).exclude(Q(document=None) & Q(poll=None)):
+        c = n.campaign()
+        if c not in campaigns_participated and not c.has_expired():
+            campaigns_invited.append(c)
+
+    # find running campaigns where user has not already participated
+    campaigns_running = []
+    for c in Campaign.objects.all():
+        if not c.has_expired() and c not in campaigns_participated:
+            campaigns_running.append(c)
 
     context = {
-        'campaigns': campaigns,
-        'n_of_followed': len(campaigns),
+        'campaigns_invited': campaigns_invited,
+        'campaigns_running': campaigns_running,
+        'campaigns_participated': campaigns_participated,
+        'tab': request.GET.get('tab', 'invited'),
     }
 
     return render(request, 'ct_projects/campaign/dashboard.html', context)

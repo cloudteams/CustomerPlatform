@@ -2,13 +2,13 @@ a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     transition: color 0.3s ease-in-out;
 }
 
-/* body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
+body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):not(.btn-transparent):not(.campaign-project-teaser-link),
 header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download),
 header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     color: #ddd;
-} */
+}
 
-body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):hover,
+body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):not(.btn-transparent):not(.campaign-project-teaser-link):hover,
 body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):hover,
 body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):focus{
     color: whitesmoke;
@@ -28,7 +28,7 @@ main a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
 
 body > header .global-nav .container > ul li ul.submenu {
 	width: 250px;
-	left: -50px;
+	left: -75px;
 }
 
 body > header .global-nav .container > ul li ul.submenu li {
@@ -1655,4 +1655,10 @@ div.modal {
     color: #c9c;
     padding-bottom: 10px;
     border-bottom: 1px solid #c9c;
+}
+
+/* Fix in project dashboard */
+.user-dashboard-projects-content>.row article.project:nth-last-of-type(-n+2),
+article.campaign, article.reward {
+	margin-bottom: 30px !important;
 }

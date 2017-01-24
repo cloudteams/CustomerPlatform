@@ -2,11 +2,13 @@
 {% load staticfiles %}
 {% load project_tags %}
 
-<article class="campaign public-campaign block-line-half col-lg-6 col-md-6 col-sm-12 clear-3">
+<article class="campaign public-campaign block-line-half clear-3">
 	<div class="background">
 		<header class="article-header">
 			<h3 class="header-medium secondary">{{campaign.name}}</h3>
-			<p class="highlight bold">{{campaign.project.title}}</p>
+			<p class="highlight bold">
+                <a href="/projects/{{ campaign.project_id }}" class="campaign-project-teaser-link">{{ campaign.project.title }}</a>
+            </p>
 
 			<div class="tooltip-container">
 				<a href="#nowhere" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
@@ -54,6 +56,16 @@
 						<p class="bold">{{ campaign|print_days_left }}</p>
 					</td>
 				</tr>
+
+                <tr class="row">
+					<td class="col-xs-5">
+						<i class="icon icon-cloudcoins"></i>
+						<p>CloudCoins</p>
+					</td>
+					<td class="col-xs-7">
+						<p class="bold">{{ campaign.answer_value|default:0 }}</p>
+					</td>
+				</tr>
 			</table>
 		</div>
 
@@ -68,13 +80,8 @@
                             <a href="{% if request.user.is_authenticated %}{{ poll|get_poll_token_link:request.user }}{% else %}/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}{% endif %}"
                                class="btn col-xs-12"
                                {% if request.user.is_authenticated %}target="_blank"{% endif %}>Participate in poll</a>
-                        {% endfor %}
-
-                        {% for document in campaign.documents.all %}
-                            <a href="{% if request.user.is_authenticated %}{{ document.link }}{% else %}/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}{% endif %}"
-                               target="_blank"
-                               class="btn col-xs-12" style="padding: 10px;"
-                               title="View document {{ document.name }}"><i class="icon icon-document"></i> {{ document.name }}</a>
+                        {% empty %}
+                            <div style="margin-bottom: 39.5px; clear: both;"></div>
                         {% endfor %}
                     {% endif %}
                 </div>
