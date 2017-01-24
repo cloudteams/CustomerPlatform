@@ -474,7 +474,7 @@ class PollToken(models.Model):
         return result
 
     def update_coins(self):
-        if self.status == 'USED':
+        if self.status in ['USED', 'DONE']:
             try:
                 CloudCoinsClient().campaigns.add_answer(campaign_id=self.poll.campaign_id, user_id=self.user_id)
             except CloudCoinsAnswerAlreadyExistsError:
