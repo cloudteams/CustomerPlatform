@@ -63,7 +63,7 @@
 						<p>CloudCoins</p>
 					</td>
 					<td class="col-xs-7">
-						<p class="bold">{{ campaign.answer_value|default:0 }}</p>
+						<p class="bold">{{ campaign.answer_value|default:0|floatformat:0 }}</p>
 					</td>
 				</tr>
 			</table>
