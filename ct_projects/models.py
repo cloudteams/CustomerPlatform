@@ -60,7 +60,7 @@ class Project(models.Model):
         Project.objects.filter(pk=self.pk).update(views=self.views + 1)
 
     def update_trend_factor(self):
-        tf = (self.number_of_followers * 10 + self.ideas.all().count() * 20 + self.views + 1.0) / \
+        tf = (self.get_running_campaigns().__len__() * 10 + self.number_of_followers * 5 + self.ideas.all().count() * 3 + self.views + 1.0) / \
              ((now() - self.created).days + 1.0)
 
         Project.objects.filter(pk=self.pk).update(trend_factor=tf)
