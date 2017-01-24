@@ -3,10 +3,12 @@ from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Count
 from django.http import HttpResponse, HttpResponseForbidden, Http404
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 from django_comments.forms import CommentForm
 from django_comments.models import Comment
+
 from ct_projects.forms import IdeaForm, IdeaRatingForm
 from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken, BlogPost
 

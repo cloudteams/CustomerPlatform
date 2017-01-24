@@ -7,6 +7,12 @@ from ct_projects.connectors.cloudcoins.util import *
 
 
 class CloudCoinsCustomer(CloudCoinsApiEntity):
+    """
+    balance: 15,
+    last_updated: "2017-01-20T17:27:14.155",
+    id: 9515,
+    email: ""
+    """
     pass
 
 

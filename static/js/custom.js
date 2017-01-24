@@ -113,4 +113,15 @@ $(function() {
         e.preventDefault();
         return false;
     });
-})
+
+    /* Get coins information if user is logged in */
+    if (USER_ID !== undefined) {
+        $.ajax({
+            url: '/profile/get-current-balance/',
+            method: 'GET',
+            success: function(data) {
+                $('#cloudcoins-info > .balance').text(data.cloudcoins + ' CC earned');
+            }
+        })
+    }
+});

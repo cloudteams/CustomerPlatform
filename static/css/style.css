@@ -28,6 +28,7 @@ main a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):hover,
 
 body > header .global-nav .container > ul li ul.submenu {
 	width: 250px;
+	left: -50px;
 }
 
 body > header .global-nav .container > ul li ul.submenu li {
@@ -1646,4 +1647,12 @@ div.modal {
 	.tablet-only {
 		display: none !important;
 	}
+}
+
+/* Cloudcoins info */
+#cloudcoins-info {
+	margin-bottom: 10px;
+    color: #c9c;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c9c;
 }

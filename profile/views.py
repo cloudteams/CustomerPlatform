@@ -5,11 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
 from Activitytracker_Project.settings import SERVER_URL
 from ct_projects.models import Notification
+from ct_projects.connectors.cloudcoins import *
 from profile.forms import UserProfileForm
 from profile.models import *
 from profile.templatetags.profile_tags import get_brand_icon
@@ -281,3 +283,21 @@ def password_change(request):
             ctx['password_change_success'] = True
 
     return render(request, 'profile/password-change.html', ctx)
+
+
+@login_required
+def get_current_balance(request):
+    empty_info = {
+        'cloudcoins': 0
+    }
+
+    try:
+        customer = CloudCoinsClient().users.get(customer_id=request.user.pk)
+
+        info = {
+            'cloudcoins': customer.balance
+        }
+    except CloudCoinsCustomerError:  # customer has no coins information
+        info = empty_info
+
+    return JsonResponse(info)

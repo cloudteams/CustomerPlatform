@@ -81,6 +81,11 @@
 											{% include 'gamification/info.html' %}
 										{% endwith %}
 									</li>
+                                    <li>
+                                        <div id="cloudcoins-info">
+                                            <i class="icon icon-cloudcoins"></i> <span class="balance">Loading cloudcoins...</span>
+                                        </div>
+                                    </li>
 									<li><a href="/profile/"><i class="icon icon-profile"></i> Edit profile</a></li>
 									<li><a href="{% url 'settings' %}"><i class="icon icon-settings"></i> Settings</a></li>
 									<li><a href="{% url 'password-change' %}"><i class="icon icon-locked"></i> Change password</a></li>

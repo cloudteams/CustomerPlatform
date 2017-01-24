@@ -1,9 +1,9 @@
 /* Generic gamification info */
 .gamification-info {
-    color: #eee;
+    color: #c9c;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    border-bottom: 1px solid #aaa;
+    border-bottom: 1px solid #c9c;
 }
 
 .gamification-info .progress-container .progress-wrap .progress-bar {
@@ -20,7 +20,7 @@
 #badge-collection-popup .modal-header h3,
 #leaderboard-popup .modal-header button.close,
 #badge-collection-popup .modal-header button.close {
-    color: #eee;
+    color: #c9c;
 }
 
 .leaderboard-table > thead > tr > th {
