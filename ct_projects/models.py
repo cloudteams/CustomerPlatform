@@ -315,6 +315,7 @@ class Campaign(models.Model):
     expires = models.DateTimeField(blank=True, null=True, default=None)
     rewards = models.TextField(blank=True, null=True, default=None)
     logo = models.URLField(blank=True, null=True, default=None)
+    closed = models.BooleanField(default=False)
 
     # coins info
     answer_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=None)
@@ -322,8 +323,13 @@ class Campaign(models.Model):
     max_answers = models.IntegerField(blank=True, null=True, default=None)
 
     def has_expired(self):
+        if self.closed:
+            return True
+
         if self.expires:
             return datetime.datetime.today() > self.expires
+
+        return False
 
     def get_days_left(self):
         if self.has_expired():

@@ -210,9 +210,24 @@ class CloudTeamsConnector:
 
         # deleting objects not found in Team Platform
         Project.objects.all().exclude(id__in=project_ids).delete()
-        Campaign.objects.all().exclude(id__in=campaign_ids).delete()
-        Document.objects.all().exclude(id__in=document_ids).delete()
-        Poll.objects.all().exclude(id__in=poll_ids).delete()
         BlogPost.objects.all().exclude(id__in=blogpost_ids).delete()
+
+        # don't just delete campaigns & their items -- they might have expired!!
+        for campaign in Campaign.objects.all().exclude(id__in=campaign_ids):
+            if not campaign.has_expired():
+                campaign.closed = True
+                campaign.save()
+
+        for document in Document.objects.all().exclude(id__in=document_ids):
+            if not document.campaign.has_expired():
+                campaign = document.campaign
+                campaign.closed = True
+                campaign.save()
+
+        for poll in Poll.objects.all().exclude(id__in=poll_ids):
+            if not poll.campaign.has_expired():
+                campaign = poll.campaign
+                campaign.closed = True
+                campaign.save()
 
         return len(entries)
