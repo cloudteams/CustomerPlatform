@@ -485,7 +485,7 @@ class PollToken(models.Model):
 @receiver(post_save, sender=PollToken)
 def on_poll_token_saved(sender, instance, created, **kwargs):
     # when token is used
-    if instance.status == 'USED':
+    if instance.status in ['USED', 'DONE']:
         instance.update_coins()
 
 
