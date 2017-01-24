@@ -671,8 +671,8 @@ User.get_participated_campaigns = get_participated_campaigns
 @property
 def all_notifications(user):
     return [n for n in Notification.objects.filter(user=user, persistent=True, dismissed=False).order_by('-created')
-            if (not n.campaign()) or 
-            (not n.campaign().has_expired()) or
-            (n.campaign() not in user.get_participated_campaigns())]
+            if (not n.campaign()) or
+                ((not n.campaign().has_expired()) and
+                 (n.campaign() not in user.get_participated_campaigns()))]
 
 User.all_notifications = all_notifications
