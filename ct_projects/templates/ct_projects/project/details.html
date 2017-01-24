@@ -162,9 +162,9 @@
                         </header>
                     </div>
 
-                    {% with ideas=project.ideas.all %}
-                        {% include "ct_projects/idea/list.html" %}
-                    {% endwith %}
+                    <div id="ideas-container" data-projectid="{{ project.pk }}">
+                        <i class="loader-general loader-general-gray"></i> <span class="loader-message">Loading project ideas...</span>
+                    </div>
                 </div>
             </section>
 

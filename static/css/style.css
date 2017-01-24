@@ -1662,3 +1662,13 @@ div.modal {
 article.campaign, article.reward {
 	margin-bottom: 30px !important;
 }
+
+/* Loaders extra */
+.loader-message {
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 15px;
+    font-size: 16px;
+    color: #aaa;
+}

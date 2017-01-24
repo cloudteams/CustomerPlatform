@@ -124,4 +124,19 @@ $(function() {
             }
         })
     }
+
+    /* Async get ideas */
+    var $ideasContainer = $('#ideas-container');
+    if ($ideasContainer) {
+        $.ajax({
+            url: '/projects/' + $ideasContainer.data('projectid') + '/ideas/',
+            method: 'GET',
+            success: function(data) {
+                $ideasContainer.html(data)
+            },
+            error: function () {
+                $ideasContainer.html('<div style="color: #ff5071; font-size: 16px;"><i class="fa fa-times"></i> An error occurred, please try again later.</div>')
+            }
+        })
+    }
 });

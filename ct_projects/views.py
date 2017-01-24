@@ -146,6 +146,18 @@ def follow_project(request, pk):
         return HttpResponse('Only POST allowed', status=400)
 
 
+def get_project_ideas(request, pk):
+    try:
+        project = Project.objects.get(pk=pk)
+    except Project.DoesNotExist:
+        return HttpResponse('Project with id #%d was not found' % pk, status=404)
+
+    return render(request, 'ct_projects/idea/list.html', {
+        'project': project,
+        'ideas': project.ideas.all(),
+    })
+
+
 @login_required
 def unfollow_project(request, pk):
     # only posts allowed to this method
