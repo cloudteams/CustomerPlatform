@@ -10,7 +10,7 @@ from django_comments.forms import CommentForm
 from django_comments.models import Comment
 
 from ct_projects.forms import IdeaForm, IdeaRatingForm
-from ct_projects.models import ProjectFollowing, Idea, Project, Campaign, Poll, PollToken, BlogPost, Notification
+from ct_projects.models import *
 
 
 def how_it_works(request):
