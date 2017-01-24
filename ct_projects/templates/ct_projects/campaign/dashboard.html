@@ -26,8 +26,8 @@
         </ul>
 
         <section id="subpage-1" class="subpage{% if tab == 'invited' %} active{% endif %}">
-            {% if invited_campaigns %}
-                {% with campaigns=invited_campaigns %}
+            {% if campaigns_invited %}
+                {% with campaigns=campaigns_invited %}
                     {% include "ct_projects/campaign/list.html" %}
                 {% endwith %}
             {% else %}
