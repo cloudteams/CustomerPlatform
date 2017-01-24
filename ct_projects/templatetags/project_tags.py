@@ -61,6 +61,14 @@ def get_poll_token_link(poll, user):
 
 
 @register.filter
+def has_participated_to(user, campaign):
+    if not user.is_authenticated():
+        return False
+
+    return campaign in user.get_participated_campaigns()
+
+
+@register.filter
 def participated_campaigns_number(user, project=None):
     return user.get_participated_campaigns(project=project).count()
 

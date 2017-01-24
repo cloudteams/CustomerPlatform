@@ -79,7 +79,7 @@
                         {% for poll in campaign.polls.all %}
                             <a href="{% if request.user.is_authenticated %}{{ poll|get_poll_token_link:request.user }}{% else %}/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}{% endif %}"
                                class="btn col-xs-12"
-                               {% if request.user.is_authenticated %}target="_blank"{% endif %}>Participate in poll</a>
+                               {% if request.user.is_authenticated %}target="_blank"{% endif %}>{% if request.user|has_participated_to:campaign %}View results{% else %}Participate in poll{% endif %}</a>
                         {% empty %}
                             <div style="margin-bottom: 39.5px; clear: both;"></div>
                         {% endfor %}
