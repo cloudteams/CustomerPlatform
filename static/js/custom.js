@@ -120,14 +120,14 @@ $(function() {
             url: '/profile/get-current-balance/',
             method: 'GET',
             success: function(data) {
-                $('#cloudcoins-info > .balance').text(data.cloudcoins + ' CC earned');
+                $('#cloudcoins-info > .balance').html('<span class="user-current-balance">' + data.cloudcoins + '</span> CC');
             }
         })
     }
 
     /* Async get ideas */
     var $ideasContainer = $('#ideas-container');
-    if ($ideasContainer) {
+    if ($ideasContainer.length > 0) {
         $.ajax({
             url: '/projects/' + $ideasContainer.data('projectid') + '/ideas/',
             method: 'GET',

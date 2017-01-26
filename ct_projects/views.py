@@ -324,6 +324,19 @@ def rewards(request):
     })
 
 
+@login_required
+def purchase_reward(request, reward_pk):
+    try:
+        reward = Reward.objects.get(pk=reward_pk)
+    except Reward.DoesNotExist:
+        return HttpResponse('Reward was not found', status=404)
+
+    try:
+        reward.purchase(request.user)
+    except RewardPurchaseError as e:
+        return HttpResponse(str(e), status=400)
+
+
 # Project generic views
 def terms_and_conditions(request):
     return render(request, 'ct_projects/generic/terms-and-conditions.html')

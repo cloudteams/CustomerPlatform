@@ -1,8 +1,8 @@
 {% load static %}
 
-<div class="reward-teaser added-reward {{ reward_class|default:"col-md-3" }}">
+<div class="reward-teaser added-reward {{ reward_class|default:"col-md-3" }}" data-id="{{ reward.pk }}">
     <header class="reward-header">
-        <strong>{{ reward.name }}</strong>
+        <strong class="reward-name">{{ reward.name }}</strong>
     </header>
     <section class="reward-body">
         <img src="{% if reward.image_link %}{{ reward.image_link }}{% else %}{% static 'img/reward-default-logo.svg' %}{% endif %}"
@@ -10,15 +10,16 @@
              alt="Reward logo for {{ reward.name }}">
     </section>
     <section class="reward-content">
-        <p>{{ reward.description }}</p>
+        <p title="{{ reward.description }}">{{ reward.description|truncatechars:40 }}</p>
     </section>
     <hr>
     <section class="reward-content">
-        <p class="meta">Remaining: <span><strong{% if reward.remaining < 3 %} style="color: red;"{% endif %}>{{ reward.remaining }}</strong></span></p>
-        <p class="meta">CloudCoins needed: <span><strong>{{ reward.cost }}</strong></span></p>
+        <p class="project-name hidden">{{ reward.project.title }}</p>
+        <p class="meta">Remaining: <span><strong{% if reward.remaining < 3 %} class="running-out-warning"{% endif %}>{{ reward.remaining }}</strong></span></p>
+        <p class="meta">CloudCoins needed: <span><strong class="reward-cost">{{ reward.cost }}</strong></span></p>
     </section>
     <hr>
     <section class="reward-button">
-        <a href="#" class="btn" alt="buy reward" data-toggle="modal" data-target=".buy-new-reward-popup">buy</a>
+        <a href="#" class="btn reward-purchase-btn" alt="buy reward" data-toggle="modal" data-target=".buy-new-reward-popup">buy</a>
     </section>
 </div>

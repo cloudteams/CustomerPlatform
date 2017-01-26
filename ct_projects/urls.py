@@ -32,6 +32,7 @@ urlpatterns = [
 
     # rewards
     url(r'^rewards/$', views.rewards, name='rewards'),
+    url(r'^rewards/purchase/(?P<reward_pk>[\w-]+)/$', views.purchase_reward, name='purchase-reward'),
 
     # generic
     url(r'^how-it-works$', views.how_it_works, name='how-it-works'),

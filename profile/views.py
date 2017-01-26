@@ -288,5 +288,5 @@ def password_change(request):
 @login_required
 def get_current_balance(request):
     return JsonResponse({
-        'cloudcoins': CloudCoinsClient().users.get(customer_id=request.user.pk).balance
+        'cloudcoins': request.user.balance
     })

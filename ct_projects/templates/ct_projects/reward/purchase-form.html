@@ -18,15 +18,21 @@
 				<section class="confirm-1">
 					<div class="row confirm-1">
 						<div class="col-md-12 text-center">
-							<p>Are you sure you want to buy Reward #1?</p>
+                            <h4 class="reward-name"></h4>
+                            <div class="reward-id hidden"></div>
+                            <p>Project: <span class="project-name"></span></p>
+                            <p><span class="reward-description"></span></p>
+                            <p>Cost: <i class="icon icon-cloudcoins"></i> <span class="reward-cost"></span></p>
+							<p>Are you sure you want to buy <b class="reward-name"></b>?</p>
 						</div>
 					</div>
 					<hr>
 					<div class="row">
 						<div class="col-md-12">
+                            {% csrf_token %}
 							<fieldset class="form-group form-submit">
-								<a href="#nowhere" data-dismiss="modal" class="btn-transparent" alt="cancel">Cancel</a>
-								<a href="#nowhere" class="btn confirm-button" alt="create">Buy</a>
+								<a href="#" data-dismiss="modal" class="btn-transparent" alt="cancel">Cancel</a>
+								<a href="#" class="btn confirm-button confirm-purchase" alt="create">Buy</a>
 							</fieldset>
 						</div>
 					</div>
@@ -35,16 +41,14 @@
 
 					<div class="row">
 						<div class="col-md-12 text-center">
-							<p>Succesfully purchased!</p>
-							<a href="#" class="btn"><i class="icon icon-download"></i> Download</a>
-							<p>You can find this reward on your <a href="#">Reward page</a></p>
+
 						</div>
 					</div>
 					<hr>
 					<div class="row">
 						<div class="col-md-12">
 							<fieldset class="form-group form-submit">
-								<a href="#nowhere" data-dismiss="modal" class="btn" alt="cancel">Ok</a>
+								<a href="#" data-dismiss="modal" class="btn purchase-close" alt="cancel">Ok</a>
 							</fieldset>
 						</div>
 					</div>

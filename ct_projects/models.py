@@ -536,10 +536,8 @@ class Reward(models.Model):
             raise RewardPurchaseError('Reward has been sold out.')
 
         # check balance
-        balance = CloudCoinsClient().users.get(customer_id=buyer.pk)
-
-        if balance < self.cost:
-            raise RewardPurchaseError('Not enough CC!')
+        if buyer.balance < self.cost:
+            raise RewardPurchaseError('You don\'t have enough CloudCoins!')
 
         # Only on production
         if PRODUCTION:
@@ -764,3 +762,12 @@ def all_notifications(user):
                  (n.campaign() not in user.get_participated_campaigns()))]
 
 User.all_notifications = all_notifications
+
+
+@property
+def get_balance(user):
+    costs = RewardPurchase.objects.filter(user_id=user.pk).aggregate(total_cost=Sum('coins_spent'))['total_cost'] or 0
+
+    return CloudCoinsClient().users.get(customer_id=user.pk).balance - costs
+
+User.balance = get_balance
