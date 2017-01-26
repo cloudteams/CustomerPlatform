@@ -2,7 +2,7 @@ from django import template
 from django.db.models import Q
 from django_comments.forms import CommentForm
 
-from ct_projects.models import ProjectFollowing, PollToken, Notification
+from ct_projects.models import ProjectFollowing, PollToken, Notification, RewardPurchase
 import re
 
 __author__ = 'dipap'
@@ -86,6 +86,26 @@ def get_invited_campaigns(project, user):
             campaigns_invited.append(c)
 
     return list(set(campaigns_invited))
+
+
+@register.filter
+def count_invites_by_project(user, project):
+    ns = Notification.objects.filter(user=user).filter(Q(poll__campaign__project_id=project.pk) |
+                                                       Q(document__campaign__project_id=project.pk))
+
+    campaigns = []
+    for n in ns:
+        campaign = n.campaign()
+
+        if not campaign.has_expired():
+            campaigns.append(campaign)
+
+    return len(list(set(campaigns)))
+
+
+@register.filter
+def count_rewards_won_by(user, project):
+    return RewardPurchase.objects.filter(user=user, reward__project_id=project.pk).count()
 
 
 @register.filter

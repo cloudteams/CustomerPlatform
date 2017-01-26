@@ -49,7 +49,7 @@
                                         <p>My invites</p>
                                     </td>
                                     <td>
-                                        <p>-</p>
+                                        <p>{{ request.user|count_invites_by_project:project }}</p>
                                     </td>
                                 </tr>
 
@@ -59,7 +59,7 @@
                                         <p>My rewards won</p>
                                     </td>
                                     <td>
-                                        <p>-</p>
+                                        <p>{{ request.user|count_rewards_won_by:project }}</p>
                                     </td>
                                 </tr>
 
