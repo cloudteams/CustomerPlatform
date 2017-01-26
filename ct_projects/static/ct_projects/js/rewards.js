@@ -55,9 +55,14 @@ $(function() {
                 // update balance, remove/update teaser
                 $('.user-current-balance').text(currentBalance - cost);
                 $('.reward-teaser.added-reward[data-id="' + rewardId + '"]').remove();
-                $('.reward-teaser.public-reward[data-id="' + rewardId + '"]')
+
+                var $inProjectTeaser = $('.reward-teaser.public-reward[data-id="' + rewardId + '"]')
+                $inProjectTeaser
                     .find('.reward-purchase-btn')
                     .replaceWith('<a class="btn-grey" href="/projects/rewards/?tab=purchased"><i class="fa fa-check green-text"></i> Bought</a>');
+                $inProjectTeaser
+                    .find('.remaining-count')
+                    .text(Number($inProjectTeaser.find('.remaining-count')) - 1);
 
                 // remove placeholder purchase if exists
                 $('.purchase-placeholder').remove();

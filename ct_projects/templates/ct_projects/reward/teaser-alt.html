@@ -23,7 +23,7 @@
                         <p>Remaining</p>
                     </td>
                     <td class="col-xs-7">
-                        <p class="bold{% if reward.remaining < 3 %} running-out-warning{% endif %}">{{ reward.remaining }}</p>
+                        <p class="bold remaining-count{% if reward.remaining < 3 %} running-out-warning{% endif %}">{{ reward.remaining }}</p>
                     </td>
                 </tr>
 
@@ -44,7 +44,11 @@
                 <i class="fa fa-check green-text"></i> Bought
             </a>
         {% else %}
-            <a href="#" class="btn reward-purchase-btn" alt="buy reward" data-toggle="modal" data-target=".buy-new-reward-popup">buy</a>
+            {% if not reward.is_available %}
+                <a class="btn-grey" href="#"><i class="fa fa-times green-text"></i> {% if reward.remaining == 0 %}Sold out{% else %}Not available{% endif %}</a>
+            {% else %}
+                <a href="#" class="btn reward-purchase-btn" alt="buy reward" data-toggle="modal" data-target=".buy-new-reward-popup">buy</a>
+            {% endif %}
         {% endif %}
     </footer>
 </article>
