@@ -29,8 +29,6 @@
     <div class="container">
         <ul class="menu-subsection public">
             <li id="link-to-subsection-4" class="link-to-subsection active">About campaign</li>
-            <li id="link-to-subsection-5" class="link-to-subsection">Rewards</li>
-            <li id="link-to-subsection-6" class="link-to-subsection">Results</li>
         </ul>
     </div>
 </div>
@@ -62,47 +60,5 @@
     </div>
 </section>
 
-<section id="subsection-5" class="subsection">
-    <div class="container">
-        <div class="content">
-            <header>
-                <h2 class="header-medium secondary">Rewards</h2>
-            </header>
 
-            <p>{{ campaign.rewards|default:"No rewards" }}</p>
-        </div>
-    </div>
-</section>
 
-<section id="subsection-6" class="subsection">
-    <div class="container">
-        <div class="content">
-            <header>
-                <h2 class="header-medium secondary">Results</h2>
-            </header>
-
-            <div class="still-running">
-                <div class="vertical-align">
-                    <div class="middle">
-
-                        {% if campaign.has_expired %}
-                            {% if campaign.polls.exists %}
-                                {% with poll=campaign.polls.all|first %}
-                                    {% if request.user.is_authenticated %}
-                                        <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
-                                           class="btn">View campaign results<</a>
-                                    {% else %}
-                                        <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
-                                           class="btn">View campaign results<</a>
-                                    {% endif %}
-                                {% endwith %}
-                            {% endif %}
-                        {% else %}
-                            <h3 class="header-medium secondary">This campaign is still running</h3>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

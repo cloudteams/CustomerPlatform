@@ -6,21 +6,6 @@
 		<header class="article-header">
 			<h3 class="header-medium secondary">{{ poll.name }}</h3>
 			<p class="highlight bold">{{ poll.campaign.project.title }}</p>
-
-			<div class="tooltip-container">
-				<a href="#nowhere" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
-				<div class="custom-tooltip">
-					<ul>
-						<li>
-                            {% if request.user.is_authenticated %}
-                                <a href="{{poll|get_poll_token_link:request.user}}" target="_blank">Participate</a>
-                            {% else %}
-                                <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}">Participate</a>
-                            {% endif %}
-                        </li>
-					</ul>
-				</div>
-			</div>
 		</header>
 
 		<div class="content data">
@@ -32,20 +17,26 @@
 		</div>
 
 
-        <footer {% if poll.campaign.has_expired %}class="empty"{% endif %}>
-            {% if not poll.campaign.has_expired %}
-                <div class="row">
-                    <div class="col-xs-12">
-                        {% if request.user.is_authenticated %}
-                            <a href="{{poll|get_poll_token_link:request.user}}" target="_blank"
-                               class="btn">Participate in this poll</a>
+        <footer>
+            <div class="row">
+                <div class="col-xs-12">
+                    {% if request.user.is_authenticated %}
+                        {% if not poll.campaign.has_expired %}
+                            <a href="{{poll|get_poll_token_link:request.user}}" target="_blank" class="btn">Participate</a>
                         {% else %}
-                            <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
-                               class="btn">Participate in this poll</a>
+                            {% with results_url=poll.get_results_url %}
+                                {% if results_url %}
+                                    <a href="{{ results_url }}" target="_blank" class="btn">View results</a>
+                                {% else %}
+                                    <div class="btn disabled btn-default">No results</div>
+                                {% endif %}
+                            {% endwith %}
                         {% endif %}
-                    </div>
+                    {% else %}
+                        <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}" class="btn">Participate</a>
+                    {% endif %}
                 </div>
-            {% endif %}
+            </div>
         </footer>
 	</div>
 </article>

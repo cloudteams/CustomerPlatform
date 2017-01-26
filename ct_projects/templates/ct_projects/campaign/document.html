@@ -6,21 +6,6 @@
 		<header class="article-header">
 			<h3 class="header-medium secondary">{{ document.name }}</h3>
 			<p class="highlight bold">{{ document.campaign.project.title }}</p>
-
-			<div class="tooltip-container">
-				<a href="#nowhere" class="open-tooltip-button"><i class="icon icon-more-options"></i></a>
-				<div class="custom-tooltip">
-					<ul>
-						<li>
-                            {% if request.user.is_authenticated %}
-                                <a href="{{ document.link }}" target="_blank">View document</a>
-                            {% else %}
-                                <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}">View document</a>
-                            {% endif %}
-						</li>
-					</ul>
-				</div>
-			</div>
 		</header>
 
 		<div class="content data">
@@ -32,15 +17,13 @@
 		</div>
 
 
-        <footer {% if document.campaign.has_expired %}class="empty"{% endif %}>
-            {% if not document.campaign.has_expired %}
-                {% if request.user.is_authenticated %}
-                    <a href="{{ document.link }}" target="_blank"
-                       class="btn">View document</a>
-                {% else %}
-                    <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
-                       class="btn">View document</a>
-                {% endif %}
+        <footer>
+            {% if request.user.is_authenticated %}
+                <a href="{{ document.link }}" target="_blank"
+                   class="btn">View document</a>
+            {% else %}
+                <a href="/activitytracker/login/?next={% url 'campaign-details' campaign.project.pk campaign.pk %}"
+                   class="btn">View document</a>
             {% endif %}
         </footer>
 	</div>

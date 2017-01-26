@@ -387,6 +387,30 @@ class Campaign(models.Model):
 
         print('%d campaign%s sent' % (len(campaigns), '' if len(campaigns) == 1 else 's'))
 
+    def save(self, *args, **kwargs):
+
+        # for closed campaigns, cancel notifications
+        if self.pk and self.has_expired():
+            Notification.objects.\
+                filter(Q(poll__campaign_id=self.pk) | Q(document__campaign_id=self.pk)). \
+                update(dismissed=True)
+
+        super(Campaign, self).save(*args, **kwargs)
+
+    def get_results_url(self):
+        if not self.has_expired():
+            return None
+
+        try:
+            token = PollToken.objects.filter(poll__campaign_id=self.pk, status='DONE')[0]
+        except IndexError:
+            return None
+
+        return token.token_link + '&mode=votes'
+
+    def __str__(self):
+        return '%s (%s)' % (self.name, 'closed' if self.has_expired() else 'open')
+
 
 class Document(models.Model):
     """
@@ -482,6 +506,13 @@ class PollToken(models.Model):
             except CloudCoinsAnswerAlreadyExistsError:
                 # here we don't care if answer was already posted
                 pass
+
+            # maybe campaign now must be closed
+            campaign = self.poll.campaign
+            if campaign.max_answers is not None:
+                if campaign.max_answers <= campaign.count_participants():
+                    campaign.closed = True
+                    campaign.save()
 
 
 @receiver(post_save, sender=PollToken)
@@ -631,7 +662,7 @@ class Notification(models.Model):
         if self.document:
             return 'Open document'
         elif self.poll:
-            return 'Participate in poll'
+            return 'Participate'
         elif self.custom_action and self.custom_action_text:
             return self.custom_action_text
         else:

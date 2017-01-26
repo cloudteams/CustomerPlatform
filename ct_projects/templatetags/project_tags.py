@@ -1,7 +1,8 @@
 from django import template
+from django.db.models import Q
 from django_comments.forms import CommentForm
 
-from ct_projects.models import ProjectFollowing, PollToken
+from ct_projects.models import ProjectFollowing, PollToken, Notification
 import re
 
 __author__ = 'dipap'
@@ -66,6 +67,25 @@ def has_participated_to(user, campaign):
         return False
 
     return campaign in user.get_participated_campaigns()
+
+
+@register.filter
+def get_invited_campaigns(project, user):
+    if not user.is_authenticated():
+        return []
+
+    # find participated campaigns
+    campaigns_participated = user.get_participated_campaigns()
+
+    # find invited campaigns
+    campaigns_invited = []
+    for n in Notification.objects.filter(user=user).filter(Q(document__campaign__project_id=project.pk) |
+                                                           Q(poll__campaign__project_id=project.pk)):
+        c = n.campaign()
+        if c not in campaigns_participated and not c.has_expired():
+            campaigns_invited.append(c)
+
+    return list(set(campaigns_invited))
 
 
 @register.filter
