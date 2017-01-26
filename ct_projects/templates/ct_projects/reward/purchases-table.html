@@ -1,0 +1,38 @@
+<div class="row">
+
+    <div class="row bought-rewards-content-row">
+
+        <div class="bought-rewards-row-header">
+            <article class="bought-rewards-row-item col-lg-5">
+                <p>Reward name</p>
+            </article>
+
+            <article class="bought-rewards-row-item col-lg-3">
+                <p>Bought on</p>
+            </article>
+
+            <article class="bought-rewards-row-item col-lg-3">
+                <p class="bought-rewards-align-right"><i class="icon icon-cloudcoins"></i></p>
+            </article>
+        </div>
+
+        {% for purchase in purchases %}
+            {% include 'ct_projects/reward/purchase-table-row.html' %}
+        {% empty %}
+            <div class="bought-rewards-row-content purchase-placeholder">
+                <article class="bought-rewards-row-item col-lg-5">
+                    <p><a href="#" class="purple-link">No purchases</a></p>
+                </article>
+
+                <article class="bought-rewards-row-item col-lg-3">
+
+                </article>
+
+                <article class="bought-rewards-row-item col-lg-3">
+
+                </article>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>

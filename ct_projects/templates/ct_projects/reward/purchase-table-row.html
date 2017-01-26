@@ -1,0 +1,15 @@
+            <div class="bought-rewards-row-content">
+                <article class="bought-rewards-row-item col-lg-5">
+                    <p><a href="{{ purchase.reward.download_ref }}" target="_blank" class="reward-download-link purple-link">{{ purchase.reward.name }}</a></p>
+                </article>
+
+                <article class="bought-rewards-row-item col-lg-3">
+                    <p class="bold">
+                        <time datetime="{{ purchase.created }}">{{ purchase.created|date:'Y-m-d' }}</time>
+                    </p>
+                </article>
+
+                <article class="bought-rewards-row-item col-lg-3">
+                    <p class="bought-rewards-align-right">{{ purchase.coins_spent }}</p>
+                </article>
+            </div>

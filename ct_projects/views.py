@@ -318,7 +318,7 @@ blog_details = BlogPostDetailView.as_view()
 @login_required
 def rewards(request):
     return render(request, 'ct_projects/reward/index.html', {
-        'store_rewards': Reward.available_rewards(),
+        'store_rewards': Reward.available_rewards(user=request.user),
         'purchases': RewardPurchase.objects.filter(user=request.user),
         'tab': request.GET.get('tab', 'store')
     })
@@ -332,9 +332,13 @@ def purchase_reward(request, reward_pk):
         return HttpResponse('Reward was not found', status=404)
 
     try:
-        reward.purchase(request.user)
+        purchase = reward.purchase(request.user)
     except RewardPurchaseError as e:
         return HttpResponse(str(e), status=400)
+
+    return render(request, 'ct_projects/reward/purchase-table-row.html', {
+        'purchase': purchase,
+    })
 
 
 # Project generic views

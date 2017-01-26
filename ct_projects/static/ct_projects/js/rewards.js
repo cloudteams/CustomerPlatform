@@ -31,7 +31,7 @@ $(function() {
             $popupSection2 = $popup.find('section.confirm-2'),
             rewardId = $popupSection1.find('.reward-id').text(),
             cost = Number($popupSection1.find('.reward-cost').text()),
-            currentBalance =  Number($('.user-current-balance').text()),
+            currentBalance =  Number($($('.user-current-balance').get(0)).text()),
             csrfToken = $popup.find('input[name="csrfmiddlewaretoken"]').val();
 
         // loading animation
@@ -50,11 +50,28 @@ $(function() {
             data: {
                 csrfmiddlewaretoken: csrfToken
             },
-            success: function(data) {
+            success: function(purchaseRow) {
 
-                // update balance, remove teaser, add transaction
+                // update balance, remove teaser
                 $('.user-current-balance').text(currentBalance - cost);
                 $('.reward-teaser[data-id="' + rewardId + '"]').remove();
+
+                // remove placeholder purchase if exists
+                $('.purchase-placeholder').remove();
+
+                // add transaction to table
+                var $table = $('.bought-rewards-content-row'),
+                    $purchaseRow = $(purchaseRow);
+
+                $table.append($purchaseRow);
+
+                // update modal
+                var $container = $popupSection2.find('.col-md-12.text-center');
+                $container
+                    .empty()
+                    .append('<p>Succesfully purchased!</p>')
+                    .append('<a href="' + $purchaseRow.find('.reward-download-link').attr('href') +  '" target="_blank" class="btn"><i class="icon icon-download"></i> Download</a>')
+                    .append('<p>You can find this reward on your <a href="/projects/rewards/?tab=purchased" class="purple-link">Reward page</a></p>');
             },
             error: function(error) {
                 var message = error.responseText,
@@ -62,7 +79,7 @@ $(function() {
 
                 if (message.indexOf('enough CloudCoins') >= 0) {
                     message = message.replace('CloudCoins!', '<i class="icon icon-cloudcoins"></i>');
-                    messageAlt = '<p>Participate in <a href="/projects/dashboard/campaigns/?tab=running">open campaigns</a> to collect CC and buy your favourite rewards!</p>'
+                    messageAlt = '<p>Participate in <a href="/projects/dashboard/campaigns/?tab=running" class="purple-link">open campaigns</a> to collect CC and buy your favourite rewards!</p>'
                 }
 
                 $popupSection2

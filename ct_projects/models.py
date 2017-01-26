@@ -522,8 +522,17 @@ class Reward(models.Model):
         return '%s' % self.name
 
     @staticmethod
-    def available_rewards():
-        return Reward.objects.filter(is_available=True)
+    def available_rewards(user=None):
+        qs = Reward.objects.filter(is_available=True)
+
+        # for user, exclude bough rewards
+        if user:
+            qs = qs.exclude(sales__user_id=user.pk)
+
+        # least remaining first
+        qs = qs.order_by('remaining')
+
+        return qs
 
     def purchase(self, buyer):
 
@@ -548,7 +557,7 @@ class Reward(models.Model):
                 raise RewardPurchaseError('Reward has been sold out.')
 
         # create purchase entry
-        RewardPurchase.objects.create(user=buyer, reward=self, coins_spent=self.cost)
+        purchase = RewardPurchase.objects.create(user=buyer, reward=self, coins_spent=self.cost)
 
         # update customer balance
         # TODO make call to CC service to update balance
@@ -557,12 +566,12 @@ class Reward(models.Model):
         self.given += 1
         self.remaining -= 1
 
-        if self.remaining < 0:
+        if self.remaining <= 0:
             self.is_available = False
 
         self.save()
 
-        return self
+        return purchase
 
 
 class RewardPurchase(models.Model):
