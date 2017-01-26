@@ -28,7 +28,7 @@ from ct_projects.connectors.cloudcoins import CloudCoinsClient
 from ct_projects.connectors.cloudcoins.util import CloudCoinsAnswerAlreadyExistsError
 from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, CUSTOMER_PASSWD
 from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
-from ct_projects.lists import POLL_TOKEN_STATES
+from ct_projects.lists import POLL_TOKEN_STATES, REWARD_TYPES
 
 from django.db import transaction
 
@@ -50,7 +50,6 @@ class Project(models.Model):
     category = models.TextField(blank=True, null=True, default=None)
     icon = models.TextField(blank=True, null=True, default=None)
     application_type = models.TextField(blank=True, null=True, default=None)
-    rewards = models.TextField(blank=True, null=True, default=None)
 
     views = models.IntegerField(default=0)
     trend_factor = models.FloatField(default=0, db_index=True)
@@ -83,7 +82,7 @@ class Project(models.Model):
         return related
 
     def has_rewards(self):
-        return self.campaigns.all().exclude(rewards='').exclude(rewards=None).exists()
+        return self.rewards.exists()
 
     def anonymize(self, user):
         """
@@ -135,7 +134,6 @@ class Project(models.Model):
             'description': self.description,
             'category': self.category,
             'application_type': self.application_type,
-            'rewards': self.rewards,
             'logo': self.logo,
             'is_public': self.is_public,
             'number_of_followers': self.number_of_followers,
@@ -313,7 +311,6 @@ class Campaign(models.Model):
     description = models.TextField()
     starts = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=True, default=None)
-    rewards = models.TextField(blank=True, null=True, default=None)
     logo = models.URLField(blank=True, null=True, default=None)
     closed = models.BooleanField(default=False)
 
@@ -379,7 +376,6 @@ class Campaign(models.Model):
             'description': self.description,
             'starts': self.starts,
             'expires': self.expires,
-            'rewards': self.rewards,
             'logo': self.logo,
         }
 
@@ -493,6 +489,28 @@ def on_poll_token_saved(sender, instance, created, **kwargs):
     # when token is used
     if instance.status in ['USED', 'DONE']:
         instance.update_coins()
+
+
+class Reward(models.Model):
+    """
+    A reward offered by a project
+    """
+    id = models.IntegerField(primary_key=True)
+    project = models.ForeignKey(Project, related_name='rewards')
+    reward_type = models.CharField(max_length=32, choices=REWARD_TYPES)
+    image_link = models.CharField(max_length=1024, default='')
+    download_ref = models.CharField(max_length=1024, default='')
+    name = models.CharField(max_length=512)
+    description = models.TextField()
+
+    # logistics
+    cost = models.IntegerField(validators=[MinValueValidator(1)])
+    total_amount = models.IntegerField(validators=[MinValueValidator(1)])
+    given = models.IntegerField(validators=[MinValueValidator(0)])
+    remaining = models.IntegerField(validators=[MinValueValidator(0)])
+
+    def __str__(self):
+        return '%s' % self.name
 
 
 class Notification(models.Model):

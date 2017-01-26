@@ -9,7 +9,8 @@ from Activitytracker_Project.settings import SITE_ID
 from ct_projects.connectors.cloudcoins import CloudCoinsClient
 from ct_projects.connectors.team_platform.server_login import SERVER_URL, USER_PASSWD, XAPI_TEST_FOLDER, CUSTOMER_PASSWD
 from ct_projects.connectors.team_platform.xmlrpc_srv import XMLRPC_Server
-from ct_projects.models import Project, Campaign, Document, Poll, Idea, BlogPost, ProjectManager
+from ct_projects.lists import REWARD_TYPES
+from ct_projects.models import Project, Campaign, Document, Poll, Idea, BlogPost, ProjectManager, Reward
 
 __author__ = 'dipap'
 
@@ -47,7 +48,6 @@ class CloudTeamsConnector:
             project.description = entry['descr'] if 'descr' in entry else ''
             project.application_type = entry['bscw_cloudteams:p_type']
             project.logo = entry['logo']['url'] if 'logo' in entry else ''
-            project.rewards = entry['rewards'] if 'rewards' in entry else ''
             project.category = entry['bscw_cloudteams:p_category']
             project.icon = entry['category_icon'] if 'category_icon' in entry else ''
             project.managers = ','.join(entry['managers']) if 'managers' in entry else ''
@@ -121,6 +121,33 @@ class CloudTeamsConnector:
                                                                  site_id=SITE_ID, submit_date=submit_date)
                                 comments.append(comment)
 
+            # get all project rewards
+            if 'rewards' in entry and entry['rewards']:
+                for reward_id in entry['rewards'].keys():
+                    r_entry = entry['rewards'][reward_id]
+
+                    # get or create
+                    try:
+                        reward = Reward.objects.get(pk=int(reward_id))
+                    except Reward.DoesNotExist:
+                        reward = Reward(pk=int(reward_id), given=0, project=project)
+
+                    # pass reward info
+                    reward.name = r_entry['name']
+                    reward.description = r_entry['description'] if 'description' in r_entry else ''
+                    reward.image_link = r_entry['picture']['url'] if 'picture' in r_entry else ''
+                    reward.download_ref = r_entry['download_ref']
+                    reward.reward_type = REWARD_TYPES[r_entry['type']][0] if 0 <= r_entry['type'] <= 2 else 'OTHER'
+
+                    # update logistics, but keep in mind server might be behind on this one (somehow)
+                    reward.cost = r_entry['cloudcoins_needed']
+                    reward.total_amount = r_entry['amount_of_rewards']
+                    reward.given = max(r_entry['rewards_given'], reward.given)
+                    reward.remaining = max(reward.total_amount - reward.given, 0)
+
+                    # save
+                    reward.save()
+
             # get all project campaigns
             if 'campaigns' in entry:
                 for c_entry in entry['campaigns']:
@@ -137,7 +164,6 @@ class CloudTeamsConnector:
                     campaign.logo = c_entry['logo']['url'] if 'logo' in c_entry else ''
                     campaign.starts = datetime.strptime(c_entry['start'], '%Y-%m-%d %H:%M:%S') if 'start' in c_entry else now()
                     campaign.expires = datetime.strptime(c_entry['end'], '%Y-%m-%d %H:%M:%S') if ('end' in c_entry) and (c_entry['end'] != 'Never') else None
-                    campaign.rewards = c_entry['rewards'] if 'rewards' in c_entry else ''
                     campaign.project = project
 
                     # coins info
