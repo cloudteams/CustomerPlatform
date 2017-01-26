@@ -399,7 +399,7 @@ class Campaign(models.Model):
 
     def get_results_url(self):
         try:
-            return self.polls.all()[0].get_results_ur()
+            return self.polls.all()[0].get_results_url()
         except IndexError:
             return None
 
