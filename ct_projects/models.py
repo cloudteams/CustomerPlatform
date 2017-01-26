@@ -81,8 +81,8 @@ class Project(models.Model):
 
         return related
 
-    def has_rewards(self):
-        return self.rewards.exists()
+    def count_rewards(self):
+        return self.rewards.all().count()
 
     def anonymize(self, user):
         """
@@ -506,7 +506,7 @@ class PollToken(models.Model):
         return result
 
     def update_coins(self):
-        if self.status in ['USED', 'DONE']:
+        if self.status == 'DONE':
             try:
                 CloudCoinsClient().campaigns.add_answer(campaign_id=self.poll.campaign_id, user_id=self.user_id)
             except CloudCoinsAnswerAlreadyExistsError:
@@ -523,8 +523,8 @@ class PollToken(models.Model):
 
 @receiver(post_save, sender=PollToken)
 def on_poll_token_saved(sender, instance, created, **kwargs):
-    # when token is used
-    if instance.status in ['USED', 'DONE']:
+    # when token is completed
+    if instance.status == 'DONE':
         instance.update_coins()
 
 
@@ -619,6 +619,9 @@ class RewardPurchase(models.Model):
     reward = models.ForeignKey(Reward, related_name='sales')
     coins_spent = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return '<User %s> bought %s' % (self.user.username, str(self.reward))
 
 
 class Notification(models.Model):

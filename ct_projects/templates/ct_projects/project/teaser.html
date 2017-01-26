@@ -62,7 +62,7 @@
                             <p>Rewards</p>
                         </td>
                         <td class="col-xs-7">
-                            <p class="bold">{% if project.has_rewards %}Yes{% else %}No{% endif %}</p>
+                            <p class="bold">{{ project.count_rewards|default:"No" }}</p>
                         </td>
                     </tr>
                 </table>

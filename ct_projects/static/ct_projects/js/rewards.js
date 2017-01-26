@@ -52,9 +52,12 @@ $(function() {
             },
             success: function(purchaseRow) {
 
-                // update balance, remove teaser
+                // update balance, remove/update teaser
                 $('.user-current-balance').text(currentBalance - cost);
-                $('.reward-teaser[data-id="' + rewardId + '"]').remove();
+                $('.reward-teaser.added-reward[data-id="' + rewardId + '"]').remove();
+                $('.reward-teaser.public-reward[data-id="' + rewardId + '"]')
+                    .find('.reward-purchase-btn')
+                    .replaceWith('<a class="btn-grey" href="/projects/rewards/?tab=purchased"><i class="fa fa-check green-text"></i> Bought</a>');
 
                 // remove placeholder purchase if exists
                 $('.purchase-placeholder').remove();

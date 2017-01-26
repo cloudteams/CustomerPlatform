@@ -2,6 +2,8 @@ from datetime import date
 from django import template
 from django.templatetags.static import static
 
+from ct_projects.models import RewardPurchase
+
 __author__ = 'dipap'
 
 register = template.Library()
@@ -66,3 +68,7 @@ def get_year_options(_):
 def get_poll_token_link(poll, user):
     return poll.get_poll_token_link(user)
 
+
+@register.filter
+def was_bought_by(reward, user):
+    return RewardPurchase.objects.filter(user_id=user.pk, reward_id=reward.pk).exists()

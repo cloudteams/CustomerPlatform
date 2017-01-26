@@ -1,0 +1,50 @@
+{% load static %}
+
+{% load profile_tags %}
+
+<article class="reward-teaser {{ reward_class|default:"reward public-reward block-line-half col-lg-4 col-md-6 clear-3" }}" data-id="{{ reward.pk }}">
+    <header class="reward-header">
+        <h3 class="header-medium secondary reward-name">{{ reward.name }}</h3>
+    </header>
+    <section class="reward-body">
+        <img src="{% if reward.image_link %}{{ reward.image_link }}{% else %}{% static 'img/reward-default-logo.svg' %}{% endif %}"
+             style="height: 167px;"
+             alt="Reward logo for {{ reward.name }}">
+    </section>
+    <section class="reward-content content">
+        <p title="{{ reward.description }}" class="highlight bold">{{ reward.description|truncatechars:40 }}</p>
+    </section>
+    <div class="content data">
+        <p class="project-name hidden">{{ reward.project.title }}</p>
+        <table>
+            <tbody>
+                <tr class="row">
+                    <td class="col-xs-5">
+                        <p>Remaining</p>
+                    </td>
+                    <td class="col-xs-7">
+                        <p class="bold{% if reward.remaining < 3 %} running-out-warning{% endif %}">{{ reward.remaining }}</p>
+                    </td>
+                </tr>
+
+                <tr class="row">
+                    <td class="col-xs-5">
+                        <p>Reward price</p>
+                    </td>
+                    <td class="col-xs-7">
+                        <p class="bold reward-cost">{{ reward.cost }}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        {% if reward|was_bought_by:request.user %}
+            <a class="btn-grey" href="{% url 'rewards' %}?tab=purchased">
+                <i class="fa fa-check green-text"></i> Bought
+            </a>
+        {% else %}
+            <a href="#" class="btn reward-purchase-btn" alt="buy reward" data-toggle="modal" data-target=".buy-new-reward-popup">buy</a>
+        {% endif %}
+    </footer>
+</article>

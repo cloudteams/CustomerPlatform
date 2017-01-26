@@ -23,8 +23,9 @@
                         <ul class="menu-subpage public">
                             <li id="link-to-subpage-1" class="link-to-subpage {% if not default_campaign and not tab %}active{% endif %}">About this project</li>
                             <li id="link-to-subpage-2" class="link-to-subpage {% if default_campaign %}active{% endif %}">Campaigns</li>
-                            <li id="link-to-subpage-3" class="link-to-subpage {% if tab == "ideas" %}active{% endif %}">Customer ideas</li>
-                            <li id="link-to-subpage-4" class="link-to-subpage">Blog posts</li>
+                            <li id="link-to-subpage-3" class="link-to-subpage{% if tab == "rewards" %} active{% endif %}">Rewards</li>
+                            <li id="link-to-subpage-4" class="link-to-subpage{% if tab == "ideas" %} active{% endif %}">Customer ideas</li>
+                            <li id="link-to-subpage-5" class="link-to-subpage">Blog posts</li>
                         </ul>
                     </div>
                 </div>
@@ -144,11 +145,31 @@
                     </section>
                 </section>
 
-                <section id="subpage-3" class="subpage {% if tab == "ideas" %}active{% endif %}">
+                <section id="subpage-3" class="subpage {% if tab == "rewards" %}active{% endif %}">
                     <div class="container">
                         <div class="content about">
                             <header>
-                                <h2 class="header-large secondary" style="margin-bottom: 30px;">Customer ideas</h2>
+                                <div style="margin-bottom: 30px;">
+                                    <h2 class="header-large secondary">Rewards</h2>
+                                </div>
+                            </header>
+
+                            <div class="row">
+                                {% for reward in project.rewards.all %}
+                                    {% include 'ct_projects/reward/teaser-alt.html' %}
+                                {% empty %}
+                                    <p class="col-xs-12" style="color: #999;">No rewards from this project.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="subpage-4" class="subpage {% if tab == "ideas" %}active{% endif %}">
+                    <div class="container">
+                        <div class="content about">
+                            <header>
+                                <h2 class="header-large secondary" style="margin: 30px 0;">Customer ideas</h2>
 
                                 {% if request.user.is_authenticated %}
                                     <div class="btn show-idea-form">Send idea</div>
@@ -176,7 +197,7 @@
                     </div>
                 </section>
 
-                <section id="subpage-4" class="subpage" style="padding-top: 30px;">
+                <section id="subpage-5" class="subpage" style="padding-top: 30px;">
                     <div class="container">
                         <div class="content about">
                             <header>
@@ -194,7 +215,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        <p>No blog posts yet.</p>
+                                        <p style="color: #999;">No blog posts published.</p>
                                     {% endif %}
                                 {% endwith %}
                             </div>
@@ -202,7 +223,7 @@
                     </div>
                 </section>
 
-                <section id="subpage-5" class="subpage campaign-info-container {% if default_campaign %}active{% endif %}">
+                <section id="subpage-6" class="subpage campaign-info-container {% if default_campaign %}active{% endif %}">
                     {% if default_campaign %}
                         {% with campaign=default_campaign %}
                             {% include "ct_projects/campaign/content.html" %}
@@ -212,8 +233,11 @@
             </section>
         </main>
     {% endwith %}
+
+    {% include 'ct_projects/reward/purchase-form.html' %}
 {% endblock %}
 
 {% block extra_js %}
     <script type="text/javascript" src="{% static "js/publicprojectoverview-dev.js" %}"></script>
+    <script type="text/javascript" src="{% static "ct_projects/js/rewards.js" %}"></script>
 {% endblock %}
