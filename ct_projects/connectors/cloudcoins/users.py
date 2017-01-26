@@ -48,6 +48,12 @@ class CustomerService(object):
 
         if response.status_code < 300:
             return CloudCoinsCustomer(resp=json.loads(response.content))
+        elif response.status_code == 404:  # user info still not passed to CC service - no balance for this user
+            return CloudCoinsCustomer(resp={
+                'payload': {
+                    'balance': 0
+                }
+            })
         else:
             raise CloudCoinsCustomerError('Information for customer with id %d could not be fetched.' % customer_id)
 

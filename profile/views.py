@@ -287,17 +287,6 @@ def password_change(request):
 
 @login_required
 def get_current_balance(request):
-    empty_info = {
-        'cloudcoins': 0
-    }
-
-    try:
-        customer = CloudCoinsClient().users.get(customer_id=request.user.pk)
-
-        info = {
-            'cloudcoins': customer.balance
-        }
-    except CloudCoinsCustomerError:  # customer has no coins information
-        info = empty_info
-
-    return JsonResponse(info)
+    return JsonResponse({
+        'cloudcoins': CloudCoinsClient().users.get(customer_id=request.user.pk).balance
+    })

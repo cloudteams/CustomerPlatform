@@ -314,6 +314,16 @@ class BlogPostDetailView(DetailView):
 blog_details = BlogPostDetailView.as_view()
 
 
+# Rewards views
+@login_required
+def rewards(request):
+    return render(request, 'ct_projects/reward/index.html', {
+        'store_rewards': Reward.available_rewards(),
+        'purchases': RewardPurchase.objects.filter(user=request.user),
+        'tab': request.GET.get('tab', 'store')
+    })
+
+
 # Project generic views
 def terms_and_conditions(request):
     return render(request, 'ct_projects/generic/terms-and-conditions.html')

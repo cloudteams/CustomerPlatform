@@ -491,6 +491,13 @@ def on_poll_token_saved(sender, instance, created, **kwargs):
         instance.update_coins()
 
 
+class RewardPurchaseError(ValueError):
+    """
+    Error type for when an exception happens while buying a reward, or for when a reward can not be bought
+    """
+    pass
+
+
 class Reward(models.Model):
     """
     A reward offered by a project
@@ -509,13 +516,70 @@ class Reward(models.Model):
     given = models.IntegerField(validators=[MinValueValidator(0)])
     remaining = models.IntegerField(validators=[MinValueValidator(0)])
 
+    is_available = models.BooleanField(default=True)
+
     def __str__(self):
         return '%s' % self.name
+
+    @staticmethod
+    def available_rewards():
+        return Reward.objects.filter(is_available=True)
+
+    def purchase(self, buyer):
+
+        # check if already bought
+        if RewardPurchase.objects.filter(user=buyer, reward=self).exists():
+            raise RewardPurchaseError('You have already bought this reward.')
+
+        # check stock
+        if self.remaining < 1:
+            raise RewardPurchaseError('Reward has been sold out.')
+
+        # check balance
+        balance = CloudCoinsClient().users.get(customer_id=buyer.pk)
+
+        if balance < self.cost:
+            raise RewardPurchaseError('Not enough CC!')
+
+        # Only on production
+        if PRODUCTION:
+            # notify team platform another reward is sold
+            try:
+                XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).give_reward(str(self.project_id), str(self.id))
+            except Fault:
+                raise RewardPurchaseError('Reward has been sold out.')
+
+        # create purchase entry
+        RewardPurchase.objects.create(user=buyer, reward=self, coins_spent=self.cost)
+
+        # update customer balance
+        # TODO make call to CC service to update balance
+
+        # update info
+        self.given += 1
+        self.remaining -= 1
+
+        if self.remaining < 0:
+            self.is_available = False
+
+        self.save()
+
+        return self
+
+
+class RewardPurchase(models.Model):
+    """
+    A user bought a reward
+    """
+    user = models.ForeignKey(User, related_name='bought_rewards')
+    reward = models.ForeignKey(Reward, related_name='sales')
+    coins_spent = models.IntegerField()
+    created = models.DateTimeField(auto_now_add=True, editable=False)
 
 
 class Notification(models.Model):
     """
-    A notification regarding documents & polls
+    A notification with its context and actions
     """
     user = models.ForeignKey(User, related_name='notifications')
     document = models.ForeignKey(Document, blank=True, null=True, default=None)

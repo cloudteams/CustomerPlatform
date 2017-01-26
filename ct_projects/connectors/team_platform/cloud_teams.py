@@ -34,6 +34,7 @@ class CloudTeamsConnector:
         campaign_ids = []
         document_ids = []
         poll_ids = []
+        reward_ids = []
         blogpost_ids = []
 
         for entry in entries:
@@ -124,6 +125,7 @@ class CloudTeamsConnector:
             # get all project rewards
             if 'rewards' in entry and entry['rewards']:
                 for reward_id in entry['rewards'].keys():
+                    reward_ids.append(reward_id)
                     r_entry = entry['rewards'][reward_id]
 
                     # get or create
@@ -144,6 +146,7 @@ class CloudTeamsConnector:
                     reward.total_amount = r_entry['amount_of_rewards']
                     reward.given = max(r_entry['rewards_given'], reward.given)
                     reward.remaining = max(reward.total_amount - reward.given, 0)
+                    reward.is_available = reward.remaining > 0
 
                     # save
                     reward.save()
@@ -237,6 +240,9 @@ class CloudTeamsConnector:
         # deleting objects not found in Team Platform
         Project.objects.all().exclude(id__in=project_ids).delete()
         BlogPost.objects.all().exclude(id__in=blogpost_ids).delete()
+
+        # mark not listed rewards as not available any more
+        Reward.objects.all().exclude(id__in=reward_ids).update(is_available=False)
 
         # don't just delete campaigns & their items -- they might have expired!!
         for campaign in Campaign.objects.all().exclude(id__in=campaign_ids):

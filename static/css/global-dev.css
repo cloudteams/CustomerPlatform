@@ -8750,6 +8750,62 @@ article.blogpost:hover .background-image .developer-dashboard-activities-content
     color: #7d3c8c
 }
 
+.user-dashboard-rewards-content .added-reward {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 0;
+    margin: 10px
+}
+
+.user-dashboard-rewards-content .added-reward .open-tooltip-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #7d3c8c
+}
+
+.user-dashboard-rewards-content .added-reward .custom-tooltip {
+    position: absolute;
+    right: 6px;
+    top: 39px
+}
+
+.user-dashboard-rewards-content .added-reward hr {
+    margin: 0
+}
+
+.user-dashboard-rewards-content .added-reward .reward-header {
+    background-color: #f7f6f6;
+    padding: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px
+}
+
+.user-dashboard-rewards-content .added-reward .reward-content {
+    padding: 5px 10px
+}
+
+.user-dashboard-rewards-content .added-reward .reward-content .meta {
+    margin: 10px 0
+}
+
+.user-dashboard-rewards-content .added-reward .reward-content p>span {
+    float: right
+}
+
+.user-dashboard-rewards-content .added-reward .reward-button {
+    text-align: center
+}
+
+.user-dashboard-rewards-content .added-reward .reward-button a {
+    width: 90%;
+    margin: 5px 0
+}
+
+.page-developer-dashboard-project-rewards .modal-dialog.medium {
+    min-width: 800px
+}
+
 .developer-dashboard-project-campaign-overview-content .modal-dialog.medium {
     min-width: 800px
 }

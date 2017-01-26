@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^(?P<project_pk>[\w-]+)/polls/(?P<pk>\d+)/token/$', views.request_poll_token, name='request-poll-token'),
     url(r'^(?P<project_pk>[\w-]+)/blogs/(?P<pk>\d+)/$', views.blog_details, name='blog-details'),
 
+    # rewards
+    url(r'^rewards/$', views.rewards, name='rewards'),
+
     # generic
     url(r'^how-it-works$', views.how_it_works, name='how-it-works'),
     url(r'^(?P<next_page>.*)/who-are-you', views.who_are_you, name='who-are-you'),
