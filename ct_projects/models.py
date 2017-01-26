@@ -398,15 +398,10 @@ class Campaign(models.Model):
         super(Campaign, self).save(*args, **kwargs)
 
     def get_results_url(self):
-        if not self.has_expired():
-            return None
-
         try:
-            token = PollToken.objects.filter(poll__campaign_id=self.pk, status='DONE')[0]
+            return self.polls.all()[0].get_results_ur()
         except IndexError:
             return None
-
-        return token.token_link + '&mode=votes'
 
     def __str__(self):
         return '%s (%s)' % (self.name, 'closed' if self.has_expired() else 'open')
@@ -451,6 +446,17 @@ class Poll(models.Model):
 
     def request_token_link(self):
         return reverse('request-poll-token', args=(self.campaign.project.pk, self.pk))
+
+    def get_results_url(self):
+        if not self.campaign.has_expired():
+            return None
+
+        try:
+            token = PollToken.objects.filter(poll__campaign_id=self.campaign_id, status='DONE')[0]
+        except IndexError:
+            return None
+
+        return token.token_link + '&mode=votes'
 
     def get_poll_token_link(self, user):
         # get or create the link/user/persona combination

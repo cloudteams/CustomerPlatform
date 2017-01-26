@@ -46,14 +46,14 @@
             {% for poll in campaign.polls.all %}
                 {% include "ct_projects/campaign/poll.html" %}
             {% empty %}
-                <p>No polls in this campaign</p>
+                <p class="col-xs-12" style="color: #999;">No polls in this campaign</p>
             {% endfor %}
 
             <h2 class="header-medium secondary campaign-bookmark">Documents</h2>
             {% for document in campaign.documents.all %}
                 {% include "ct_projects/campaign/document.html" %}
             {% empty %}
-                <p>No documents in this campaign</p>
+                <p class="col-xs-12" style="color: #999;">No documents in this campaign</p>
             {% endfor %}
 
         </div>
