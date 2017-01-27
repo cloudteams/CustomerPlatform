@@ -11,10 +11,10 @@
 }
 
 /* Leaderboard */
-#leaderboard-popup.modal-default.in,
-#badge-collection-popup.modal-default.in {
-    height: calc(100% - 100px);
-    max-height: 570px;
+#leaderboard-popup.modal-default.in .modal-content,
+#badge-collection-popup.modal-default.in .modal-content{
+    height: 380px;
+    overflow-y: auto;
 }
 
 #leaderboard-popup .modal-header,
