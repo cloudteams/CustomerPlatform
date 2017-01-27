@@ -17,6 +17,9 @@ urlpatterns = [
     # project details
     url(r'^(?P<pk>\d+)/$', views.project_details, name='project-details'),
 
+    # contact team
+    url(r'^(?P<pk>\d+)/contact-team/$', views.contact_project_team, name='contact-project-team'),
+
     # following projects
     url(r'^(?P<pk>\d+)/follow/$', views.follow_project, name='follow-project'),
     url(r'^(?P<pk>\d+)/unfollow/$', views.unfollow_project, name='unfollow-project'),

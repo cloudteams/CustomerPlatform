@@ -158,6 +158,28 @@ def get_project_ideas(request, pk):
     })
 
 
+def contact_project_team(request, pk):
+    try:
+        project = Project.objects.get(pk=pk)
+    except Project.DoesNotExist:
+        return HttpResponse('Project with id #%d was not found' % pk, status=404)
+
+    if ContactRequest.objects.filter(user_id=request.user.pk, project_id=pk):
+        return HttpResponse('Contact request already sent', status=400)
+
+    provided_info = request.POST.get('provided_info', '')
+    message = request.POST.get('message', '')
+
+    if not provided_info:
+        return HttpResponse('`provided_info` is required', status=400)
+
+    cr = ContactRequest.objects.create(user=request.user, project=project,
+                                       provided_info=provided_info,
+                                       message=message)
+
+    return HttpResponse('Contact request sent to project team (Request ID: #%d)' % cr.pk)
+
+
 @login_required
 def unfollow_project(request, pk):
     # only posts allowed to this method

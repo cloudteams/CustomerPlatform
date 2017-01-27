@@ -629,6 +629,17 @@ class RewardPurchase(models.Model):
         return '<User %s> bought %s' % (self.user.username, str(self.reward))
 
 
+class ContactRequest(models.Model):
+    """
+    A customer wants to contact a project team
+    """
+    user = models.ForeignKey(User, related_name='contact_requests')
+    project = models.ForeignKey(Project, related_name='contact_requests')
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    provided_info = models.TextField(blank=False)
+    message = models.TextField()
+
+
 class Notification(models.Model):
     """
     A notification with its context and actions

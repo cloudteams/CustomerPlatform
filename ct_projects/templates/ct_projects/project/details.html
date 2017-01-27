@@ -7,14 +7,13 @@
 {% block wrapper %}{% endblock %}
 
 {% block content %}
-    {% with invited_campaigns=project|get_invited_campaigns:request.user %}
+    {% with invited_campaigns=project|get_invited_campaigns:request.user user_has_contacted=request.user|has_contacted:project %}
         <main>
             <section class="public-project-overview-content">
                 <header class="main-header" {% if project.logo %}style="background-image: url({{project.logo}});"{% endif %}>
                     <div class="vertical-align">
                         <div class="middle">
                             <h1 class="header-extra-large">{{ project.title }}</h1>
-                            {# <p>Project by <span>team name</span></p> #}
                         </div>
                     </div>
                 </header>
@@ -54,6 +53,12 @@
                                         <p>{{ project.description|youtube_embed_url|custom_urlize|safe|linebreaks }}</p>
                                     {% else %}
                                         <p>No project description</p>
+                                    {% endif %}
+
+                                    {% if not user_has_contacted %}
+                                        <a class="btn btn-transparent" data-toggle="modal" data-target=".contact-team-form-popup">Contact project members</a>
+                                    {% else %}
+                                        <div class="btn-grey"><i class="fa fa-check green-text"></i> Contacted project members</div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -235,9 +240,14 @@
     {% endwith %}
 
     {% include 'ct_projects/reward/purchase-form.html' %}
+
+    {% if not user_has_contacted %}
+        {% include 'ct_projects/project/contact-team.html' %}
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}
     <script type="text/javascript" src="{% static "js/publicprojectoverview-dev.js" %}"></script>
     <script type="text/javascript" src="{% static "ct_projects/js/rewards.js" %}?v=20170126.2"></script>
+    <script type="text/javascript" src="{% static "ct_projects/js/contact-team.js" %}?v=20170126.2"></script>
 {% endblock %}

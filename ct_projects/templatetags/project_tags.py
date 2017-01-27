@@ -2,7 +2,7 @@ from django import template
 from django.db.models import Q
 from django_comments.forms import CommentForm
 
-from ct_projects.models import ProjectFollowing, PollToken, Notification, RewardPurchase
+from ct_projects.models import ProjectFollowing, PollToken, Notification, RewardPurchase, ContactRequest
 import re
 
 __author__ = 'dipap'
@@ -179,3 +179,8 @@ def custom_urlize(value):
     for link in mv.keys():
         value = value.replace(link, mv[link])
     return value
+
+
+@register.filter
+def has_contacted(user, project):
+    return ContactRequest.objects.filter(user_id=user.pk, project_id=project.pk).exists()

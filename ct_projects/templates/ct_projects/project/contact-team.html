@@ -1,0 +1,47 @@
+<div id="contact-team-popup" class="contact-team-form-popup modal fade"
+     role="dialog" style="display: none;" data-projectid="{{ project.pk }}">
+	<div class="modal-dialog medium">
+		<div class="block block-fill">
+			<header class="modal-header">
+				<div class="vertical-align">
+					<div class="middle">
+						<i class="icon icon-user"></i>
+						<h2 class="header-medium secondary">Contact "{{ project.title }}" team</h2>
+					</div>
+					<div class="close" data-dismiss="modal">
+						<i class="icon icon-close"></i>
+					</div>
+				</div>
+			</header>
+
+			<div class="modal-body">
+                {% csrf_token %}
+
+				<div class="row form-group required">
+					<div class="col-md-4">
+                        <label class="control-label" for="id_contact_provided_info">Your contact info</label>
+                    </div>
+					<div class="col-md-8">
+                        <input type="text" id="id_contact_provided_info" name="contact_provided_info" value="Email: {{ request.user.email }}" required="required">
+                    </div>
+				</div>
+                <div class="row form-group">
+					<div class="col-md-4"><label class="control-label" for="id_contact_message">Message</label></div>
+					<div class="col-md-8">
+                        <textarea id="id_contact_message" name="contact_message" style="height: 240px;">Hello, I discovered the "{{ project.title }}" project on CloudTeams, and I would really like to get in touch with you!
+Sincerely,
+
+{{ request.user.profile.get_display_name }}
+                        </textarea>
+                    </div>
+				</div>
+				<div class="row">
+					<fieldset class="col-md-12 form-submit">
+                        <a href="#" data-dismiss="modal" class="btn confirm-button" alt="contact team"><i class="icon icon-send"></i> Send</a>
+						<a href="#" data-dismiss="modal" class="btn-transparent" alt="cancel">Cancel</a>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
