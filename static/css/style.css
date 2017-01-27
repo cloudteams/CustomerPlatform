@@ -1672,3 +1672,16 @@ article.campaign, article.reward {
     font-size: 16px;
     color: #aaa;
 }
+
+.fc-view-container {
+	background: #eee;
+}
+
+.fc-toolbar h2 {
+	color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    line-height: 1.3;
+}
