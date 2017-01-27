@@ -12796,7 +12796,7 @@ section.public-page.page-tutorial section.introduction ul.steps li {
 
 .btn-transparent:hover {
     background: #7d3c8c;
-    color: #fff
+    color: #fff !important
 }
 
 .btn-green {
