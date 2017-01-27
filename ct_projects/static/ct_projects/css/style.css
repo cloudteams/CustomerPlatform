@@ -148,6 +148,7 @@ section.user-dashboard-projects-content {
 
 .campaign .article-header h3 {
     width: calc(100% - 25px);
+    min-height: 50px;
 }
 
 .campaign footer.empty {
