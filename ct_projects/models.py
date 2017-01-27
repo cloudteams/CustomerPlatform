@@ -311,6 +311,7 @@ class Campaign(models.Model):
     description = models.TextField()
     starts = models.DateTimeField()
     expires = models.DateTimeField(blank=True, null=True, default=None)
+    actual_close = models.DateTimeField(blank=True, null=True, default=None)  # used when manually closed
     logo = models.URLField(blank=True, null=True, default=None)
     closed = models.BooleanField(default=False)
 
@@ -318,6 +319,9 @@ class Campaign(models.Model):
     answer_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=None)
     manager = models.ForeignKey(ProjectManager, blank=True, null=True, default=None)
     max_answers = models.IntegerField(blank=True, null=True, default=None)
+
+    def close_time(self):
+        return self.actual_close or self.expires
 
     def has_expired(self):
         if self.closed:
@@ -381,7 +385,7 @@ class Campaign(models.Model):
 
     @staticmethod
     def send_all():
-        campaigns = Campaign.objects.filter(expires__gt=datetime.datetime.today())
+        campaigns = Campaign.objects.filter(expires__gt=datetime.datetime.today(), closed=False)
         for campaign in campaigns:
             campaign.send()
 
@@ -518,6 +522,7 @@ class PollToken(models.Model):
             if campaign.max_answers is not None:
                 if campaign.max_answers <= campaign.count_participants():
                     campaign.closed = True
+                    campaign.actual_close = now()
                     campaign.save()
 
             # create success popup notification

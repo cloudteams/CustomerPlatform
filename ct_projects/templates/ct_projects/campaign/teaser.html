@@ -27,10 +27,10 @@
 				<i class="icon icon-start"></i>
 				<p><time datetime="{{ campaign.starts|date:"Y-m-d" }}">{{ campaign.starts|date:"d-m-Y" }}</time></p>
 			</div>
-            {% if campaign.expires %}
+            {% if campaign.close_time %}
 				<div>
                 	<i class="icon icon-close2"></i>
-                	<p><time datetime="{{ campaign.expires|date:"Y-m-d" }}">{{ campaign.expires|date:"d-m-Y" }}</time></p>
+                	<p><time datetime="{{ campaign.close_time|date:"Y-m-d" }}">{{ campaign.close_time|date:"d-m-Y" }}</time></p>
 				</div>
             {% endif %}
 		</div>
