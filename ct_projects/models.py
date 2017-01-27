@@ -506,7 +506,7 @@ class PollToken(models.Model):
         return result
 
     def update_coins(self):
-        if self.status == 'DONE':
+        if self.status == 'DONE' and self.poll.campaign.answer_value > 0:
             try:
                 CloudCoinsClient().campaigns.add_answer(campaign_id=self.poll.campaign_id, user_id=self.user_id)
             except CloudCoinsAnswerAlreadyExistsError:
@@ -519,6 +519,11 @@ class PollToken(models.Model):
                 if campaign.max_answers <= campaign.count_participants():
                     campaign.closed = True
                     campaign.save()
+
+            # create success popup notification
+            message = '[P]You just earned <i class="icon icon-cloudcoins"></i> %d CC !<br />' % \
+                      self.poll.campaign.answer_value
+            Notification.objects.create(user_id=self.user_id, text=message, persistent=False)
 
 
 @receiver(post_save, sender=PollToken)
