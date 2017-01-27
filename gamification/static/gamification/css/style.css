@@ -11,8 +11,8 @@
 }
 
 /* Leaderboard */
-#leaderboard-popup.modal-default.in .modal-content,
-#badge-collection-popup.modal-default.in .modal-content{
+#leaderboard-popup.modal-default.in .modal-body,
+#badge-collection-popup.modal-default.in .modal-body{
     height: 380px;
     overflow-y: auto;
 }
