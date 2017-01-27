@@ -5,9 +5,9 @@
 <article class="campaign public-campaign block-line-half clear-3">
 	<div class="background">
 		<header class="article-header">
-			<h3 class="header-medium secondary" title="{{ campaign.name }}">{{ campaign.name|truncatewords:50 }}</h3>
+			<h3 class="header-medium secondary" title="{{ campaign.name }}">{{ campaign.name|truncatechars:50 }}</h3>
 			<p class="highlight bold">
-                <a href="/projects/{{ campaign.project_id }}" class="campaign-project-teaser-link">{{ campaign.project.title }}</a>
+                <a href="/projects/{{ campaign.project_id }}" class="campaign-project-teaser-link">{{ campaign.project.title|truncatechars:30 }}</a>
             </p>
 
 			<div class="tooltip-container">
