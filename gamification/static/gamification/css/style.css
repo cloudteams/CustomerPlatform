@@ -1,9 +1,9 @@
 /* Generic gamification info */
 .gamification-info {
-    color: #c9c;
+    color: #eee;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    border-bottom: 1px solid #c9c;
+    border-bottom: 1px solid #aaa;
 }
 
 .gamification-info .progress-container .progress-wrap .progress-bar {
@@ -11,6 +11,12 @@
 }
 
 /* Leaderboard */
+#leaderboard-popup.modal-default.in,
+#badge-collection-popup.modal-default.in {
+    height: calc(100% - 100px);
+    max-height: 570px;
+}
+
 #leaderboard-popup .modal-header,
 #badge-collection-popup .modal-header {
     background: #3f1e47;
@@ -20,7 +26,7 @@
 #badge-collection-popup .modal-header h3,
 #leaderboard-popup .modal-header button.close,
 #badge-collection-popup .modal-header button.close {
-    color: #c9c;
+    color: #eee;
 }
 
 .leaderboard-table > thead > tr > th {
@@ -33,23 +39,23 @@
 
 /* Badge collection */
 .badge {
-    padding-top: 30px;
+    padding: 5px 40px;
 }
 
 .badge > .badge-content {
     border: 1px solid #ddd;
     border-radius: 50%;
-    height: 95px;
-    width: 95px;
+    height: 45px;
+    width: 45px;
     text-align: center;
 }
 
 .badge > .badge-content .fa-trophy {
     position: absolute;
-    font-size: 40px;
+    font-size: 20px;
     color: #ddd;
-    left: calc(50% - 19px);
-    top: calc(50% - 20px);
+    left: calc(50% - 10px);
+    top: calc(50% - 10px);
 }
 
 .badge > .badge-content .name {
@@ -65,4 +71,18 @@
 .badge.badge-rewarded > .badge-content .name,
 .badge.badge-rewarded > .badge-content .fa-trophy {
     color: white;
+}
+
+.badge-row {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+}
+
+.badge-row:last {
+    border-bottom: none;
+}
+
+.badge-name, .badge-description {
+    padding-top: 15px
 }
