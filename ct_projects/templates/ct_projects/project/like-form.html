@@ -1,0 +1,8 @@
+{% with is_liked=False %}
+    <form action="/projects/{{ project.pk }}/{% if is_liked %}unlike{% else %}like{% endif %}/" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn-transparent" title="{% if is_liked %}Unlike project{% else %}Like project{% endif %}">
+            <i class="icon icon-like{% if is_liked %}-fill{% endif %}"></i> Like{% if is_liked %}d{% endif %}
+        </button>
+    </form>
+{% endwith %}

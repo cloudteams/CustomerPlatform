@@ -287,6 +287,11 @@ def comment_posted(request):
 
 
 @login_required
+def like_unlike_project(request, project_id, action):
+    project = get_object_or_404(Project, pk=project_id)
+
+
+@login_required
 def rate_idea(request, project_pk, pk):
     idea = get_object_or_404(Idea, pk=pk)
 
