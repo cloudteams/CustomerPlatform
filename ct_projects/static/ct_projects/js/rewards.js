@@ -62,7 +62,7 @@ $(function() {
                     .replaceWith('<a class="btn-grey" href="/projects/rewards/?tab=purchased"><i class="fa fa-check green-text"></i> Bought</a>');
                 $inProjectTeaser
                     .find('.remaining-count')
-                    .text(Number($inProjectTeaser.find('.remaining-count')) - 1);
+                    .text(Number($inProjectTeaser.find('.remaining-count').text()) - 1);
 
                 // remove placeholder purchase if exists
                 $('.purchase-placeholder').remove();
