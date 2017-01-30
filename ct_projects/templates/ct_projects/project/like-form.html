@@ -1,7 +1,9 @@
-{% with is_liked=False %}
+{% load project_tags %}
+
+{% with is_liked=project|project_is_liked_by:request.user %}
     <form action="/projects/{{ project.pk }}/{% if is_liked %}unlike{% else %}like{% endif %}/" method="POST">
         {% csrf_token %}
-        <button type="submit" class="btn-transparent" title="{% if is_liked %}Unlike project{% else %}Like project{% endif %}">
+        <button type="submit" class="btn{% if not is_liked %}-transparent{% endif %}" title="{% if is_liked %}Unlike project{% else %}Like project{% endif %}">
             <i class="icon icon-like{% if is_liked %}-fill{% endif %}"></i> Like{% if is_liked %}d{% endif %}
         </button>
     </form>

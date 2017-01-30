@@ -287,8 +287,27 @@ def comment_posted(request):
 
 
 @login_required
-def like_unlike_project(request, project_id, action):
-    project = get_object_or_404(Project, pk=project_id)
+def like_unlike_project(request, pk, action):
+    get_object_or_404(Project, pk=pk)
+
+    # try to get like
+    try:
+        like = ProjectLike.objects.get(project_id=pk, user_id=request.user.pk)
+
+        if action == 'like':
+            return HttpResponse('Can not re-like', status=400)
+    except ProjectLike.DoesNotExist:
+
+        if action == 'unlike':
+            return HttpResponse('Can not unlike', status=400)
+
+    # create or delete like
+    if action == 'like':
+        ProjectLike.objects.create(project_id=pk, user_id=request.user.pk)
+    else:
+        like.delete()
+
+    return redirect('/projects/%s/' % pk)
 
 
 @login_required

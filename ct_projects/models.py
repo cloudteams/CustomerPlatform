@@ -124,6 +124,20 @@ class Project(models.Model):
         except Fault:
             print('Error on updating number of followers for project "%s" (#%d)' % (self.title, self.id))
 
+    def update_number_of_likes(self, on_delete=False):
+        # Only on production
+        if not PRODUCTION:
+            return
+
+        try:
+            cnt = self.likes.all().count()
+            if on_delete:
+                cnt -= 1
+
+            XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).setlikes(str(self.id), str(cnt))
+        except Fault:
+            print('Error on updating number of followers for project "%s" (#%d)' % (self.title, self.id))
+
     def to_json(self):
         return {
             'id': self.pk,
@@ -191,6 +205,26 @@ def on_project_following_create(sender, instance, created, **kwargs):
 @receiver(pre_delete, sender=ProjectFollowing)
 def on_project_following_delete(sender, instance, **kwargs):
     instance.project.update_number_of_followers(on_delete=True)
+
+
+class ProjectLike(models.Model):
+    """
+    A user likes a project
+    """
+    user = models.ForeignKey(User)
+    project = models.ForeignKey(Project, related_name='likes')
+
+
+@receiver(post_save, sender=ProjectLike)
+def on_project_like(sender, instance, created, **kwargs):
+
+    if created:
+        instance.project.update_number_of_likes()
+
+
+@receiver(pre_delete, sender=ProjectLike)
+def on_project_unlike(sender, instance, **kwargs):
+    instance.project.update_number_of_likes(on_delete=True)
 
 
 class Idea(models.Model):

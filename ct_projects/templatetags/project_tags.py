@@ -2,7 +2,7 @@ from django import template
 from django.db.models import Q
 from django_comments.forms import CommentForm
 
-from ct_projects.models import ProjectFollowing, PollToken, Notification, RewardPurchase, ContactRequest
+from ct_projects.models import ProjectFollowing, PollToken, Notification, RewardPurchase, ContactRequest, ProjectLike
 import re
 
 __author__ = 'dipap'
@@ -12,7 +12,15 @@ register = template.Library()
 
 @register.filter
 def is_followed_by(project, user):
-    return ProjectFollowing.objects.filter(project=project, user=user).count() > 0
+    return ProjectFollowing.objects.filter(project_id=project.pk, user_id=user.pk).exists()
+
+
+@register.filter
+def project_is_liked_by(project, user):
+    if not user.is_authenticated():
+        return False
+
+    return ProjectLike.objects.filter(project_id=project.pk, user_id=user.pk).exists()
 
 
 @register.filter

@@ -9,6 +9,9 @@ urlpatterns = [
     url(r'^followed/$', views.followed_projects, name='followed-projects'),
     url(r'^dashboard/campaigns/$', views.dashboard_campaigns, name='followed-campaigns'),
 
+    # project likes
+    url(r'^(?P<pk>[\w-]+)/(?P<action>(like|unlike))/$', views.like_unlike_project),
+
     # ideas
     url(r'^(?P<pk>[\w-]+)/post-idea/$', views.post_idea, name='post-idea'),
     url(r'^(?P<pk>[\w-]+)/ideas/$', views.get_project_ideas, name='ideas-list'),
