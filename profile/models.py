@@ -1,3 +1,4 @@
+import thread
 from django.core.mail import send_mail
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -144,8 +145,12 @@ class UserBrandOpinion(models.Model):
 
 
 def on_profile_info_updated(sender, instance, created, **kwargs):
-    # send campaigns
-    Campaign.send_all()
+
+    def send_all_campaigns():
+        Campaign.send_all()
+
+    # send campaigns asynchronously
+    thread.start_new_thread(send_all_campaigns, ())
 
 
 # connect with update events

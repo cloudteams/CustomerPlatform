@@ -35,3 +35,6 @@ django-cookie-law
 
 # timezones
 pytz
+
+# debug
+django-debug-toolbar
