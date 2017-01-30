@@ -250,6 +250,12 @@ AUTHENTICATION_BACKENDS = (
 CLOUDCOINS_SERVICE_URL = 'http://localhost:8009/cloudcoins'
 
 
+# debug toolbar
+if not PRODUCTION:
+    INSTALLED_APPS += ('debug_toolbar', )
+    MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware', )
+    INTERNAL_IPS = []  # ['127.0.0.1', ]
+
 if PRODUCTION:
     SERVER_URL = 'https://customers.cloudteams.eu'
     ANONYMIZER_URL = 'http://cloudteams.epu.ntua.gr'
