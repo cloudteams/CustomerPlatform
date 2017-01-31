@@ -2,7 +2,7 @@
 
 <article class="reward-teaser {{ reward_class|default:"added-reward col-md-3" }}" data-id="{{ reward.pk }}">
     <header class="reward-header">
-        <strong class="reward-name">{{ reward.name }}</strong>
+        <strong class="reward-name" title="{{ reward.name }}">{{ reward.name|truncatechars:22 }}</strong>
     </header>
     <section class="reward-body">
         <img src="{% if reward.image_link %}{{ reward.image_link }}{% else %}{% static 'img/reward-default-logo.svg' %}{% endif %}"
