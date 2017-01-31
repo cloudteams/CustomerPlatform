@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^password-change/$', views.password_change, name='password-change'),
 
     # Coins
-    url(r'^get-current-balance/$', views.get_current_balance, name='password-change'),
+    url(r'^get-current-balance/$', views.get_current_balance, name='get-coins'),
 ]
