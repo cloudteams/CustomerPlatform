@@ -13,8 +13,8 @@
     cursor: default;
 }
 
-.follow-button {
-    min-width: 100px;
+.overview-buttons button {
+    min-width: 150px;
 }
 
 .project-search input {
