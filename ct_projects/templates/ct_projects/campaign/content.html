@@ -11,10 +11,10 @@
             </div>
 
             <div class="middle">
-                <label>Select an other campaign</label>
+                <label>Select another campaign:</label>
 
                 <div class="select-dropdown">
-                    <select name="visable-to" id="visable-to" onchange="" size="1">
+                    <select id="id_selected-campaign" name="selected-campaign" data-projectid="{{ campaign.project_id }}" size="1">
                         {% for campaign in campaign.project.campaigns.all %}
                             <option value="{{ campaign.pk }}">{{ campaign.name }}</option>
                         {% endfor %}

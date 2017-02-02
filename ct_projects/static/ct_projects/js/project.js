@@ -11,4 +11,9 @@ $(function() {
         form.toggle();
         form.parent().find('.show-idea-form').toggle();
     });
+
+    /* On campaign change */
+    $('#id_selected-campaign').on('change', function(){
+        window.location = '/projects/' + $(this).data('projectid') + '/campaigns/' + $(this).val()+ '/'
+    });
 });
