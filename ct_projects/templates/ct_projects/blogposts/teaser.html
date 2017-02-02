@@ -1,5 +1,8 @@
+{% load staticfiles %}
+
 <article class="blogpost public-blogpost col-lg-4 col-md-6 block-image">
-	<div class="background-image" style="{% if blog.image_link %}background-image: url({{ blog.image_link }});{% endif %}">
+	<div class="background-image"
+         style="background-image: url('{% if blog.image_link %}{{ blog.image_link }}{% else %}{% static "ct_projects/img/blogpost-placeholder.svg" %}{% endif %}');">
 
 		<div class="content">
 			<div class="vertical-align">
