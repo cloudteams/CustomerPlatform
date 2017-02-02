@@ -77,28 +77,25 @@ class UserProfile(models.Model):
             points += 5
 
         if self.business_sector:
-            points += 3
+            points += 5
 
         if self.work_location:
             points += 5
 
         if self.years_experience:
-            points += 2
+            points += 5
 
         if self.tech_level:
-            points += 10
-
-        if self.user.influences.all():
             points += 15
 
-        if self.user.devices.all():
+        if self.user.devices.exists():
             points += 20
 
-        if self.user.platforms.all():
+        if self.user.platforms.exists():
             points += 20
 
-        if self.user.brand_opinions.all():
-            points += 10
+        if self.user.brand_opinions.exists():
+            points += 15
 
         return points
 
