@@ -221,8 +221,7 @@ def project_details(request, pk):
             'idea_form': IdeaForm(),
         }
 
-        if request.GET.get('tab', '') == 'ideas':
-            context['tab'] = 'ideas'
+        context['tab'] = request.GET.get('tab', '')
 
         # increase project views
         project.increase_views()
@@ -370,8 +369,10 @@ def rewards(request):
     })
 
 
-@login_required
 def purchase_reward(request, reward_pk):
+    if not request.user.is_authenticated():
+        return HttpResponse('You must first login or signup to buy a reward!', status=400)
+
     try:
         reward = Reward.objects.get(pk=reward_pk)
     except Reward.DoesNotExist:

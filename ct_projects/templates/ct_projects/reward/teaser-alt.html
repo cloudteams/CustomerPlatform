@@ -46,6 +46,8 @@
         {% else %}
             {% if not reward.is_available %}
                 <a class="btn-grey" href="#"><i class="fa fa-times green-text"></i> {% if reward.remaining == 0 %}Sold out{% else %}Not available{% endif %}</a>
+            {% elif not request.user.is_authenticated %}
+                <a href="/activitytracker/login/?next=/projects/{{ reward.project_id }}/?tab=rewards" class="btn" alt="login to buy reward">buy</a>
             {% else %}
                 <a href="#" class="btn reward-purchase-btn" alt="buy reward" data-toggle="modal" data-target=".buy-new-reward-popup">buy</a>
             {% endif %}
