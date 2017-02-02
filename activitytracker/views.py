@@ -185,8 +185,6 @@ def register(request):
     if ctx['errors']:
         return render(request, 'activitytracker/register.html', ctx)
 
-    username = email.split('@')[0] if not User.objects.filter(username=email.split('@')[0]).exists() else email
-
     user = User.objects.create_user(
         username=username,
         email=email,
