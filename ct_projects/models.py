@@ -289,7 +289,7 @@ class BlogPost(models.Model):
     """
     project = models.ForeignKey(Project, related_name='blogs')
     created = models.DateTimeField()
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1024)
     image_link = models.CharField(max_length=1024, default='')
     author = models.CharField(max_length=1024, default='')
     content = models.TextField()
