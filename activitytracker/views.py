@@ -499,11 +499,9 @@ visited_activity_tracker_home = Signal(providing_args=["user"])
 
 # Basic View, Gets called on "History" page load
 @login_required
-def index(request, new_user=False):
+def index(request):
 
     user = request.user
-
-    new_user = True if new_user == "NewUser" else False
 
     activity_data = dict([(category, []) for ( _ , category) in Activity.CATEGORY_CHOICES])
     for activity in Activity.objects.all():
@@ -512,14 +510,7 @@ def index(request, new_user=False):
     context = {
                'username': user.get_username(),
                'activity_data': activity_data,
-               'show_carousel_guide': new_user
     }
-
-    if not user.logged_in_before:
-
-        context['show_carousel_guide'] = True
-        user.logged_in_before = True
-        user.save()
 
     # send signal that signifies the user visited the activity tracker
     visited_activity_tracker_home.send(sender=User, user=request.user)

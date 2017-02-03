@@ -21,8 +21,6 @@ class User(AbstractUser):
     )
     date_of_birth = models.DateField(null=True)
     location = models.CharField(max_length=200, null=True)
-    logged_in_before = models.BooleanField(default=False)
-
 
 class UserUniqueTokens(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)

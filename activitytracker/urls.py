@@ -29,7 +29,6 @@ urlpatterns = [
     url(r'^index/displayperiod/$', views.displayperiod, name='displayPeriod'),
     url(r'^index/fetch_tokenfield_values/$', views.fetch_tokenfield_values, name='fetchTokenfieldValues'),
     url(r'^index/getgroupedactivities/$', views.getgroupedactivities, name='getgroupedactivities'),
-    url(r'^index/(?P<new_user>\w+)/$', views.index, name='index'),
     url(r'^settings/$', views.settings, name='settings'),
     url(r'^settings/places/$', views.places, name='places'),
     url(r'^settings/placestojson/$', views.placestojson, name='placestojson'),
