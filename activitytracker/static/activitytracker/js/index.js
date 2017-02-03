@@ -56,13 +56,6 @@
                 initializeEditMap()
             });
 
-        $(document).ready(function () {
-            // executes when DOM is loaded and ready
-            if (show_carousel_guide == "True") {
-                $('#carouselModal').modal('show');
-            }
-        });
-
 
         /* add activity */
         $("#addActivityModalSubmit").click(function(event) {
