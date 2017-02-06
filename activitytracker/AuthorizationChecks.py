@@ -6,7 +6,7 @@ from config import *
 from django.http import HttpResponse, HttpResponseBadRequest
 from datetime import datetime
 
-EARLIEST_DATA_DATE = '2016-09-01'
+EARLIEST_DATA_DATE = '2017-01-01'
 
 ERROR_MESSAGE = 'An Error has occurred. Please refresh the page and try again'
 
@@ -113,14 +113,26 @@ class OAuth2Validation(Validation):
         if 'refresh_token' in self.provider_data:
 
             refresh_url = eval(self.PROVIDER + '_API_REFRESH_TOKEN_URL')
+            headers = {}
             refresh_parameters = {'client_id': self.client_key,
                                   'client_secret': self.client_secret,
                                   'refresh_token': self.provider_data['refresh_token'],
                                   'grant_type': 'refresh_token'
                                   }
-            provider_response = requests.post(refresh_url, params=refresh_parameters).json()
+
+            # Fitbit requires a specific base64-encoded Authorization header
+            if self.PROVIDER == 'FITBIT':
+                import base64
+                headers = {
+                    'Authorization': 'Basic %s' % (base64.b64encode(self.client_key + ':' + self.client_secret)),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+
+            provider_response = requests.post(refresh_url, headers=headers, params=refresh_parameters).json()
 
             if 'error_description' not in provider_response:
+                if 'refresh_token' in provider_response:
+                    self.provider_data['refresh_token'] = provider_response['refresh_token']
 
                 self.provider_data['access_token'] = provider_response['access_token']
                 self.user_social_instance.save()
