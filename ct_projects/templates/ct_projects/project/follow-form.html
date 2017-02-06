@@ -7,8 +7,12 @@
                         <button type="submit"
                                 class="btn {% if link_style %}btn-link{% else %}follow-button{% endif %}"
                                 title="{% if is_followed %}Unfollow project{% else %}Follow project{% endif %}">
-                        <i class="icon icon-{% if is_followed %}invite{% else %}follower{% endif %}"></i>
-                        {% if is_followed %}Following{% else %}Follow{% endif %}
+
+                        {% if not menu_entry %}
+                            <i class="icon icon-{% if is_followed %}invite{% else %}follower{% endif %}"></i>
+                        {% endif %}
+                        
+                        {% if is_followed %}{{ following_text|default:"Following" }}{% else %}Follow{% endif %}
                         </button>
                     </form>
                 {% endwith %}
