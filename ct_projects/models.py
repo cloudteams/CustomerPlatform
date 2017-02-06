@@ -350,7 +350,7 @@ class Campaign(models.Model):
     closed = models.BooleanField(default=False)
 
     # coins info
-    answer_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=None)
+    answer_value = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True, default=None)
     manager = models.ForeignKey(ProjectManager, blank=True, null=True, default=None)
     max_answers = models.IntegerField(blank=True, null=True, default=None)
 
