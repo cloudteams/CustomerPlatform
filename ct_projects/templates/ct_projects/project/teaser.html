@@ -24,7 +24,7 @@
 							<a href="{% url 'project-details' project.pk %}">More about this</a>
 						</li>
 						<li>
-                            {% with link_style=True %}
+                            {% with link_style=True following_text="Unfollow" menu_entry=True %}
                                 {% include 'ct_projects/project/follow-form.html' %}
                             {% endwith %}
                         </li>

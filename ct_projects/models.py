@@ -289,7 +289,7 @@ class BlogPost(models.Model):
     """
     project = models.ForeignKey(Project, related_name='blogs')
     created = models.DateTimeField()
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1024)
     image_link = models.CharField(max_length=1024, default='')
     author = models.CharField(max_length=1024, default='')
     content = models.TextField()
@@ -350,7 +350,7 @@ class Campaign(models.Model):
     closed = models.BooleanField(default=False)
 
     # coins info
-    answer_value = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=None)
+    answer_value = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True, default=None)
     manager = models.ForeignKey(ProjectManager, blank=True, null=True, default=None)
     max_answers = models.IntegerField(blank=True, null=True, default=None)
 

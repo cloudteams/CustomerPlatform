@@ -184,7 +184,7 @@ class CloudTeamsConnector:
                         campaign.manager = manager
                     else:
                         campaign.answer_value = None
-                        campaign.manager_account = None
+                        campaign.manager = None
                         campaign.max_answers = None
 
                     # save the campaign in the database
