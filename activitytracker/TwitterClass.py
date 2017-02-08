@@ -119,7 +119,7 @@ class Twitter(OAuth1Validation):
                   'contributor_details': True,
                   }
 
-        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE and self.metadata.since_id != '0':
             params['since_id'] = self.metadata.since_id
 
         last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")

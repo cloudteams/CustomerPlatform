@@ -17,7 +17,6 @@ class Instagram(OAuth2Validation):
         for media in feed:
 
             time_posted = datetime.utcfromtimestamp(float(media['created_time']))
-            print float(media['created_time'])
 
             if time_posted < _time_barrier:
                 return _max_id, 'Reached Barrier'
@@ -87,7 +86,7 @@ class Instagram(OAuth2Validation):
 
         params = {'access_token': self.provider_data['access_token']}
 
-        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE:
+        if self.metadata.last_updated != DUMMY_LAST_UPDATED_INIT_VALUE and self.metadata.since_id != '0':
             params['min_id'] = self.metadata.since_id
 
         last_updated = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")

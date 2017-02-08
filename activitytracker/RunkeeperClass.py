@@ -15,9 +15,7 @@ class Runkeeper(OAuth2Validation):
 
         for item_ in feed:
 
-            if PerformsProviderInfo.objects.filter(provider='runkeeper',
-                                                   provider_instance_id=item_['uri']
-                                                   ).count() > 0:
+            if PerformsProviderInfo.objects.filter(provider='runkeeper', provider_instance_id=item_['uri']).count() > 0:
                 continue
 
             activity = requests.get(url=self.api_base_url + item_['uri'],

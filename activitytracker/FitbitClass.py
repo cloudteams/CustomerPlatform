@@ -4,7 +4,7 @@ from django.db import transaction
 
 utc_offset = 0
 
-class Fitbit(OAuth1Validation):
+class Fitbit(OAuth2Validation):
 
     def __init__(self, user_social_instance):
         super(Fitbit, self).__init__(user_social_instance)
@@ -17,7 +17,7 @@ class Fitbit(OAuth1Validation):
         profile_data_url = self.api_base_url + FITBIT_PROFILE_DATA_URI
 
         profile_data = requests.get(url=profile_data_url,
-                                    auth=auth
+                                    headers=auth
                                     ).json()
 
         if 'offsetFromUTCMillis' not in profile_data['user']:
@@ -164,7 +164,7 @@ class Fitbit(OAuth1Validation):
 
         for activity in feed:
 
-            if not activity['hasStartTime']:
+            if not ('hasStartTime' in activity and activity['hasStartTime']):
                 continue
 
             if activity['name'] == "Run":
@@ -228,7 +228,7 @@ class Fitbit(OAuth1Validation):
                   'offset': 0,
                   }
 
-        if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE + 'T00:00:00':
+        if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
             params['afterDate'] = EARLIEST_DATA_DATE + 'T00:00:00'
 
         url = self.api_base_url + FITBIT_FITNESS_URI
@@ -237,7 +237,7 @@ class Fitbit(OAuth1Validation):
 
             fitness_feed = requests.get(url=url,
                                         params=params,
-                                        auth=auth
+                                        headers=auth
                                         ).json()
 
             if 'errors' in fitness_feed:
@@ -260,7 +260,7 @@ class Fitbit(OAuth1Validation):
 
         last_sync = self.metadata.last_updated[:10]
 
-        if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
+        if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE[:10]:
             last_sync = EARLIEST_DATA_DATE
 
         chosen_day = datetime.utcnow().strftime("%Y-%m-%d")
@@ -274,7 +274,7 @@ class Fitbit(OAuth1Validation):
 
             url = self.api_base_url + FITBIT_FOOD_URI
 
-            food_feed = requests.get(url=url, auth=auth).json()
+            food_feed = requests.get(url=url, headers=auth).json()
 
             if 'errors' in food_feed:
                 return 'Error'
@@ -290,7 +290,7 @@ class Fitbit(OAuth1Validation):
 
         last_sync = self.metadata.last_updated[:10]
 
-        if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE:
+        if last_sync == DUMMY_LAST_UPDATED_INIT_VALUE[:10]:
             last_sync = EARLIEST_DATA_DATE
 
         chosen_day = datetime.utcnow().strftime("%Y-%m-%d")
@@ -304,7 +304,7 @@ class Fitbit(OAuth1Validation):
 
             url = self.api_base_url + FITBIT_SLEEP_URI
 
-            sleep_feed = requests.get(url=url, auth=auth).json()
+            sleep_feed = requests.get(url=url, headers=auth).json()
 
             if 'errors' in sleep_feed:
                 return 'Error'
@@ -321,11 +321,9 @@ class Fitbit(OAuth1Validation):
         if self.validate() != 'Authentication Successful':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
-        auth = OAuth1(self.client_key,
-                      self.client_secret,
-                      self.resource_owner_key,
-                      self.resource_owner_secret
-                      )
+        auth = {
+            'Authorization': 'Bearer %s' % self.provider_data['access_token']
+        }
 
         global utc_offset
 
@@ -339,12 +337,10 @@ class Fitbit(OAuth1Validation):
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         status = self.fetchFoodActivities(auth)
-
         if status != 'Ok':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
         status = self.fetchSleepActivities(auth)
-
         if status != 'Ok':
             return HttpResponseBadRequest(ERROR_MESSAGE)
 
