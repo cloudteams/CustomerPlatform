@@ -206,8 +206,8 @@ def register(request):
     email = DEFAULT_FROM_EMAIL
     mail_title = "CloudTeams account verification"
     recipient = [user.email.encode('utf8')]
-    mail_message = 'Hello %s. In order to verify your account click the following link: %s' \
-                   % (user.get_username(), verification_url)
+    mail_message = 'Hello %s. In order to verify your account click the following link: <a href="%s">%s</a>' \
+                   % (user.get_username(), verification_url, verification_url)
 
     send_mail(mail_title, mail_message, email, recipient, fail_silently=False)
 
