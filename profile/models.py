@@ -29,8 +29,7 @@ class UserProfile(models.Model):
     # Generic info
     first_name = models.CharField(max_length=255, blank=True, null=True, default=None)
     last_name_initial = models.CharField(max_length=1, blank=True, null=True, default=None)
-    year_of_birth = models.IntegerField(blank=True, null=True, default=None, validators=[MinValueValidator(1930),
-                                                                                         MaxValueValidator(2010)])
+    year_of_birth = models.IntegerField(blank=True, null=True, default=None)
     # -- location is in main model -> asume it to be home location
 
     # Business info
