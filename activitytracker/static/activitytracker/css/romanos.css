@@ -118,9 +118,3 @@
     }
 
 }
-
-@media (min-width: 531px) {
-    .bs-height-config {
-        height: 460px !important;
-    }
-}

@@ -39,31 +39,6 @@ $(document).on('ready',function() {
 
     });
 
-
-    /* ************************************************** */
-
-     // Start of: Chart for Provider Data of Last 7 Days
-    svg = dimple.newSvg("#ProviderActivities7DayChart", "100%", "100%");
-
-    var barChartTop = new dimple.chart(svg, period_provider_activities);
-    barChartTop.setBounds('10%', '0%', '85%', '70%');
-
-    barChartTop.addCategoryAxis("x", "provider");
-    y = barChartTop.addMeasureAxis("y", "instances");
-    y.tickFormat = "d";
-
-    barChartTop.addSeries("provider", dimple.plot.bar);
-
-    barChartTop.draw();
-
-    $(window).on('resize', function () {
-        barChartTop.draw(0, true);
-    });
-
-    // End of: Chart for Provider Data of Last 7 Days
-
-     /******************************************************************/
-
     // Start of:  Top (10) Activities of the Week Chart
     svg = dimple.newSvg("#Top10ActivitiesInstanceChart", "100%", "100%");
 
@@ -160,8 +135,6 @@ $('#carousel-activities.carousel').one('slid.bs.carousel', function() {
 
 // Start of: Chart for Provider Lifetime Data
 
-$('#carousel-providers.carousel').one('slid.bs.carousel', function() {
-
     var svg = dimple.newSvg("#ProviderActivitiesLifetimeChart", "100%", "100%");
 
     var barChart = new dimple.chart(svg, lifetime_provider_activities);
@@ -178,7 +151,7 @@ $('#carousel-providers.carousel').one('slid.bs.carousel', function() {
     $(window).on('resize', function () {
         barChart.draw(0, true);
     });
-});
+
 // End of: Chart for Provider Lifetime Data
 
 /*****************************************************/
