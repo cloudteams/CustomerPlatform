@@ -7,7 +7,7 @@
         $.ajax({
             type: "get",
             cache: false,
-            url: BASE_URL + 'index/fetch_tokenfield_values/',
+            url: BASE_URL + 'calendar/fetch_tokenfield_values/',
             dataType: "json",
             error: function (xhr, status, error) {
             },

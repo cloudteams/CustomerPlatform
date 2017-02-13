@@ -120,7 +120,7 @@ function drawDonut() {
 				type: "get",
 				global: false,
 				data: {chart_data: ShownIds(), csrfmiddlewaretoken: getCookie('csrftoken')},
-				url: BASE_URL + "index/chartdatajson/",
+				url: BASE_URL + "calendar/chartdatajson/",
 				dataType: "json",
 				success: function (data) {
 					plotDonutChart(data);
@@ -261,7 +261,7 @@ function DrawGroupUngroupSort(id_list) {
 		type: "post",
 		data: data,
 		cache: false,
-		url: BASE_URL + "index/getgroupedactivities/",
+		url: BASE_URL + "calendar/getgroupedactivities/",
 		dataType: "json",
 		error: function (xhr, status, error) {
 			Done();
@@ -294,7 +294,7 @@ function DrawGroupUngroupSortWithChart(id_list) {
 		data: data,
 
 		cache: false,
-		url: BASE_URL + "index/getgroupedactivities/",
+		url: BASE_URL + "calendar/getgroupedactivities/",
 		dataType: "json",
 		error: function (xhr, status, error) {
 			Done();
@@ -380,7 +380,7 @@ function RenderViewActivities(view){
 		 type: "post",
 		 data: data,
 		 cache: false,
-		 url: BASE_URL + "index/displayperiod/",
+		 url: BASE_URL + "calendar/displayperiod/",
 		 dataType: "text",
 		 error: function (xhr, status, error) {
 			 Done();
@@ -668,7 +668,7 @@ function calendars(){
   		 },
 		aspectRatio: 1.5,
 		editable: true,
-		events: BASE_URL + "index/eventstojson/",
+		events: BASE_URL + "calendar/eventstojson/",
 		timeFormat: 'H(:mm)'
 	});
 }
