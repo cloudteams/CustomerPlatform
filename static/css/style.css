@@ -1716,7 +1716,7 @@ article.campaign, article.reward {
 }
 
 .text--disabled {
-	color: rgba(241, 241, 241, 0.2) !important;
+	color: rgba(241, 241, 241, 0.3) !important;
 }
 
 #ProvidersTable tbody tr td {
@@ -1744,7 +1744,7 @@ article.campaign, article.reward {
 .header-with-line h2,
 .header-with-line h3,
 .header-with-line h4 {
-	border-bottom: 1px solid;
+	border-bottom: 1px solid hsla(0, 0%, 100%, .15);
 	padding-bottom: 5px;
 }
 
@@ -1758,7 +1758,7 @@ article.campaign, article.reward {
     margin-left: 5px;
 }
 
-.connected-app-button {
+#ProvidersTable .btn {
 	min-width: 170.5px;
 	min-height: 40px;
 }
