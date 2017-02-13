@@ -1559,8 +1559,13 @@ body.activitytracker-page .btn.btn-at {
  }
 
  .connected-app img {
- width: 55px !important;
- padding: 10px;
+	 width: 55px !important;
+	 padding: 10px;
+	 opacity: 0.9;
+ }
+
+ .instagram.connected-app img {
+	 width: 45px !important;
  }
 
 .show-dashboard-glyphicon {
@@ -1700,4 +1705,60 @@ article.campaign, article.reward {
 
 #noty_top_layout_container > li .noty_message.emotion-N {
     background: rgba(231, 76, 60, 0.8) !important;
+}
+
+.text--white {
+	color: white;
+}
+
+.text--lightgrey {
+	color: #ccc;
+}
+
+.text--disabled {
+	color: rgba(241, 241, 241, 0.2) !important;
+}
+
+#ProvidersTable tbody tr td {
+	padding-bottom: 10px;
+	padding-top: 5px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.025);
+}
+
+.disconnect-app {
+	position: absolute;
+	margin-left: 25px;
+	visibility: hidden;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.disconnect-app i {
+	padding-top: 10px;
+}
+
+#ProvidersTable tbody tr:hover .disconnect-app {
+	visibility: visible;
+}
+
+.header-with-line h2,
+.header-with-line h3,
+.header-with-line h4 {
+	border-bottom: 1px solid;
+	padding-bottom: 5px;
+}
+
+.connected-app:not(.text--disabled) .connected-app-text::after {
+	font-family: FontAwesome;
+	content: "\f00c";
+	position: absolute;
+    color: #ad64be;
+    margin-top: -5px;
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.connected-app-button {
+	min-width: 170.5px;
+	min-height: 40px;
 }

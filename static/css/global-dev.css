@@ -4833,9 +4833,13 @@ a.label:hover {
 }
 
 .alert-success {
-    background-color: #dff0d8;
-    border-color: #d0e9c6;
-    color: #3c763d
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #38173f;
+    font-weight: bold;
+    text-decoration: underline;
+    border-radius: 5px;
+    padding: 10px 15px;
 }
 
 .alert-success hr {

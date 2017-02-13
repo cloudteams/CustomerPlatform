@@ -13,7 +13,10 @@ static/CACHE
 
 # user avatars
 avatars/*
-activitytracker/static/*
+activitytracker/static/font/
+activitytracker/static/css/
+activitytracker/static/fonts/
+activitytracker/static/js/
 media/avatars/*
 
 # passwords

@@ -4,8 +4,12 @@
  */
 
 
-	function synchronizeProvider(provider){
-			Loading();
+	function synchronizeProvider(provider, button){
+
+			var $button = $(button);
+			var width = $button.css('width')
+			$button.html('<i class="fa fa-spinner fa-spin spinner margin-right-1"></i>Syncing...');
+
 			$.ajax({
 				type: "post",
 				data: {csrfmiddlewaretoken: getCookie('csrftoken')},
@@ -17,7 +21,8 @@
 					Done();
 				},
 				success: function (response) {
-					Done();
+
+					$button.html('Synchronize');
 					$('#success-msg').removeClass('hidden').text(response);
 					if ($('.' + provider + ' .connected-app-button').length == 1) {
 						setTimeout(function(){ window.location.reload(); }, 3000);
