@@ -8,6 +8,11 @@ header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download) {
     color: #ddd;
 }
 
+.notification .middle a {
+	color: #7d3c8c !important;
+    text-decoration: underline;
+}
+
 body > section.dashboard-page a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):not(.btn-transparent):not(.campaign-project-teaser-link):not(.purple-link):hover,
 body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):hover,
 body > header a:not(.btn):not(.btn-confirm):not(.btn-decline):not(.btn-download):not(.notification-link):focus{
