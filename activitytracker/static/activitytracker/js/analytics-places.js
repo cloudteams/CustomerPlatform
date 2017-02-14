@@ -32,8 +32,8 @@
 		function initializeAnalyticsPlacesMap(map_data) {
 			var mapCanvas = document.getElementById('map-canvas');
 			var mapOptions = {
-			  center: {lat:20, lng:20},
-			  zoom: 14
+			  center: {lat:44.8408466, lng:15.7434564},
+			  zoom: 5
 			};
 			map = new google.maps.Map(mapCanvas, mapOptions);
 		}
