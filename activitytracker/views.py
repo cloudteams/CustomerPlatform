@@ -2427,8 +2427,6 @@ def updateactivitiesinplacedonutchart(request):
                      'purple': "purple"
     }
     user = request.user
-    radius_selected = request.POST['radius']
-    place_selected = request.POST['place']
 
     datestart = (request.POST['range']).split('-')[0]
     dateend = (request.POST['range']).split('-')[1]
@@ -2442,31 +2440,30 @@ def updateactivitiesinplacedonutchart(request):
 
     for activity_instance in instances:
         if activity_instance.location_address != "":
-            if placesNearActivity(user, activity_instance, place_selected, radius_selected) != [] or place_selected == "all":
-                json_list[2].append({'activity': activity_instance.activity.activity_name,
-                                     'start_date': activity_instance.start_date.strftime("%m/%d/%Y %H:%M"),
-                                     'duration': activity_instance.displayable_date(),
-                                     'pinColor': pinColourDict[activity_instance.activity.category],
-                                     'lat':activity_instance.location_lat,
-                                     'lng':activity_instance.location_lng
-                })
+            json_list[2].append({
+                'activity': activity_instance.activity.activity_name,
+                'start_date': activity_instance.start_date.strftime("%m/%d/%Y %H:%M"),
+                'duration': activity_instance.displayable_date(),
+                'pinColor': pinColourDict[activity_instance.activity.category],
+                'lat':activity_instance.location_lat,
+                'lng':activity_instance.location_lng
+            })
 
-
-                try:
-                    chart_inner_data[activity_instance.activity.get_category_display()]['count'] += 1
-                    chart_inner_data[activity_instance.activity.get_category_display()]['time'] += activity_instance.end_date - activity_instance.start_date
-                except KeyError:
-                    chart_inner_data[activity_instance.activity.get_category_display()] = {}
-                    chart_inner_data[activity_instance.activity.get_category_display()]['count'] = 1
-                    chart_inner_data[activity_instance.activity.get_category_display()]['time'] = activity_instance.end_date - activity_instance.start_date
-                    chart_inner_data[activity_instance.activity.get_category_display()]['color'] = colourDict[activity_instance.activity.category]
-                try:
-                    chart_outer_data[activity_instance.activity.activity_name]['count'] += 1
-                    chart_outer_data[activity_instance.activity.activity_name]['time'] += activity_instance.end_date - activity_instance.start_date
-                except KeyError:
-                    chart_outer_data[activity_instance.activity.activity_name] = {}
-                    chart_outer_data[activity_instance.activity.activity_name]['count'] = 1
-                    chart_outer_data[activity_instance.activity.activity_name]['time'] = activity_instance.end_date - activity_instance.start_date
+            try:
+                chart_inner_data[activity_instance.activity.get_category_display()]['count'] += 1
+                chart_inner_data[activity_instance.activity.get_category_display()]['time'] += activity_instance.end_date - activity_instance.start_date
+            except KeyError:
+                chart_inner_data[activity_instance.activity.get_category_display()] = {}
+                chart_inner_data[activity_instance.activity.get_category_display()]['count'] = 1
+                chart_inner_data[activity_instance.activity.get_category_display()]['time'] = activity_instance.end_date - activity_instance.start_date
+                chart_inner_data[activity_instance.activity.get_category_display()]['color'] = colourDict[activity_instance.activity.category]
+            try:
+                chart_outer_data[activity_instance.activity.activity_name]['count'] += 1
+                chart_outer_data[activity_instance.activity.activity_name]['time'] += activity_instance.end_date - activity_instance.start_date
+            except KeyError:
+                chart_outer_data[activity_instance.activity.activity_name] = {}
+                chart_outer_data[activity_instance.activity.activity_name]['count'] = 1
+                chart_outer_data[activity_instance.activity.activity_name]['time'] = activity_instance.end_date - activity_instance.start_date
 
     # Return the data necessary for the inner ring of the double-donut chart (categories)
     for key, value in chart_inner_data.iteritems():
@@ -2487,22 +2484,6 @@ def updateactivitiesinplacedonutchart(request):
                       }
         json_list[1].append(json_entry)
         count += 1
-
-    # Also return the place or places so to pinpoint them on the Google Map
-    if place_selected == "all" or place_selected == "Everywhere else":
-        for p in user.places_set.all():
-            json_list[3].append({
-                'Place': p.place_name,
-                'lat': p.place_lat,
-                'lng': p.place_lng}
-            )
-    else:
-        p = user.places_set.get(place_name=place_selected)
-        json_list[3].append({
-                'Place': p.place_name,
-                'lat': p.place_lat,
-                'lng': p.place_lng}
-        )
 
     return HttpResponse(json.dumps(json_list), content_type='application/json')
 

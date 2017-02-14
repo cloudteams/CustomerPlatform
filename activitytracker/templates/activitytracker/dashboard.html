@@ -162,22 +162,32 @@
             </div>
         </div>
     </div>
+
+    <div id="carousel-categories" class="col-xs-12 dashboardWrapper margin-top-5">
+        <h4 class="margin-vertical-5 text-center">Activity Intensity Comparison</h4>
+        <div id="ActivitiesInstanceChart" class="margin-vertical-5" style="height: 225px;"></div>
+    </div>
+
     <div class="col-xs-12 dashboardWrapper margin-top-5">
         <div class="col-xs-12 margin-bottom-5">
             <h4 class="text-center margin-vertical-5">Lifetime Service Contribution</h4>
             <div id="ProviderActivitiesLifetimeChart" class="bs-height-config" style="height: 225px;"></div>
         </div>
     </div>
-    <div class="col-xs-12 dashboardWrapper margin-top-5">
+
+    <div class="col-xs-12 dashboardWrapper margin-top-5" style="display: none">
         <div id="carousel-activities" class="col-xs-12">
             <h4 class="text-center margin-vertical-5">Last week's Top 10 Activities</h4>
             <div id="Top10ActivitiesInstanceChart" class="margin-vertical-5 bs-height-config" style="height: 225px;"></div>
         </div>
     </div>
-    <div id="carousel-categories" class="col-xs-12 dashboardWrapper margin-vertical-5">
-        <h4 class="margin-vertical-5 text-center">Activity Intensity Comparison</h4>
-        <div id="ActivitiesInstanceChart" class="margin-vertical-5" style="height: 225px;"></div>
+
+    <div class="col-xs-12 dashboardWrapper margin-top-5">
+        <h4 class="margin-vertical-5 text-center">LifeTime Activities</h4>
+        <div id="all-activities-chart" class="margin-vertical-5" style="height: 225px;"></div>
     </div>
+
+    <div class="col-xs-12 map-canvas dashboardWrapper margin-vertical-5" style="height:325px" id="map-canvas"></div>
 
 
     <script>chart_data = {{ chart_data|safe }};</script>
@@ -202,8 +212,11 @@
 {% block js %}
     <script src="{% static 'activitytracker/js/counter.js' %}"></script>
     <script src="{% static 'activitytracker/js/jquery.knob.modified.js' %}"></script>
+    <script src="{% static 'activitytracker/js/moment.js' %}"></script>
     <script src="{% static 'activitytracker/js/custom.js' %}"></script>
     <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
  	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
     <script src="{% static 'activitytracker/js/dashboard.js' %}"></script>
+    <script src="{% static 'activitytracker/js/analytics-activities.js' %}"></script>
+    <script src="{% static 'activitytracker/js/analytics-places.js' %}"></script>
 {% endblock %}
