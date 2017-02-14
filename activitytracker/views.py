@@ -1366,7 +1366,7 @@ def dashboard(request):
             lifetime_provider_data[provider] += 1
             lifetime_tracked_activities += 1
 
-        except ObjectDoesNotExist:
+        except (ObjectDoesNotExist, KeyError):
             pass
 
     provider_lifetime_activities_data = list([
