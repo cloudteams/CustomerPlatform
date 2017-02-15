@@ -1,6 +1,8 @@
+            {% load project_tags %}
+
             <div class="bought-rewards-row-content">
                 <article class="bought-rewards-row-item col-lg-5">
-                    <p><a href="{{ purchase.reward.download_ref }}" target="_blank" class="reward-download-link purple-link">{{ purchase.reward.name }}</a></p>
+                    <p><a href="{{ purchase.reward|get_reward_link_for_user:request.user }}" target="_blank" class="reward-download-link purple-link">{{ purchase.reward.name }}</a></p>
                 </article>
 
                 <article class="bought-rewards-row-item col-lg-3">

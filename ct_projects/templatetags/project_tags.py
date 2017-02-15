@@ -192,3 +192,9 @@ def custom_urlize(value):
 @register.filter
 def has_contacted(user, project):
     return ContactRequest.objects.filter(user_id=user.pk, project_id=project.pk).exists()
+
+
+@register.filter
+def get_reward_link_for_user(reward, user):
+    return reward.get_link_for_user(user)
+

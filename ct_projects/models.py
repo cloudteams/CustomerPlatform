@@ -615,6 +615,33 @@ class Reward(models.Model):
 
         return qs
 
+    def get_all_links(self):
+        # each line contains another reward link
+        result = self.download_ref.split('\n')[:self.total_amount]
+
+        # fill in missing rewards
+        if result.__len__() < self.total_amount:
+            result += [result[-1]] * (self.total_amount - result.__len__())
+
+        return result
+
+    def get_link_for_user(self, user):
+        rps = RewardPurchase.objects.filter(reward=self).order_by('pk')
+
+        idx = None
+        for i, rp in enumerate(rps):
+            if rp.user == user:
+                idx = i
+                break
+
+        if idx is None:
+            return None
+
+        try:
+            return self.get_all_links()[idx]
+        except IndexError:
+            return None
+
     def purchase(self, buyer):
 
         # check if already bought
