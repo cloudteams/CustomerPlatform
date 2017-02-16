@@ -366,6 +366,14 @@ class Campaign(models.Model):
 
         return False
 
+    def try_to_reopen(self):
+        if datetime.datetime.today() <= self.expires:
+            if self.max_answers is not None:
+                if self.max_answers > self.count_participants():
+                    self.closed = False
+            else:
+                self.closed = False
+
     def get_days_left(self):
         if self.has_expired():
             return None
