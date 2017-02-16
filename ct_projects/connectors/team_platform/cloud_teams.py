@@ -168,6 +168,7 @@ class CloudTeamsConnector:
                     campaign.starts = datetime.strptime(c_entry['start'], '%Y-%m-%d %H:%M:%S') if 'start' in c_entry else now()
                     campaign.expires = datetime.strptime(c_entry['end'], '%Y-%m-%d %H:%M:%S') if ('end' in c_entry) and (c_entry['end'] != 'Never') else None
                     campaign.project = project
+                    campaign.closed = campaign.has_expired()
 
                     # coins info
                     if 'cloudcoins_info' in c_entry:
