@@ -136,7 +136,7 @@ class Project(models.Model):
 
             XMLRPC_Server(SERVER_URL, CUSTOMER_PASSWD).setlikes(str(self.id), str(cnt))
         except Fault:
-            print('Error on updating number of followers for project "%s" (#%d)' % (self.title, self.id))
+            print('Error on updating number of followers for project #%d' % self.id)
 
     def to_json(self):
         return {
