@@ -29,7 +29,7 @@ class CloudTeamsConnector:
         :return: Number of projects fetched from CloudTeams team platform
         """
         entries = self.srv.get_projectstore('')
-        print entries
+
         project_ids = []
         campaign_ids = []
         document_ids = []
