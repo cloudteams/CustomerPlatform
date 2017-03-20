@@ -6,7 +6,7 @@ Hello,
 
 {% if from_name %}{{ from_name }} has invited you{% elif project_name %}The {{ project_name }} project has invited you{% else %}You are invited{% endif %} to join CloudTeams.eu, a new platform that brings together the software development community and potential end users.
 CloudTeams aims to create a link between the creators of technology and the people who add meaning to it, like you!
-Follow this link to join CloudTeams now: https://cloudteams.epu.ntua.gr:8008/activitytracker/account/register/{% if ref_id %}?ref_id={{ ref_id }}{% elif team_ref_id %}?team_ref_id={{ team_ref_id }}{% endif %}
+Follow this link to join CloudTeams now: https://customer.cloudteams.eu/activitytracker/account/register/{% if ref_id %}?ref_id={{ ref_id }}{% elif team_ref_id %}?team_ref_id={{ team_ref_id }}{% endif %}
 
 Best,
 The CloudTeams team

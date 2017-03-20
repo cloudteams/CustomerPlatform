@@ -157,6 +157,15 @@ def notifications(request):
 
 
 @login_required
+def notification_details(request, pk):
+    ctx = {
+        'notification': Notification.objects.get(pk=pk, user=request.user),
+    }
+
+    return render(request, 'profile/notification/details.html', ctx)
+
+
+@login_required
 def update_notification_settings(request):
     if request.method != 'POST':
         return HttpResponse('Only POST allowed', status=400)
@@ -179,13 +188,14 @@ def perform_main_notification_action(request, pk):
         return HttpResponse('This action is not permitted', status=403)
 
     # perform main action
-    notification.perform_custom_action()
+    from_detailed_view = request.POST.get('detailed_view', '') == 'detailed_view'
+    redirect_to = notification.perform_custom_action(generic_redirect=not from_detailed_view)
 
     # dismiss notification
     notification.dismissed = True
     notification.save()
 
-    return redirect('/profile/notifications/')
+    return redirect(redirect_to)
 
 
 @login_required

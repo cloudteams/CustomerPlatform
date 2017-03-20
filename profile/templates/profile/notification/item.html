@@ -21,7 +21,7 @@
                     {% elif custom_action %}
                         <form action="/profile/notifications/{{ notification.pk }}/perform-main-action/" method="POST">
                             {% csrf_token %}
-                            <button class="notification-link" type="submit">
+                            <button class="notification-link" type="submit"{% if detailed_view %} name="detailed_view" value="detailed_view"{% endif %}>
                                 <i class="icon icon-campaign"></i>
                                 {{ notification.main_action_text }}
                             </button>
@@ -30,6 +30,7 @@
 
                     <form action="/profile/notifications/{{ notification.pk }}/dismiss/" method="POST">
                         {% csrf_token %}
+
                         <button class="notification-link" type="submit">
                             <i class="icon {% if link or custom_action %}icon-close{% else %}icon-check{% endif %}"></i>
                             {{ notification.dismiss_action_text }}

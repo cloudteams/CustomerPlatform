@@ -213,14 +213,14 @@ def invite_customers(request, pk):
         invitation = TeamInvitation.objects.create(project_id=p.id, email=email, auto_accept=user is None)
         new_invitations += 1
 
-        # automatically accept if the user exists
+        # despite the (misleading) status, the invitation is NOT yet accepted
+        # status = 'ACCEPTED' means it has been stored & the user is notified
         if user is not None:
-            # accept the invitation
             invitation.status = 'ACCEPTED'
             invitation.save()
-        else:
-            # send an email
-            invitation.send_email()
+
+        # send an email
+        invitation.send_email(for_user=user)
 
     # format & send success message
     message = '%d invitation%s sent successfully' % (new_invitations, 's' if new_invitations != 1 else '')

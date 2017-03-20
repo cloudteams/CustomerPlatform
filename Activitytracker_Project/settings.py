@@ -98,7 +98,6 @@ LOGIN_URL = 'login'
 
 # Database
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -110,22 +109,18 @@ DATABASES = {
     }
 }
 
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.transip.email'
-EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = 'CloudTeams <webmasters@cloudteams.eu>'
-DEFAULT_TO_EMAIL = 'to email'
-EMAIL_HOST_USER = 'webmasters@cloudteams.eu'
-EMAIL_HOST_PASSWORD = 'RM3z\\S~2~7XxfVFF'
-"""
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'Activitytracker.app@gmail.com'
-DEFAULT_TO_EMAIL = 'to email'
-EMAIL_HOST_USER = 'Activitytracker.app@gmail.com'
-EMAIL_HOST_PASSWORD = 'Activitytrackerpassword'
-"""
+
+if PRODUCTION:
+    EMAIL_USE_SSL = True
+    EMAIL_HOST = 'smtp.transip.email'
+    EMAIL_PORT = 465
+    DEFAULT_TO_EMAIL = 'to email'
+    EMAIL_HOST_USER = 'webmasters@cloudteams.eu'
+    EMAIL_HOST_PASSWORD = 'RM3z\\S~2~7XxfVFF'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/

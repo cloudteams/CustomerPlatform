@@ -1,0 +1,7 @@
+Dear {{ user.profile.get_display_name }},
+
+The {{ project_name }} project has invited you to join them CloudTeams.eu!
+Follow this link to respond to this invitation: https://customer.cloudteams.eu{{ team_invitation.get_notification_url }}
+
+Best,
+The CloudTeams team

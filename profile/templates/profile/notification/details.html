@@ -1,0 +1,27 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+{% block title %}Notification{% endblock %}
+{% block dashboard_content %}
+        <header class="main-header">
+            <div class="vertical-align">
+                <div class="middle">
+                    <i class="icon icon-notification"></i>
+                    <h1 class="header-large">Notification</h1>
+                </div>
+            </div>
+        </header>
+
+        <section class="developer-dashboard-notifications-content">
+            <div class="legend" style="margin: 10px 0;">
+                <p class="legend-item"><i class="icon icon-message"></i> Message</p>
+                <p class="legend-item">Action</p>
+            </div>
+
+            <section class="content">
+                {% with detailed_view=True %}
+                    {% include "profile/notification/item.html" %}
+                {% endwith %}
+            </section>
+        </section>
+{% endblock %}

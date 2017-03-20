@@ -775,7 +775,9 @@ class Notification(models.Model):
         else:
             return 'OK'
 
-    def perform_custom_action(self):
+    def perform_custom_action(self, generic_redirect=True):
+        redirect_to = '/profile/notifications/'
+
         if not self.custom_action:
             return
 
@@ -785,8 +787,13 @@ class Notification(models.Model):
                 project = Project.objects.get(id=project_id)
                 if not self.user.follows.filter(project_id=project_id).exists():
                     ProjectFollowing.objects.create(user=self.user, project=project)
+
+                if not generic_redirect:
+                    redirect_to = '/projects/%d/' % project_id
             except:
                 pass
+
+        return redirect_to
 
     def send_email(self):
         # validate that email should be sent

@@ -14,6 +14,7 @@ urlpatterns = [
 
     # Notification
     url(r'^notifications/$', views.notifications, name='notifications'),
+    url(r'^notifications/(?P<pk>\d+)/$', views.notification_details, name='notification-details'),
     url(r'^notifications/(?P<pk>\d+)/perform-main-action/$', views.perform_main_notification_action,
         name='perform-main-notification-action'),
     url(r'^notifications/(?P<pk>\d+)/dismiss/$', views.dismiss_notification, name='notification-dismiss'),

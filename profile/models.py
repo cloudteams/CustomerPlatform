@@ -7,6 +7,7 @@ from django.dispatch import Signal
 from django.dispatch import receiver
 from django.template.loader import render_to_string
 
+from Activitytracker_Project.settings import DEFAULT_FROM_EMAIL
 from activitytracker.models import User
 from ct_projects.models import Campaign, Project, ProjectFollowing, Notification
 from profile.lists import *
@@ -177,25 +178,40 @@ class TeamInvitation(models.Model):
     email = models.EmailField()
     auto_accept = models.BooleanField(default=False)
     status = models.CharField(max_length=15, choices=INVITATION_STATUS, default='PENDING')
+    notification = models.ForeignKey(Notification, blank=True, null=True, default=None)
 
-    def send_email(self):
+    def send_email(self, for_user=None):
         # render the email
         project_name = Project.objects.get(id=self.project_id).title
-        title = 'Invitation from %s: Join CloudTeams.eu today!' % project_name
+
+        if not for_user:
+            title = 'Invitation from %s: Join CloudTeams.eu today!' % project_name
+        else:
+            title = 'Invitation: Join %s on CloudTeams today!' % project_name
 
         ctx = {
             'title': title,
             'project_name': project_name,
             'team_ref_id': self.pk,
+            'team_invitation': self,
         }
 
-        plain_content = render_to_string('profile/emails/invitation-plaintext.txt', ctx)
-        html_content = render_to_string('profile/emails/invitation.html', ctx)
+        if not for_user:
+            plain_content = render_to_string('profile/emails/invitation-plaintext.txt', ctx)
+            html_content = render_to_string('profile/emails/invitation.html', ctx)
+        else:
+            ctx['user'] = for_user
+
+            plain_content = render_to_string('profile/emails/invitation-plaintext-follow.txt', ctx)
+            html_content = render_to_string('profile/emails/invitation-follow.html', ctx)
 
         # send the email
         send_mail(subject=title, message=plain_content, html_message=html_content,
-                  from_email='webmasters@cloudteams.eu',
+                  from_email=DEFAULT_FROM_EMAIL,
                   recipient_list=[self.email], fail_silently=False)
+
+    def get_notification_url(self):
+        return '/profile/notifications/%s/' % str(self.notification_id)
 
     def save(self, *args, **kwargs):
         if self.status == 'ACCEPTED':
@@ -213,9 +229,12 @@ class TeamInvitation(models.Model):
                     # send notification to user
                     project_url = '/projects/%d/' % project.id
                     project_link = '<a href="%s" target="_blank">%s</a>' % (project_url, project.title)
-                    Notification.objects.create(user=user, text='You were invited to follow project %s.' % project_link,
-                                                custom_action='FOLLOW %d' % project.id, custom_action_text='Accept',
-                                                dismiss_action='Reject')
+                    self.notification = Notification.objects.create(user=user,
+                                                                    text='You were invited to follow project %s.'
+                                                                         % project_link,
+                                                                    custom_action='FOLLOW %d' % project.id,
+                                                                    custom_action_text='Accept',
+                                                                    dismiss_action='Reject')
             except Project.DoesNotExist:
                 # project might have been deleted in the meanwhile
                 pass
