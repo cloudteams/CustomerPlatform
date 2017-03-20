@@ -173,9 +173,11 @@ def contact_project_team(request, pk):
     if not provided_info:
         return HttpResponse('`provided_info` is required', status=400)
 
+    # create & send email
     cr = ContactRequest.objects.create(user=request.user, project=project,
                                        provided_info=provided_info,
                                        message=message)
+    cr.send_email()
 
     return HttpResponse('Contact request sent to project team (Request ID: #%d)' % cr.pk)
 

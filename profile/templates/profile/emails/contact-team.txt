@@ -1,0 +1,9 @@
+Hello,
+
+A customer in CloudTeams wants to contact you about the project {{ project.title }}:
+
+Contact information: {{ contact_request.provided_info }}
+{% if contact_request.message %}
+Message:
+{{ contact_request.message }}
+{% endif %}

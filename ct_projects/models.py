@@ -55,6 +55,15 @@ class Project(models.Model):
     trend_factor = models.FloatField(default=0, db_index=True)
     is_public = models.BooleanField(default=False)
 
+    # a comma-separated list of the contact emails
+    contacts = models.TextField(blank=True, null=True, default=None)
+
+    def get_contacts(self):
+        if not self.contacts:
+            return []
+
+        return self.contacts.split(',')
+
     def increase_views(self):
         Project.objects.filter(pk=self.pk).update(views=self.views + 1)
 
@@ -712,6 +721,25 @@ class ContactRequest(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     provided_info = models.TextField(blank=False)
     message = models.TextField()
+
+    def send_email(self):
+        # send the email
+        from_email = DEFAULT_FROM_EMAIL
+        mail_title = 'CloudTeams - A customer is interested in %s' % self.project.title
+
+        recipient = [contact.encode('utf8') for contact in self.project.get_contacts()]
+        mail_message = get_template('profile/emails/contact-team.txt').render({
+            'title': 'New customer contact',
+            'project': self.project,
+            'contact_request': self
+        })
+        mail_html_message = get_template('profile/emails/contact-team.html').render({
+            'title': 'New customer contact',
+            'project': self.project,
+            'contact_request': self
+        })
+
+        send_mail(mail_title, mail_message, from_email, recipient, html_message=mail_html_message, fail_silently=False)
 
 
 class Notification(models.Model):

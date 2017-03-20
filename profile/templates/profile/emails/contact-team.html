@@ -1,0 +1,15 @@
+{% extends 'profile/emails/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <p>Hello,</p>
+
+    <p>A customer in <a href="https://cloudteams.eu">CloudTeams</a> wants to contact you about the project <b>{{ project.title }}</b>:</p>
+
+    <p style="margin-top: 20px;"><b>Contact information:</b> {{ contact_request.provided_info|linebreaksbr }}</p>
+    {% if contact_request.message %}
+        <p style="margin-top: 20px;"><b>Message: </b></p>
+        <p>{{ contact_request.message|linebreaksbr }}</p>
+    {% endif %}
+{% endblock %}
