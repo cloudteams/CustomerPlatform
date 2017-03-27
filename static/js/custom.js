@@ -1,7 +1,7 @@
 /* Footer class */
 $('#footer').attr('class', $('#footer_class').text());
 if ($('#footer_class').text() == 'footer-public') {
-    $('#footer').find('.cloudteams-logo').attr('src', '/static/img/logo-purple-beta.svg');
+    $('#footer').find('.cloudteams-logo').attr('src', '/static/img/logo-purple.svg');
 }
 
 $(function() {
