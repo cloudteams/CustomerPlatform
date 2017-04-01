@@ -20,46 +20,7 @@
         <div class="col-xs-12 text-center">
             <h1>Account Settings</h1>
         </div>
-        <div class="col-xs-12 margin-top-5">
-            <div class="box-header header-with-line padding-bottom-3 text--white" data-original-title>
-                <h4><i class="fa fa-cloud white margin-right-2"></i><span class="break"></span>Available Providers</h4>
-            </div>
-            <div class="box-content row text--lightgrey">
-                <p class="col-xs-12">Connect with these providers to see them easily on your dashboard.
-                    CloudTeams will then discover and suggest interesting projects to you based on your activities!</p>
-
-                <table id="ProvidersTable" class="col-xs-12 text-center user-providers">
-                    <tbody>
-                        {% for provider_name,provider_data in providerDomValues.items %}
-                        <tr class="connected-app {{ provider_name }} text--white {% if provider_data.statusText != "App connected" %}text--disabled{% endif %}">
-                            <td ><img src="{% static 'activitytracker/img/'|add:provider_name|add:'.png' %}"/></td>
-                            <td><span class="connected-app-text provider-name">{{ provider_name|capitalizeFirstLetter|removeDashes }}</span></td>
-                            <td>
-                                {% if provider_data.statusText == "App connected" %}
-                                <a class="btn connected-app-button btn-blueNavy" onclick="synchronizeProvider('{{ provider_name }}', this)" title="Synchronize">
-                                    Synchronize
-                                </a>
-                                {% endif %}
-
-                                {% if provider_data.buttonText == 'De-Authorize'  %}
-                                    <a onclick="appFunctionHandler('{{ provider_name }}', this)" class="text--white disconnect-app" title="{{ provider_data.buttonText }}">
-                                        <i class="fa fa-trash-o"></i>
-                                    </a>
-                                {% else %}
-                                    <a onclick="appFunctionHandler('{{ provider_name }}', this)" class="btn btn-transparent" title="{{ provider_data.buttonText }}">
-                                        {{ provider_data.buttonText }}
-                                    </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="row margin-vertical-5">
-                <div class="col-sm-6 col-sm-offset-3 vertical-margin text-center alert-success hidden" id="success-msg"></div>
-            </div>
-        </div>
+        {% include 'activitytracker/providers.html' %}
         <div class="col-xs-12 margin-vertical-5 text--white" id="section-email-notifications">
             <div class="box-header header-with-line" data-original-title>
                 <h4><i class="fa fa-envelope white margin-right-2"></i><span class="break"></span>Email notifications</h4>

@@ -1373,6 +1373,17 @@ def dashboard(request):
         {'instances': instances, 'provider': provider} for provider, instances in lifetime_provider_data.iteritems()
     ])
 
+    providerDomValues = {}
+
+    for provider in AVAILABLE_PROVIDERS:
+
+        if user.social_auth.filter(provider=provider).count() == 0:
+            providerDomValues[provider] = getAppManagementDomValues("Not Connected", provider)
+            continue
+
+        provider_object = eval(provider.title().replace('-', ''))(user.social_auth.get(provider=provider))
+        providerDomValues[provider] = getAppManagementDomValues(provider_object.validate(), provider)
+
     """
     #############################################
         End of Calculations
@@ -1381,6 +1392,7 @@ def dashboard(request):
 
     return render(request, 'activitytracker/dashboard.html', {
         'username': user.get_username(),
+        'providerDomValues': providerDomValues,
         'connected_providers': connected_providers,
         'connected_provider_percentage': connected_provider_percentage,
         'total_providers': total_providers,

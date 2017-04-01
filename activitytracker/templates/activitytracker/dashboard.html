@@ -10,7 +10,10 @@
 {% endblock %}
 
 {% block dashboard_content %}
+
     <h1 class="header-large text--white text-center margin-vertical-5">Activity Overview</h1>
+
+    {% include 'activitytracker/providers.html' %}
 
     <div id="carousel-providers" class="carousel carousel-dashboard slide col-xs-12 dashboardWrapper margin-top-5" data-ride="carousel" data-interval="false">
         <div class="carousel-inner padding-bottom-5" role="listbox">
@@ -214,6 +217,7 @@
     <script src="{% static 'activitytracker/js/jquery.knob.modified.js' %}"></script>
     <script src="{% static 'activitytracker/js/moment.js' %}"></script>
     <script src="{% static 'activitytracker/js/custom.js' %}"></script>
+    <script src="{% static 'activitytracker/js/settings.js' %}?v=20170118.1"></script>
     <script src="{% static 'activitytracker/js/d3.min.js' %}"></script>
  	<script src="{% static 'activitytracker/js/dimple.v2.1.2.min.js' %}"></script>
     <script src="{% static 'activitytracker/js/dashboard.js' %}"></script>
