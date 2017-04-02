@@ -2,8 +2,12 @@ from django.contrib import admin
 
 from .models import *
 
+
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'first_name', 'last_name', 'location')
+    list_display = ('username', 'first_name', 'last_name', 'location', 'date_joined')
+
+    def get_queryset(self, request):
+        return super(UserAdmin, self).get_queryset(request).exclude(email__endswith='@test.com')
 
 
 class PerformsAdmin(admin.ModelAdmin):
