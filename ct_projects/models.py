@@ -627,8 +627,8 @@ class Reward(models.Model):
         if user:
             qs = qs.exclude(sales__user_id=user.pk)
 
-        # least remaining first
-        qs = qs.order_by('remaining')
+        # most expensive first
+        qs = qs.order_by('-cost')
 
         return qs
 
