@@ -75,7 +75,7 @@ class GamificationProfile(Model):
 
     @property
     def next_level_points(self):
-        return 1000
+        return 100
 
     @property
     def level(self):
