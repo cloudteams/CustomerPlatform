@@ -42,7 +42,10 @@
                             {% csrf_token %}
                             <div class='grid-options-container col-xs-12 margin-top-4'>
                                 <div class="checkbox margin-right-1 margin-top-1" style="display:inline-block;">
-                                    <label><input type="checkbox" id="groupcheckbox" name="group-activities" checked onChange="GroupUngroupSort()"/>Group common </label>
+                                    <label style="padding-left: 0;">
+                                        <input type="checkbox" id="groupcheckbox" style="margin-right: 10px;"
+                                               name="group-activities" checked onChange="GroupUngroupSort()"/>Group common
+                                    </label>
                                 </div>
                                 <div style="display: inline-block" class="margin-top-1">
                                     <label for="sortdropdown">  | Sort by   </label>
@@ -63,9 +66,9 @@
                 <!--- Chart -->
                 <div class="col-lg-6" style="height:561px">
                     <div class="box-custom-header margin-top-4">
-                        <h4 class="text-center padding-2"><i class="fa fa-tasks white margin-right-3"></i><span class="break" ></span>Activity Type Overview</h4>
+                        <h4 class="text-center padding-2" style="margin-bottom: 0;"><i class="fa fa-tasks white margin-right-3"></i><span class="break" ></span>Activity Type Overview</h4>
                     </div>
-                    <div class="box-content" id="donut-canvas">
+                    <div class="box-content" id="donut-canvas" style="background: white;">
                          <div id="donutchart" ></div>
                     </div>
                 </div>
